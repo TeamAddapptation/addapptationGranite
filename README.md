@@ -82,3 +82,9 @@ jsonTheme =
 
 ```
 # Understanding Granite.js
+
+## Release Notes
+
+|                |Features                          |Date                         |
+|----------------|-------------------------------|-----------------------------|
+|Version 0.1.0 |Tiles August 17, 2020|
