@@ -66,3 +66,7 @@ hero_wrapper.setAttribute('id', "granite-123");
 hero_wrapper.setAttribute('class','g__micro_wrapper');
 hero_wrapper.setAttribute('mode','midnight');
 ```
+## Append micro to the DOM
+```js
+document.getElementById(id).appendChild(hero_wrapper);
+```
