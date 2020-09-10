@@ -4,15 +4,13 @@ Granite.js is a front-end component library from addapptation, built to render f
 
 ## Getting Started
 
-Addapptations server-side logic calls the requested micro(s) and writes a DOM element with a unique id to the pages DOM.
-
-Sample DOM element with unique id per micro:
+addapptations server-side logic calls the requested micro(s) and writes a DOM element with a unique id.
 ```html
 
 <div id='a0R1I00000FfTXsUAN-granite'></div>
 
 ```
-Your micro function call will look like this:
+Sample function call:
 ```js
 
 granite_template(templateBlock, jsonTheme);
@@ -21,11 +19,10 @@ granite_template(templateBlock, jsonTheme);
 ...and those JSON objects might look like this:
 
 ```js
-     //Block JSON
+//Block JSON
+templateBlock =
      {
-      "id": "someUniqueID", //REQUIRED
-      "feature": "tiles", //REQUIRED      
-      "class": "a_custom",
+      "id": "a0R1I00000FfTXsUAN-granite", //matches DOM element id
       "options": {
         "title": "Header",
         "description": "Ibid ipsum lorem",
@@ -75,12 +72,12 @@ granite_template(templateBlock, jsonTheme);
       ]
      }
 
-     //Theme JSON
+//Theme JSON
+jsonTheme =
      {
-          "colors" : {
-               "primary" : "#ffffff",
-               "secondary" : "#ffcc66"           
-          }
+     "primary": "#3fd0d4",
+     "secondary": "#3fd0d4",
+     "mode": "midnight"
      }
 
 ```
