@@ -82,6 +82,13 @@ jsonTheme =
 
 ```
 # Understanding Granite.js
+The following core concepts constitute the foundation of development of all new and existing _blocks_ of Granite.js
+
+> **block:** a Granite.js UI element is called a block, and consists of an HTML tag with an _id_.
+
+> **Function:** Granite.js requests the.
+
+> **JSON:** Granite.js relies on valid JSON (which includes defining keys as strings). When in doubt, run your JSON through [https://jsonlint.com/](https://jsonlint.com/) 
 
 ## Release Notes
 
