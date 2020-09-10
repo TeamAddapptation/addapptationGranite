@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Granite</title>
+  </head>
+  <body>
+    <div id="hero-granite"></div>
+    <div id="granite-template"></div>
+    <div id="chart-343"></div>
+
+    <script src='json/data.js'></script>
+    <script src='template/granite_template.js'></script>
+    <script src='hero/granite_hero.js'></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  </body>
+  <script>
+    const render = ["hero", "bar-chart", "drill"];
+    const micros = {
+        "template": ["granite_template", "templateBlock"],
+        "hero": ["granite_hero", "heroBlock"]
+    }
+    render.forEach((micro) => {
+        switch (micro){
+        case "template":
+            granite_template(templateBlock, jsonTheme);
+        break;
+        case "hero":
+            granite_hero(heroBlock, jsonTheme);
+        break;
+        default:
+            //nothing
+        break;
+        }
+    });
+
+
+
+  </script>
+</html>
