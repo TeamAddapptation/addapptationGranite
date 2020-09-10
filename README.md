@@ -82,17 +82,21 @@ jsonTheme =
 
 ```
 # Understanding Granite.js
-The following core concepts constitute the foundation of development of all new and existing _blocks_ of Granite.js
+The following core concepts constitute the foundation of development of all new and existing micros within Granite.js
 
 > **block:** a Granite.js UI element is called a block, and consists of an HTML tag with an _id_.
 
-> **Function:** Granite.js requests the.
+> **Function:** Server-side logic request the micro and calls the micro function. The final build is then appended to the unique _id_ on the page.
 
-> **JSON:** Granite.js relies on valid JSON (which includes defining keys as strings). When in doubt, run your JSON through [https://jsonlint.com/](https://jsonlint.com/) 
+> **JSON:** Granite.js relies on two valid JSON files. The first JSON file, [microName]Block holds the id, options and records, see options and records section for more detailed information. The second file, themeBlock, holds the global UI settings from the platform. This included the primary color, secondary color and mode (standard or midnight).
 
 ## Release Notes
 
 |Version         |Features                          |Date                         |
 |----------------|-------------------------------|-----------------------------|
 |1.0.0 |Tiles | August 17, 2020|
+|1.0.0 |Navigation| August 17, 2020|
+|1.0.0 |Content | August 17, 2020|
+|1.0.0 |Cards | August 17, 2020|
+|1.1.0 |Tabs | September 9, 2020|
 |1.1.0 |Hero | September 9, 2020|
