@@ -85,6 +85,6 @@ jsonTheme =
 
 ## Release Notes
 
-|                |Features                          |Date                         |
+|Version         |Features                          |Date                         |
 |----------------|-------------------------------|-----------------------------|
-|Version 0.1.0 |Tiles August 17, 2020|
+|Version 1.0.0 |Tiles | August 17, 2020|
