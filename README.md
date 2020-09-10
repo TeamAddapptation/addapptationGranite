@@ -87,4 +87,5 @@ jsonTheme =
 
 |Version         |Features                          |Date                         |
 |----------------|-------------------------------|-----------------------------|
-|Version 1.0.0 |Tiles | August 17, 2020|
+|1.0.0 |Tiles | August 17, 2020|
+|1.1.0 |Hero | September 9, 2020|
