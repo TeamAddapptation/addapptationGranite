@@ -84,6 +84,8 @@ jsonTheme =
 # Understanding Granite.js
 The following core concepts constitute the foundation of development of all new and existing micros within Granite.js
 
+> **One Flavor - Vanilla:** Granite.js is based on the best of breed usage of HTML, CSS, and JavaScript. To keep everything as atomic as possible, Granite.js leverages the native strengths of each language or protocol with no special flavors except vanilla. 
+
 > **block:** a Granite.js UI element is called a block, and consists of an HTML tag with an _id_.
 
 > **Function:** Server-side logic request the micro and calls the micro function. The final build is then appended to the unique _id_ on the page.
