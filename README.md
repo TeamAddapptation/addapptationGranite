@@ -81,3 +81,4 @@ jsonTheme =
      }
 
 ```
+# Understanding Granite.js
