@@ -117,3 +117,27 @@ let carouselBlock = {
       },
     ]
     };
+/*---------------------------------------------
+Chart
+---------------------------------------------*/
+let chartBlock = {
+  "id": "chart-granite",
+  "classes": "",
+  "options": {
+    "title": "2019 Sales",
+    "height": "500px",
+    "ytitle": "Sales",
+    "xtitle": "Quarter",
+    "animate": true,
+    "data_format": "currency",
+    "chart_style": "line",
+    "ymax": 60,
+    "palette": ["#EA386E","#BF458A","#FF8BCD","#FFA08C","#FFB866","#CCF0E8","#00B28B","#D44697","#FDDBEE"]
+  },
+  "records": [
+    ['Q1', 245000, 500000],
+    ['Q2', 670987, 324000],
+    ['Q3', 456000, 560400],
+    ['Q4', 450400, 400000]
+  ]
+}
