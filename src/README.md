@@ -2,9 +2,11 @@
 
 This section of the article goes through the steps you need to follow – and some things you need to consider – when creating a well-structured addapptation Adapter.
 
+We'll be using 'template' as our example micro.
+
 ## Basic Micro Function
 ```js
-granite_[microName]([microName]Block, jsonTheme){
+function granite_template(templateBlock, jsonTheme){
   Micro Code
 }
 ```
