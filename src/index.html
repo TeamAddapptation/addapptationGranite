@@ -4,21 +4,28 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="stylesheet" href="carousel/granite_carousel.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Granite</title>
   </head>
   <body>
+    <div class="container">
+      <div id="hero-granite"></div>
+      <div id="granite-template"></div>
+      <div id="granite-carousel"></div>
+    </div>
     <div id="hero-granite"></div>
     <div id="granite-template"></div>
-    <div id="chart-343"></div>
+    <div id="granite-carousel"></div>
 
     <script src='json/data.js'></script>
     <script src='template/granite_template.js'></script>
     <script src='hero/granite_hero.js'></script>
+    <script src='carousel/granite_carousel.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   </body>
   <script>
-    const render = ["hero", "bar-chart", "drill"];
+    const render = ["template", "carousel"];
     const micros = {
         "template": ["granite_template", "templateBlock"],
         "hero": ["granite_hero", "heroBlock"]
@@ -30,6 +37,12 @@
         break;
         case "hero":
             granite_hero(heroBlock, jsonTheme);
+        break;
+        case "carousel":
+            granite_carousel(carouselBlock, jsonTheme);
+        break;
+        case "donut":
+            granite_donut(donutBlock, jsonTheme);
         break;
         default:
             //nothing

@@ -65,3 +65,55 @@ let heroBlock = {
     },
     "records": [{}]
 };
+/*---------------------------------------------
+Carousel
+---------------------------------------------*/
+let carouselBlock = {
+    "id": "granite-carousel",
+    "feature": "carousel",
+    "options": {
+      "background_color": "red",
+    },
+    "records": [
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/aerial.png",
+        "description": "Image Description 1"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/asia.png",
+        "description": "Image Description 2"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/backlit.png",
+        "description": "Image Description 3"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/bridge.png",
+        "description": "Image Description 4"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/deganwy.png",
+        "description": "Image Description 5"
+      },
+      {
+        "image": "https://addapptation.blob.core.windows.net/pictures/nature/italy.png",
+        "description": "Image Description 6"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/backlit.png",
+        "description": "Image Description 3"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/bridge.png",
+        "description": "Image Description 4"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/deganwy.png",
+        "description": "Image Description 5"
+      },
+      {
+        "image_url": "https://addapptation.blob.core.windows.net/pictures/nature/italy.png",
+        "description": "Image Description 6"
+      },
+    ]
+    };

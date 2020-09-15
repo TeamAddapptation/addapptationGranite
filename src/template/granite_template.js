@@ -5,7 +5,8 @@ function granite_template(jsonTemplate, jsonTheme){
     const id = jsonTemplate.id;
     const o = jsonTemplate.options;
     const r = jsonTemplate.records;
-    const t = jsonTheme
+    const t = jsonTheme;
+    const cssId = "#" + id;
 
     /*---------------------------------------------
     Add Font Family To Header
@@ -42,7 +43,7 @@ function granite_template(jsonTemplate, jsonTheme){
     ---------------------------------------------*/
     var heroCss = document.createElement('style');
     heroCss.innerHTML = `
-    .g__micro_wrapper{
+    ${cssId} .g__micro_wrapper{
         display: flex;
         flex-direction: row;
         --primary: 212, 70, 151;
@@ -55,7 +56,7 @@ function granite_template(jsonTemplate, jsonTheme){
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
     }
-    .g__micro_wrapper[mode="midnight"]{
+    ${cssId} .g__micro_wrapper[mode="midnight"]{
         --primary: 212, 70, 151;
         --background: #101010;
         --bottom-background: #ffffff;
@@ -63,13 +64,13 @@ function granite_template(jsonTemplate, jsonTheme){
         --header-color: #ffffff;
         --description-color: #ffffff;
     }
-    .g__micro_container{
+    ${cssId} .g__micro_container{
         padding: 50px;
         margin: 15px;
         border: 2px solid #b4b4b4;
         background:var(--background);
     }
-    .g__micro_header{
+    ${cssId} .g__micro_header{
         color:var(--header-color);
         font-family: var(--font-regular);
         font-weight: 300;

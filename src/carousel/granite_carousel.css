@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+  }
+
+  /* Position the image container (needed to position the left and right arrows) */
+  #g__carousel.container {
+    position: relative;
+    margin-top: 50px;
+  }
+  .g__active_container{
+    display: flex;
+    height:500px;
+    justify-content: center;
+    align-items: center;
+
+  }
+  .g__carousel_item{
+    height: 500px;
+  }
+  .g__carousel_image{
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  /* Add a pointer when hovering over the thumbnail images */
+  #g__carousel .cursor {
+    cursor: pointer;
+  }
+
+  /* Next & previous buttons */
+  #g__carousel .prev,
+  #g__carousel .next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Position the "next button" to the right */
+  #g__carousel .next {
+    right: 16px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  #g__carousel .prev:hover,
+  #g__carousel .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  /* Six columns side by side */
+  #g__carousel .g__thumbnails_container {
+    display: flex;
+    margin: 10px 0;
+    overflow: auto;
+  }
+  #g__carousel .thumbnail{
+    max-width: 150px;
+  }
+  #g__carousel .column {
+    margin: 5px;
+  }
+
+  /* Add a transparency effect for thumnbail images */
+  #g__carousel .demo {
+    opacity: 0.6;
+  }
+
+  #g__carousel .active,
+  #g__carousel .demo:hover {
+    opacity: 1;
+  }
+
+  #g__carousel .w3-animate-top {
+    position: relative;
+    animation: animatetop 0.4s;
+  }
+  /* Fading animation */
+  #g__carousel .w3-animate-right{
+  position:relative;
+  animation:animateright 0.4s
+}
+@keyframes animateright{
+    from{
+        right:-300px;
+        opacity:0
+    }
+     to{
+        right:0;
+        opacity:1
+    }
+}
