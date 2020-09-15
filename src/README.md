@@ -63,12 +63,12 @@ document.head.appendChild(heroCss);
 /*---------------------------------------------
 Wrapper
 ---------------------------------------------*/
-const hero_wrapper = document.createElement('div');
-hero_wrapper.setAttribute('id', "granite-123");
-hero_wrapper.setAttribute('class','g__micro_wrapper');
-hero_wrapper.setAttribute('mode','midnight');
+const template_wrapper = document.createElement('div');
+template_wrapper.setAttribute('id', "granite-123");
+template_wrapper.setAttribute('class','g__micro_wrapper');
+template_wrapper.setAttribute('mode','midnight');
 ```
 ## Append micro to the DOM
 ```js
-document.getElementById(id).appendChild(hero_wrapper);
+document.getElementById(id).appendChild(template_wrapper);
 ```
