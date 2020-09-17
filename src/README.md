@@ -58,6 +58,26 @@ templateCss.innerHTML = `
 `
 document.head.appendChild(templateCss);
 ```
+## Layout Case Block with Felxbox
+```js
+switch (o.layout){
+      case "left":
+        var content_layout = "row";
+        var content_align = "flex-start";
+        var desc_align = "left";
+      break;
+      case "right":
+        var content_layout = "row-reverse";
+        var content_align = "flex-end";
+        var desc_align = "left";
+      break;
+      default:
+        var content_layout = "column";
+        var content_align = "center";
+        var desc_align = "center";
+      break;
+    }
+```
 ## Wrapper
 ```js
 /*---------------------------------------------
