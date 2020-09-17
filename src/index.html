@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="carousel/granite_carousel.css">
+    <link rel="stylesheet" type="text/css" href="https://addapptation.blob.core.windows.net/addapptation-stylesheets/fontawesome-pro-5.10.0-11-web/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js" type="text/javascript"></script>
     <title>Granite</title>
@@ -14,15 +15,17 @@
       <div id="hero-granite"></div>
       <div id="granite-template"></div>
       <div id="granite-carousel"></div>
+      <div id="granite-tiles"></div>
     <script src='json/data.js'></script>
     <script src='template/granite_template.js'></script>
     <script src='hero/granite_hero.js'></script>
     <script src='carousel/granite_carousel.js'></script>
     <script src='chart/granite_chart.js'></script>
+    <script src='tiles/granite_tiles.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   </body>
   <script>
-    const render = ["chart"];
+    const render = ["tiles"];
     const micros = {
         "template": ["granite_template", "templateBlock"],
         "hero": ["granite_hero", "heroBlock"]
@@ -40,6 +43,9 @@
         break;
         case "chart":
             granite_chart(chartBlock, jsonTheme);
+        break;
+        case "tiles":
+            granite_tiles(tilesBlock, jsonTheme);
         break;
         default:
             //nothing
