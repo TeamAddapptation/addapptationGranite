@@ -21,8 +21,8 @@ const t = jsonTheme
 ```
 ## Block Level CSS in JS
 ```js
-var heroCss = document.createElement('style');
-heroCss.innerHTML = `
+var templateCss = document.createElement('style');
+templateCss.innerHTML = `
 .g__micro_wrapper{
     display: flex;
     flex-direction: row;
@@ -56,7 +56,7 @@ heroCss.innerHTML = `
     font-weight: 300;
 }
 `
-document.head.appendChild(heroCss);
+document.head.appendChild(templateCss);
 ```
 ## Wrapper
 ```js
@@ -66,7 +66,7 @@ Wrapper
 const template_wrapper = document.createElement('div');
 template_wrapper.setAttribute('id', "granite-123");
 template_wrapper.setAttribute('class','g__micro_wrapper');
-template_wrapper.setAttribute('mode','midnight');
+template_wrapper.setAttribute('mode', t.mode);
 ```
 ## Append micro to the DOM
 ```js
