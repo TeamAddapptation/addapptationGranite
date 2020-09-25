@@ -21,8 +21,8 @@ const t = jsonTheme
 ```
 ## Block Level CSS in JS
 ```js
-var heroCss = document.createElement('style');
-heroCss.innerHTML = `
+var templateCss = document.createElement('style');
+templateCss.innerHTML = `
 .g__micro_wrapper{
     display: flex;
     flex-direction: row;
@@ -56,7 +56,27 @@ heroCss.innerHTML = `
     font-weight: 300;
 }
 `
-document.head.appendChild(heroCss);
+document.head.appendChild(templateCss);
+```
+## Layout Case Block with Felxbox
+```js
+switch (o.layout){
+      case "left":
+        var content_layout = "row";
+        var content_align = "flex-start";
+        var desc_align = "left";
+      break;
+      case "right":
+        var content_layout = "row-reverse";
+        var content_align = "flex-end";
+        var desc_align = "left";
+      break;
+      default:
+        var content_layout = "column";
+        var content_align = "center";
+        var desc_align = "center";
+      break;
+    }
 ```
 ## Wrapper
 ```js
@@ -66,7 +86,7 @@ Wrapper
 const template_wrapper = document.createElement('div');
 template_wrapper.setAttribute('id', "granite-123");
 template_wrapper.setAttribute('class','g__micro_wrapper');
-template_wrapper.setAttribute('mode','midnight');
+template_wrapper.setAttribute('mode', t.mode);
 ```
 ## Append micro to the DOM
 ```js
