@@ -2,7 +2,7 @@
 Themes and Mode
 ---------------------------------------------*/
 let jsonTheme = {
-    "primary": "#3fd0d4",
+    "primary": "#df0284",
     "secondary": "#3fd0d4",
     "mode": "midnight"
 }
@@ -118,10 +118,10 @@ let carouselBlock = {
     ]
     };
 /*---------------------------------------------
-Chart
+Data 1
 ---------------------------------------------*/
-let chartBlock = {
-  "id": "chart-granite",
+let dataVisualizationBlock_1 = {
+  "id": "data_visualization-granite",
   "classes": "",
   "options": {
     "title": "2019 Sales",
@@ -130,17 +130,63 @@ let chartBlock = {
     "xtitle": "Quarter",
     "animate": true,
     "data_format": "currency",
+    "bar_chart_vertical": true,
     "chart_style": "line",
     "ymax": 60,
     "palette": ["#EA386E","#BF458A","#FF8BCD","#FFA08C","#FFB866","#CCF0E8","#00B28B","#D44697","#FDDBEE"]
   },
   "records": [
-    ['Q1', 245000, 500000],
-    ['Q2', 670987, 324000],
-    ['Q3', 456000, 560400],
-    ['Q4', 450400, 400000]
+    {"x": "Apples", "value": "68.84", "fill": "green"},
+    {"x": "Oranges", "value": "128.14", "fill": "orange"},
   ]
 }
+/*---------------------------------------------
+Data 2
+---------------------------------------------*/
+let dataVisualizationBlock = {
+  "id": "data_visualization-granite",
+  "classes": "",
+  "options": {
+    "title": "Granite Chart",
+    "chart_type": "line",
+    "drilldown_chart_types": ["pie", "line"],
+    "drilldown_details_field_name": "type_breakdown",
+    "inner_radius": "70%",
+    "label_position": "inside",
+    "listener": "point_select",
+    "series_titles": [],
+    "attr__series_titles": "Test Title",
+    "title2": "Interaction Type",
+    "x_axis_title": "Company",
+    "y_axis_title": "Sales",
+  },
+  "records": [
+    {"x": "Microsoft", "name": "Detective", "value": "518.84", "line_values": ["January", 120, 356, 45, 100], "fill": "#3BBA7B", "type_breakdown": [
+      {"x": "Q1", "value": 792026},
+      {"x": "Q2", "value": 610501},
+      {"x": "Q3", "value": 441843},
+      {"x": "Q4", "value": 350711}
+  ]},
+    {"x": "Oracle", "name": "Classics", "value": "128.14", "line_values": ["February", 543, 256, 345, 346], "fill": "#3BBA7B", "type_breakdown": [
+      {"x": "Q1", "value": 1378786},
+      {"x": "Q2", "value": 571063},
+      {"x": "Q3", "value": 510493},
+      {"x": "Q4", "value": 797105}
+  ]},
+    {"x": "HP", "name": "Textbooks", "value": "328.14", "line_values": ["March", 234, 763, 134,872], "fill": "#3BBA7B", "type_breakdown": [
+      {"x": "Q1", "value": 499299},
+      {"x": "Q2", "value": 649963},
+      {"x": "Q3", "value": 571176},
+      {"x": "Q4", "value": 242969}
+    ]},
+  {"x": "Dell", "name": "Textbooks", "value": "328.14", "line_values": ["April", 34, 363, 720, 348], "fill": "#3BBA7B", "type_breakdown": [
+    {"x": "Q1", "value": 499299},
+    {"x": "Q2", "value": 649963},
+    {"x": "Q3", "value": 571176},
+    {"x": "Q4", "value": 242969}
+    ]}
+  ]}
+
 /*---------------------------------------------
 Tiles
 ---------------------------------------------*/
