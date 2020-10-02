@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="carousel/granite_carousel.css">
+    <link rel="stylesheet" href="navigation/granite_navigation.css">
     <link rel="stylesheet" type="text/css" href="https://addapptation.blob.core.windows.net/addapptation-stylesheets/fontawesome-pro-5.10.0-11-web/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js" type="text/javascript"></script>
@@ -12,13 +13,15 @@
     <title>Granite</title>
   </head>
   <body>
-      <div id="data_visualization-granite"></div>
-      <div id="hero-granite"></div>
-      <div id="granite-template"></div>
-      <div id="granite-carousel"></div>
-      <div id="granite-tiles"></div>
+        <div id="granite-navigation"></div>
+        <div id="data_visualization-granite"></div>
+        <div id="hero-granite"></div>
+        <div id="granite-template"></div>
+        <div id="granite-carousel"></div>
+        <div id="granite-tiles"></div>
     <script src='json/data.js'></script>
     <script src='template/granite_template.js'></script>
+    <script src='navigation/granite_navigation.js'></script>
     <script src='hero/granite_hero.js'></script>
     <script src='carousel/granite_carousel.js'></script>
     <script src='data_visualization/granite_data_visualization.js'></script>
@@ -33,6 +36,9 @@
     }
     render.forEach((micro) => {
         switch (micro){
+        case "navigation":
+            granite_navigation(navigationBlock, jsonTheme);
+        break;
         case "template":
             granite_template(templateBlock, jsonTheme);
         break;

@@ -122,10 +122,16 @@ function granite_tiles(jsonTiles, jsonTheme) {
 
         break;
     }
-    if(o.customOverlay){
+    if(o.no_overlay){
+      var filter_one = "";
+      var filter_two = "";
+    } else if(o.filter_one || o.filter_two){
       var filter_one = !!o.filter_one ? o.filter_one : "";
       var filter_two = !!o.filter_two ? o.filter_two : "";
     }
+    var filter_one_opacity = o.filter_one_opacity || ".5";
+    var filter_two_opacity = o.filter_two_opacity || ".5";
+
 
     /*---------------------------------------------
     Layout Case Block
@@ -138,7 +144,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
       break;
       case "right":
         var content_layout = "row-reverse";
-        var content_align = "flex-end";
+        var content_align = "space-around";
         var desc_align = "left";
       break;
       default:
@@ -150,27 +156,17 @@ function granite_tiles(jsonTiles, jsonTheme) {
     /*---------------------------------------------
     CSS Block
     ---------------------------------------------*/
-    var cssStyle = o.descHover ? "basic" : "icon";
+    var cssStyle = o.description_hover ? "basic" : "icon";
     var css = document.createElement('style');
     css.innerHTML = `
-    ${cssID}.g__container{
+    #${id}{
         --font-hairline: hero-new-hairline, sans-serif;
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
     }
-    ${cssID}.g__container{
-      max-width: 1140px;
-      margin-left: auto;
-      margin-right: auto;
-    }
     #${id}.g__container{
       padding-top: ${o.container_top_padding};
       padding-bottom: ${o.container_bottom_padding};
-    }
-    ${cssID}.g__container-fluid{
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
     }
     ${cssID}.a__tile_wrapper .g__col{
       flex: ${fillRow} 0 ${columns};
@@ -189,17 +185,28 @@ function granite_tiles(jsonTiles, jsonTheme) {
     ${cssID} .a__${cssStyle}_tile.a__filters:before {
         background: ${filter_one};
         border-radius: ${border_radius};
+        opacity: ${filter_one_opacity};
     }
     ${cssID} .a__${cssStyle}_tile.a__filters:after {
         background: ${filter_two};
         border-radius: ${border_radius};
+        opacity: ${filter_two_opacity};
     }
-    ${cssID} .a__${cssStyle}_tile .g__tile_body .g__tile_header{
+    ${cssID} .a__basic_tile .g__tile_body .g__tile_header{
       font-family: var(--font-hairline);
       font-weight: 100;
-        color: ${header_color} !important;
-        font-size: ${o.header_size};
-        text-align: ${desc_align};
+      color: ${header_color} !important;
+      font-size: ${o.header_size};
+      text-align: ${desc_align};
+      padding: 15px;
+    }
+    ${cssID} .a__icon_tile .g__tile_body .g__tile_header{
+      font-family: var(--font-hairline);
+      font-weight: 100;
+      color: ${header_color} !important;
+      font-size: ${o.header_size};
+      text-align: ${desc_align};
+      padding: 0 10px 10px 10px;
     }
     ${cssID} .g__tile_container .a__basic_tile .g__desc_container {
       font-family: var(--font-regular);
@@ -315,7 +322,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: .6;
       }
       .a__basic_tile.a__filters:after {
         content: '';
@@ -324,7 +330,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: .6;
       }
       /* Fonts & Icons */
       .a__tile_wrapper .a__basic_tile .g__tile_icon,
@@ -404,7 +409,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: .6;
       }
       .a__icon_tile.a__filters:after {
         content: '';
@@ -413,12 +417,11 @@ function granite_tiles(jsonTiles, jsonTheme) {
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: .6;
       }
       .a__tile_wrapper .a__icon_tile .g__icon{
         z-index: 5;
         opacity: 1;
-        padding: 20px 25px;
+        padding: 15px 25px;
         transition: opacity .5s ease-out;
       }
       .a__tile_wrapper .a__icon_tile .g__tile_body{
@@ -732,14 +735,20 @@ function granite_tiles(jsonTiles, jsonTheme) {
         .g__desc_container {
           position: relative;
           opacity: 1;
-          padding: 0;
+        }
+        .a__tile_wrapper .g__tile_container .a__basic_tile .g__desc_container{
+          display: flex;
+          position: relative;
+          flex-direction: column;
+          padding: 5px;
+          height: auto;
+          opacity: 1;
+        }
+        .a__tile_wrapper .a__basic_tile .g__desc_container .g__desc{
+          opacity: 1;
         }
         .a__tile:hover  .g__desc_container {
           background-color: transparent;
-        }
-        .a__basic_container .g__desc_container {
-        opacity: 1;
-        position: relative;
         }
         .a__tile_action{
           display: flex;
@@ -903,7 +912,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
 
         var tileContainer = createElement("div", {
           "id": `${id}`,
-          "class": `${container(o)}`
+          "class": `g__container`
         });
         var wrapper = createElement("div", {
           "id": `a__${addappterID}`,
@@ -943,7 +952,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
                   var tile_item = document.createElement('div');
                   tile_item.setAttribute("style", tileBkg(o, r) );
                 }
-                if(o.descHover){
+                if(o.description_hover){
                   tile_item.setAttribute("class", "a__basic_tile " + filters(r) + sidepane(r) + hover(r));
                 }else{
                   tile_item.setAttribute("class", "a__icon_tile " + filters(r) + sidepane(r));

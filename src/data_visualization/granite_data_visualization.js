@@ -29,20 +29,78 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
     console.log(anychart_include);
 
     /*---------------------------------------------
+    Theme Variables
+    ---------------------------------------------*/
+    const background_color = t.mode === "midnight" ? "#101010" : "#ffffff";
+    const font_color = t.mode === "midnight" ? "#ffffff" : "#101010";
+    const tooltip_background = t.mode === "midnight" ? "#ffffff" : "#000000";
+    /*---------------------------------------------
     CSS Block
     ---------------------------------------------*/
     var dataVisualization = document.createElement('style');
-
     dataVisualization.innerHTML = `
-    html, body, ${cssId} {
-        width: 100%;
-        height: 100%;
+    ${cssId}{
+      --font-hairline: hero-new-hairline, sans-serif;
+      --font-regular: hero-new, sans-serif;
+      --font-bold: hero-new, sans-serif;
     }
     ${cssId} {
       height: 600px;
       width: auto;
-  }
+      margin: 0 auto;
+    }
+    ${cssId} .g__action_container{
+      padding-bottom: 25px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid #BFBFBF;
+    }
+    ${cssId} .g__action_header{
+      font-family: var(--font-hairline);
+      font-weight: 100;
+      font-size: 32px;
+      color: #101010;
+      margin-bottom: 25px;
+    }
+    ${cssId} .g__action_description{
+      font-family: var(--font-regular);
+      font-weight: 300;
+      font-size: 16px;
+      color: #101010;
+      margin-bottom: 25px;
+    }
     `
+    /*---------------------------------------------
+    Action Row
+    ---------------------------------------------*/
+    const action_row_container = document.createElement('div');
+    action_row_container.setAttribute('class', 'g__action_container')
+
+    const action_content = document.createElement('div');
+    action_content.setAttribute('class', 'g__action_content')
+
+    if(!!o.action_header){
+      const action_header = document.createElement('h2');
+      action_header.setAttribute('class', 'g__action_header');
+      action_header.innerHTML = o.action_header;
+      action_content.appendChild(action_header);
+    }
+    if(!!o.action_description){
+      const action_description = document.createElement('p');
+      action_description.setAttribute('class', 'g__action_description');
+      action_description.innerHTML = o.action_description;
+      action_content.appendChild(action_description);
+    }
+
+    const action_utility = document.createElement('div');
+    action_utility.setAttribute('class', 'g__action_utility');
+
+    action_row_container.appendChild(action_content);
+    action_row_container.appendChild(action_utility);
+
+    document.getElementById(id).appendChild(action_row_container);
+
+
+
     document.head.appendChild(dataVisualization);
 
     const LISTENER_DOUBLE_CLICK = "double_click";
@@ -79,12 +137,11 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
       anychart.onDocumentLoad(function () {
         var colors = [
-          '#0072A5',
-          '#3BBA7B',
-          '#FFCD61',
-          '#FA5446',
-          '#7D58BD',
-          '#29D8D5'
+          '#D44697',
+          '#FF8BCD',
+          '#FDDBEE',
+          '#FFB866',
+          '#FFA08C'
         ];
 
         // create an instance of a pie chart
@@ -135,12 +192,40 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // set the data. The 'normal' key with the 'fill' option sets the color of the bars
             chart.data(attr__records);
 
-            // set the start angle
-            chart.startAngle(-90);
+            // background color
+            chart.background("transparent");
 
-            // configure connectors
-            chart.connectorStroke({color: "#101010", thickness: 5, dash:"2 2"});
+            // enable the legend
+            legend = chart.legend();
+            legend.enabled(true);
+            legend.itemsLayout("veritcal");
+            legend.position("right");
+            legend.align("center");
+            legend.itemsSpacing(50);
+            legend.fontColor("#101010");
+            legend.fontSize(18);
+            legend.fontWeight(300);
+            legend.fontFamily("hero-new, sans-serif");
+
+            // configure outlines
+            chart.normal().outline().enabled(true);
+            chart.normal().outline().width("0");
+            chart.hovered().outline().width("0");
+            chart.selected().outline().width("3");
+            chart.selected().outline().fill("#19c5f2");
+            chart.selected().outline().stroke("#101010");
+            chart.selected().outline().offset(5);
+
+            // set the position of labels
+            chart.labels().position(attr__label_position);
+            chart.labels().fontSize(18);
+            chart.labels().fontColor(font_color);
+            chart.labels().fontWeight(300);
+            chart.labels().fontFamily("hero-new, sans-serif");
+            chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
+
             chart.palette().items(colors);
+
             if(!!attr__inner_radius) {
               //set the inner radius to form the doughnut shape
               chart.innerRadius(attr__inner_radius);
@@ -251,6 +336,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 // set the data. The 'normal' key with the 'fill' option sets the color of the bars
                 chart.data(attr__records);
 
+
                 // set the start angle
                 chart.startAngle(-90);
 
@@ -333,7 +419,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
         // set the tooltip styles
         var tooltipBackground = chart.tooltip().background();
-        tooltipBackground.fill("#406181");
+        tooltipBackground.fill(tooltip_background);
         tooltipBackground.stroke("white");
         tooltipBackground.cornerType("round");
         tooltipBackground.corners(4);
@@ -345,7 +431,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           title.text(attr__title);
           title.fontFamily('hero-new', 'sans-serif', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji')
           title.fontWeight(300);
-          title.fontColor(attr__title_color);
+          title.fontColor(font_color);
           title.fontSize(30);
           //dissable credits watermark
           var credits = chart.credits();
@@ -361,17 +447,12 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           title.fontFamily('hero-new', 'sans-serif', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji')
           title.fontWeight(300);
           label.fontColor(attr__label_color);
-          label.fontSize(24);
+          label.fontSize(18);
           label.hAlign("center");
           label.vAlign("middle");
 
           // set the label as the center content
           chart.center().content(label);
-        }
-
-        if(!!attr__label_position) {
-          // set the position of labels
-          chart.labels().position(attr__label_position);
         }
 
         //legend styling
