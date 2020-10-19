@@ -87,7 +87,7 @@ let navigationBlock = {
   //     {"href": "addappter-tabs-test.html", "label": "", "icon": "fal fa-layer-group"},
   //     ],
   "options": {
-    "type": "sidebar",
+    "type": "topbar",
     "background": "#3c4c8c",
     "background_opacity": "",
     "mobile_menu": "topbar",
@@ -279,41 +279,47 @@ let dataVisualizationBlock = {
   "classes": "",
   "options": {
     "title": "Granite Chart",
-    "chart_type": "pie",
+    "chart_type": "line",
     "drilldown_chart_types": ["pie", "line"],
+    "colors": "",
     "drilldown_details_field_name": "type_breakdown",
-    "inner_radius": "25%",
+    "inner_radius": "60%",
+    "show_tooltip": true,
     "label_position": "outside",
     "listener": "point_select",
     "series_titles": [],
     "attr__series_titles": "Test Title",
     "title2": "Interaction Type",
+    "export_excel": true,
+    "export_pdf": true,
     "x_axis_title": "Company",
     "y_axis_title": "Sales",
+    // x axis labels
+    "x_axis_labels": ["January", "February", "March", "April"],
     // action row
     "action_header": "Action Row Header",
     "action_description": "Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna."
   },
   "records": [
-    {"x": "Microsoft", "name": "Detective", "value": "518.84", "line_values": ["January", 120, 356, 45, 100], "type_breakdown": [
+    {"x": "Microsoft", "name": "Detective", "value": "518.84", "line_values": [120, 356, 45, 100], "type_breakdown": [
       {"x": "Q1", "value": 792026},
       {"x": "Q2", "value": 610501},
       {"x": "Q3", "value": 441843},
       {"x": "Q4", "value": 350711}
   ]},
-    {"x": "Oracle", "name": "Classics", "value": "128.14", "line_values": ["February", 543, 256, 345, 346], "type_breakdown": [
+    {"x": "Oracle", "name": "Classics", "value": "128.14", "line_values": [543, 256, 345, 346], "type_breakdown": [
       {"x": "Q1", "value": 1378786},
       {"x": "Q2", "value": 571063},
       {"x": "Q3", "value": 510493},
       {"x": "Q4", "value": 797105}
   ]},
-    {"x": "HP", "name": "Textbooks", "value": "328.14", "line_values": ["March", 234, 763, 134,872], "type_breakdown": [
+    {"x": "HP", "name": "Textbooks", "value": "328.14", "line_values": [234, 763, 134,872], "type_breakdown": [
       {"x": "Q1", "value": 499299},
       {"x": "Q2", "value": 649963},
       {"x": "Q3", "value": 571176},
       {"x": "Q4", "value": 242969}
     ]},
-  {"x": "Dell", "name": "Textbooks", "value": "328.14", "line_values": ["April", 34, 363, 720, 348], "type_breakdown": [
+  {"x": "Dell", "name": "Textbooks", "value": "328.14", "line_values": [34, 363, 720, 348], "type_breakdown": [
     {"x": "Q1", "value": 499299},
     {"x": "Q2", "value": 649963},
     {"x": "Q3", "value": 571176},
@@ -497,3 +503,237 @@ let tilesBlock = {
       }
     ]
 };
+/*---------------------------------------------
+Cards
+---------------------------------------------*/
+let cardsBlock = {
+  "id": "granite-cards",
+  "feature": "cards",
+  "class": "a_custom",
+    "options": {
+      "style": "basic",
+      "action_header": "Action Row",
+      "action_header_size": "30px",
+      "action_header_color": "",
+      "action_header_bottom_margin": "20px",
+      "action_description": "Pellentesque aliquam velit ut iaculis scelerisque. Nullam vel pulvinar diam, non pellentesque ipsum. Aenean non euismod nunc, pellentesque placerat leo. Curabitur non massa hendrerit, vehicula elit quis, ornare nisi. Proin mattis condimentum mollis. Pellentesque a elit et turpis faucibus fermentum.",
+      "action_description_size": "16px",
+      "action_description_color": "",
+      "action_description_bottom_margin": "20px",
+      "action_align_text": "left",
+      "action_border": true,
+      "align_content": "right", //picklist: left, center, right
+      "top_height": "250px",
+      "theme": "custom",
+      "header_color": "#333",
+      "align_header_text": "center",
+      "match_height": false,
+      "align_buttons_bottom": true,
+      "inside_top_bottom_padding": "15px",
+      "inside_left_right_padding": "45px",
+      "bottom_background_color": "#5051c3",
+      "border_color": "#333333",
+      "header_size": "28px", //small, medium, large
+      "description_color": "red",
+      "description_size": "16px", //small, medium, large
+      "button_top_margin": "20px",
+      "button_style": "pink",
+      "icon_color": "",
+      "columns": "3",
+      "fillRow": false,
+      "icon_size": "",
+      "height": "300px",
+      "filter_one": "",
+      "filter_two": "",
+      "search": false,
+      "classes": "tabs-class",
+      "hover_color": "",
+      "padding": "small",
+      "border_radius": "",
+      "border": "",
+      "border_color": "#ff0f3f",
+      "micro_top_padding": "50px",
+      "micro_bottom_padding": "50px",
+      "bottom_button_text": "Bottom Button",
+      "bottom_buttom_link": "https://addapptation.com/",
+      "bottom_button_target": true,
+      "bottom_button_style": "pink",
+      "bottom_button_top_margin": "50px",
+      "bottom_button_align": "center"
+
+    },
+    "records": [
+      {
+        "header": "Amsterdam",
+        "description": "Aliquam dictum purus vitae lorem lobortis, in laoreet lacus vulputate. Mauris in varius mi, non aliquam nisi.",
+        "background_image": "",
+        "thumb_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+        "background_color": "",
+        "button_link": "https://addapptation.com/",
+        "align_background_image": "center center",
+        "button_text": "Hero Button",
+        "target": true,
+        "opacity_background": "black",
+        "background_opacity": ".98",
+        "overlay_color": "",
+        "overlay_opacity": "",
+      },
+      {
+        "header": "Amsterdam",
+        "description": "Mauris in varius mi, non aliquam nisi.",
+        "background_image": "",
+        "thumb_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+        "background_color": "linear-gradient(133deg, rgba(163,69,123,1) 0%, rgba(208,98,143,1) 100%)",
+        "button_link": "",
+        "button_text": "Hero Button",
+        "target": true,
+
+      },
+      {
+        "header": "Amsterdam",
+        "description": "",
+        "background_image": "",
+        "thumb_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+        "background_color": "linear-gradient(133deg, rgba(163,69,123,1) 0%, rgba(208,98,143,1) 100%)",
+        "button_link": "https://addapptation.com/",
+        "button_text": "Hero Button",
+        "target": true,
+
+      }
+    ]
+};
+/*---------------------------------------------
+Content
+---------------------------------------------*/
+let contentBlock = {
+  "id": "granite-content",
+  "feature": "content",
+  "options": {
+    "height": "",
+    "columns": "1",
+    "fillRow": false,
+    "top_padding": "50px",
+    "bottom_padding": "50px",
+    "left_padding": "50px",
+    "right_padding": "50px",
+    "body_top_padding": "50px",
+    "background_image": "",
+    "align_background_image": "center center",
+    "background_color": "darkblue",
+    "theme": "custom",
+    "mobile_reverse_column": true,
+    "overlay_color": "orange",
+    "overlay_opacity": ".7",
+    "mobile_margin_top": "50px",
+    "mobile_margin_bottom": "50px",
+    "action_header": "Action Row",
+    "action_header_size": "30px",
+    "action_header_color": "white",
+    "action_header_bottom_margin": "20px",
+    "action_align_text": "left",
+    "action_description": "Pellentesque aliquam velit ut iaculis scelerisque. Nullam vel pulvinar diam, non pellentesque ipsum. Aenean non euismod nunc, pellentesque placerat leo. Curabitur non massa hendrerit, vehicula elit quis, ornare nisi. Proin mattis condimentum mollis. Pellentesque a elit et turpis faucibus fermentum.",
+    "action_description_size": "16px",
+    "action_description_color": "white",
+    "action_description_bottom_margin": "20px",
+    "action_align_text": "left",
+    "action_border": true
+
+  },
+  "records": [
+    {
+      "align_content": "center",
+      "align_text": "left",
+      "max-width": "100%",
+      "content_left_padding": "50px",
+      "content_right_padding": "50px",
+      "content_top_padding": "",
+      "content_bottom_padding": "",
+      "header": "Section 1",
+      "header_size": "35px",
+      "header_color": "",
+      "header_bottom_margin": "25px",
+      "description": "Pellentesque aliquam velit ut iaculis scelerisque. Nullam vel pulvinar diam, non pellentesque ipsum. Aenean non euismod nunc, pellentesque placerat leo. Curabitur non massa hendrerit, vehicula elit quis, ornare nisi. Proin mattis condimentum mollis. Pellentesque a elit et turpis faucibus fermentum.",
+      "description_size": "18px",
+      "description_color": "",
+      "description_line_height": "25px",
+      "description_bottom_margin": "25px",
+      "button_style": "transparentWhite",
+      "button_url": "https://addapptation.com/",
+      "button_text": "Hero Button",
+      "same_window": true,
+      "button_top_margin": "50px",
+      "button_align": "flex-start",
+      "featured_image": "",
+      "featured_image_link": "https://addapptation.com/",
+      "featured_image_horizontal_align": "center",
+      "featured_image_vertical_align": "center",
+      "featured_image_max_width": "100px",
+      "featured_image_bottom_margin": "25px",
+      "featured_image_targer": false,
+
+    },
+
+    // {
+    //   "align_content": "center",
+    //   "align_text": "left",
+    //   "content_left_padding": "50px",
+    //   "content_right_padding": "50px",
+    //   "featured_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+    //   "featured_image_link": "https://addapptation.com/",
+    //   "featured_image_horizontal_align": "center",
+    //   "featured_image_vertical_align": "center",
+    //   "featured_image_max_width": "300px",
+    //   "featured_image_bottom_margin": "25px",
+    //   "featured_image_targer": false,
+
+    // },
+    {
+      "align_content": "center",
+      "align_text": "left",
+      "max-width": "100%",
+      "content_left_padding": "50px",
+      "content_right_padding": "50px",
+      "content_top_padding": "100px",
+      "content_bottom_padding": "",
+      "header": "Section 2",
+      "header_size": "35px",
+      "header_color": "",
+      "header_bottom_margin": "25px",
+      "description": "Aenean non euismod nunc, pellentesque placerat leo. Curabitur non massa hendrerit, vehicula elit quis, ornare nisi. Proin mattis condimentum mollis. Pellentesque a elit et turpis faucibus fermentum.",
+      "description_size": "18px",
+      "description_color": "green",
+      "description_line_height": "25px",
+      "description_bottom_margin": "25px",
+      "button_style": "color",
+      "button_url": "https://addapptation.com/",
+      "button_text": "",
+      "same_window": true,
+      "button_top_margin": "50px",
+      "button_align": "flex-start",
+      "featured_image": "",
+      "featured_image_link": "https://addapptation.com/",
+      "featured_image_horizontal_align": "center",
+      "featured_image_vertical_align": "center",
+      "featured_image_max_width": "100px",
+      "featured_image_bottom_margin": "25px",
+      "featured_image_targer": false,
+
+    },
+    // {
+    //   "align_content": "center",
+    //   "align_text": "left",
+    //   "content_left_padding": "50px",
+    //   "content_right_padding": "50px",
+    //   "content_top_padding": "100px",
+    //   "content_bottom_padding": "",
+    //   "featured_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+    //   "featured_image_link": "https://addapptation.com/",
+    //   "featured_image_horizontal_align": "center",
+    //   "featured_image_vertical_align": "center",
+    //   "featured_image_max_width": "300px",
+    //   "featured_image_bottom_margin": "25px",
+    //   "featured_image_targer": false,
+
+    // }
+  ]
+  };

@@ -193,16 +193,16 @@ function granite_tiles(jsonTiles, jsonTheme) {
         opacity: ${filter_two_opacity};
     }
     ${cssID} .a__basic_tile .g__tile_body .g__tile_header{
-      font-family: var(--font-hairline);
-      font-weight: 100;
+      font-family: var(--font-regular);
+      font-weight: 300;
       color: ${header_color} !important;
       font-size: ${o.header_size};
       text-align: ${desc_align};
       padding: 15px;
     }
     ${cssID} .a__icon_tile .g__tile_body .g__tile_header{
-      font-family: var(--font-hairline);
-      font-weight: 100;
+      font-family: var(--font-regular);
+      font-weight: 300;
       color: ${header_color} !important;
       font-size: ${o.header_size};
       text-align: ${desc_align};

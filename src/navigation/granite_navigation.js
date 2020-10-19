@@ -8,6 +8,7 @@ function granite_navigation(jsonNav, jsonTheme){
     var options = json.options;
     var records = json.records;
     var t = jsonTheme;
+    console.log(t);
     var content = (document.getElementById(targetID).innerHTML).trim();
     var nav_root = document.documentElement;
     const font_include = document.getElementById('g__font_stylesheet');
@@ -104,6 +105,9 @@ function granite_navigation(jsonNav, jsonTheme){
     var topbar_mobile_menu_background = t.mode === "midnight" ? "#101010" : "#ffffff";
     var topbar_mobile_font_color = t.mode === "midnight" ? "#ffffff" : "#101010";
     var font_color = !!options.font_color ? hexToRgb(options.font_color) : "#fff";
+    var topbar_submenu_background = t.mode === "midnight" ? "#101010" : "#ffffff";
+    var topbar_submenu_hover = t.mode === "midnight" ? "rgba(255, 255, 255, .2)" : "rgba(0, 0, 0, .2)";
+    var topbar_submenu_active = t.mode === "midnight" ? "rgba(255, 255, 255, .3)" : "rgba(0, 0, 0, .3)";
     console.log(font_color);
     if(!!options){
         nav_root.style.setProperty('--active', primary); /*options.highlight*/
@@ -124,6 +128,9 @@ function granite_navigation(jsonNav, jsonTheme){
         nav_root.style.setProperty('--topbarPaddingLeft', options.topbar_padding_left);
         nav_root.style.setProperty('--topbarMobileMenuBackground', topbar_mobile_menu_background);
         nav_root.style.setProperty('--topbarMobileFontColor', topbar_mobile_font_color);
+        nav_root.style.setProperty('--topbarSubmenuBackground', topbar_submenu_background);
+        nav_root.style.setProperty('--topbarSubmenuHover', topbar_submenu_hover);
+        nav_root.style.setProperty('--topbarSubmenuActive', topbar_submenu_active);
     }
         /* MENU OPTIONS */
         var options_list_content = '';
@@ -155,7 +162,7 @@ function granite_navigation(jsonNav, jsonTheme){
         if(options.type === 'topbar'){
             nav.setAttribute('id','a__topbar_nav');
             nav.setAttribute('class','a__nav_container');
-            nav.setAttribute('mode', mode(t.mode));
+            nav.setAttribute('mode', mode());
             topbar = true;
             document.body.classList.add('topbar_shift');
             if(!!side_pane){
@@ -164,7 +171,7 @@ function granite_navigation(jsonNav, jsonTheme){
         } else {
             nav.setAttribute('id','a__sidebar_nav');
             nav.setAttribute('class','a__nav_container');
-            nav.setAttribute('mode', mode(t.mode));
+            nav.setAttribute('mode', mode());
             document.body.classList.add('sidebar_shift');
             if(!!side_pane){
             side_pane.classList.add('sidebar_shift');
@@ -222,9 +229,10 @@ function granite_navigation(jsonNav, jsonTheme){
                 return "g__break_link"
             }
         }
-        function mode(t){
+        function mode(){
+            console.log(t);
             if(t.mode === "standard"){
-                return "light"
+                return "standard"
             }else{
                 return "midnight"
             }

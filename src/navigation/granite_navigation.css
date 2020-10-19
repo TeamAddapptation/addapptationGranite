@@ -20,6 +20,9 @@
     --topbarPaddingLeft: 0;
     --topbarMobileMenuBackground: #101010;
     --topbarMobileFontColor: #ffffff;
+    --topbarSubmenuBackground: #101010;
+    --topbarSubmenuActive: rgba(255, 255, 255, 0.3);
+    --topbarSubmenuHover: rgba(255, 255, 255, 0.2);
   }
   /* HTML */
   /* Verion G1.0.4 */
@@ -1338,18 +1341,18 @@
       /* box-shadow: 0 0px 10px 0px grey; */
     }
     #a__topbar_nav ul.nav-submenu {
-      background: var(--topbarMobileMenuBackground);
+      background: var(--topbarSubmenuBackground);
       border: 1px solid #5d5d5d;
       z-index: -1;
     }
     #a__topbar_nav ul.nav-submenu li {
       display: flex;
     }
-    #a__topbar_nav ul.nav-submenu li a:hover {
-      background: rgba(0,0,0,0.05) !important;
+    #a__topbar_nav #a__sidebar_nav__list li .nav-submenu .g__submenu-item a:hover {
+      background: var(--topbarSubmenuHover) !important;
     }
     #a__topbar_nav ul.nav-submenu li .nav-submenu-link.active {
-      background: #EAEAEA;
+      background: var(--topbarSubmenuActive) !important;
     }
     #a__topbar_nav .a__sidebar_nav__footer {
       display: none;
