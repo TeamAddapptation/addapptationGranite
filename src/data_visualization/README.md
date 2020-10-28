@@ -10,11 +10,15 @@ Data can be aligned three different ways to accomidate our single series, multip
 #### Settings Level
 Multiple Series: False
 #### Record Level
-Label:
+Label (String)
 ```html
 Apple
 ```
-Value:
+Value (Single Number)
 ```html
 35
+```
+Series Name (String)
+```html
+Q3 Sales
 ```
