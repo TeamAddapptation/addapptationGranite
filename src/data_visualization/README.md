@@ -20,5 +20,5 @@ Value (Single Number)
 ```
 Series Name (String)
 ```html
-Q3 Sales
+Sales in Q3
 ```
