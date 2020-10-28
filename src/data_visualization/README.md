@@ -37,3 +37,11 @@ X Axis Labels (Array of values)
 ```
 #### Record Level
 
+Values for this record (array)
+```js
+[120, 356, 45, 100, 276, 437, 134]
+```
+Label (String)
+```html
+Apple
+```
