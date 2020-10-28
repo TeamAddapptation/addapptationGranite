@@ -74,4 +74,25 @@ Drilldown Data (Array of Objects)
 ```
 #### Output
 ![Multi Series Chart](../../screenshots/granite_dv_drilldown.jpg)
+```js
+"records": [
+    {"x": "Apple", "value": "234", "drilldown": [
+      {"x": "Q1", "value": 792026},
+      {"x": "Q2", "value": 610501},
+      {"x": "Q3", "value": 441843},
+      {"x": "Q4", "value": 350711}
+  ]},
+    {"x": "Microsoft", "value": "491", "drilldown": [
+      {"x": "Q1", "value": 1378786},
+      {"x": "Q2", "value": 571063},
+      {"x": "Q3", "value": 510493},
+      {"x": "Q4", "value": 797105}
+  ]},
+    {"x": "Oracle", "value": "395", "drilldown": [
+      {"x": "Q1", "value": 499299},
+      {"x": "Q2", "value": 649963},
+      {"x": "Q3", "value": 571176},
+      {"x": "Q4", "value": 242969}
+    ]};
+```
 
