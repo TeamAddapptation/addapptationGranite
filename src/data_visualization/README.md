@@ -72,3 +72,6 @@ Drilldown Data (Array of Objects)
 {"x":"Q4","value":350711}
 ]
 ```
+#### Output
+![Multi Series Chart](../../screenshots/granite_dv_drilldown.jpg)
+
