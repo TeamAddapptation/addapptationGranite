@@ -60,6 +60,10 @@ Series Data (array)
 
 # Drilldown
 #### Settings Level
+Drilldown Chart Types (Array)
+```js
+["bar", "line"]
+```
 Multiple Series: False
 #### Record Level
 Label (String)
