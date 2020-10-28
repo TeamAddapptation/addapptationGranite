@@ -22,3 +22,6 @@ Series Name (String)
 ```html
 Sales in Q3
 ```
+#### Output
+![Single Series Chart](https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/microdocumentation/granite_dv_single_series)
+Format: ![Single Series Chart](url)
