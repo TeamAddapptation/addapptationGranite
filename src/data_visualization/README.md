@@ -23,4 +23,4 @@ Series Name (String)
 Sales in Q3
 ```
 #### Output
-![Single Series Chart](../../../screenshots/granite_dv_single_series.jpg)
+![Single Series Chart](../../screenshots/granite_dv_single_series.jpg)
