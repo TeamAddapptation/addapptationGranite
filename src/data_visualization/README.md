@@ -73,9 +73,17 @@ Series Data (array)
 ```html
 False
 ```
-Drilldown Chart Types (Array)
+Drilldown Chart Type One (Picklist)
 ```js
-["bar", "line"]
+Pie
+```
+Drilldown Chart Type Two (Picklist)
+```js
+Line
+```
+Drilldown Chart Two Title (Picklist)
+```js
+Title Here
 ```
 Multiple Series: False
 #### Record Level
