@@ -36,12 +36,12 @@ X Axis Labels (Array of values)
 ["January", "February", "March", "April", "May", "June", "July"]
 ```
 #### Record Level
-
-Values for this record (array)
-```js
-[120, 356, 45, 100, 276, 437, 134]
-```
 Label (String)
 ```html
 Apple
 ```
+Series Data (array)
+```js
+[120, 356, 45, 100, 276, 437, 134]
+```
+
