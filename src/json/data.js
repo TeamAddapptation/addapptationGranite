@@ -114,10 +114,11 @@ let navigationBlock = {
     "gradient": "",
     "topbar_gradient": "",
     "searching": false,
-    "link_label": "",
+    "link_label": "Sign In",
     "link_url": "#",
     "link_target": false,
-    "cta_label": "",
+    "cta_link_left_margin": "300px",
+    "cta_label": "Edit",
     "cta_url": "#",
     "cta_target": false,
     "hide_on": [],
@@ -279,11 +280,13 @@ let dataVisualizationBlock = {
   "classes": "",
   "options": {
     "title": "Granite Chart",
-    "chart_type": "drilldown",
-    "series_data": false,
+    "chart_type": "line",
+    "chart_height": "700px",
+    "series_data": true,
     "drilldown_chart_types": ["bar", "line"],
-    "colors": ["#ffbe0b", "#fb5607", "#ff006e", "#8338ec", "#3a86ff"],
-    "drilldown_details_field_name": "drilldown_data",
+    // "colors": ["#C492B1", "#AF3B6E","#BCE7FD", "#424651", "#21FA90"],
+    "colors":"",
+    "drilldown_details_field_name": "drilldown",
     "inner_radius": "60%",
     "show_tooltip": true,
     "enable_legend": false,
@@ -296,6 +299,11 @@ let dataVisualizationBlock = {
     "export_pdf": true,
     "x_axis_title": "Month",
     "y_axis_title": "Sales",
+    "series_name": "November Sales",
+    // Legend
+    "legend_horizontal_position": "center",
+    "legend_vertical_position": "center",
+    "legend_items_layout": "horizontal",
     // x axis labels
     "x_axis_labels": ["January", "February", "March", "April", "May", "June"],
     // action row
@@ -325,13 +333,13 @@ let dataVisualizationBlock = {
       {"x": "Q3", "value": 571176},
       {"x": "Q4", "value": 242969}
     ]},
-  {"x": "Dell", "name": "Textbooks", "value": "328.14", "series_values": [34, 363, 720, 348, 543, 276], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9800, 9000, 10000, 5000], "drilldown": [
+  {"x": "Dell", "name": "Textbooks", "value": "328.14", "series_values": [434, 863, 20, 348, 243, 46], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9800, 9000, 10000, 5000], "drilldown": [
     {"x": "Q1", "value": 499299},
     {"x": "Q2", "value": 649963},
     {"x": "Q3", "value": 571176},
     {"x": "Q4", "value": 242969}
     ]},
-  {"x": "Lenovo", "name": "Textbooks", "value": "328.14", "series_values": [34, 363, 720, 348], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [4000, 9000, 7000, 6400], "drilldown": [
+  {"x": "Lenovo", "name": "Textbooks", "value": "328.14", "series_values": [34, 363, 720, 348, 453, 642], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [4000, 9000, 7000, 6400], "drilldown": [
     {"x": "Q1", "value": 499299},
     {"x": "Q2", "value": 649963},
     {"x": "Q3", "value": 571176},
@@ -629,7 +637,7 @@ let contentBlock = {
     "left_padding": "50px",
     "right_padding": "50px",
     "body_top_padding": "50px",
-    "background_image": "",
+    "background_image": "https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/addapptation-micros-emerson/Rectangle%2027.png",
     "align_background_image": "center center",
     "background_color": "darkblue",
     "theme": "custom",
@@ -675,13 +683,13 @@ let contentBlock = {
       "same_window": true,
       "button_top_margin": "50px",
       "button_align": "flex-start",
-      "featured_image": "",
-      "featured_image_link": "https://addapptation.com/",
+      "featured_image": "https://addapptation.blob.core.windows.net/logo/logo.png",
+      "featured_image_link": "",
       "featured_image_horizontal_align": "center",
       "featured_image_vertical_align": "center",
       "featured_image_max_width": "100px",
       "featured_image_bottom_margin": "25px",
-      "featured_image_targer": false,
+      "featured_image_target": true,
 
     },
 
@@ -749,3 +757,23 @@ let contentBlock = {
     // }
   ]
   };
+/*---------------------------------------------
+Heat Map
+---------------------------------------------*/
+let heatmapBlock = {
+  "id": "granite-heatmap",
+  "options": {
+    "title": "Granite Heat Map"
+  },
+  "records": [
+    {x: "2010", y: "A", heat: 15},
+    {x: "2011", y: "A", heat: 17},
+    {x: "2012", y: "A", heat: 21},
+    {x: "2010", y: "B", heat: 34},
+    {x: "2011", y: "B", heat: 33},
+    {x: "2012", y: "B", heat: 32},
+    {x: "2010", y: "C", heat: 51},
+    {x: "2011", y: "C", heat: 50},
+    {x: "2012", y: "C", heat: 47}
+  ]
+}

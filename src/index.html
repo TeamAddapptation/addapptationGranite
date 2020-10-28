@@ -20,6 +20,7 @@
         <div id="granite-tiles"></div>
         <div id="granite-cards"></div>
         <div id="granite-content"></div>
+        <div id="granite-heatmap"></div>
     <script src='json/data.js'></script>
     <script src='template/granite_template.js'></script>
     <script src='navigation/granite_navigation.js'></script>
@@ -29,6 +30,7 @@
     <script src='tiles/granite_tiles.js'></script>
     <script src='cards/granite_cards.js'></script>
     <script src='content/granite_content.js'></script>
+    <script src='heatmap/granite_heatmap.js'></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   </body>
   <script>
@@ -62,6 +64,9 @@
         break;
         case "content":
             granite_content(contentBlock, jsonTheme);
+        break;
+        case "heatmap":
+            granite_heatmap(heatmapBlock, jsonTheme);
         break;
         default:
             //nothing

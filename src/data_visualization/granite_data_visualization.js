@@ -1,11 +1,11 @@
 function granite_data_visualization(dataVisualizationBlock, jsonTheme){
+    console.log("Data Viz Micro");
     const id = dataVisualizationBlock.id;
     const cssId = "#" + dataVisualizationBlock.id;
     const chartId = 'chart-' + id;
     const o = dataVisualizationBlock.options;
     const r = dataVisualizationBlock.records;
     const t = jsonTheme;
-    console.log(dataVisualizationBlock);
     let viewportWidth = window.innerWidth;
     let attr__container_id = id || '';
     let attr__chart_height = o.chart_height || '500px';
@@ -30,10 +30,11 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
     let attr__series_name = dataVisualizationBlock.options.series_name || '';
     let attr__xAxis_title = dataVisualizationBlock.options.x_axis_title || '';
     let attr__yAxis_title = dataVisualizationBlock.options.y_axis_title || '';
+    let attr__data_name = dataVisualizationBlock.options.data_name || '';
     // Legend Items
     let attr__legend_horizontal_position = dataVisualizationBlock.options.legend_horizontal_position || 'center';
     let attr__legend_vertical_position = dataVisualizationBlock.options.legend_vertical_position || 'center';
-    let attr__legend_items_layout = dataVisualizationBlock.options.legend_items_layout || 'center';
+    let attr__legend_items_layout = dataVisualizationBlock.options.legend_items_layout || 'horizontal';
     let attr__legend_items_spacing = dataVisualizationBlock.options.legend_items_spacing || 50;
 
     /*---------------------------------------------
@@ -295,26 +296,29 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
         var stage;
         var draw_chart = true; // We might have to draw our charts in a custom function
 
-        const process_selected_fill = function(my_chart, chart_type, fill_color) {
-            // Deal with selected state fill colors.
-            switch(chart_type) {
-              case CHART_TYPE_COLUMN:
-              case CHART_TYPE_BAR:
-              case CHART_TYPE_VERTICAL_BAR:
-                var i=0;
-                // create a loop
-                while (my_chart.getSeriesAt(i)){
-                  // rename each series
-                  my_chart.getSeriesAt(i).selected().fill(fill_color);
-                  i++;
-                }
-                break;
-              default:
-               // do nothing
-            }
-        }
+        // const process_selected_fill = function(my_chart, chart_type, fill_color) {
+        //     // Deal with selected state fill colors.
+        //     switch(chart_type) {
+        //       case CHART_TYPE_COLUMN:
+        //       case CHART_TYPE_BAR:
+        //       case CHART_TYPE_VERTICAL_BAR:
+        //         var i=0;
+        //         // create a loop
+        //         while (my_chart.getSeriesAt(i)){
+        //           // rename each series
+        //           my_chart.getSeriesAt(i).selected().fill(fill_color);
+        //           i++;
+        //         }
+        //         break;
+        //       default:
+        //        // do nothing
+        //     }
+        // }
 
         switch(attr__chart_type) {
+          /*---------------------------------------------
+          Line
+          ---------------------------------------------*/
           case CHART_TYPE_LINE:
             if(attr__series_data){
               let line_data = [];
@@ -373,7 +377,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // create the first series and set the data
             var series1 = chart.line(mapping1);
             series1.hovered().markers().enabled(true).type('circle').size(5);
-            series1.name("test");
+            series1.name(attr__series_name);
             chart.xScale().mode('continuous');
           }
 
@@ -405,12 +409,10 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             yLabels.fontFamily("hero-new, sans-serif");
             yLabels.fontColor(font_color);
             yLabels.padding(10);
-
-            //Tooltip settings
-            if(o.show_tooltip){
-              chart.tooltip().useHtml(true);
-            }
           break;
+          /*---------------------------------------------
+          Pie
+          ---------------------------------------------*/
           case CHART_TYPE_PIE:
             chart = anychart.pie();
             // set the data. The 'normal' key with the 'fill' option sets the color of the bars
@@ -442,6 +444,9 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             }
 
           break;
+          /*---------------------------------------------
+          Column
+          ---------------------------------------------*/
           case CHART_TYPE_COLUMN:
             if(attr__series_data){
               console.log("series Data");
@@ -527,12 +532,10 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             yLabels.fontColor(font_color);
             yLabels.padding(10);
 
-            //Tooltip settings
-            if(o.show_tooltip){
-              chart.tooltip().useHtml(true);
-            }
-
           break;
+          /*---------------------------------------------
+          Bar
+          ---------------------------------------------*/
           case CHART_TYPE_BAR:
           if(attr__series_data){
             let bar_data = [];
@@ -589,6 +592,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // create the first series and set the data
             var series1 = chart.bar(mapping1);
             series1.normal().stroke(0);
+            series1.name(attr__series_name);
           }
             // set the titles of the axes
             if(!!attr__xAxis_title) {
@@ -617,11 +621,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             yLabels.fontColor(font_color);
             yLabels.padding(10);
 
-            //Tooltip settings
-            if(o.show_tooltip){
-              chart.tooltip().useHtml(true);
-            }
-
           break;
           case CHART_TYPE_VERTICAL_BAR:
             chart = anychart.vertical();
@@ -634,6 +633,9 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             series.stroke("none");
 
           break;
+          /*---------------------------------------------
+          Pyramid
+          ---------------------------------------------*/
           case CHART_TYPE_PYRAMID:
             var data = anychart.data.set(attr__records);
             var chart = anychart.pyramid(data);
@@ -642,23 +644,26 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           chart.connectorStroke('#607D8B', 1.5, '5 2', 'round');
 
           break;
+          /*---------------------------------------------
+          Drilldown
+          ---------------------------------------------*/
           case CHART_TYPE_DRILLDOWN:
             let details_chart;
             let chart_type_main = attr__drilldown_chart_types[0];
             let chart_type_details = attr__drilldown_chart_types[1];
 
             // Build Details data object
-            for(var i = 0; i < attr__records.length; i++){
-              let drilldown_x = attr__records[i].drilldown_x;
-              let drilldown_value = attr__records[i].drilldown_value;
-              var drilldown_data = drilldown_x.map((val, index) =>  {
-                return {
-                  x: val,
-                  value: drilldown_value[index]
-                }
-              });
-              attr__records[i].drilldown_data = drilldown_data;
-            }
+            // for(var i = 0; i < attr__records.length; i++){
+            //   let drilldown_x = attr__records[i].drilldown_x;
+            //   let drilldown_value = attr__records[i].drilldown_value;
+            //   var drilldown_data = drilldown_x.map((val, index) =>  {
+            //     return {
+            //       x: val,
+            //       value: drilldown_value[index]
+            //     }
+            //   });
+            //   attr__records[i].drilldown_data = drilldown_data;
+            // }
 
             let drillDownFunction = function() {
                 // clear the chart with details
@@ -673,8 +678,9 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 for (i=0;i<points.length;i++){
                   switch(chart_type_details) {
                     case CHART_TYPE_LINE:
-                      details_chart.line(points[i].get(attr__drilldown_details_field_name)).name(points[i].get('x'));
+                      details_chart.line(points[i].get(attr__drilldown_details_field_name)).name(points[i].get('x')).stroke({color: palette[0],  thickness: 3});
                       details_chart.background(background_color);
+
                       break;
                     case CHART_TYPE_BAR:
                       details_chart.bar(points[i].get(attr__drilldown_details_field_name)).name(points[i].get('x'));
@@ -692,13 +698,18 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             switch(chart_type_main) {
               case CHART_TYPE_BAR:
                 chart = anychart.bar();
-                chart.bar(attr__records); // .name("Subject Interactions:");
-                chart.selected({fill: '#4CAF50'});
+                series = chart.bar(attr__records); // .name("Subject Interactions:");
+                series.normal().fill("#00cc99", 0.3);
+                series.selected().fill("#00cc99", 0.5);
+                series.hovered().fill("#00cc99", 0.1);
+                series.normal().stroke("#00cc99", 1, "10 5", "round");
+                series.hovered().stroke("#00cc99", 2, "10 5", "round");
+                series.selected().stroke("#00cc99", 4, "10 5", "round");
               break;
               case CHART_TYPE_COLUMN:
                 chart = anychart.column();
                 chart.column(attr__records); // .name("Subject Interactions:");
-                chart.selected({fill: '#4CAF50'});
+                chart.palette().items(palette);
               break;
               case CHART_TYPE_PIE:
                 chart = anychart.pie();
@@ -707,7 +718,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
                 // set the start angle
                 chart.startAngle(-90);
-                chart.selected({fill: '#4CAF50'});
                 // configure connectors
                 chart.connectorStroke({color: "#595959", thickness: 2, dash:"2 2"});
 
@@ -720,7 +730,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 // do nothing
             }
 
-            process_selected_fill(chart, chart_type_main, "none");
+            // process_selected_fill(chart, chart_type_main, "none");
 
             // Everything we normally do to chart outside of the select, we have to do here for the details chart.
             switch(chart_type_details) {
@@ -795,13 +805,20 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
         Global Elements
         ---------------------------------------------*/
         //Color Pallette
-        chart.palette().items(palette);
+        switch(attr__chart_type) {
+          case CHART_TYPE_PIE:
+          case CHART_TYPE_BAR:
+          case CHART_TYPE_COLUMN:
+            chart.palette().items(palette);
+          break;
+          default:
+        }
 
         // background color
         chart.background(background_color);
 
         // Tooltip settings
-        if(o.show_tooltip && ((o.chart_type === "pie") || (o.chart_type === "pyramid"))){
+        if(o.show_tooltip){
           chart.tooltip().useHtml(true);
         }
 
@@ -835,8 +852,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           chart.center().content(label);
         }
         // Lengend Settings
-        var legend = chart.legend();
-        if(!!attr__enable_legend) {
+        if(attr__enable_legend) {
             legend = chart.legend();
             legend.enabled(true);
             legend.itemsLayout(attr__legend_items_layout);
@@ -874,7 +890,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           }
         }
 
-        process_selected_fill(chart, attr__chart_type, "none");
+        // process_selected_fill(chart, attr__chart_type, "none");
 
     /*---------------------------------------------
     Draw The Chart
