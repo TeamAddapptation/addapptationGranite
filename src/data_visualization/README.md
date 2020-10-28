@@ -8,7 +8,10 @@ Data can be aligned three different ways to accomidate our single series, multip
 
 # Single Series Data
 #### Settings Level
-Multiple Series: False
+Multiple Series
+```html
+False
+```
 #### Record Level
 Label (String)
 ```html
@@ -67,6 +70,9 @@ Series Data (array)
 
 # Drilldown
 #### Settings Level
+```html
+False
+```
 Drilldown Chart Types (Array)
 ```js
 ["bar", "line"]
