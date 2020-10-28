@@ -93,6 +93,7 @@ Drilldown Data (Array of Objects)
       {"x": "Q2", "value": 649963},
       {"x": "Q3", "value": 571176},
       {"x": "Q4", "value": 242969}
-    ]};
+    ]}
+  ];
 ```
 
