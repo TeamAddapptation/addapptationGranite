@@ -46,3 +46,28 @@ Series Data (array)
 ```
 #### Output
 ![Multi Series Chart](../../screenshots/granite_dv_multi_series.jpg)
+
+# Drilldown
+#### Settings Level
+Multiple Series: False
+#### Record Level
+Label (String)
+```html
+Apple
+```
+Value (Single Number)
+```html
+35
+```
+Series Name (String)
+```html
+Sales in Q3
+```
+Drilldown Data (Array of Objects)
+``` js
+[
+{"x":"Q1","value":792026},
+{"x":"Q2","value":610501},
+{"x":"Q3","value":441843},
+{"x":"Q4","value":350711}]
+```
