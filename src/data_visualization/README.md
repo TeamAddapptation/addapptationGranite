@@ -57,7 +57,7 @@ Apple
 ```
 Value (Single Number)
 ```html
-35
+234
 ```
 Series Name (String)
 ```html
