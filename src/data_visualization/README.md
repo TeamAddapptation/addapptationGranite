@@ -74,15 +74,15 @@ Series Data (array)
 False
 ```
 Drilldown Chart Type One (Picklist)
-```js
+```html
 Pie
 ```
 Drilldown Chart Type Two (Picklist)
-```js
+```html
 Line
 ```
 Drilldown Chart Two Title (Picklist)
-```js
+```html
 Title Here
 ```
 Multiple Series: False
