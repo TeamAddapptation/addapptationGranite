@@ -44,4 +44,5 @@ Series Data (array)
 ```js
 [120, 356, 45, 100, 276, 437, 134]
 ```
-
+#### Output
+![Multi Series Chart](../../screenshots/granite_dv_multi_series.jpg)
