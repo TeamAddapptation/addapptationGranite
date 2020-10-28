@@ -24,3 +24,15 @@ Sales in Q3
 ```
 #### Output
 ![Single Series Chart](../../screenshots/granite_dv_single_series.jpg)
+
+### Single Series Data
+#### Settings Level
+Multiple Series
+```html
+True
+```
+X Axis Labels
+``` js
+["January", "February", "March", "April", "May", "June", "July"]
+```
+#### Record Level
