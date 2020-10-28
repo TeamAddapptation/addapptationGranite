@@ -53,7 +53,8 @@ Series Data (array)
 "records":[
     {"x": "Apple", "series_values": [120, 356, 45, 100, 276, 437]},
     {"x": "Microsoft", "series_values": [543, 256, 345, 346, 472, 100]},
-    {"x": "Oracle", "series_values": [234, 763, 134, 872, 145, 592]}
+    {"x": "Oracle", "series_values": [234, 763, 134, 872, 145, 592]},
+    {"x": "Dell", "series_values": [434, 863, 20, 348, 243, 46]}
     ]
 ```
 
