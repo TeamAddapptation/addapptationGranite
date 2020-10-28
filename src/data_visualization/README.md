@@ -48,13 +48,13 @@ Series Data (array)
 ![Multi Series Chart](../../screenshots/granite_dv_multi_series.jpg)
 ```js
 "options":{
-        "x_axis_labels": ["January", "February", "March", "April", "May", "June"]
-        },
-"records":{
-        {"x": "Apple", "series_values": [120, 356, 45, 100, 276, 437]},
-        {"x": "Microsoft", "series_values": [543, 256, 345, 346, 472, 100]},
-        {"x": "Oracle", "series_values": [234, 763, 134, 872, 145, 592]}
-        }
+    "x_axis_labels": ["January", "February", "March", "April", "May", "June"]
+    },
+"records":[
+    {"x": "Apple", "series_values": [120, 356, 45, 100, 276, 437]},
+    {"x": "Microsoft", "series_values": [543, 256, 345, 346, 472, 100]},
+    {"x": "Oracle", "series_values": [234, 763, 134, 872, 145, 592]}
+    ]
 ```
 
 # Drilldown
