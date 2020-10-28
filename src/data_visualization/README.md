@@ -24,6 +24,13 @@ Sales in Q3
 ```
 #### Output
 ![Single Series Chart](../../screenshots/granite_dv_single_series.jpg)
+```js
+"records": [
+    {"x": "Apple", "value": "234"},
+    {"x": "Microsoft", "value": "491"},
+    {"x": "Oracle", "value": "395"}
+  ];
+```
 
 # Multi Series Data
 #### Settings Level
