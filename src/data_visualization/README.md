@@ -65,9 +65,6 @@ Series Data (array)
 
 # Drilldown
 #### Settings Level
-```html
-False
-```
 Drilldown Chart Type One (Picklist)
 ```html
 Pie
