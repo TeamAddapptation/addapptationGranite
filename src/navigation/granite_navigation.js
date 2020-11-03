@@ -8,7 +8,6 @@ function granite_navigation(jsonNav, jsonTheme){
     var options = json.options;
     var records = json.records;
     var t = jsonTheme;
-    console.log(t);
     var content = (document.getElementById(targetID).innerHTML).trim();
     var nav_root = document.documentElement;
     const font_include = document.getElementById('g__font_stylesheet');
@@ -109,7 +108,6 @@ function granite_navigation(jsonNav, jsonTheme){
     var topbar_submenu_background = t.mode === "midnight" ? "#101010" : "#ffffff";
     var topbar_submenu_hover = t.mode === "midnight" ? "rgba(255, 255, 255, .2)" : "rgba(0, 0, 0, .2)";
     var topbar_submenu_active = t.mode === "midnight" ? "rgba(255, 255, 255, .3)" : "rgba(0, 0, 0, .3)";
-    console.log(font_color);
     if(!!options){
         nav_root.style.setProperty('--active', primary); /*options.highlight*/
         nav_root.style.setProperty('--color', font_color);
@@ -232,7 +230,6 @@ function granite_navigation(jsonNav, jsonTheme){
             }
         }
         function mode(){
-            console.log(t);
             if(t.mode === "standard"){
                 return "standard"
             }else{

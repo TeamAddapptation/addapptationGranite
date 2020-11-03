@@ -280,71 +280,68 @@ let dataVisualizationBlock = {
   "classes": "",
   "options": {
     "title": "Granite Chart",
-    "chart_type": "line",
-    "chart_height": "700px",
+    "chart_type": "drilldown",
+    "chart_height": "600px",
     "series_data": true,
-    "drilldown_chart_types": ["bar", "line"],
-    // "colors": ["#C492B1", "#AF3B6E","#BCE7FD", "#424651", "#21FA90"],
-    "colors":"",
-    "drilldown_details_field_name": "drilldown",
-    "inner_radius": "60%",
+    "colors": ["#C492B1", "#AF3B6E","#BCE7FD", "#424651", "#21FA90"],
+    // "colors":"",
+    "inner_radius": "20%",
     "show_tooltip": true,
     "enable_legend": false,
     "label_position": "outside",
-    "listener": "point_select",
     "series_titles": [],
     "attr__series_titles": "Test Title",
-    "title2": "Interaction Type",
     "export_excel": true,
     "export_pdf": true,
     "x_axis_title": "Month",
     "y_axis_title": "Sales",
+    "y_axis_format": "$",
     "series_name": "November Sales",
+    // Drilldown
+    "drilldown_details_field_name": "drilldown",
+    "drilldown_chart_one": "pie",
+    "drilldown_chart_two": "line",
+    "drilldown_chart_types": ["pie", "bar"],
+    "listener": "point_select",
+    "title2": "Interaction Type",
     // Legend
-    "legend_horizontal_position": "center",
+    "legend_horizontal_position": "right",
     "legend_vertical_position": "center",
-    "legend_items_layout": "horizontal",
+    "legend_items_layout": "vertical",
     // x axis labels
-    "x_axis_labels": ["January", "February", "March", "April", "May", "June"],
+    "x_axis_labels": '["January", "February", "March", "April", "May", "June"]',
     // action row
     "action_header": "Action Row Header",
-    "action_description": "Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna."
+    "action_description": "Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna.Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna. Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna.Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna. Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna.Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna. Maecenas aliquam tortor sed elementum venenatis. Vestibulum dolor quam, blandit a eros eget, dictum eleifend lorem. Sed non magna risus. Maecenas eget tellus urna.",
+    // custom btn
+    "custom_buttom_1_text": "New Button",
+    "custom_buttom_1_url": "#"
   },
   "records": [
   //   {"x": "Microsoft", "value": "518.84", "fill": "#ffbe0b"},
   //   {"x": "Oracle", "value": "128.14", "fill": "#fb5607"},
   //   {"x": "HP", "value": "328.14", "fill": "#ff006e"},
   //   {"x": "Dell", "value": "328.14", "fill": "#8338ec"}
-    {"x": "Microsoft", "name": "Detective", "value": "518.84", "series_values": [120, 356, 45, 100, 276, 437], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [10000, 9500, 12000, 7000], "drilldown": [
+    {"x": "Microsoft", "value": "518.84", "series_values": [120, 356, 45, 100, 276, 437], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [10000, 9500, 12000, 7000], "drilldown_data": [
       {"x": "Q1", "value": 792026},
       {"x": "Q2", "value": 610501},
       {"x": "Q3", "value": 441843},
       {"x": "Q4", "value": 350711}
   ]},
-    {"x": "Oracle", "name": "Classics", "value": "128.14", "series_values": [543, 256, 345, 346, 472, 100], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [5000, 8900, 10000, 6000], "drilldown": [
+    {"x": "Oracle", "value": "128.14", "series_values": "[543, 256, 345, 346, 472, 100]", "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [5000, 8900, 10000, 6000], "drilldown_data": [
       {"x": "Q1", "value": 1378786},
       {"x": "Q2", "value": 571063},
       {"x": "Q3", "value": 510493},
       {"x": "Q4", "value": 797105}
   ]},
-    {"x": "HP", "name": "Textbooks", "value": "328.14", "series_values": [234, 763, 134, 872, 145, 592], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9000, 9500, 6000, 10000], "drilldown": [
+    {"x": "HP", "value": "328.14", "series_values": [234, 763, 134, 872, 145, 592], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9000, 9500, 6000, 10000], "drilldown_data": [
       {"x": "Q1", "value": 499299},
       {"x": "Q2", "value": 649963},
       {"x": "Q3", "value": 571176},
       {"x": "Q4", "value": 242969}
     ]},
-  {"x": "Dell", "name": "Textbooks", "value": "328.14", "series_values": [434, 863, 20, 348, 243, 46], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9800, 9000, 10000, 5000], "drilldown": [
-    {"x": "Q1", "value": 499299},
-    {"x": "Q2", "value": 649963},
-    {"x": "Q3", "value": 571176},
-    {"x": "Q4", "value": 242969}
-    ]},
-  {"x": "Lenovo", "name": "Textbooks", "value": "328.14", "series_values": [34, 363, 720, 348, 453, 642], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [4000, 9000, 7000, 6400], "drilldown": [
-    {"x": "Q1", "value": 499299},
-    {"x": "Q2", "value": 649963},
-    {"x": "Q3", "value": 571176},
-    {"x": "Q4", "value": 242969}
-    ]}
+  {"x": "Dell", "value": "328.14", "series_values": [434, 863, 20, 348, 243, 46], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [9800, 9000, 10000, 5000], "drilldown_data": '[{"x": "Q1", "value": 50},{"x": "Q2", "value": 600},{"x": "Q3", "value": 200},{"x": "Q4", "value": 320}]'},
+  {"x": "Lenovo", "value": "328.14", "series_values": [34, 363, 720, 348, 453, 642], "drilldown_x": ["Q1", "Q2", "Q3", "Q4"], "drilldown_value": [4000, 9000, 7000, 6400], "drilldown_data": '[{"x": "Q1", "value": 50},{"x": "Q2", "value": 600},{"x": "Q3", "value": 200},{"x": "Q4", "value": 320}]'}
   ]};
 
 /*---------------------------------------------
@@ -777,3 +774,5 @@ let heatmapBlock = {
     {x: "2012", y: "C", heat: 47}
   ]
 }
+
+

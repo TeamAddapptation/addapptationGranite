@@ -1,7 +1,7 @@
 function granite_data_visualization(dataVisualizationBlock, jsonTheme){
-    console.log("Data Viz Micro");
     const id = dataVisualizationBlock.id;
     const cssId = "#" + dataVisualizationBlock.id;
+    console.log(dataVisualizationBlock);
     const chartId = 'chart-' + id;
     const o = dataVisualizationBlock.options;
     const r = dataVisualizationBlock.records;
@@ -19,18 +19,21 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
     let attr__label_color = dataVisualizationBlock.options.label_color || '#60727b';
     let attr__inner_radius = dataVisualizationBlock.options.inner_radius || '';
     let attr__label_position = dataVisualizationBlock.options.label_position || 'outside';
-    let attr__listener = dataVisualizationBlock.options.listener || '';
+    let attr__listener = dataVisualizationBlock.options.listener || 'point_select';
     let attr__chart_type = dataVisualizationBlock.options.chart_type || 'pie';
     let attr__bar_chart_vertical = dataVisualizationBlock.options.bar_chart_vertical || false;
     let attr__drilldown_chart_types = dataVisualizationBlock.options.drilldown_chart_types || []; // used with drilldown chart
-    let attr__drilldown_details_field_name = dataVisualizationBlock.options.drilldown_details_field_name || "total";
+    let attr__drilldown_details_field_name = dataVisualizationBlock.options.drilldown_details_field_name || "drilldown_data";
     let attr__enable_legend = dataVisualizationBlock.options.enable_legend || true;
     let attr__legend_color = '';
     let attr__series_titles = dataVisualizationBlock.options.series_titles || [];
     let attr__series_name = dataVisualizationBlock.options.series_name || '';
     let attr__xAxis_title = dataVisualizationBlock.options.x_axis_title || '';
     let attr__yAxis_title = dataVisualizationBlock.options.y_axis_title || '';
-    let attr__data_name = dataVisualizationBlock.options.data_name || '';
+    let attr__yAxis_format = dataVisualizationBlock.options.y_axis_format || '';
+    // Drilldown
+    let attr___drilldown_chart_one = dataVisualizationBlock.options.drilldown_chart_one || "pie"
+    let attr___drilldown_chart_two = dataVisualizationBlock.options.drilldown_chart_two || "bar"
     // Legend Items
     let attr__legend_horizontal_position = dataVisualizationBlock.options.legend_horizontal_position || 'center';
     let attr__legend_vertical_position = dataVisualizationBlock.options.legend_vertical_position || 'center';
@@ -250,7 +253,12 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
       }
       action_utility.appendChild(btn_wrapper);
     }
-
+    if (o.custom_buttom_1_text){
+      const custom_btn_1 = document.createElement('button');
+      custom_btn_1.setAttribute('href', o.custom_button_1_href);
+      custom_btn_1.setAttribute('class', 'g__custom_btn');
+      custom_btn_1.innerHTML = o.custom_button_1_text
+    }
 
 
     action_row_container.appendChild(action_content);
@@ -322,93 +330,80 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           case CHART_TYPE_LINE:
             if(attr__series_data){
               let line_data = [];
-            const labels = o.x_axis_labels;
-            const line_data_points = attr__records[0].series_values;
-            const line_data_count = line_data_points.length;
-            // Push the first values into the new array - x axis labels
-            for(var i = 0; i < line_data_count; i++){
-              if(!!labels[i]){
-                line_data.push([labels[i]]);
-              } else {
-                line_data.push(["No X Label"]);
+              let labels = o.x_axis_labels;
+              if (typeof labels === 'string'){
+                let labels_no_brackets = labels.substring(1, labels.length-1);
+                let labels_clean = labels_no_brackets.replace(new RegExp('"', 'g'), '');
+                console.log(labels_clean);
+                labels = labels_clean.split(',');
               }
-            }
-            // Push the second value for tooltip alingment.
-            for(var i = 0; i < line_data_count; i++){
-              let line_label = !!attr__records[i] ? true : false;
-              if(line_label){
-                line_data[i].push(attr__records[i].x);
-              } else {
-                line_data[i].push("No Label");
+              let line_data_points = attr__records[0].series_values;
+              let line_data_count;
+              if (typeof line_data_points === 'string'){
+                const line_data_no_brackets = line_data_points.substring(1, line_data_points.length-1);
+                const line_data_points_array = line_data_no_brackets.split(',');
+                line_data_count = line_data_points_array.length;
+              }else{
+                line_data_count = line_data_points.length;
+              }
+              // Push the first values into the new array - x axis labels
+              for(var i = 0; i < line_data_count; i++){
+                if(!!labels[i]){
+                  line_data.push([labels[i]]);
+                } else {
+                  line_data.push(["No X Label"]);
+                }
+              }
+              // Push the second value for tooltip alingment.
+              for(var i = 0; i < line_data_count; i++){
+                let line_label = !!attr__records[i] ? true : false;
+                if(line_label){
+                  line_data[i].push(attr__records[i].x);
+                } else {
+                  line_data[i].push("No Label");
+                }
+
+              }
+              // loop through each record and align the values with anycharts structure
+              for(var i = 0; i < attr__records.length; i++){
+                let series_values = attr__records[i].series_values;
+                if (typeof series_values === 'string'){
+                  var remove_brackets = series_values.substring(1, series_values.length-1);
+                  var series_array = remove_brackets.split(',');
+                  series_values = series_array;
+                }
+                series_values.forEach((val, count)=>{
+                  line_data[count].push(val);
+                })
               }
 
-            }
-            // loop through each record and align the values with anycharts structure
-            for(var i = 0; i < attr__records.length; i++){
-              let series_values = attr__records[i].series_values;
-              series_values.forEach((val, count)=>{
-                line_data[count].push(val);
-              })
-            }
-            console.table(line_data);
-
-
-            // assign the data to anycharts
-            chart = anychart.line();
-            var data = anychart.data.set(line_data);
-            for(var i = 0; i < attr__records.length; i++){
-              let series = chart.line(data.mapAs({x: 0, value: i+2})).stroke({color: palette[i],  thickness: 3});
-              series.hovered().markers().enabled(true).type('circle').size(5);
-              series.name(line_data[i][1]);
-
-            }
-            // set scale mode - no space for beginning and end x labels
-            chart.xScale().mode('continuous');
+              // assign the data to anycharts
+              chart = anychart.line();
+              var data = anychart.data.set(line_data);
+              for(var i = 0; i < attr__records.length; i++){
+                let series = chart.line(data.mapAs({x: 0, value: i+2})).stroke({color: palette[i],  thickness: 6});
+                series.hovered().markers().enabled(true).type('circle').size(5);
+                series.name(line_data[i][1]);
+              }
+              // set scale mode - no space for beginning and end x labels
+              chart.xScale().mode('continuous');
             } else {
-            // create a data set
-            var dataSet = anychart.data.set(attr__records);
+              // create a data set
+              var dataSet = anychart.data.set(attr__records);
 
-            // map the data
-            var mapping1 = dataSet.mapAs({x: 0, value: 1});
+              // map the data
+              var mapping1 = dataSet.mapAs({x: 0, value: 1});
 
-            // create a chart
-            var chart = anychart.line();
+              // create a chart
+              var chart = anychart.line();
 
-            // create the first series and set the data
-            var series1 = chart.line(mapping1);
-            series1.hovered().markers().enabled(true).type('circle').size(5);
-            series1.name(attr__series_name);
-            chart.xScale().mode('continuous');
+              // create the first series and set the data
+              var series1 = chart.line(mapping1);
+              series1.hovered().markers().enabled(true).type('circle').size(5);
+              series1.name(attr__series_name);
+              chart.xScale().mode('continuous');
           }
 
-
-
-            // set the titles of the axes
-            if(!!attr__xAxis_title) {
-              let xAxis = chart.xAxis();
-              xAxis.title(attr__xAxis_title);
-              xAxis.title().fontSize(18);
-              xAxis.title().fontColor(font_color);
-              xAxis.title().fontWeight(300);
-              xAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            if(!!attr__yAxis_title) {
-              let yAxis = chart.yAxis();
-              yAxis.title(attr__yAxis_title);
-              yAxis.title().fontSize(18);
-              yAxis.title().fontColor(font_color);
-              yAxis.title().fontWeight(300);
-              yAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            var xLabels = chart.xAxis().labels();
-            xLabels.fontFamily("hero-new, sans-serif");
-            xLabels.fontColor(font_color);
-            xLabels.padding(3);
-
-            var yLabels = chart.yAxis().labels();
-            yLabels.fontFamily("hero-new, sans-serif");
-            yLabels.fontColor(font_color);
-            yLabels.padding(10);
           break;
           /*---------------------------------------------
           Pie
@@ -418,7 +413,8 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // set the data. The 'normal' key with the 'fill' option sets the color of the bars
             chart.data(attr__records);
 
-            // configure outlines
+            chart.palette().items(palette);
+
             chart.normal().outline().enabled(true);
             chart.normal().outline().width("0");
             chart.hovered().outline().width("0");
@@ -443,17 +439,29 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
               chart.labels().position("inside");
             }
 
+
           break;
           /*---------------------------------------------
           Column
           ---------------------------------------------*/
           case CHART_TYPE_COLUMN:
             if(attr__series_data){
-              console.log("series Data");
               let column_data = [];
-              const column_labels = o.x_axis_labels;
-              const column_data_points = attr__records[0].series_values;
-              const column_data_count = column_data_points.length;
+              let column_labels = o.x_axis_labels;
+              if (typeof column_labels === 'string'){
+                let labels_no_brackets = column_labels.substring(1, column_labels.length-1);
+                let labels_clean = labels_no_brackets.replace(new RegExp('"', 'g'), '');
+                column_labels = labels_clean.split(',');
+              }
+              let column_data_points = attr__records[0].series_values;
+              let column_data_count;
+              if (typeof column_data_points === 'string'){
+                let column_data_no_brackets = column_data_points.substring(1, column_data_points.length-1);
+                let column_data_points_array = column_data_no_brackets.split(',');
+                column_data_count = column_data_points_array.length;
+              }else{
+                column_data_count = column_data_points.length;
+              }
               // Push the first values into the new array - x axis labels
               for(var i = 0; i < column_data_count; i++){
                 if(!!column_labels[i]){
@@ -475,11 +483,15 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
               // loop through each record and align the values with anycharts structure
               for(var i = 0; i < attr__records.length; i++){
                 let series_values = attr__records[i].series_values;
+                if (typeof series_values === 'string'){
+                  var remove_brackets = series_values.substring(1, series_values.length-1);
+                  var series_array = remove_brackets.split(',');
+                  series_values = series_array;
+                }
                 series_values.forEach((val, count)=>{
                   column_data[count].push(val);
                 })
               }
-              console.table(column_data);
 
 
               // assign the data to anycharts
@@ -502,35 +514,9 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
               // create the first series and set the data
               var series1 = chart.column(mapping1);
+              series1.name(attr__series_name);
             }
 
-
-            // set the titles of the axes
-            if(!!attr__xAxis_title) {
-              let xAxis = chart.xAxis();
-              xAxis.title(attr__xAxis_title);
-              xAxis.title().fontSize(18);
-              xAxis.title().fontColor(font_color);
-              xAxis.title().fontWeight(300);
-              xAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            if(!!attr__yAxis_title) {
-              let yAxis = chart.yAxis();
-              yAxis.title(attr__yAxis_title);
-              yAxis.title().fontSize(18);
-              yAxis.title().fontColor(font_color);
-              yAxis.title().fontWeight(300);
-              yAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            var xLabels = chart.xAxis().labels();
-            xLabels.fontFamily("hero-new, sans-serif");
-            xLabels.fontColor(font_color);
-            xLabels.padding(3);
-
-            var yLabels = chart.yAxis().labels();
-            yLabels.fontFamily("hero-new, sans-serif");
-            yLabels.fontColor(font_color);
-            yLabels.padding(10);
 
           break;
           /*---------------------------------------------
@@ -539,9 +525,22 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           case CHART_TYPE_BAR:
           if(attr__series_data){
             let bar_data = [];
-            const bar_labels = o.x_axis_labels;
-            const bar_data_points = attr__records[0].series_values;
-            const bar_data_count = bar_data_points.length;
+            let bar_labels = o.x_axis_labels;
+            if (typeof bar_labels === 'string'){
+              let labels_no_brackets = bar_labels.substring(1, bar_labels.length-1);
+              let labels_clean = labels_no_brackets.replace(new RegExp('"', 'g'), '');
+              console.log(labels_clean);
+              bar_labels = labels_clean.split(',');
+            }
+            let bar_data_points = attr__records[0].series_values;
+            let bar_data_count;
+            if (typeof bar_data_points === 'string'){
+              let bar_data_no_brackets = bar_data_points.substring(1, bar_data_points.length-1);
+              let bar_data_points_array = bar_data_no_brackets.split(',');
+              bar_data_count = bar_data_points_array.length;
+            }else{
+              bar_data_count = bar_data_points.length;
+            }
             // Push the first values into the new array - x axis labels
             for(var i = 0; i < bar_data_count; i++){
               if(!!bar_labels[i]){
@@ -563,11 +562,15 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // loop through each record and align the values with anycharts structure
             for(var i = 0; i < attr__records.length; i++){
               let series_values = attr__records[i].series_values;
+              if (typeof series_values === 'string'){
+                var remove_brackets = series_values.substring(1, series_values.length-1);
+                var series_array = remove_brackets.split(',');
+                series_values = series_array;
+              }
               series_values.forEach((val, count)=>{
                 bar_data[count].push(val);
               })
             }
-            console.table(bar_data);
 
 
             // assign the data to anycharts
@@ -594,43 +597,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             series1.normal().stroke(0);
             series1.name(attr__series_name);
           }
-            // set the titles of the axes
-            if(!!attr__xAxis_title) {
-              let xAxis = chart.xAxis();
-              xAxis.title(attr__xAxis_title);
-              xAxis.title().fontSize(18);
-              xAxis.title().fontColor(font_color);
-              xAxis.title().fontWeight(300);
-              xAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            if(!!attr__yAxis_title) {
-              let yAxis = chart.yAxis();
-              yAxis.title(attr__yAxis_title);
-              yAxis.title().fontSize(18);
-              yAxis.title().fontColor(font_color);
-              yAxis.title().fontWeight(300);
-              yAxis.title().fontFamily("hero-new, sans-serif");
-            }
-            var xLabels = chart.xAxis().labels();
-            xLabels.fontFamily("hero-new, sans-serif");
-            xLabels.fontColor(font_color);
-            xLabels.padding(3);
-
-            var yLabels = chart.yAxis().labels();
-            yLabels.fontFamily("hero-new, sans-serif");
-            yLabels.fontColor(font_color);
-            yLabels.padding(10);
-
-          break;
-          case CHART_TYPE_VERTICAL_BAR:
-            chart = anychart.vertical();
-            data = anychart.data.set(attr__records);
-
-            var series = chart.bar(data);
-              series.name(attr__series_name);
-
-              // disable the stroke
-            series.stroke("none");
 
           break;
           /*---------------------------------------------
@@ -649,22 +615,15 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
           ---------------------------------------------*/
           case CHART_TYPE_DRILLDOWN:
             let details_chart;
-            let chart_type_main = attr__drilldown_chart_types[0];
-            let chart_type_details = attr__drilldown_chart_types[1];
+            let chart_type_main = attr___drilldown_chart_one;
+            let chart_type_details = attr___drilldown_chart_two;
 
-            // Build Details data object
-            // for(var i = 0; i < attr__records.length; i++){
-            //   let drilldown_x = attr__records[i].drilldown_x;
-            //   let drilldown_value = attr__records[i].drilldown_value;
-            //   var drilldown_data = drilldown_x.map((val, index) =>  {
-            //     return {
-            //       x: val,
-            //       value: drilldown_value[index]
-            //     }
-            //   });
-            //   attr__records[i].drilldown_data = drilldown_data;
-            // }
-
+            for(var i = 0; i < attr__records.length; i++){
+              var drilldown_data = attr__records[i].drilldown_data;
+              if(typeof(drilldown_data) != "object"){
+                attr__records[i].drilldown_data = JSON.parse(drilldown_data);
+              }
+            }
             let drillDownFunction = function() {
                 // clear the chart with details
                 details_chart.removeAllSeries();
@@ -672,19 +631,44 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 // points = e.points;
                 points = chart.getSelectedPoints();
 
-                console.log(points);
-
                 // go through selected points and add proper data
                 for (i=0;i<points.length;i++){
                   switch(chart_type_details) {
                     case CHART_TYPE_LINE:
-                      details_chart.line(points[i].get(attr__drilldown_details_field_name)).name(points[i].get('x')).stroke({color: palette[0],  thickness: 3});
+                      details_chart.line(points[i].get("drilldown_data")).name(points[i].get('x'));
                       details_chart.background(background_color);
+                      details_chart.palette().items(palette);
+                      // set the titles of the axes
+                      if(!!attr__xAxis_title) {
+                        let xAxis = details_chart.xAxis();
+                        xAxis.title(attr__xAxis_title);
+                        xAxis.title().fontSize(18);
+                        xAxis.title().fontColor(font_color);
+                        xAxis.title().fontWeight(300);
+                        xAxis.title().fontFamily("hero-new, sans-serif");
+                      }
+                      if(!!attr__yAxis_title) {
+                        let yAxis = details_chart.yAxis();
+                        yAxis.title(attr__yAxis_title);
+                        yAxis.title().fontSize(18);
+                        yAxis.title().fontColor(font_color);
+                        yAxis.title().fontWeight(300);
+                        yAxis.title().fontFamily("hero-new, sans-serif");
+                      }
+                      var xLabels = details_chart.xAxis().labels();
+                      xLabels.fontFamily("hero-new, sans-serif");
+                      xLabels.fontColor(font_color);
+                      xLabels.padding(3);
 
+                      var yLabels = details_chart.yAxis().labels();
+                      yLabels.fontFamily("hero-new, sans-serif");
+                      yLabels.fontColor(font_color);
+                      yLabels.padding(10);
                       break;
                     case CHART_TYPE_BAR:
-                      details_chart.bar(points[i].get(attr__drilldown_details_field_name)).name(points[i].get('x'));
+                      details_chart.bar(points[i].get("drilldown_data")).name(points[i].get('x'));
                       details_chart.background(background_color);
+                      details_chart.palette().items(palette);
                       break;
                     default:
                       // do nothing
@@ -693,22 +677,31 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 };
             }
 
+
             stage = anychart.graphics.create(chartId);
 
             switch(chart_type_main) {
               case CHART_TYPE_BAR:
                 chart = anychart.bar();
-                series = chart.bar(attr__records); // .name("Subject Interactions:");
-                series.normal().fill("#00cc99", 0.3);
-                series.selected().fill("#00cc99", 0.5);
-                series.hovered().fill("#00cc99", 0.1);
-                series.normal().stroke("#00cc99", 1, "10 5", "round");
-                series.hovered().stroke("#00cc99", 2, "10 5", "round");
-                series.selected().stroke("#00cc99", 4, "10 5", "round");
+                var chart_main_series = chart.bar(attr__records); // .name("Subject Interactions:");
+                chart_main_series.normal().fill(palette[0], 0.3);
+                chart_main_series.selected().fill(palette[0], 0.5);
+                chart_main_series.hovered().fill(palette[0], 0.1);
+                chart_main_series.normal().stroke(palette[0], 1);
+                chart_main_series.hovered().stroke(palette[0], 1);
+                chart_main_series.selected().stroke(palette[0], .5);
+                chart_main_series.name(attr__series_name);
               break;
               case CHART_TYPE_COLUMN:
                 chart = anychart.column();
-                chart.column(attr__records); // .name("Subject Interactions:");
+                var chart_main_series = chart.column(attr__records); // .name("Subject Interactions:");
+                chart_main_series.normal().fill("#00cc99", 0.3);
+                chart_main_series.selected().fill("#00cc99", 0.5);
+                chart_main_series.hovered().fill("#00cc99", 0.1);
+                chart_main_series.normal().stroke("#00cc99", 1);
+                chart_main_series.hovered().stroke("#00cc99", 1);
+                chart_main_series.selected().stroke("#00cc99", .5);
+                chart_main_series.name(attr__series_name);
                 chart.palette().items(palette);
               break;
               case CHART_TYPE_PIE:
@@ -720,7 +713,31 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 chart.startAngle(-90);
                 // configure connectors
                 chart.connectorStroke({color: "#595959", thickness: 2, dash:"2 2"});
+                chart.palette().items(palette);
+                // configure outlines
+                chart.normal().outline().enabled(true);
+                chart.normal().outline().width("0");
+                chart.hovered().outline().width("0");
+                chart.selected().outline().width("3");
+                chart.selected().outline().fill(font_color);
+                chart.selected().outline().stroke(font_color);
+                chart.selected().outline().offset(0);
 
+                // set the position of labels
+                chart.labels().position(attr__label_position);
+                chart.labels().fontSize(18);
+                chart.labels().fontColor(font_color);
+                chart.labels().fontWeight(300);
+                chart.labels().fontFamily("hero-new, sans-serif");
+                chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
+
+            if(!!attr__inner_radius) {
+              //set the inner radius to form the doughnut shape
+              chart.innerRadius(attr__inner_radius);
+            }
+            if(viewportWidth < 768){
+              chart.labels().position("inside");
+            }
                 if(!!attr__inner_radius) {
                   //set the inner radius to form the doughnut shape
                   chart.innerRadius(attr__inner_radius);
@@ -805,22 +822,13 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
         Global Elements
         ---------------------------------------------*/
         //Color Pallette
-        switch(attr__chart_type) {
-          case CHART_TYPE_PIE:
-          case CHART_TYPE_BAR:
-          case CHART_TYPE_COLUMN:
-            chart.palette().items(palette);
-          break;
-          default:
-        }
+        chart.palette().items(palette);
 
         // background color
         chart.background(background_color);
 
         // Tooltip settings
-        if(o.show_tooltip){
-          chart.tooltip().useHtml(true);
-        }
+        chart.tooltip().useHtml(true);
 
         // Title Settings
         if(!!attr__title) {
@@ -859,13 +867,13 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             legend.position(attr__legend_horizontal_position);
             legend.align(attr__legend_vertical_position);
             legend.itemsSpacing(attr__legend_items_spacing);
+            legend.itemsSpacing(20);
             if(viewportWidth < 768){
               legend.itemsLayout("horizontal-expandable");
               legend.position("center");
               legend.align("center");
               legend.itemsSpacing(20);
             }
-
             legend.fontColor(font_color);
             legend.fontSize(18);
             legend.fontWeight(300);
@@ -874,6 +882,42 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
         else {
           legend.enabled(false);
         }
+        // set the titles of the axes
+        if(attr__chart_type === "column" || attr__chart_type ===  "bar" || attr__chart_type === "line"){
+          if(!!attr__xAxis_title) {
+            let xAxis = chart.xAxis();
+            xAxis.title(attr__xAxis_title);
+            xAxis.title().fontSize(18);
+            xAxis.title().fontColor(font_color);
+            xAxis.title().fontWeight(300);
+            xAxis.title().fontFamily("hero-new, sans-serif");
+          }
+          if(!!attr__yAxis_title) {
+            let yAxis = chart.yAxis();
+            yAxis.title(attr__yAxis_title);
+            yAxis.title().fontSize(18);
+            yAxis.title().fontColor(font_color);
+            yAxis.title().fontWeight(300);
+            yAxis.title().fontFamily("hero-new, sans-serif");
+            if(attr__yAxis_format === "%"){
+              yAxis.labels().format("{%value}" + attr__yAxis_format);
+            }else{
+              yAxis.labels().format(attr__yAxis_format + "{%value}");
+            }
+
+          }
+          var xLabels = chart.xAxis().labels();
+          xLabels.fontFamily("hero-new, sans-serif");
+          xLabels.fontColor(font_color);
+          xLabels.padding(3);
+
+          var yLabels = chart.yAxis().labels();
+          yLabels.fontFamily("hero-new, sans-serif");
+          yLabels.fontColor(font_color);
+          yLabels.padding(10);
+        }
+
+
 
         if(!!attr__listener) {
           // Bind some listeners to the chart
