@@ -280,7 +280,7 @@ let dataVisualizationBlock = {
   "classes": "",
   "options": {
     "title": "Granite Chart",
-    "chart_type": "drilldown",
+    "chart_type": "pie",
     "chart_height": "600px",
     "series_data": true,
     "colors": ["#C492B1", "#AF3B6E","#BCE7FD", "#424651", "#21FA90"],

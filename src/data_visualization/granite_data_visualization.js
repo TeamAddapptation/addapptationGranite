@@ -70,16 +70,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
         head.appendChild(fontLink);
     }
     /*---------------------------------------------
-    AnyChart Script
-    ---------------------------------------------*/
-    var anyChartScript = document.createElement('script');
-    anyChartScript.type = 'text/javascript';
-    anyChartScript.id = "granite-anychart"
-    anyChartScript.src = 'https://cdn.anychart.com/releases/8.9.0/js/anychart-bundle.min.js';
-    document.head.appendChild(anyChartScript);
-    const anychart_include = document.getElementById('granite-anychart');
-
-    /*---------------------------------------------
     Theme Variables
     ---------------------------------------------*/
     var g__container = document.getElementById(id);
@@ -290,7 +280,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
     anychart.onDocumentLoad(function () {
 
-      anychart.graphics.useAbsoluteReferences(false);
+      anychart.graphics.useAbsoluteReferences(true);
       if (!!o.colors){
         var palette = o.colors;
       } else {
@@ -413,23 +403,21 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // set the data. The 'normal' key with the 'fill' option sets the color of the bars
             chart.data(attr__records);
 
-            chart.palette().items(palette);
+            // chart.normal().outline().enabled(true);
+            // chart.normal().outline().width("0");
+            // chart.hovered().outline().width("0");
+            // chart.selected().outline().width("3");
+            // chart.selected().outline().fill(font_color);
+            // chart.selected().outline().stroke(font_color);
+            // chart.selected().outline().offset(0);
 
-            chart.normal().outline().enabled(true);
-            chart.normal().outline().width("0");
-            chart.hovered().outline().width("0");
-            chart.selected().outline().width("3");
-            chart.selected().outline().fill(font_color);
-            chart.selected().outline().stroke(font_color);
-            chart.selected().outline().offset(0);
-
-            // set the position of labels
-            chart.labels().position(attr__label_position);
-            chart.labels().fontSize(18);
-            chart.labels().fontColor(font_color);
-            chart.labels().fontWeight(300);
-            chart.labels().fontFamily("hero-new, sans-serif");
-            chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
+            // // set the position of labels
+            // chart.labels().position(attr__label_position);
+            // chart.labels().fontSize(18);
+            // chart.labels().fontColor(font_color);
+            // chart.labels().fontWeight(300);
+            // chart.labels().fontFamily("hero-new, sans-serif");
+            // chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
 
             if(!!attr__inner_radius) {
               //set the inner radius to form the doughnut shape
@@ -637,7 +625,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                     case CHART_TYPE_LINE:
                       details_chart.line(points[i].get("drilldown_data")).name(points[i].get('x'));
                       details_chart.background(background_color);
-                      details_chart.palette().items(palette);
                       // set the titles of the axes
                       if(!!attr__xAxis_title) {
                         let xAxis = details_chart.xAxis();
@@ -668,7 +655,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                     case CHART_TYPE_BAR:
                       details_chart.bar(points[i].get("drilldown_data")).name(points[i].get('x'));
                       details_chart.background(background_color);
-                      details_chart.palette().items(palette);
                       break;
                     default:
                       // do nothing
@@ -702,7 +688,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 chart_main_series.hovered().stroke("#00cc99", 1);
                 chart_main_series.selected().stroke("#00cc99", .5);
                 chart_main_series.name(attr__series_name);
-                chart.palette().items(palette);
               break;
               case CHART_TYPE_PIE:
                 chart = anychart.pie();
@@ -713,7 +698,6 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
                 chart.startAngle(-90);
                 // configure connectors
                 chart.connectorStroke({color: "#595959", thickness: 2, dash:"2 2"});
-                chart.palette().items(palette);
                 // configure outlines
                 chart.normal().outline().enabled(true);
                 chart.normal().outline().width("0");
