@@ -1,0 +1,595 @@
+<% unless records.present? && records.count > 0 %>
+  <% if Rails.env.development? %>
+    <style>
+      .a__add_element {
+        border: 2px gray dashed;
+        width: calc(100% - 4rem);
+        height: 200px;
+        margin: 2rem;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 0 0 10px 2px #bfbfbf;
+        font-size: 40px;
+        color: #bfbfbf;
+        background: white;
+        align-items: center;
+        line-height: 40px;
+    }
+    </style>
+    <div class='a__add_element'>Add Form Element</div>
+  <% end %>
+<% else %>
+
+<% @a__form_dev_css ||= false %>
+  <% unless @a__form_dev_css %>
+    <link rel='stylesheet' type='text/css' href='https://cdn.addapptation.com/addapptation-stylesheets/chosen.css'>
+    <link rel='stylesheet' type='text/css' href='https://cdn.addapptation.com/addapptation-stylesheets/quill/quill.bubble.css'>
+    <link rel='stylesheet' type='text/css' href='https://cdn.addapptation.com/addapptation-stylesheets/quill/quill.snow.css'>
+    <% @a__form_dev_css = true %>
+  <% end %>
+
+  <% @a__form_dev_js ||= false %>
+  <% unless @a__form_dev_js %>
+    <script src='https://cdn.addapptation.com/addapptation-stylesheets/chosen.jquery.min.js'></script>
+    <script src='https://cdn.addapptation.com/addapptation-stylesheets/quill/quill.min.js'></script>
+    <% @a__form_dev_js = true %>
+  <% end %>
+
+  <style>
+    @media (min-width: 768px) {
+      .row.a__button_section {
+        <% if button_1_label.present? && !button_2_label.present? %>
+          width: fit-content;
+          margin-left: auto;
+          margin-right: -10px;
+        <% else %>
+          margin: auto;
+        <% end %>
+      }
+    }
+  </style>
+  <% section_present = false %>  <%#= initialize section break presence check =#%>
+  <% form_fields = "" %>
+  <% records.each do |record| %>
+    <% record_id = if record[:id].present? then record[:id] else "a__#{SecureRandom.hex}" end %>
+
+    <% if ['text','string','textarea'].include? record[:type] %>
+      <% record_value = if record[:value].present? then record[:value].gsub('"','&quot;') else "" end %>
+    <% else %>
+      <% record_value = record[:value] %>
+    <% end %>
+
+    <% record[:super_text] = true if record[:super_text].nil? %>
+    <% case record[:type] %>
+    <% when 'code', 'html' %>
+      <% form_fields += "#{record[:value].to_s.html_safe}" %>
+    <% when 'subheader' %>
+      <% form_fields += "<h2 class='form-description #{record[:class]}'>#{record[:value].to_s.html_safe}</h2>" %>
+    <% when 'description' %>
+      <% form_fields += "<p class='form-description #{record[:class]}'>#{record[:value].to_s.html_safe}</p>" %>
+    <% when 'section', 'pane_start' %>
+      <% form_fields += "#{'</div></div>' if section_present}<div class='a__section_wrapper #{record[:classes]}'><h2 data-toggle='collapse' data-target='##{record_id}' class='a__pane_right_lined pane-header mb-3 #{'collapsed' if record[:collapsed].to_s == 'true'}'><div class='a__section_title' title=\"#{record[:title]}\">#{record[:title]}</div><div class='a__pane_arrow px-2'><i class='fal fa-angle-down'></i></div></h2><div id='#{record_id}' class='collapse #{'show' if record[:collapsed].to_s != 'true'} w-100 a__group'>" %>
+      <% section_present = true %>
+    <% when 'col' %>
+      <% form_fields += "#{'</div></div>' if section_present}</div><div class='col-md'>" %>
+      <% section_present = false %>
+    <% when 'select', 'picklist' %>
+      <% select_options = "" %>
+      <% options = record[:options] || [] %>
+      <% if record[:multiple].to_s == 'true' && !record_value.kind_of?(Array) %>
+        <% record_value = record_value.to_s.split(";") %>
+      <% end %>
+      <% options.each do |option|
+        if option.kind_of?(Array)
+          select_options += "<option value='#{option[0]}' #{if record_value.kind_of?(Array) then ("selected" if record_value.include? option[0]) else ("selected" if record_value == option[0]) end}>#{option[1]}</option>"
+        else
+          select_options += "<option value='#{option}' #{if record_value.kind_of?(Array) then ("selected" if record_value.include? option) else ("selected" if record_value == option) end}>#{option}</option>"
+        end
+      end %>
+      <% form_fields += "<div class='form-group'>
+        <style>
+          #{if record[:prepend].present? then
+            "##{record_id} {
+              border-top-left-radius: 0;
+              border-bottom-left-radius: 0;
+            }
+            ##{record_id}_chosen {
+              #{record[:style]}
+            }
+            ##{record_id}_chosen .chosen-single {
+              border-top-left-radius: 0;
+              border-bottom-left-radius: 0;
+            }"
+          end}
+        </style>
+        #{if record[:options].present? then
+          "<div class='a__input_select_wrapper #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'a__select_disabled' : ''}'>
+            #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\" class='pr-2'>#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+            <div class='input-group #{case record[:size] when 'large' then 'input-group-lg' when 'small' then 'input-group-sm' end} #{record[:classes]}'>
+              #{if record[:prepend].present? then
+                "<div class='input-group-prepend'>
+                  <span class='input-group-text'>#{record[:prepend]}</span>
+                </div>"
+              end}
+              <select form_id='#{id}' id='#{record_id}' data-placeholder='#{record[:placeholder].present? ? record[:placeholder] : 'Select an Option'}' style='#{record[:style]}' name='#{record[:name]}#{(record[:multiple].to_s == 'true' && record[:name][-2..-1] != "[]") ? "[]" : ""}' class='custom-select #{case record[:size] when 'large' then 'custom-select-lg' when 'small' then 'custom-select-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''}' #{(record[:multiple].to_s == 'true') ? 'multiple' : ''} #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+                #{if !(record[:multiple].to_s == 'true') then "<option value=''>#{record[:placeholder].present? ? record[:placeholder] : 'Select an Option'}</option>" end}
+                #{select_options}
+              </select>
+              <div class='input-group-append a__select_append'>
+                <label class='input-group-text'><i class='fal fa-angle-down a__select_arrow'></i></label>
+              </div>
+            </div>
+            <div class='invalid-feedback'>Example invalid custom select feedback</div>
+          </div>"
+        end}
+      </div>
+      <script>
+        // CONVERT SELECT TO CHOSEN SELECT
+        $(document).ready(function(){
+          $('##{record_id}').chosen();
+          // IDENTIFY THE DROPDOWN ARROW
+          var #{record_id}_arrow = $('##{record_id}_chosen').siblings('.a__select_append').find('.input-group-text')
+          // UNFLIP ARROW ON FOCUS OUT OF CHOSEN SELECT CONTAINER
+          $('##{record_id}_chosen').parent().on('focusout', function(){
+            if(!$('##{record_id}_chosen').hasClass('chosen-container-active')){#{record_id}_arrow.removeClass('flip')}
+          })
+          // FLIP ARROW ON CLICK OF CHOSEN SELECT BAR
+          $('##{record_id}_chosen .chosen-single').on('mousedown', function(){
+            #{record_id}_arrow.toggleClass('flip')
+          })
+          $('##{record_id}_chosen .chosen-choices').on('mousedown', function(e){
+            if(e.target.nodeName == 'UL'){#{record_id}_arrow.addClass('flip')}
+          })
+          // UNFLIP ARROW ON CLICK OF CHOSEN SELECT DROPDOWN
+          $('##{record_id}_chosen .chosen-drop ul').on('click', function(){
+            #{record_id}_arrow.removeClass('flip')
+          })
+          // UNFLIP ARROW ON FOCUS OUT OF WINDOW
+          $(window).blur(function() {
+            #{record_id}_arrow.removeClass('flip')
+          });
+        })
+      </script>" %>
+
+    <% when 'multiselect' %>
+      <p class='text-danger mb-0'>To use a multiselect field, create a select field with the attribute multiple: true.</p>
+    <% when 'hidden' %>
+      <% form_fields += "<input type='hidden' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='form-control #{record[:classes]}' value=\"#{record_value}\">" %>
+    <% when 'date' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_date_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\" class='a__input_date_label'>#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <div class='input-group w-fit-content'>
+            <div class='input-group-prepend'>
+              <span class='input-group-text bg-white'><i class='fal fa-calendar-alt'></i></span>
+            </div>
+            <input type='text' form_id='#{id}' onfocus=\"$(this).attr('type','date');\" id='#{record_id}' name='#{record[:name]}' class='a__date_field a__reset_input form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+          </div>
+        </div>
+      </div>" %>
+    <% when 'time' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_time_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input form_id='#{id}' type='time' onclick=\"$(this).attr('type','time');\" id='#{record_id}' name='#{record[:name]}' class='a__reset_input form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'datetime-local' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_datetime_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input type='datetime-local' form_id='#{id}' onclick=\"$(this).attr('type','datetime-local');\" id='#{record_id}' name='#{record[:name]}' class='a__reset_input form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'file' %>
+      <% form_fields += "<div class='form-group'>
+        <div class='a__input_file_wrapper'>
+          #{if record[:title].present? then "<label>#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <div class='custom-file'>
+            <input type='file' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='custom-file-input #{record[:classes]} #{(record[:required].to_s == 'true') ? 'required' : ''}' placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+            <label class='custom-file-label' for='#{record_id}'>Choose file...</label>
+            <div class='invalid-feedback'>Example invalid custom file feedback</div>
+          </div>
+        </div>
+      </div>" %>
+    <% when 'checkbox', 'boolean' %>
+      <% checked = false %>
+      <% checked = true if record_value == "true" %>
+      <% form_fields += "<div class='a__input_checkbox_wrapper custom-control custom-checkbox pr-2 #{record[:classes]} #{'custom-control-inline' if record[:inline].to_s == 'true'} #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'a__checkbox_disabled' : ''}'>
+        <input type='checkbox' form_id='#{id}' class='custom-control-input #{(record[:required].to_s == 'true') ? 'required' : ''}' id='#{record_id}' name='#{record[:name]}' value=\"#{checked ? 'true' : 'false'}\" #{checked ? 'checked' : ''} #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        <label class='custom-control-label' for='#{record_id}'>#{record[:title].to_s.html_safe if record[:title].present?}</label>
+      </div>" %>
+    <% when 'color' %>
+      <% form_fields += "<div class='form-group'>
+        <div class='a__input_color_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\" class='pr-2'>#{record[:title]}</label>" end}
+          <input type='color' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{record[:classes]}' #{"value=#{record_value}" if record_value.present?} placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'month' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_month_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input type='month' form_id='#{id}' onclick=\"$(this).attr('type','month');\" id='#{record_id}' name='#{record[:name]}' class='a__reset_input form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'number', 'currency', 'double' %>
+      <% min = if record[:min].present? then record[:min] else "" end %>
+      <% max = if record[:max].present? then record[:max] else "" end %>
+      <% step = if record[:step].present? then record[:step] else "" end %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_number_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          #{"<div class='a__currency_prepend'>$</div>" if record[:type] == 'currency'}<input type='number' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' min='#{record[:min]}' max='#{record[:max]}' #{record[:type] == 'currency' ? "step='0.01'" : "step='#{record[:step]}'"} onkeypress='return isNumberKey(event)' class='form-control #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]} #{'a__currency' if record[:type] == 'currency'}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'radio' %>
+      <% form_fields += "<div class='a__input_radio_wrapper custom-control custom-radio #{record[:classes]} #{'custom-control-inline' if record[:inline].to_s == 'true'}'>
+        <input type='radio' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='custom-control-input #{(record[:required].to_s == 'true') ? 'required' : ''}' value=\"#{record[:title] if record[:title].present?}\" #{record_value == record[:title] ? 'checked' : ''} #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        <label class='custom-control-label pr-2' for='#{record_id}' title=\"#{record[:title]}\">#{record[:title] if record[:title].present?}</label>
+        <div class='invalid-feedback'>More example invalid feedback text</div>
+      </div>" %>
+    <% when 'range' %>
+      <% form_fields += "<div class='form-group'>
+        <div class='a__input_range_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\" class='pr-2'>#{record[:title]}</label>" end}
+          <input type='range' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='custom-range #{record[:classes]}' value=\"#{record_value}\" #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'week' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_week_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input form_id='#{id}' type='week' onclick=\"$(this).attr('type','week');\" id='#{record_id}' name='#{record[:name]}' class='a__reset_input form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'phone' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_phone_wrapper'>
+          #{if record[:title].present? then "<label class='#{case record[:size] when 'large' then 'a__lg_label' when 'small' then 'a__sm_label' end}' for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input type='tel' form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'url' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_url_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input form_id='#{id}' type='url' id='#{record_id}' name='#{record[:name]}' class='form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+    <% when 'textarea' %>
+      <% form_fields += "<style>
+        #{"##{record_id}{min-height: #{record[:min_height]};}" if record[:min_height].present?}
+      </style>
+      <div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_textarea_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <textarea form_id='#{id}' id='#{record_id}' name='#{record[:name]}' class='form-control #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' placeholder='#{record[:placeholder]}' rows='#{record[:rows]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>#{record_value}</textarea>
+        </div>
+      </div>" %>
+    <% when 'email' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_email_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input type='email' form_id='#{id}' autocomplete='new-password' id='#{record_id}' name='#{record[:name]}' class='form-control #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" aria-describedby='emailHelp' placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+          #{if record[:text].present? then "<small id='emailHelp' class='form-text text-muted'>#{record[:text]}</small>" end}
+        </div>
+      </div>" %>
+    <% when 'password' %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_password_wrapper'>
+          #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input type='password' form_id='#{id}' autocomplete='new-password' id='#{record_id}' name='#{record[:name]}' class='form-control #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' aria-describedby='passwordHelpInline' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+          #{if record[:text].present? then "<small id='passwordHelpInline' class='text-muted'>#{record[:text]}</small>" end}
+        </div>
+      </div>" %>
+    <% when 'quill' %>
+      <% form_fields += "<style>
+        #{"##{record_id} .ql-editor{
+          min-height: #{record[:min_height].present? ? record[:min_height] : "100px"};}"}
+      </style>
+      <div class='a__quill_wrapper #{'a__quill_disabled' if record[:disabled].to_s == 'true'}'>
+        #{if record[:title].present? then "<label for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+        <div id='#{record_id}' class='#{'a__quill_bubble' if record[:theme] == 'bubble'} #{record[:classes]} #{'required' if record[:required].to_s == 'true'}'>#{record_value}</div>
+        <input name='#{record[:name]}' form_id='#{id}' class='a__quill_hidden_field #{'required' if record[:required].to_s == 'true'}' #{'disabled' if record[:disabled].to_s == 'true'} style='display:none;' id='#{record_id}_hidden' type='text'>
+      </div>
+      <script>
+        var #{record_id}_toolbarOptions = [
+          ['bold', 'italic', 'underline'/*, 'strike'*/], // toggled buttons
+          ['blockquote', 'code-block'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'indent': '-1'}, { 'indent': '+1' }], // outdent/indent
+          [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
+          [{ 'align': [] }],
+          ['clean'], // remove formatting button
+          [{'debug': false}],
+          // [{ 'font': [] }],
+          // [{ 'header': 1 }, { 'header': 2 }], // custom button values
+          // [{ 'script': 'sub'}, { 'script': 'super' }], // superscript/subscript
+          // [{ 'direction': 'rtl' }], // text direction
+          // [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
+          // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        ];
+
+        var #{record_id}_options = {
+          debug: 'false',
+          modules: {
+            toolbar: #{record_id}_toolbarOptions,
+            history: {'userOnly': true, 'delay': 1000 /*2500*/}
+          },
+          theme: '#{record[:theme] || 'snow'}',  // snow, bubble
+          readOnly: #{record[:disabled] || false},
+          placeholder: '#{record[:placeholder]}',
+        }
+        var #{record_id} = new Quill('##{record_id}', #{record_id}_options);
+
+        // POPULATE THE HIDDEN QUILL FIELD WITH VALUE
+        function populate_quill_#{record_id}(){
+          var #{record_id}_field = document.querySelector('input[name=#{record[:name]}]');
+          #{record_id}_field.value = #{record_id}.root.innerHTML;
+        }
+
+        #{record_id}.on('text-change', function(delta, oldDelta, source) {
+          populate_quill_#{record_id}()
+        });
+
+        $(document).ready(function(){
+          populate_quill_#{record_id}()
+        });
+      </script>" %>
+    <% else %>
+      <% form_fields += "<div class='form-group #{"super_text" if record[:super_text].to_s == 'true'}'>
+        <div class='a__input_text_wrapper'>
+          #{if record[:title].present? then "<label class='#{case record[:size] when 'large' then 'a__lg_label' when 'small' then 'a__sm_label' end} #{'a__override_super_text' if record[:title].length > 30}' for='#{record_id}' title=\"#{record[:title]}\">#{record[:title]}#{'*' if (record[:required].to_s == 'true' && record[:disabled].to_s != 'true' && star_required.to_s == 'true')}</label>" end}
+          <input form_id='#{id}' type='text' id='#{record_id}' name='#{record[:name]}' #{"maxlength=#{record[:length]}" if record[:length].present?} class='form-control #{case record[:size] when 'large' then 'form-control-lg' when 'small' then 'form-control-sm' end} #{(record[:required].to_s == 'true') ? 'required' : ''} #{record[:classes]}' value=\"#{record_value}\" placeholder='#{record[:placeholder]}' #{(record[:disabled].to_s == 'true') || (record[:read_only].to_s == 'true') ? 'disabled' : ''}>
+        </div>
+      </div>" %>
+
+      <% unless ['text','string'].include?(record[:type]) %>
+        <script>
+          console.log("No support for type '<%= record[:type] %>'")
+        </script>
+      <% end %>
+    <% end %>
+
+    <!-- FIELD DEPENDENCIES -->
+
+    <% dependency_field = record[:dependency_field] || "" # NAME OF THE FIELD THAT DRIVES SHOW / HIDE %>
+    <% dependency_values = record[:dependency_values] || "" # VALUE OF THE FIELD THAT DRIVES SHOW / HIDE %>
+    <% dependency_values_invalid = record[:dependency_values_invalid] || "" # SHOW FIELD UNLESS THIS VALUE MATCHES %>
+    <% dependency_not_blank = record[:dependency_not_blank] || "" # SHOW FIELD IF DEPENDENY IS NOT NULL %>
+    <%# dependency_class = record[:dependency_class] || "" # CLASS OF THE FIELDS / OBJECTS TO SHOW / HIDE %>
+
+    <% if dependency_field.present? %>
+      <!--<script>
+        // console.log("-----------------------------------------------------\nFIELD: <%= dependency_field %>\nVALUES: <%= dependency_values %>\nNOT BLANK: <%= dependency_not_blank %>\nPASS: <%= dependency_field.present? && (dependency_values.present? || dependency_not_blank.to_s == 'true') %>\n-----------------------------------------------------")
+      </script> -->
+    <% end %>
+
+    <% if dependency_field.present? && (dependency_values.present? || dependency_not_blank.to_s == 'true') %>
+      <% dependencies = [[dependency_values, dependency_field, dependency_values_invalid, dependency_not_blank]] %>
+    <% else %>
+      <% dependencies = [] %>
+    <% end %>
+
+    <% if dependencies.present? %>
+      <script>
+        <% dependencies.each do |dep| %>
+          // INITIALIZE VARIABLES
+          <% show_if_value = raw dep[0].gsub("'","\\\"") %>
+          <% field_id = record[:id] %>
+          <% field_name = record[:name] %>
+          <% dependency_name = dep[1] %>
+          <% show_if_not_blank = dep[3] %>
+          parent_<%= dependency_name %> = $('select[name=<%= dependency_name %>]');
+          parent_<%= dependency_name %>_type = "select"
+
+          $(document).ready(function(){
+
+            // USE ID INSTEAD OF NAME IF PRESENT
+            <% if record[:id].present? %>
+              <% field_name = field_id %>
+            <% end %>
+
+            // BUILD ARRAY OF SHOW IF VALUES
+            child_value_<%= field_name %> = "<%= show_if_value %>".split(',');
+
+            // DEFINE SHOW IF NOT BLANK BOOLEAN
+            show_if_not_blank_<%= field_name %> = '<%= show_if_not_blank %>';
+
+            // SELECT THE FIELD THAT DRIVES SHOW / HIDE
+            parent_<%= dependency_name %> = $('select[name=<%= dependency_name %>]');
+
+            if(parent_<%= dependency_name %>.attr('name') === undefined){
+              // console.log("DEPENDENCY SELECT NAME UNDEFINED")
+              parent_<%= dependency_name %> = $('input[name=<%= dependency_name %>]');
+              parent_<%= dependency_name %>_type = parent_<%= dependency_name %>.attr('type');
+              // console.log(`TYPE: ${parent_<%= dependency_name %>_type}`)
+            }
+
+
+            // SELECT THE FORM GROUP OF DEPENDENT FIELD
+            <% if record[:id].present? %>
+              // console.log("ID PRESENT")
+              <% if record[:type] == "checkbox" || record[:type] == "boolean" %>
+                child_<%= field_name %> = $('#<%= record[:id] %>').closest('.a__input_checkbox_wrapper');
+              <% elsif record[:type] == "file" %>
+                child_<%= field_name %> = $('#<%= record[:id] %>').closest('.a__input_file_wrapper');
+              <% elsif record[:type] == "textarea" %>
+                child_<%= field_name %> = $('#<%= record[:id] %>').closest('.a__input_textarea_wrapper');
+              <% else %>
+                child_<%= field_name %> = $('#<%= record[:id] %>').closest('.form-group');
+              <% end %>
+            <% else %>
+              <% if record[:type] == "select" || record[:type] == "picklist" %>
+                child_<%= field_name %> = $('select[name=<%= field_name %>]').closest('.form-group');
+              <% elsif record[:type] == "checkbox" || record[:type] == "boolean" %>
+                child_<%= field_name %> = $('input[name=<%= field_name %>]').closest('.a__input_checkbox_wrapper');
+              <% elsif record[:type] == "textarea" %>
+                child_<%= field_name %> = $('textarea[name=<%= field_name %>]').closest('.a__input_textarea_wrapper');
+              <% else %>
+                child_<%= field_name %> = $('input[name=<%= field_name %>]').closest('.form-group');
+              <% end %>
+            <% end %>
+
+            // console.log(`SHOW_IF: <%= show_if_value %>\nFIELD_NAME: <%= field_name %>\ndependency_name: <%= dependency_name %>`);
+          });
+
+          // SHOW DEPENDENT FIELD ON PAGE LOAD IF INITIAL VALUE MATCHES
+          $(document).ready(function(){
+            // HIDE DEPENDENT FIELD
+            child_<%= field_name %>.hide();
+
+            var parent_value = parent_<%= dependency_name %>.val();
+            if(show_if_not_blank_<%= field_name %> == 'true'){
+              // console.log(`PARENT VALUE: ${parent_value}`)
+              if (parent_value != undefined && parent_value != ''){
+                if(parent_<%= dependency_name %>_type == 'checkbox'){
+                  if(parent_value == 'true') {
+                    child_<%= field_name %>.show();
+                  } else {
+                    child_<%= field_name %>.hide();
+                  }
+                } else {
+                  child_<%= field_name %>.show();
+                }
+              } else {
+                child_<%= field_name %>.hide();
+              }
+            } else {
+              if (parent_value == undefined){
+                parent_value = parent_<%= dependency_name %>.find(":selected").text();
+              } else {
+                var parent_value_string = parent_value.toString();
+                if(parent_value_string == child_value_<%= field_name %>) {
+                  child_<%= field_name %>.show();
+                }
+              }
+            }
+          });
+
+          // SHOW DEPENDENT FIELD ON CHANGE OF DEPENDENCY FIELD IF VALUE MATCHES
+          $('body').on('change',parent_<%= dependency_name %>,function(){
+            // console.log(`PARENT DEPENDENCY CHANGED, TYPE: ${parent_<%= dependency_name %>_type}`)
+            if(parent_<%= dependency_name %>_type == "select"){
+              var parent_value = $(this).find(':selected').val();
+              if(parent_value == undefined || parent_value == ''){
+              // console.log('UNDEFINED')
+                parent_value = parent_<%= dependency_name %>.chosen().val();
+              }
+              // console.log(parent_value)
+            } else if(parent_<%= dependency_name %>_type == "checkbox"){
+              // console.log('CHECKBOX')
+              parent_value = parent_<%= dependency_name %>.is(':checked');
+              parent_value = String(parent_value)
+              // console.log(parent_value)
+            } else {
+              parent_value = parent_<%= dependency_name %>.val();
+            }
+            if(show_if_not_blank_<%= field_name %> == 'true'){
+              if (parent_value != undefined && parent_value != ''){
+                if(parent_<%= dependency_name %>_type == "checkbox"){
+                  if(parent_value == 'true') {
+                    child_<%= field_name %>.show();
+                  } else {
+                    child_<%= field_name %>.hide();
+                  }
+                } else {
+                  child_<%= field_name %>.show();
+                }
+              } else {
+                child_<%= field_name %>.hide();
+              }
+            } else {
+              if (parent_value != undefined){
+                // CONVERT SELECTED VALUE TO STRING
+                // parent_value = String(parent_value);
+
+                // CONVERT ELEMENTS OF ARRAY TO STRINGS
+                // child_value_<%= field_name %> = child_value_<%= field_name %>.map(function(x){return String(x);});
+                // console.log(`${child_value_<%= field_name %>[0]} (${typeof child_value_<%= field_name %>[0]})\n${child_value_<%= field_name %>[1]} (${typeof child_value_<%= field_name %>[1]})\n${parent_value} (${typeof parent_value})\nINDEX: ${child_value_<%= field_name %>.indexOf(parent_value)}`)
+                if(child_value_<%= field_name %>.indexOf(parent_value) !== -1){
+                  child_<%= field_name %>.show();
+                  // console.log(`SHOW\nARRAY: [${child_value_<%= field_name %>}]\nPARENT VALUE: ${parent_value}`)
+                } else {
+                  child_<%= field_name %>.hide();
+                  // console.log(`HIDE\nARRAY: [${child_value_<%= field_name %>}]\nPARENT VALUE: ${parent_value}`)
+                }
+              }
+            }
+          });
+        <% end %> <%#= end dependencies.each do |record| =#%>
+      </script>
+    <% end %> <%#= end if dependencies.present? =#%>
+
+  <% end %> <%#= end records loop =#%>
+
+  <% if section_present %>
+    <% form_fields += "</div></div>" %>
+  <% end %>
+
+  <% if db_id.present? %>
+    <% form_fields += "<input type='hidden' form_id='#{id}' name='Id' value='#{db_id}'>" %>
+  <% end %>
+
+  <% if db_object.present? %>
+    <% form_fields += "<input type='hidden' form_id='#{id}' name='object' value='#{db_object}'>" %>
+  <% end %>
+
+  <% if db_action.present? %>
+    <% form_fields += "<input type='hidden' form_id='#{id}' name='submit_form' value='#{db_action}'>" %>
+  <% end %>
+
+  <% if db_redirect.present? %>
+    <% form_fields += "<input type='hidden' form_id='#{id}' name='redirect_to' value='#{db_redirect}'>" %>
+  <% end %>
+
+  <div class="container mb-5" style="<%= "max-width: #{max_width}" if max_width.present? %>">
+    <%= "<div class='text-danger'>Your form must have an id.</div>".html_safe if !id.present? %>
+    <form id="<%= id %>" method="<%= method %>" action="<%= action %>" class="<%= classes %> <%= "form-inline" if inline.to_s == 'true' %>" enctype="<%= enctype %>">
+      <%= "<h1 class='a__form_header text-center'>#{title}</h1>".html_safe if title.present? %>
+      <%= "<p class='form-description'>#{description}</p>".html_safe if description.present? %>
+
+      <div class="row">
+        <div class="col-md">
+          <%= form_fields.html_safe %>
+        </div>
+      </div>
+
+      <div class='a__button_section text-center mt-3'>
+        <%# CANCEL BUTTON #%>
+        <% if allow_cancel.to_s == 'true' %>
+          <a href="<%= request.referrer %>" class='<%= (show_loader.to_s == 'true') ? "show_loader" : "no_loader" %> d-inline-block a__form_button_container <% if cancel_primary.to_s == 'true' %>a__form_button_primary<% end %>'>
+              <button tabIndex="-1" type="button" class='btn btn-outline-<%= cancel_button_color %> py-2 a__form_button'><%= cancel_label %></button>
+          </a>
+        <% end %>
+        <%# CUSTOM BUTTON 1 #%>
+        <% if button_1_label.present? %>
+          <a href="<%= button_1_href %>" target="<%= button_1_target %>" class='<% if button_1_primary.to_s == 'true' %>a__form_button_primary<% else %>col-md<% end %> <%= (show_loader.to_s == 'true') ? "show_loader" : "no_loader" %> d-inline-block a__form_button_container'>
+            <button tabIndex="-1" type="button" class='btn btn-outline-<%= button_1_color %> py-2 a__form_button'><%= button_1_label %></button>
+          </a>
+        <% end %>
+        <%# CUSTOM BUTTON 2 #%>
+        <% if button_2_label.present? %>
+          <a href="<%= button_2_href %>" target="<%= button_2_target %>" class='<% if button_2_primary.to_s == 'true' %>a__form_button_primary<% else %>col-md <% if button_3_primary.to_s == 'true' %>last<% end %><% end %> <%= (show_loader.to_s == 'true') ? "show_loader" : "no_loader" %> d-inline-block a__form_button_container'>
+            <button tabIndex="-1" type="button" class='btn btn-outline-<%= button_2_color %> py-2 a__form_button'><%= button_2_label %></button>
+          </a>
+        <% end %>
+        <%# CUSTOM BUTTON 3 #%>
+        <% if button_3_label.present? %>
+          <a href="<%= button_3_href %>" target="<%= button_3_target %>" class='<% if button_3_primary.to_s == 'true' %>a__form_button_primary<% else %>col-md<% end %> <%= (show_loader.to_s == 'true') ? "show_loader" : "no_loader" %> d-inline-block a__form_button_container'>
+            <button tabIndex="-1" type="button" class='btn btn-outline-<%= button_3_color %> py-2 a__form_button'><%= button_3_label %></button>
+          </a>
+        <% end %>
+        <%# SUBMIT BUTTON #%>
+        <% unless hide_submit.to_s == 'true' %>
+          <a class='<%= (show_loader.to_s == 'true') ? "show_loader" : "no_loader" %> d-inline-block a__form_button_container <% if submit_primary.to_s == 'true' %>a__form_button_primary<% end %>'>
+            <button type="submit" class='btn btn-outline-<%= submit_button_color %> py-2 a__form_button'><%= submit_label %></button>
+          </a>
+        <% end %>
+      </div>
+    </form>
+  </div>
+  <div id='result'></div>
+  <% end %>

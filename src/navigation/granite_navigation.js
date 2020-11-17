@@ -657,4 +657,12 @@ function granite_navigation(jsonNav, jsonTheme){
     };
   }
 
+  // IF MENU IS CLICKED AND SIDENAV IS COLLAPSED THEN OPEN SIDENAV
+  let submenu_item = document.getElementsByClassName('has_submenu');
+  for(var i = 0; i < submenu_item.length; i++){
+      submenu_item[i].addEventListener('click', function(){
+          console.log('click');
+      });
+  }
+
 };

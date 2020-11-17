@@ -1,0 +1,347 @@
+// AUTO SAVE
+<% if autosave.to_s == 'true' %>
+    $(document).ready(function(){
+    var auto_save_count = 0;
+    var auto_save_wait;
+    var forms = [];
+
+    // INPUT
+    $('body').on('keyup','input',function(){
+        form_id = $(this).attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+    $('body').on('focusout','input',function(){
+        form_id = $(this).attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+
+    // QUILL
+    $('body').on('keyup','.ql-editor',function(){
+        form_id = $(this).parent().siblings('input').attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+    $('body').on('focusout','.ql-editor',function(){
+        form_id = $(this).parent().siblings('input').attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+
+    // TEXTAREA
+    $('body').on('keyup','textarea',function(){
+        form_id = $(this).attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+    $('body').on('focusout','textarea',function(){
+        form_id = $(this).attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+
+    // SELECT
+    $('body').on('change','select',function(){
+        form_id = $(this).attr('form_id');
+        start_auto_save(form_id);
+        if(jQuery.inArray(form_id, forms) == -1){
+        forms.push(form_id);
+        }
+    });
+
+    function start_auto_save(form_id){
+        if(auto_save_count > 0){
+        clearTimeout(auto_save_wait);
+        auto_save_count = 0;
+        }
+        if(auto_save_count == 0){
+        auto_save_wait = setTimeout(auto_save, 3500, forms);
+        auto_save_count = 1;
+        }
+    }
+
+    function auto_save(forms){
+        $.each( forms, function( index, form_id ){
+        form_data = {}
+
+        $(`input[form_id="${form_id}"]`).each(function(){
+            if($(this).attr('type') != 'file'){
+            form_data[$(this).attr('name')] = $(this).val();
+            }
+        });
+
+        $(`select[form_id="${form_id}"]`).each(function(){
+            form_data[$(this).attr('name')] = $(this).val();
+        });
+
+        // console.log(`FORM DATA: ${JSON.stringify(form_data, null, 4)}`)
+
+        $.ajax({
+            type: 'POST',
+            url: '<%= action %>',
+            data: form_data
+        })
+        .done(function(data) {
+            <%= autosave_success.html_safe if autosave_success.present? %>
+            console.log("autosave successful")
+        })
+        .fail(function(data) {
+            <%= autosave_fail.html_safe if autosave_fail.present? %>
+            console.log("autosave failed")
+        });
+        forms = [];
+        count = 0;
+        });
+        return false;
+    }
+    });
+<% end %>
+
+// FORM REQUIRED FIELDS
+$(document).ready(function(){
+    // REMOVE RED BORDER FROM FIELDS WHEN POPULATED
+    $('#<%= id %> .required').focusout(function(){
+    if ($(this).hasClass('bootstrap-select')){
+        $(this).removeClass('border-danger');
+    } else if ($(this).hasClass("ql-container")) {
+        var value = $(this).find(".ql-editor").html();
+        // console.log(`EDITOR VALUE: ${value}\n${value != '<p><br></p>'}`);
+        if(value != '<p><br></p>'){
+        $(this).closest(".a__quill_wrapper").find(".a__quill_bubble").removeClass("border-danger");
+        $(this).closest(".a__quill_wrapper").find(".ql-toolbar").removeClass("border-danger");
+        $(this).closest(".a__quill_wrapper").find(".ql-container").removeClass("border-danger");
+        $(this).closest(".a__quill_wrapper").children('label').removeClass('a__required_label');
+        }
+    } else if($(this).val() != ''){
+        if ($(this).attr('type') == 'file'){
+        $(this).siblings('label').removeClass('border-danger');
+        $(this).parent().siblings('label').removeClass('a__required_label');
+        } else if ($(this).attr('type') == 'checkbox'){
+        if($(this).is(':checked')){
+            $(this).parent().removeClass('border border-danger');
+            $(this).siblings('label').removeClass('a__required_label');
+        }
+        } else if ($(this).attr('type') == 'radio'){
+        if($(`input[name=${$(this).attr("name")}]:checked`).val()){
+            $(this).parent().removeClass('border border-danger');
+            $(this).parent().siblings('.a__input_radio_wrapper').removeClass('border border-danger');
+            $(this).parent().find('label').removeClass('a__required_label');
+            $(this).parent().siblings('.a__input_radio_wrapper').find('label').removeClass('a__required_label');
+        }
+        } else {
+        $(this).removeClass('border-danger');
+        $(this).siblings('label').removeClass('a__required_label');
+        $(this).closest('.input-group').find('.input-group-prepend span').removeClass('border-danger');
+        $(this).closest('.input-group').siblings('label').removeClass('a__required_label');
+        }
+    }
+    });
+    // REMOVE RED BORDER FROM CHOSEN SELECT ON FOCUS OUT
+    $('.chosen-container').focusout(function(){
+    $(this).find('.chosen-single').removeClass('border-danger');
+    $(this).find('.chosen-choices').removeClass('border-danger');
+    $(this).siblings('.a__select_append').find('label').removeClass('border-danger');
+    $(this).siblings('select').removeClass('border-danger');
+    $(this).parent().siblings('label').removeClass('a__required_label');
+    });
+
+    // CHECK REQUIRED FIELDS ON FORM SUBMIT
+    $('#<%= id %>').submit(function(e){
+    errors = []
+    $('#<%= id %> .required:not(:disabled)').each(function(){
+        if (
+        (
+        // CHECK VALUE OF INPUTS
+            // SELECT INPUTS
+            (($(this).children('select').val() == 'Please Choose' || $(this).children('select').val() == '') && $(this).hasClass('bootstrap-select') == true) ||
+            // BOOTSTRAP SELECT INPUTS
+            ($(this).hasClass('bootstrap-select') == false && ($(this).val() == '' || ($(this).is('select') && $(this).val() == 'Please Choose'))) ||
+            // CHECKBOXES
+            ($(this).attr('type') == 'checkbox' && ($(this).is(':checked') == false)) ||
+            // RADIO BUTTONS
+            ($(this).attr('type') == 'radio' && (!$(`input[name=${$(this).attr('name')}]:checked`).val())) ||
+            // QUILL HIDDEN FIELD
+            ($(this).hasClass('a__quill_hidden_field') && $(this).val() == '<p><br></p>')
+        )
+        // EXCLUDE HIDDEN INPUTS
+        && $(this).attr('type') != 'hidden' //is(':visible')
+        // EXCLUDE QUILL CONTAINER
+        && !$(this).hasClass('ql-container')
+        ) {
+        // console.log($(this).val())
+        // APPLY RED BORDER
+        // FILE INPUTS
+        if ($(this).attr('type') == 'file'){
+            $(this).siblings('label').addClass('border-danger');
+            $(this).parent().siblings('label').addClass('a__required_label');
+        // CHECKBOXES
+        } else if ($(this).attr('type') == 'checkbox'){
+            $(this).parent().addClass('border border-danger');
+            $(this).siblings('label').addClass('a__required_label');
+        // RADIO BUTTONS
+        } else if ($(this).attr('type') == 'radio'){
+            $(this).parent().addClass('border border-danger');
+            $(this).siblings('label').addClass('a__required_label');
+        // QUILL
+        } else if ($(this).hasClass('a__quill_hidden_field')) {
+            $(this).siblings('label').addClass('a__required_label');
+            var quill_wrapper = $(this).closest('.a__quill_wrapper')
+            quill_wrapper.find('.a__quill_bubble').addClass('border-danger')
+            quill_wrapper.find('.ql-toolbar').addClass('border-danger')
+            quill_wrapper.find('.ql-container').addClass('border-danger')
+        // ALL OTHER INPUTS
+        } else {
+            $(this).siblings('label').addClass('a__required_label');
+            $(this).addClass('border-danger');
+            $(this).closest('.input-group').find('.input-group-prepend span').addClass('border-danger');
+            $(this).closest('.input-group').siblings('label').addClass('a__required_label');
+        }
+        // ADD NON-BOOTSTRAP SELECT TO ERROR LIST
+        if ($(this).hasClass('bootstrap-select') == false){
+            errors.push($(this).attr('name'));
+        }
+        // CHOSEN SELECT
+        if ($(this).hasClass('custom-select')) {
+            var input_group = $(this).closest('.input-group')
+            input_group.siblings('label').addClass('a__required_label');
+            input_group.find('.chosen-single').addClass('border-danger');
+            input_group.find('.chosen-choices').addClass('border-danger');
+            input_group.find('.a__select_append label').addClass('border-danger');
+        }
+        // EXPAND COLLAPSED PANES
+        var section_wrapper = $(this).closest('.a__section_wrapper')
+        section_wrapper.find('.pane-header').removeClass('collapsed')
+        section_wrapper.find('.collapse').addClass('show')
+        }
+    });
+    // PREVENT FORM SUBMISSION IF THERE ARE ANY UNPOPULATED REQUIRED FIELDS
+    if(errors.length > 0){
+        e.preventDefault();
+
+        // console.log(errors);
+
+        // try {
+        //   toastr.error('Please fill in all the required fields.');
+        // } catch {
+        //   console.log('Notice: toastr not initialized')
+        // }
+
+        // SCROLL TO FIRST ERRANT FIELD ON SUBMIT
+        var field = $('.border-danger').first();
+        if(field.hasClass('custom-select')) {
+        field.closest('html').animate({scrollTop: $('.border-danger').parent().offset().top - 40}, 500);
+        $(".a__side_pane_iframe_container",parent.document).animate({scrollTop: $('.border-danger').parent().offset().top - 40}, 500);
+        } else {
+        field.closest('html').animate({scrollTop: $('.border-danger').offset().top - 40}, 500);
+        $(".a__side_pane_iframe_container",parent.document).animate({scrollTop: $('.border-danger').parent().offset().top - 40}, 500);
+        }
+
+        <%= required_fields_alert.html_safe if required_fields_alert.present? %>
+
+        hide_loader();
+        return false;
+    } else {
+        show_loader();
+    }
+    // ALLOW UNCHECKED CHECKBOXES TO POST ON FORM SUBMIT
+    $(this).find($('input[type=checkbox]:not(:checked):not(:disabled)')).each(
+        // CREATE A HIDDEN FIELD WITH THE SAME NAME AS THE CHECKBOX AND A VALUE OF FALSE
+        function(index) {
+        var input = $('<input />');
+        input.attr('type', 'hidden');
+        input.attr('name', $(this).attr('name'));
+        input.attr('value', false);
+        // APPEND IT TO THE FORM THE CHECKBOX IS IN
+        var form = $(this)[0].form;
+        $(form).append(input);
+        }
+    );
+    // DON'T ABORT THE FORM SUBMIT
+    return true;
+    });
+});
+
+// SUPER TEXT
+    function set_super_text($this){
+    var value = $this.find('input').val()
+    if(value == undefined){
+        value = $this.find('textarea').val()
+    }
+    if(value != ''){$this.addClass('active')} else {$this.removeClass('active')}
+    }
+    // SHIFT LABEL UP ON FOCUS OF FIELD
+    $('.super_text').focusin(function(){$(this).addClass('active')});
+    // SHIFT LABEL DOWN WHEN LEAVING FIELD UNLESS IT IS POPULATED
+    $('.super_text').focusout(function(){set_super_text($(this));});
+    // SHIFT LABEL IF POPULATED ON PAGE LOAD
+    $(document).ready(function(){
+        $.each($('.super_text'),function(){set_super_text($(this));});
+    })
+
+// RESET INPUT
+    // RESET CERTAIN INPUTS TO TEXT IF THEY ARE EMPTY (date, week, month, datetime)
+    function reset_input($this){if(!$this.val()) {$this.attr('type','text');}}
+    // RESET ON PAGE LOAD IF EMPTY
+    $(document).ready(function(){
+    $.each($('.super_text .a__reset_input'),function(){
+        reset_input($(this));
+    })
+    })
+    // RESET ON EXITING FIELD
+    $('.super_text .a__reset_input').blur(function(){reset_input($(this))});
+
+// SET ENCTYPE TO MULTIPART/FORM-DATA IF THERE IS A FILE INPUT IN THE FORM
+$(document).ready(function(){
+    var no_files = true
+    $.each($('input'),function(){
+    var type = $(this).attr('type')
+    if(type == 'file'){
+        no_files = false
+    }
+    })
+    if(no_files == false){
+    $('#<%= id %>').attr('enctype','multipart/form-data')
+    }
+})
+// INPUT CHECKBOX
+$('.custom-control').on('change','input[type=checkbox]',function(){
+    if ($(this).is(':checked')) {
+    $(this).val('true')
+    } else {
+    $(this).val('false')
+    }
+})
+// INPUT FILE
+$('.custom-file input').change(function (e) {
+    var $this = $(this)
+    var files = [];
+    for (var i = 0; i < $this[0].files.length; i++) {
+    files.push($this[0].files[i].name);
+    }
+    $this.next('.custom-file-label').html(files.join(', '));
+});
+// INPUT NUMBER
+function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode != 46)
+    return false;
+    return true;
+}
+// INITIALIZE DATE FIELD WITH PROPER FORMATTING
+$.each($('.a__date_field'),function(){
+    $(this).attr('type','date');
+    setTimeout(function(){$(this).attr('type','text');},200);
+})

@@ -403,21 +403,21 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
             // set the data. The 'normal' key with the 'fill' option sets the color of the bars
             chart.data(attr__records);
 
-            // chart.normal().outline().enabled(true);
-            // chart.normal().outline().width("0");
-            // chart.hovered().outline().width("0");
-            // chart.selected().outline().width("3");
-            // chart.selected().outline().fill(font_color);
-            // chart.selected().outline().stroke(font_color);
-            // chart.selected().outline().offset(0);
+            chart.normal().outline().enabled(true);
+            chart.normal().outline().width("0");
+            chart.hovered().outline().width("0");
+            chart.selected().outline().width("3");
+            chart.selected().outline().fill(font_color);
+            chart.selected().outline().stroke(font_color);
+            chart.selected().outline().offset(0);
 
-            // // set the position of labels
-            // chart.labels().position(attr__label_position);
-            // chart.labels().fontSize(18);
-            // chart.labels().fontColor(font_color);
-            // chart.labels().fontWeight(300);
-            // chart.labels().fontFamily("hero-new, sans-serif");
-            // chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
+            // set the position of labels
+            chart.labels().position(attr__label_position);
+            chart.labels().fontSize(18);
+            chart.labels().fontColor(font_color);
+            chart.labels().fontWeight(300);
+            chart.labels().fontFamily("hero-new, sans-serif");
+            chart.connectorStroke({color: "#595959", thickness: 0, dash:"2 2"});
 
             if(!!attr__inner_radius) {
               //set the inner radius to form the doughnut shape

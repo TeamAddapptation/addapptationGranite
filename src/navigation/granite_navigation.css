@@ -306,7 +306,7 @@
 
   /* LIST */
     #a__sidebar_nav__list {
-      height: calc(100vh - 258px); /*calc(100vh - 310px);*/
+      height: calc(100vh - 300px); /*calc(100vh - 310px);*/
       overflow: auto;
       margin: 0;
       overflow: auto;

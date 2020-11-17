@@ -164,21 +164,38 @@ function granite_tiles(jsonTiles, jsonTheme) {
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
     }
+    #a__tile{
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
     #${id}.g__container{
       padding-top: ${o.container_top_padding};
       padding-bottom: ${o.container_bottom_padding};
     }
-    ${cssID}.a__tile_wrapper .g__col{
+    ${cssID}.a__tile_wrapper .g__no_wrap .g__col{
       flex: ${fillRow} 0 ${columns};
       overflow: hidden;
     }
-    ${cssID} .g__tile_container .a__${cssStyle}_tile {
+    ${cssID}.a__tile_wrapper .g__wrap .g__col{
+      flex: 0 1 125px;
+      overflow: hidden;
+    }
+    ${cssID} .g__wrap .g__tile_container .a__${cssStyle}_tile {
         flex-direction: ${content_layout};
         justify-content: ${content_align};
-        height: ${height};
-        border-radius: ${border_radius};
+        border-radius: 15px;
         border:${border} solid ${border_color};
+        padding: 5px;
     }
+    ${cssID} .g__no_wrap .g__tile_container .a__${cssStyle}_tile {
+      flex-direction: ${content_layout};
+      justify-content: ${content_align};
+      height: ${height};
+      border-radius: ${border_radius};
+      border:${border} solid ${border_color};
+  }
     ${cssID} .g__tile_container .a__basic_tile .g__desc_container {
         text-align: ${desc_align};
     }
@@ -268,12 +285,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
         margin-top: 50px;
         border: 2px dashed #707070;
       }
-      #a__tile{
-        display: flex;
-        flex-wrap: wrap;
-        margin-right: 15px;
-        margin-left: 15px;
-      }
       /*---------------------------------------------
       Layout
       ---------------------------------------------*/
@@ -295,13 +306,48 @@ function granite_tiles(jsonTiles, jsonTheme) {
         margin-right: 15px
       }
       /*---------------------------------------------
+      App Layout
+      ---------------------------------------------*/
+      .a__tile_wrapper .g__wrap .g__tile_container .a__basic_tile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        background-size: cover;
+        background-position: center center;
+        overflow: hidden;
+        text-decoration: none;
+        }
+      .a__tile_wrapper .g__wrap .g__tile_container a.a__basic_tile {
+        cursor:pointer;
+      }
+      .g__wrap .g__tile_container .a__icon_tile {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        background-size: cover;
+        background-position: center center;
+        transition: all .2s;
+        overflow: hidden;
+      }
+      .g__wrap .g__tile_container .a__icon_tile:hover {
+        cursor: pointer;
+      }
+      .a__tile_wrapper .g__wrap .a__icon_tile .g__icon {
+        z-index: 5;
+        opacity: 1;
+        padding: 0;
+        transition: opacity .5s ease-out;
+    }
+      /*---------------------------------------------
       Basic Layout
       ---------------------------------------------*/
       .a__tile_wrapper .row {
         margin-right: 0;
         margin-left: 0;
       }
-      .a__tile_wrapper .g__tile_container .a__basic_tile {
+      .a__tile_wrapper .g__no_wrap .g__tile_container .a__basic_tile {
         position: relative;
         display: flex;
         align-items: center;
@@ -311,7 +357,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         overflow: hidden;
         text-decoration: none;
         }
-        .a__tile_wrapper .g__tile_container a.a__basic_tile {
+        .a__tile_wrapper .g__no_wrap .g__tile_container a.a__basic_tile {
           cursor:pointer;
           }
       /* Overlays */
@@ -389,7 +435,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
       Icon Layout
       ---------------------------------------------*/
       /* Main Structure */
-      .g__tile_container .a__icon_tile {
+      .g__no_wrap .g__tile_container .a__icon_tile {
         position: relative;
         display: flex;
         align-items: center;
@@ -399,7 +445,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         transition: all .2s;
         overflow: hidden;
       }
-      .g__tile_container .a__icon_tile:hover {
+      .g__no_wrap .g__tile_container .a__icon_tile:hover {
         cursor: pointer;
       }
       .a__icon_tile.a__filters:before {
@@ -422,6 +468,12 @@ function granite_tiles(jsonTiles, jsonTheme) {
         z-index: 5;
         opacity: 1;
         padding: 15px 25px;
+        transition: opacity .5s ease-out;
+      }
+      .a__tile_wrapper .a__icon_tile .g__image{
+        z-index: 5;
+        opacity: 1;
+        padding: 5px;
         transition: opacity .5s ease-out;
       }
       .a__tile_wrapper .a__icon_tile .g__tile_body{
@@ -721,12 +773,11 @@ function granite_tiles(jsonTiles, jsonTheme) {
       .select-items div:hover, .same-as-selected {
         background-color: rgba(0, 0, 0, 0.1);
       }
-
       /*---------------------------------------------
       Mobile Styles
       ---------------------------------------------*/
       @media (max-width: 991.98px) {
-        ${cssID}.a__tile_wrapper .g__col{
+        ${cssID}.a__tile_wrapper .g__no_wrap .g__col{
           flex: ${fillRow} 0 50%;
           overflow: hidden;
         }
@@ -812,7 +863,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         }
       }
       @media (max-width: 575.98px) {
-        ${cssID}.a__tile_wrapper .g__col{
+        ${cssID}.a__tile_wrapper .g__no_wrap .g__col{
           flex: 0 0 100%;
           overflow: hidden;
         }
@@ -867,6 +918,10 @@ function granite_tiles(jsonTiles, jsonTheme) {
             return style === "basic" ? (val - 50) + "px" : (val / 2) + "px";
         }
     }
+    function layout(o){
+      console.log(o.app_layout);
+      return o.app_layout ? `g__wrap` : "g__no_wrap";
+    }
     function container(o){
         return o.full_width ? "g__container-fluid" : "g__container";
     }
@@ -919,7 +974,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
           "class": `a__tile_wrapper ${customClass(o)}`
         });
         var row = createElement("div", {
-            "id": "a__tile"
+            "id": "a__tile",
+            "class": layout(o)
         });
         if(action){
           var actionWrapper = createElement("div", {
@@ -967,6 +1023,15 @@ function granite_tiles(jsonTiles, jsonTheme) {
                   icon_container.append(icon);
                   tile_item.append(icon_container);
               }
+              if (!!r.image){
+                var image_container = document.createElement('div');
+                image_container.setAttribute('class','g__image');
+                var image = document.createElement('img');
+                image.setAttribute('src', r.image);
+                image.setAttribute('class', "g__tile_image");
+                image_container.append(image);
+                tile_item.append(image_container);
+            }
               // header and description container
               var tile_body = document.createElement('div');
               tile_body.setAttribute('class','g__tile_body');
@@ -975,7 +1040,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
               }
               tile_item.append(tile_body);
 
-              if(!!r.title){
+              if(!!r.title || (typeof r.title === "number")){
                   tile_header = document.createElement('div');
                   tile_header.setAttribute('class','g__tile_header');
                   tile_header.innerHTML = r.title
@@ -987,7 +1052,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
                 tile_header.innerHTML = 'Empty'
                 tile_body.append(tile_header);
             }
-              if(!!r.description){
+              if(!!r.description || (typeof r.description === "number")){
                   tile_description_container = document.createElement('div');
                   tile_description_container.setAttribute('class','g__desc_container');
                   tile_description = document.createElement('div');
