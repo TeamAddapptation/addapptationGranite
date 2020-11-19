@@ -3,11 +3,12 @@ function granite_forms(formsBlock, jsonTheme){
     const o = formsBlock.options;
     const r = formsBlock.records;
     const t = jsonTheme;
-    const cssId = "#" + id;
+    const cssId = '#' + id;
     // micro settings attributes
-    const attr__action = o.addapptation_action || "";
-    const attr__form_id = o.form_id || "";
-    const attr__method = o.method || "POST";
+    const attr__action = o.addapptation_action || '';
+    const attr__form_id = o.form_id || '';
+    const attr__method = o.method || 'POST';
+    const attr__enctype = o.enctype || 'application/x-www-form-urlencoded';
 
     /* -------------------- Fonts ----------------------*/
     const font_include = document.getElementById('g__font_stylesheet');
@@ -53,8 +54,8 @@ function granite_forms(formsBlock, jsonTheme){
     /* ------------------------ Global Field Styles ------------------------*/
     ${cssId} .g__form_group{
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
-
     }
     ${cssId} .g__form_field{
         position: relative;
@@ -75,7 +76,7 @@ function granite_forms(formsBlock, jsonTheme){
         color: var(--font-color);
         font-size: 1rem;
         padding: 0.375rem 0.75rem;
-
+        outline: none;
     }
     ${cssId} .g__form_field input:invalid {
         border-color: red;
@@ -105,7 +106,19 @@ function granite_forms(formsBlock, jsonTheme){
         border-radius: var(--border-radius);
         margin: 15px;
     }
-    /* ------------------------ Picklist ------------------------------*/
+    /* ------------------------ Range ------------------------------*/
+    ${cssId} .g__range_container{
+        display: flex;
+        align-items: center;
+    }
+    ${cssId} .g__range_output{
+        color: var(--font-color);
+        background: var(--background);
+        border: var(--border);
+        border-radius: var(--border-radius);
+        padding: 5px 10px;
+        margin-left: 20px;
+    }
     ${cssId} .g__field_range{
         -webkit-appearance: none;
     }
@@ -134,6 +147,26 @@ function granite_forms(formsBlock, jsonTheme){
         background: #fff;
         border-radius: 15px;
         cursor: pointer;
+    }
+    /* ------------------------ Textarea ------------------------------*/
+    textarea{
+        background: var(--background);
+        border: var(--border);
+        border-radius: var(--border-radius);
+        color: var(--font-color);
+        font-family: var(--font-regular);
+        font-weight: 300;
+        padding: 5px;
+        outline: none;
+    }
+    /* ------------------------ Color ------------------------------*/
+    #granite-forms .g__form_field .g__color_container {
+        display: flex;
+    }
+    #granite-forms .g__form_field input[type=color] {
+        padding: 0;
+        flex: 1;
+        height: 33px;
     }
     /* ------------------------ File ------------------------------*/
     ::-webkit-file-upload-button{
@@ -208,14 +241,16 @@ function granite_forms(formsBlock, jsonTheme){
     !!attr__form_id ? form_container.setAttribute('id', attr__form_id) : "";
     // static attributes
     form_container.setAttribute('method', attr__method)
+    form_container.setAttribute('enctype', attr__enctype)
+
 
     /* -------------------- Standard Field Attributes ----------------------*/
     function basicAttributes(r, input, class_name){
-        !!r.type  ? input.setAttribute('type', r.type) : "";
-        !!r.id    ? input.setAttribute('id', r.id) : "";
-        !!r.name  ? input.setAttribute('name', r.name) : "";
-        !!r.value ? input.setAttribute('value', r.value) : "";
         input.setAttribute('class', class_name);
+        !!r.type ? input.setAttribute('type', r.type) : "";
+        !!attr__form_id ? input.setAttribute('form_id', attr__form_id) : "";
+        !!r.name ? input.setAttribute('name', r.name) : "";
+        !!r.value ? input.setAttribute('value', r.value) : "";
         input.required = r.required;
         input.disabled = r.disabled;
         return input
@@ -231,6 +266,8 @@ function granite_forms(formsBlock, jsonTheme){
     let inline_field = false;
     let inline_group = [];
     r.forEach(function(r, num){
+        let r_id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
+        console.log(r_id);
         let class_name = "g__field_" + r.type;
         inline_field = r.inline || false;
 
@@ -247,15 +284,45 @@ function granite_forms(formsBlock, jsonTheme){
         //build each field depending on the type
         let input;
         switch (r.type){
+            case "quill":
+                let quil = document.createElement('div');
+                quil.setAttribute('id', r_id);
+                form_field.appendChild(quil);
+            break;
             case "file":
                 input = document.createElement('input');
+                input.setAttribute('id', r_id);
                 basicAttributes(r, input, class_name)
                 form_field.appendChild(input);
             break;
+            case "color":
+                let color_container = document.createElement('div');
+                color_container.setAttribute('class', 'g__color_container');
+                input = document.createElement('input');
+                input.setAttribute('id', r_id);
+                basicAttributes(r, input, class_name);
+                input.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+                var hex_display = document.createElement('input');
+                hex_display.setAttribute('class', 'g__hex_value');
+                hex_display.setAttribute('value', '#101010');
+                hex_display.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+                color_container.appendChild(input)
+                color_container.appendChild(hex_display);
+                form_field.appendChild(color_container);
+            break;
             case "textarea":
+                input = document.createElement('textarea');
+                input.setAttribute('id', r_id);
+                basicAttributes(r, input, class_name)
+                input.setAttribute('rows', '4');
+                input.setAttribute('cols', '50');
+                input.setAttribute('form', attr__form_id);
+                form_field.appendChild(input);
+            break;
             case "picklist":
                 const picklist_options = r.options;
                 input = document.createElement('div');
+                input.setAttribute('id', r_id);
                 basicAttributes(r, input, class_name)
                 input.setAttribute('class', 'g__picklist')
                 let select = document.createElement('select');
@@ -271,14 +338,22 @@ function granite_forms(formsBlock, jsonTheme){
             case "range":
                 let min = r.min || 0;
                 let max = r.max || 100;
+                let range_container = document.createElement('div');
+                range_container.setAttribute('class', "g__range_container");
                 input = document.createElement('input');
+                input.setAttribute('id', r_id);
                 basicAttributes(r, input, class_name)
                 input.setAttribute('min', min);
                 input.setAttribute('max', max);
-                form_field.appendChild(input);
+                let output = document.createElement('output');
+                output.setAttribute('class', 'g__range_output');
+                range_container.appendChild(input);
+                range_container.appendChild(output);
+                form_field.appendChild(range_container);
             break;
             default:
                 input = document.createElement('input');
+                input.setAttribute('id', r_id);
                 basicAttributes(r, input, class_name)
                 form_field.appendChild(input);
         }
@@ -302,10 +377,25 @@ function granite_forms(formsBlock, jsonTheme){
         }
 
     });
-    // Hidden Fields
+    /* -------------------- Hidden Fields ----------------------*/
     if(!!o.db_id){
         hidden = document.createElement('input');
         hiddenFields(hidden, "id", o.db_id)
+        form_container.appendChild(hidden);
+    }
+    if(!!o.db_object){
+        hidden = document.createElement('input');
+        hiddenFields(hidden, "object", o.db_object)
+        form_container.appendChild(hidden);
+    }
+    if(!!o.db_action){
+        hidden = document.createElement('input');
+        hiddenFields(hidden, "submit_form", o.db_action)
+        form_container.appendChild(hidden);
+    }
+    if(!!o.db_redirect){
+        hidden = document.createElement('input');
+        hiddenFields(hidden, "redirect_to", o.db_redirect)
         form_container.appendChild(hidden);
     }
 
@@ -359,6 +449,43 @@ function granite_forms(formsBlock, jsonTheme){
             })
         }
     }
+    /* -------------------- Range Output ----------------------*/
+    const all_ranges = document.querySelectorAll(".g__range_container");
+    all_ranges.forEach(wrap => {
+    const range = wrap.querySelector(".g__field_range");
+    const output = wrap.querySelector(".g__range_output");
+
+    range.addEventListener("input", () => {
+        setBubble(range, output);
+    });
+    setBubble(range, output);
+    });
+
+    function setBubble(range, output) {
+        const val = range.value;
+        const min = range.min ? range.min : 0;
+        const max = range.max ? range.max : 100;
+        output.innerHTML = val + 'px';
+    }
+
+    /* -------------------- Color field values ----------------------*/
+    let color_fields = document.getElementsByClassName('g__hex_value');
+    for(let i = 0; i < color_fields.length; i++){
+        color_fields[i].addEventListener('keydown', function(){
+            let color = this.value;
+            this.previousSibling.value = color;
+        });
+    }
+    let color_pickers = document.getElementsByClassName('g__field_color');
+    for(let i = 0; i < color_pickers.length; i++){
+        color_pickers[i].addEventListener('change', function(){
+            let color = this.value;
+            this.nextSibling.value = color;
+        });
+    }
+
+
+    /* -------------------- Validate ----------------------*/
     const validate = function(ev){
         //let valid = true;
         let failures = [];
