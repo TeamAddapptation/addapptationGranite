@@ -133,19 +133,7 @@ function granite_cards(jsonCards, jsonTheme) {
     ---------------------------------------------*/
     var cardCss = document.createElement('style');
     cardCss.innerHTML = `
-    /*---------------------------------------------
-    No Records
-    ---------------------------------------------*/
-    .a__no-records{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #fff;
-        color: #BFBFBF;
-        height: 225px;
-        margin-top: 50px;
-        border: 2px dashed #707070;
-    }
+
     /*---------------------------------------------
     Basic Layout
     ---------------------------------------------*/
@@ -156,8 +144,8 @@ function granite_cards(jsonCards, jsonTheme) {
         --bottom-background: #ffffff;
         --font-color: #101010;
         --header-color: #101010;
-        --description-color: #101010;
-        --border-color: #bfbfbf;
+        --description-color: #BFBFBF;
+        --border-color: #5D5D5D;
         --font-hairline: hero-new-hairline, sans-serif;
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
@@ -168,8 +156,8 @@ function granite_cards(jsonCards, jsonTheme) {
         --background: #101010;
         --font-color: #ffffff;
         --header-color: #ffffff;
-        --description-color: #ffffff;
-        --border-color: #BFBFBF;
+        --description-color: #BFBFBF;
+        --border-color: #5D5D5D;
         --box-shadow: -10px 0 10px 0px #101010;
         --font-hairline: hero-new-hairline, sans-serif;
         --font-regular: hero-new, sans-serif;
@@ -180,6 +168,19 @@ function granite_cards(jsonCards, jsonTheme) {
         margin-left: 15px;
         padding-top:${o.micro_top_padding};
         padding-bottom:${o.micro_bottom_padding};
+    }
+    /*---------------------------------------------
+    No Records
+    ---------------------------------------------*/
+    .a__no-records{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        color: var(--font-color);
+        height: 225px;
+        margin-top: 50px;
+        border: 2px dashed #707070;
     }
     /*---------------------------------------------
     Containers
@@ -455,6 +456,7 @@ function granite_cards(jsonCards, jsonTheme) {
     ---------------------------------------------*/
     ${css_class} .g__basic_top{
         display: flex;
+        position: relative;
         justify-content: center;
         align-items: center;
         height: ${o.top_height};
@@ -825,7 +827,7 @@ function granite_cards(jsonCards, jsonTheme) {
         })
     } else {
         var empty = createElement("div", {
-            html: "<h2>Add Tile Element</h2>",
+            html: "<h2>Add Card Element</h2>",
             "class": "a__no-records col-12 mt-3"
         })
         wrapper.appendChild(row).appendChild(empty);
@@ -874,6 +876,7 @@ function granite_cards(jsonCards, jsonTheme) {
             default:
                 return `<div class="g__basic_card">
                             <a ${topLink(r)} class="g__basic_top" style="${basicCardBkg(r)}">
+                                ${overlay(r)}
                                 ${basicCardImg(r)}
                             </a>
                             <div class="g__basic_bottom">
@@ -919,7 +922,8 @@ function granite_cards(jsonCards, jsonTheme) {
         /*---------------------------------------------
         Height Match
         ---------------------------------------------*/
-        var basic_bottom_height = document.getElementsByClassName('g__basic_bottom');
+        setTimeout(function(){
+            var basic_bottom_height = document.getElementsByClassName('g__basic_bottom');
         var height_arr = [];
         for (var i = 0; i < basic_bottom_height.length; i++){
                 height_arr.push(basic_bottom_height[i].clientHeight);
@@ -928,9 +932,11 @@ function granite_cards(jsonCards, jsonTheme) {
         if(o.match_height){
             console.log(max_height);
             for (var i = 0; i < basic_bottom_height.length; i++){
-                basic_bottom_height[i].style.minHeight = max_height + 'px';
+                basic_bottom_height[i].style.minHeight = max_height + 20 + 'px';
             }
         }
+        }, 1000);
+
         /*---------------------------------------------
         Align Button
         ---------------------------------------------*/

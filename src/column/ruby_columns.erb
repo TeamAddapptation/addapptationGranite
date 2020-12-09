@@ -1,0 +1,47 @@
+<% if !@a__column_v2.present? %>
+<% @a__column_v2 = true %>
+<style>
+</style>
+<script>
+</script>
+<% end %>
+<% json ||= {} %>
+<% id = json[:id] || "a__#{SecureRandom.hex}" %>
+<% options = json[:options] || {} %>
+<% if !@column_present.present? || !@column_present %>
+	<% @column_present = true %>
+	<% column_width = "-" + (options[:width].present? ? options[:width] : "") %>
+	<% column_type = "-" + (options[:type].present? ? options[:type] : "md") %>
+	<% offset_type = options[:offset_type].present? ? options[:offset_type] : "" %>
+	<% offset_width = options[:offset_width].present? ? options[:offset_width] : "" %>
+	<% hide_row = options[:hide_row].present? ? options[:hide_row] : "" %>
+	<% if offset_type.present? %>
+		<% offset_settings = "offset-#{offset_type}-#{offset_width}" %>
+	<% else %>
+		<% offset_settings = "" %>
+	<% end %>
+	<div class='<%= @a__container %>'> <!-- START COLUMNS CONTAINER -->
+	<div class='row'><!-- START ROW FOR COLUMNS -->
+	<div class='col<%= column_type %><%= column_width %> <%= offset_settings %>'><!-- START 1st COLUMN -->
+<% elsif @column_present == true %>
+	<% column_width = "-" + (options[:width].present? ? options[:width] : "") %>
+	<% column_type = "-" + (options[:type].present? ? options[:type] : "md") %>
+	<% offset_type = options[:offset_type].present? ? options[:offset_type] : "" %>
+	<% offset_width = options[:offset_width].present? ? options[:offset_width] : "" %>
+    <% end_of_row = options[:end_of_row].present? ? options[:end_of_row] : false %>
+
+	<% if end_of_row == "true" %>
+        </div><!-- END LAST COLUMN -->
+        </div><!-- END LAST ROW -->
+        </div><!-- END COLUMNS CONTAINER -->
+        <% @column_present = false %>
+    <% else %>
+		<% if offset_type.present? %>
+		  <% offset_settings = "offset-#{offset_type}-#{offset_width}" %>
+		<% else %>
+		  <% offset_settings = "" %>
+		<% end %>
+		</div><!-- END COLUMN -->
+		<div class='col<%= column_type %><%= column_width %> <%= offset_settings %>'><!-- START NEXT COLUMN -->
+    <% end %>
+<% end %>

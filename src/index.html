@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="carousel/granite_carousel.css">
     <link rel="stylesheet" href="navigation/granite_navigation.css">
-    <!-- <link rel="stylesheet" href="https://cdn.addapptation.com/addapptation-stylesheets/anychart-ui.css"> -->
+    <link rel="stylesheet" href="https://cdn.addapptation.com/addapptation-stylesheets/anychart-ui.css">
     <link rel="stylesheet" type="text/css" href="https://addapptation.blob.core.windows.net/addapptation-stylesheets/fontawesome-pro-5.10.0-11-web/css/all.min.css">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Granite</title>
   </head>
   <body>
+        <div id="g__template"></div>
+        <div id="g__jasdf8203r23j"></div>
         <div id="granite-navigation"></div>
         <div id="data_visualization-granite"></div>
         <div id="hero-granite"></div>
@@ -21,25 +24,29 @@
         <div id="granite-tiles"></div>
         <div id="granite-cards"></div>
         <div id="granite-content"></div>
-        <div id="granite-heatmap"></div>
-        <div id="granite-forms"></div>
+        <div id="granite-form"></div>
+        <div id="granite-columns"></div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src='json/data.js'></script>
     <script src='template/granite_template.js'></script>
     <script src='navigation/granite_navigation.js'></script>
     <script src='hero/granite_hero.js'></script>
+    <script src='column/granite_column.js'></script>
     <script src='carousel/granite_carousel.js'></script>
     <script src='data_visualization/granite_data_visualization.js'></script>
     <script src='tiles/granite_tiles.js'></script>
     <script src='cards/granite_cards.js'></script>
     <script src='content/granite_content.js'></script>
     <script src='heatmap/granite_heatmap.js'></script>
-    <script src='forms/granite_forms.js'></script>
-    <!-- <script src="https://cdn.addapptation.com/addapptation-stylesheets/anychart-bundle.js"></script> -->
+    <script src='form/granite_form.js'></script>
+
+    <script src="https://cdn.addapptation.com/addapptation-stylesheets/anychart-bundle.js"></script>
     <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-base.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   </body>
   <script>
-    const render = ["forms"];
+    const render = ["form"];
     render.forEach((micro) => {
         switch (micro){
         case "navigation":
@@ -69,8 +76,11 @@
         case "heatmap":
             granite_heatmap(heatmapBlock, jsonTheme);
         break;
-        case "forms":
-            granite_forms(formsBlock, jsonTheme);
+        case "form":
+            granite_form(formsBlock, jsonTheme);
+        break;
+        case "column":
+            granite_column(columnsBlock, jsonTheme);
         break;
         default:
             //nothing

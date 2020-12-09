@@ -79,7 +79,7 @@
       height: 100vh;
       width: 260px;
       box-shadow: 4px 0 10px 0 rgba(0, 0, 0, 0.15);
-      background: var(--gradient);
+      /* background: var(--gradient); */
       transition: margin-left 0.3s ease;
       margin-left: -260px;
       z-index: 10;
@@ -633,7 +633,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         height: calc(100vh - 104px);
-        background: var(--topbarGradient);
+        /* background: var(--topbarGradient); */
       }
       #a__mobile_menu_scrollable > li:not(.active) div {
         color: rgba(var(--color), 1);
@@ -1133,7 +1133,7 @@
       padding: 0;
   }
     #a__topbar_nav {
-      background: var(--topbarGradient);
+      /* background: var(--topbarGradient); */
       padding-right: var(--topbarPaddingRight);
       padding-left: var(--topbarPaddingLeft);
       position: fixed;
