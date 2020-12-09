@@ -1,6 +1,7 @@
 function granite_data_visualization(dataVisualizationBlock, jsonTheme){
     const id = dataVisualizationBlock.id;
     const cssId = "#" + dataVisualizationBlock.id;
+    console.log("Data: v2");
     console.log(dataVisualizationBlock);
     const chartId = 'chart-' + id;
     const o = dataVisualizationBlock.options;
@@ -283,35 +284,21 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
       anychart.graphics.useAbsoluteReferences(true);
       if (!!o.colors){
         var palette = o.colors;
+        if (typeof palette === 'string'){
+          let palette_no_brackets = palette.substring(1, palette.length-1);
+          let palette_clean = palette_no_brackets.replace(new RegExp('"', 'g'), '');
+          palette = palette_clean.split(',');
+        }
       } else {
         var palette = ['#D44697','#FF8BCD','#FDDBEE','#FFB866', '#FFA08C'];
-      }
 
+      }
 
         // create an instance of a pie chart
         var chart;
         var data;
         var stage;
         var draw_chart = true; // We might have to draw our charts in a custom function
-
-        // const process_selected_fill = function(my_chart, chart_type, fill_color) {
-        //     // Deal with selected state fill colors.
-        //     switch(chart_type) {
-        //       case CHART_TYPE_COLUMN:
-        //       case CHART_TYPE_BAR:
-        //       case CHART_TYPE_VERTICAL_BAR:
-        //         var i=0;
-        //         // create a loop
-        //         while (my_chart.getSeriesAt(i)){
-        //           // rename each series
-        //           my_chart.getSeriesAt(i).selected().fill(fill_color);
-        //           i++;
-        //         }
-        //         break;
-        //       default:
-        //        // do nothing
-        //     }
-        // }
 
         switch(attr__chart_type) {
           /*---------------------------------------------

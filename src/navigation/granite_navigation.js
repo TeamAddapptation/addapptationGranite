@@ -7,6 +7,7 @@ function granite_navigation(jsonNav, jsonTheme){
     var targetID = json['id'];
     var options = json.options;
     var records = json.records;
+    var css = "#" + json.id;
     var t = jsonTheme;
     var content = (document.getElementById(targetID).innerHTML).trim();
     var nav_root = document.documentElement;
@@ -41,9 +42,44 @@ function granite_navigation(jsonNav, jsonTheme){
     /*---------------------------------------------
     CSS Block
     ---------------------------------------------*/
+    var gradient_1 = jsonTheme.gradient_1 ? jsonTheme.gradient_1 : "linear-gradient(180deg, #FD937A 0%, #D44697 50%, #2F1522 100%)";
+    var gradient_2 = jsonTheme.gradient_2 ? jsonTheme.gradient_2 : "linear-gradient(to left, #ffb866 -5%, #ff8bcd 40%, #d44697 65%, #202020 96%)";
+    var primary = !!options.highlight ? hexToRgb(options.highlight) : "#D44697";;
+    var secondary = jsonTheme.secondary ? jsonTheme.secondary : "#D44697";
+    var success = jsonTheme.success ? jsonTheme.success : "#00B28B";
+    var warning = jsonTheme.warning ? jsonTheme.warning : "#00B28B";
+    var alert = jsonTheme.alert ? jsonTheme.alert : "#EA386E";
+    var darkGray = jsonTheme.darkGray ? jsonTheme.darkGray : "#666666";
+    var mediumGray = jsonTheme.mediumGray ? jsonTheme.mediumGray : "#b7b7b7";
+    var lightGray = jsonTheme.lightGray ? jsonTheme.lightGray : "#5d5d5d";
     var mobile_break_point = !!options.mobile_breakpoint ? options.mobile_breakpoint : "960px";
+
+    //SETTING THE BACKGROUND COLOR
+    if (options.type === "sidebar"){
+        if(options.background === "@none"){
+            var background_color = gradient_1;
+        }else{
+            var background_color = options.background ? options.background : gradient_1;
+        }
+    }else{
+        if(options.background === "@none"){
+            var background_color = gradient_2;
+        }else{
+            var background_color = options.background ? options.background : gradient_2;
+        }
+    }
+
     var navigationCss = document.createElement('style');
     navigationCss.innerHTML = `
+    ${css} #a__mobile_menu_scrollable {
+        background: ${background_color};
+      }
+    ${css} #a__topbar_nav {
+        background: ${background_color};
+      }
+    ${css} #a__sidebar_nav {
+        background: ${background_color};
+    }
     @media (min-width: ${mobile_break_point}) {
         #a__mobile_nav_topbar {
             transform: translateY(100vh);
@@ -63,41 +99,18 @@ function granite_navigation(jsonNav, jsonTheme){
       }
     `
     document.head.appendChild(navigationCss);
-    var gradient_1 = jsonTheme.gradient_1 ? jsonTheme.gradient_1 : "linear-gradient(180deg, #FD937A 0%, #D44697 50%, #2F1522 100%)";
-    var gradient_2 = jsonTheme.gradient_2 ? jsonTheme.gradient_2 : "linear-gradient(to left, #ffb866 -5%, #ff8bcd 40%, #d44697 65%, #202020 96%)";
-    var primary = !!options.highlight ? hexToRgb(options.highlight) : "#D44697";;
-    var secondary = jsonTheme.secondary ? jsonTheme.secondary : "#D44697";
-    var success = jsonTheme.success ? jsonTheme.success : "#00B28B";
-    var warning = jsonTheme.warning ? jsonTheme.warning : "#00B28B";
-    var alert = jsonTheme.alert ? jsonTheme.alert : "#EA386E";
-    var darkGray = jsonTheme.darkGray ? jsonTheme.darkGray : "#666666";
-    var mediumGray = jsonTheme.mediumGray ? jsonTheme.mediumGray : "#b7b7b7";
-    var lightGray = jsonTheme.lightGray ? jsonTheme.lightGray : "#5d5d5d";
 
-    //SETTING THE BACKGROUND COLOR
-    if (options.type === "sidebar"){
-        if(options.background === "@none"){
-            var background_color = gradient_1;
-        }else{
-            var background_color = options.background ? options.background : gradient_1;
-        }
-    }else{
-        if(options.background === "@none"){
-            var background_color = gradient_2;
-        }else{
-            var background_color = options.background ? options.background : gradient_2;
-        }
-    }
     if(!!hexToRgb(background_color)){
         var backgroundOpacity = options.background_opacity;
         var backgroundColor = hexToRgb(background_color);
         var heroCss = document.createElement('style');
         heroCss.innerHTML = `
-        #a__topbar_nav {
+        ${css} #a__topbar_nav {
             background: rgba(${backgroundColor}, ${backgroundOpacity});
         }`
         document.head.appendChild(heroCss);
     }
+
     // CSS VARIABLES --topbarMobileMenuBackground
     var topbar_over_content = "60px";
     var cta_button_padding = !!options.cta_button_padding ? options.cta_button_padding : "48px";
@@ -270,7 +283,7 @@ function granite_navigation(jsonNav, jsonTheme){
             var icon = record.icon;
             var link_text = !!href ? href.substr(1) : href;
             var link_check = path === link_text ? true : false;
-            var is_active = link_check ? true : (path === '/' || path === '/homepage' || path === 'homepage') && val == 0;
+            var is_active = link_check ? true : (path === '/') && val == 0;
             var active_class = is_active ? 'active' : '';
             is_submenu_item = record.submenu;
             /* CHECK FOR LABEL AND ICON */

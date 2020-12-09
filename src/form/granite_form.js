@@ -1,4 +1,4 @@
-function granite_forms(formsBlock, jsonTheme){
+function granite_form(formsBlock, jsonTheme){
     const id = formsBlock.id;
     const o = formsBlock.options;
     const r = formsBlock.records;
@@ -35,19 +35,22 @@ function granite_forms(formsBlock, jsonTheme){
         --font-bold: hero-new, sans-serif;
         --border-radius: 2px;
         --field-padding: 0.375rem 0.75rem;
+        --field-height: 37px;
 
         /* Mode Dependent */
         --background: #ffffff;
         --background-reverse: #000000;
+        --background-range: #eaeaea;
         --font-color-reverse: #ffffff;
         --border: 1px solid #5d5d5d;
         --font-color: #5d5d5d;
 
         /* css */
-        padding: 50px;
+        padding: 15px;
     }
     ${cssId}[mode="midnight"]{
         --background: rgba(255, 255, 255, 0.15);
+        --background-range: rgba(255, 255, 255, 0.15);
         --border: 1px solid #ffffff;
         --font-color: #ffffff;
     }
@@ -69,6 +72,12 @@ function granite_forms(formsBlock, jsonTheme){
     ${cssId} .g__form_field label{
         color: var(--font-color);
     }
+    ${cssId} .g__form_field input.invalid{
+        border: 1px solid yellow;
+    }
+    ${cssId} .g__form_field input.valid{
+        border: 1px solid green;
+    }
     ${cssId} .g__form_field input{
         background: var(--background);
         border: var(--border);
@@ -78,9 +87,6 @@ function granite_forms(formsBlock, jsonTheme){
         padding: 0.375rem 0.75rem;
         outline: none;
     }
-    ${cssId} .g__form_field input:invalid {
-        border-color: red;
-      }
     ${cssId} button{
         cursor: pointer;
     }
@@ -112,12 +118,82 @@ function granite_forms(formsBlock, jsonTheme){
         align-items: center;
     }
     ${cssId} .g__range_output{
+        width: 100px;
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
         color: var(--font-color);
         background: var(--background);
         border: var(--border);
         border-radius: var(--border-radius);
         padding: 5px 10px;
         margin-left: 20px;
+    }
+    ${cssId} .g__range_output[type=number] {
+        -moz-appearance: textfield;
+      }
+    ${cssId} .g__range_output::-webkit-outer-spin-button,
+    ${cssId} .g__range_output::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    ${cssId} .g__range_unit{
+        position: absolute;
+        bottom: 0;
+        right: 30px;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        width: 20px;
+        height: var(--field-height);
+        color: var(--font-color);
+        opacity: .4;
+    }
+    ${cssId} .g__range_plus_minus{
+        position: absolute;
+        bottom: 0;
+        right: 1px;
+        border-radius: 0 3px 3px 0;
+        width: 20px;
+        height: var(--field-height);
+        border-left: 1px solid var(--font-color);
+    }
+    ${cssId} .g__range_increase{
+        width: 100%;
+        height: 50%;
+        position: relative;
+    }
+    ${cssId} .g__range_increase:active{
+        background: #dce2e8;
+    }
+    ${cssId} .g__range_increase:before{
+        position: absolute;
+        content: " ";
+        left: 6px;
+        top: 6px;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 5px solid var(--font-color);
+    }
+    ${cssId} .g__range_decrease:active{
+        background: #dce2e8;
+    }
+    ${cssId} .g__range_decrease:before{
+        position: absolute;
+        content: " ";
+        width: 0;
+        height: 0;
+        left: 6px;
+        top: 4px;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid var(--font-color);
+    }
+    ${cssId} .g__range_decrease{
+        width: 100%;
+        height: 50%;
+        position: relative;
     }
     ${cssId} .g__field_range{
         -webkit-appearance: none;
@@ -126,7 +202,7 @@ function granite_forms(formsBlock, jsonTheme){
         width: 100%;
         padding: 0;
         height: 9px;
-        background-color: var(--background);
+        background-color: var(--background-range);
         border: 0;
         border-radius: 5px;
     }
@@ -135,7 +211,7 @@ function granite_forms(formsBlock, jsonTheme){
         appearance: none;
         width: 20px;
         height: 20px;
-        background: #fff;
+        background: var(--font-color);
         border-radius: 15px;
         cursor: pointer;
     }
@@ -148,6 +224,11 @@ function granite_forms(formsBlock, jsonTheme){
         border-radius: 15px;
         cursor: pointer;
     }
+    /* ------------------------ Quil ------------------------------*/
+    ${cssId} .ql-toolbar {
+        font-family: var(--font-regular);
+        font-weight: 300;
+      }
     /* ------------------------ Textarea ------------------------------*/
     textarea{
         background: var(--background);
@@ -162,11 +243,20 @@ function granite_forms(formsBlock, jsonTheme){
     /* ------------------------ Color ------------------------------*/
     #granite-forms .g__form_field .g__color_container {
         display: flex;
+        position:relative;
+    }
+    #granite-forms .g__color_container input.g__hex_value{
+        padding-left: 50px;
+        flex: 1;
     }
     #granite-forms .g__form_field input[type=color] {
         padding: 0;
-        flex: 1;
-        height: 33px;
+        position: absolute;
+        background: transparent;
+        border: 0;
+        left: 2px;
+        border-radius: var(--border-radius);
+        height: 38px;
     }
     /* ------------------------ File ------------------------------*/
     ::-webkit-file-upload-button{
@@ -229,6 +319,16 @@ function granite_forms(formsBlock, jsonTheme){
     }
     `
     document.head.appendChild(formStyles);
+    /* -------------------- Regex Expressions ----------------------*/
+    const patterns = {
+        // tel: /(^(1?)(\s?)([\s]?)((\(\d{3}\))|(\d{3}))([\s]?)([\s-]?)(\d{3})([\s-]?)(\d{4})+$)/,
+        tel: /\d{5}/,
+        username: /^[a-z\d]{5,12}$/i,
+        password: /^[\d\w@-]{8,20}$/i,
+        slug: /^[a-z\d-]{8,20}$/,
+        email: '[-a-zA-Z0-9.-_]{1,}@[-a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}[a-zA-Z0-9.]{0,}'
+        //             yourname @ domain   .  com          ( .uk )
+    };
 
     /* -------------------- Mode ----------------------*/
     var g__container = document.getElementById(id);
@@ -267,7 +367,6 @@ function granite_forms(formsBlock, jsonTheme){
     let inline_group = [];
     r.forEach(function(r, num){
         let r_id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
-        console.log(r_id);
         let class_name = "g__field_" + r.type;
         inline_field = r.inline || false;
 
@@ -284,8 +383,9 @@ function granite_forms(formsBlock, jsonTheme){
         //build each field depending on the type
         let input;
         switch (r.type){
-            case "quill":
+            case "quil":
                 let quil = document.createElement('div');
+                quil.setAttribute('class', 'g__quil_field');
                 quil.setAttribute('id', r_id);
                 form_field.appendChild(quil);
             break;
@@ -309,6 +409,23 @@ function granite_forms(formsBlock, jsonTheme){
                 color_container.appendChild(input)
                 color_container.appendChild(hex_display);
                 form_field.appendChild(color_container);
+            break;
+            case "tel":
+                input = document.createElement('input');
+                input.setAttribute('id', r_id);
+                input.setAttribute('pattern', patterns.tel);
+                input.setAttribute('title', 'Please format phone number as 16037707937');
+                basicAttributes(r, input, class_name)
+                input.setAttribute('form', attr__form_id);
+                form_field.appendChild(input);
+            break;
+            case "email":
+                input = document.createElement('input');
+                input.setAttribute('id', r_id);
+                input.setAttribute('pattern', patterns.email);
+                basicAttributes(r, input, class_name)
+                input.setAttribute('form', attr__form_id);
+                form_field.appendChild(input);
             break;
             case "textarea":
                 input = document.createElement('textarea');
@@ -345,16 +462,36 @@ function granite_forms(formsBlock, jsonTheme){
                 basicAttributes(r, input, class_name)
                 input.setAttribute('min', min);
                 input.setAttribute('max', max);
-                let output = document.createElement('output');
+                let output = document.createElement('input');
                 output.setAttribute('class', 'g__range_output');
+                output.setAttribute('type', 'number');
+                // Unit indicator
+                let unit = document.createElement('div');
+                unit.setAttribute('class', 'g__range_unit');
+                unit.innerHTML = "px";
+                // Increase decrease container
+                let plusMinus = document.createElement('div');
+                plusMinus.setAttribute('class', 'g__range_plus_minus');
+                // Increase container
+                let increase = document.createElement('div');
+                increase.setAttribute('class', 'g__range_increase');
+                plusMinus.appendChild(increase);
+                // Decrease container
+                let decrease = document.createElement('div');
+                decrease.setAttribute('class', 'g__range_decrease');
+                plusMinus.appendChild(decrease);
+                //Append the parent elements
                 range_container.appendChild(input);
                 range_container.appendChild(output);
+                range_container.appendChild(unit);
+                range_container.appendChild(plusMinus);
                 form_field.appendChild(range_container);
             break;
             default:
                 input = document.createElement('input');
                 input.setAttribute('id', r_id);
-                basicAttributes(r, input, class_name)
+                basicAttributes(r, input, class_name);
+                input.setAttribute('pattern', patterns.tel);
                 form_field.appendChild(input);
         }
 
@@ -450,24 +587,73 @@ function granite_forms(formsBlock, jsonTheme){
         }
     }
     /* -------------------- Range Output ----------------------*/
-    const all_ranges = document.querySelectorAll(".g__range_container");
+    let all_ranges = document.querySelectorAll(".g__range_container");
+    let all_range_increase = document.querySelectorAll(".g__range_increase");
+
     all_ranges.forEach(wrap => {
-    const range = wrap.querySelector(".g__field_range");
-    const output = wrap.querySelector(".g__range_output");
+        const range = wrap.querySelector(".g__field_range");
+        const output = wrap.querySelector(".g__range_output");
+        const increase = wrap.querySelector(".g__range_increase");
+        const decrease = wrap.querySelector(".g__range_decrease");
 
-    range.addEventListener("input", () => {
-        setBubble(range, output);
-    });
-    setBubble(range, output);
-    });
+        increase.addEventListener('click', () => {
+            const val = parseInt(output.value);
+            output.value = val + 1;
+            setRange(range, output.value);
+        });
+        decrease.addEventListener('click', () => {
+            const val = parseInt(output.value);
+            output.value = val - 1;
+            setRange(range, output.value);
+        });
 
-    function setBubble(range, output) {
+        output.addEventListener('change', () => {
+            const val = output.value;
+            range.value = val;
+        });
+        range.addEventListener('input', () => {
+            setOutput(range, output);
+        });
+
+    setOutput(range, output);
+
+    });
+    function setRange(range, val){
+        range.value = val;
+    }
+    function setOutput(range, output) {
         const val = range.value;
         const min = range.min ? range.min : 0;
         const max = range.max ? range.max : 100;
-        output.innerHTML = val + 'px';
+        output.value = val;
+    };
+
+    /* -------------------- Pattern Check ----------------------*/
+    const form_inputs = document.querySelectorAll('input');
+
+    form_inputs.forEach((input) => {
+        input.addEventListener('keyup', (e) => {
+                validate(e.target, patterns[e.target.attributes.name.value]);
+        });
+    });
+    // validation function
+    function validate(field, regex){
+        let convertRegex = new RegExp(regex);
+        if(convertRegex.test(field.value)){
+            field.className = 'valid';
+        } else {
+            field.className = 'invalid';
+        }
     }
 
+    /* -------------------- Quil Editors ----------------------*/
+    let quil_fields = document.getElementsByClassName('g__quil_field');
+    for(let i = 0; i < quil_fields.length; i++){
+        let quil_id = '#' + quil_fields[i].id;
+        var quill = new Quill(quil_id, {
+            theme: 'snow'
+          });
+    }
     /* -------------------- Color field values ----------------------*/
     let color_fields = document.getElementsByClassName('g__hex_value');
     for(let i = 0; i < color_fields.length; i++){
@@ -482,47 +668,6 @@ function granite_forms(formsBlock, jsonTheme){
             let color = this.value;
             this.nextSibling.value = color;
         });
-    }
-
-
-    /* -------------------- Validate ----------------------*/
-    const validate = function(ev){
-        //let valid = true;
-        let failures = [];
-        //checkbox (or radio buttons grouped by name)
-        let chk = document.getElementById('input-alive');
-        // .checked .value
-        if(!chk.checked){
-            //valid = false;
-            //chk.parentElement.classList.add('error');
-            //chk.parentElement.setAttribute('data-errormsg', 'Must be alive to submit.');
-            failures.push({input: 'input-alive', msg: 'Must be alive to submit.'})
-        }
-
-        //select
-        let select = document.getElementById('input-age');
-        // .selectedIndex  .options  .length   .selectedValue  .value
-        if( select.selectedIndex === 0 ){
-            failures.push({input:'input-age', msg:'Too young'})
-        }
-
-        //inputs for text, email, tel, color, number...
-        let first = document.getElementById('input-first');
-        let password = document.getElementById('input-password');
-        let email = document.getElementById('input-email');
-        //.value, .defaultValue, length of value
-        if( first.value === ""){
-            failures.push({input:'input-first', msg:'Required Field'})
-        }
-        if( password.value === "" || password.value.length < 8){
-            failures.push({input:'input-password', msg:'Must be at least 8 chars'})
-        }
-        if( email.value === ""){
-            failures.push({input:'input-email', msg:'Required Field'})
-        }
-
-        //return a boolean || an object with details about the failures
-        return failures;
     }
     /* -------------------- Custom Select Field ----------------------*/
     var x, i, j, l, ll, selElmnt, a, b, c;

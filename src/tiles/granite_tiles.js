@@ -279,6 +279,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
       .a__no-records{
         display: flex;
         justify-content: center;
+        background: transparent;
         align-items: center;
         color: ${header_color};
         height: 225px;
@@ -919,7 +920,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         }
     }
     function layout(o){
-      console.log(o.app_layout);
+      // let app_layout =  !!o.app_layout ? o.app_layout : "false";
       return o.app_layout ? `g__wrap` : "g__no_wrap";
     }
     function container(o){
