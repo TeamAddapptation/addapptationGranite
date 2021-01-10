@@ -1,4 +1,5 @@
 function granite_tabs(jsonTabs, jsonTheme) {
+    console.log('tabs V1.3.1')
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -13,10 +14,10 @@ function granite_tabs(jsonTabs, jsonTheme) {
     var style = style(o);
     // var style = o['style'] ? o['style'] : "tabs";
     const queryString = window.location.search;
-    console.log(jsonTheme);
     const urlParams = new URLSearchParams(queryString);
     const tab_param = urlParams.get('tab');
     const style_param = urlParams.get('style');
+    console.log('Tabs Disabled: ' +  o.cursor_disabled)
     /*---------------------------------------------
     Add Font Family To Header
     ---------------------------------------------*/
@@ -512,6 +513,9 @@ function granite_tabs(jsonTabs, jsonTheme) {
           z-index: 5;
           transition: transform .5s;
         }
+        .step-container .step-num.disabled {
+          pointer-events: none;
+        }
         .step-container.active .step-num {
           transition: transform .5s;
         }
@@ -883,6 +887,10 @@ function granite_tabs(jsonTabs, jsonTheme) {
         var step = (ival == tab_param) || (val == 0 && tab_param == null) || (!!tab_param && tab_param.includes(ival));
         return step ? "true" : "false";
     }
+    function disabled(){
+      let disabled = o.cursor_disabled ? " disabled" : "";
+      return disabled;
+    }
     function mode(t){
       if(t.mode === "standard"){
           return "light"
@@ -943,7 +951,7 @@ function granite_tabs(jsonTabs, jsonTheme) {
                         var ival = val + 1
                         // var is_complete = r.completed ? true : false;
                         var li = createElement("li", {
-                            html: `<a class="step-num" ${link(o, multiHref)}>${r.completed ? "<i class='far fa-check'></i>" : ival}</a><p class="a__label">${r.name}</p>`,
+                            html: `<a class="step-num${disabled()}" ${link(o, multiHref)}>${r.completed ? "<i class='far fa-check'></i>" : ival}</a><p class="a__label">${r.name}</p>`,
                             "class": strClass(style, "item") + active_check(val) + complete(val)
                         });
                         content.appendChild(li);

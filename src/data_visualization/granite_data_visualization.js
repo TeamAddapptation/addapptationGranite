@@ -800,6 +800,7 @@ function granite_data_visualization(dataVisualizationBlock, jsonTheme){
 
         // Tooltip settings
         chart.tooltip().useHtml(true);
+        chart.tooltip().format("Value: {%x}<br>Percent: {%value}");
 
         // Title Settings
         if(!!attr__title) {

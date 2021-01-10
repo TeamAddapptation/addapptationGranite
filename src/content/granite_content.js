@@ -389,7 +389,7 @@ function granite_content(jsonContent, jsonTheme){
     } else {
         content_wrapper.setAttribute('class', 'g__no-records');
         let copy = document.createElement('h2');
-        copy.innerHTML = 'Add Content Element';
+        copy.innerHTML = 'Content';
         content_wrapper.appendChild(copy);
     }
     content_wrapper.setAttribute('mode', mode(t));
@@ -523,7 +523,7 @@ function granite_content(jsonContent, jsonTheme){
                 content_video.muted = r.featured_video_muted;
                 content_video.loop = r.featured_video_loop;
                 content_video.autoplay = r.featured_video_autoplay;
-                content_video.playsinline = r.featured_video_autoplay;
+                r.featured_video_autoplay ? content_video.setAttribute('playsinline', true) : "";
                 video_container.appendChild(content_video)
 
             }

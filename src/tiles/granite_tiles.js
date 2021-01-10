@@ -119,8 +119,14 @@ function granite_tiles(jsonTiles, jsonTheme) {
           var filter_one = wht;
           var filter_two = wht;
           var hover_color = !!o.hover_color ? o.hover_color : "#ffffff";
-
         break;
+        default:
+          var header_color =  !!o.header_color ? o.header_color : wht;
+          var description_color = !!o.description_color ? o.description_color : wht;
+          var icon_color =  !!o.icon_color ? o.icon_color : wht;
+          var filter_one = blk;
+          var filter_two = blk;
+          var hover_color = !!o.hover_color ? o.hover_color : "#000000";
     }
     if(o.no_overlay){
       var filter_one = "";
@@ -1069,7 +1075,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
             })
         } else {
             var empty = createElement("div", {
-                html: "<h2>Add Tile Element</h2>",
+                html: "<h2>Tiles</h2>",
                 "class": "a__no-records col-12 mt-3"
             })
             tileContainer.appendChild(row).appendChild(empty);

@@ -362,6 +362,7 @@ function granite_cards(jsonCards, jsonTheme) {
     .a__card_single .a__card_top:hover .a__filter,
     .a__card_single .a__card_top:hover .a__white_btn{
         opacity: 1;
+        cursor:pointer;
     }
     /*----------
     Overlays
@@ -467,6 +468,9 @@ function granite_cards(jsonCards, jsonTheme) {
         border-top: 1px solid ${!!o.border_color ? o.border_color : "var(--border-color)"};
         border-right: 1px solid ${!!o.border_color ? o.border_color : "var(--border-color)"};
         border-left: 1px solid ${!!o.border_color ? o.border_color : "var(--border-color)"};
+    }
+    ${css_class} a.g__basic_top{
+        cursor: pointer;
     }
     ${css_class} .g__basic_bottom{
         padding: ${o.inside_top_bottom_padding} ${o.inside_left_right_padding};
@@ -757,7 +761,7 @@ function granite_cards(jsonCards, jsonTheme) {
     function basicCardBkg(r){
         var align_background = !!r.align_background_image ? r.align_background_image : "center center";
         if(!!r.background_image){
-            return `background: url(${r.background_image}) ${align_background}; background-size:cover;)`
+            return `background: url(${r.background_image}) ${align_background}; background-size:cover;`
         }else if(!!r.background_color){
             return `background: ${r.background_color};`
         }else{
@@ -827,7 +831,7 @@ function granite_cards(jsonCards, jsonTheme) {
         })
     } else {
         var empty = createElement("div", {
-            html: "<h2>Add Card Element</h2>",
+            html: "<h2>Card</h2>",
             "class": "a__no-records col-12 mt-3"
         })
         wrapper.appendChild(row).appendChild(empty);
