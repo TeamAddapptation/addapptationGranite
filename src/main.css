@@ -1,0 +1,19 @@
+.g__main_content{
+    display: flex;
+    flex-direction: row;
+}
+.g__test_content{
+    flex: 3;
+    height: 300px;
+    background: #818D92;
+    padding: 15px;
+    margin: 15px;
+    border: 1px solid transparent;
+}
+.g__editable:hover{
+    cursor: pointer;
+    border: 1px solid red;
+}
+.g__form_editor{
+    flex: 2;
+}
