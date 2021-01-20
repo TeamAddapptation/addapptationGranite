@@ -90,7 +90,6 @@ function granite_template(jsonTemplate, jsonTheme){
     ---------------------------------------------*/
     if(!!r){
         r.forEach((r, val) => {
-
             /* Record Container */
             const micro_container = document.createElement('div');
             micro_container.setAttribute('class','g__micro_container');

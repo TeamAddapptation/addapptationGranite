@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="homepage.css">
+
+</head>
+<body>
+    <nav class="g__navigation">
+        <div class="logo">
+            <a href="/">G</a>
+        </div>
+        <ul class="g__nav_links">
+            <li>Docs</li>
+        </ul>
+    </nav>
+    <!-- Hero Section -->
+    <div class="g__row g__hero_section">
+        <div class="g__col g__hero_left">
+            <div class="g__addapptation_product">
+                <p>A product of addapptation</p>
+            </div>
+            <h1 class="g__hero_header">Granite</h1>
+            <p class="g__hero_description">Granite.js is a front-end component library from addapptation, built to render JSON objects as DOM elements.</p>
+            <div class="g__hero_btn">
+                <a class="g__btn_solid mr-15" href="#">Download</a>
+                <a class="g__btn_outline" href="#">Github</a>
+            </div>
+            <p class="text-small g__release mt-15">Currently: V1.4.6</p>
+        </div>
+        <div class="g__col g__hero_right">
+            <img class="g__fluid_img" src="images/g_hero.png" alt="Granite Hero Image">
+        </div>
+    </div>
+
+    <!-- Micro Description -->
+    <div class="g__row g__container">
+        <div class="g__col pt-100">
+            <h2>Micros</h2>
+            <p>Granite micros give you the freedom to bring your own vision to life. The predefined JSON values give your team the ability to streamline your design and development process. Each block of granite.js creates a self-contained chunk of HTML, CSS, and JS that can be late-loaded into any front-end environment - yes, even inside your existing Vue, React, or Angular project.</p>
+        </div>
+        <div class="g__col pt-100">
+            <img class="g__fluid_img" src="images/g_micros.png" alt="Granite Preview Image">
+        </div>
+    </div>
+    <!-- Micro Tiles -->
+    <div class="g__row g__container">
+        <div class="g__col pt-100 g__micro_list">
+            <h2 class="text-center">Production Ready Micros</h2>
+            <div class="g__current_micros">
+                <a class="g__micro_item" href="/cards">Cards</a>
+                <a class="g__micro_item" href="/content">Content</a>
+                <a class="g__micro_item" href="form.html">Form</a>
+                <a class="g__micro_item" href="/hero">Hero</a>
+                <a class="g__micro_item" href="/navigation">Navigation</a>
+                <a class="g__micro_item" href="/tiles">Tiles</a>
+                <a class="g__micro_item" href="/tabs">Tabs</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install -->
+    <div class="g__row g__container">
+        <div class="g__col pt-100">
+            <h2>Installation</h2>
+            <p>Quickly add Granite to your project using our CDN. Copy and past the CSS link into the head of your document and include the JS script before the closing of your body tag.</p>
+            <p>Remember to update the micro you're referencing at the end of the url.</p>
+            <code>granite_[micro].js</code>
+        </div>
+        <div class="g__col pt-100 g__overflow g__code_block">
+                <pre><code>&lt;script src="https://deployment-engine.herokuapp.com/storage?action_type=get_blob&container_name=addapptation&blob_name=granite/granite_[micro].js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+
+
+</body>
+</html>

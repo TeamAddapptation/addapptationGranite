@@ -8,7 +8,7 @@ function granite_form(formsBlock, jsonTheme){
     const cssId = '#' + id;
     // micro settings attributes
     const attr__action = o.addapptation_action || '';
-    const attr__form_id = o.form_id || '';
+    const attr__form_id = o.form_id || 'a__no_id';
     const attr__method = o.method || 'POST';
     const attr__enctype = o.enctype || 'application/x-www-form-urlencoded';
     /* -------------------- Check Alignment & Set Mode ----------------------*/
@@ -49,6 +49,7 @@ function granite_form(formsBlock, jsonTheme){
 
         /* Mode Dependent */
         --background: #eaeaea;
+        --background-darker: #ffffff;
         --background-reverse: #000000;
         --background-range: #eaeaea;
         --background-hover: #eeeeee;
@@ -63,12 +64,32 @@ function granite_form(formsBlock, jsonTheme){
     ${cssId}[mode="midnight"],
     #ui-datepicker-div[mode="midnight"]{
         --background: #2a2a2a;
+        --background-darker: #151515;
         --background-reverse: #ffffff;
         --background-range: #2a2a2a;
         --background-hover: #3b3b3b;
         --body: #101010;
         --border: 1px solid #2a2a2a;
         --font-color: #ffffff;
+    }
+    /* ------------------------ Action Row ------------------------*/
+    ${cssId} .g__form_action_row{
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+        margin-right: 15px
+    }
+    ${cssId} .g__form_action_title{
+        font-family: var(--font-regular);
+        color: var(--font-color);
+        font-weight: 300;
+        font-size: ${o.title_font_size || "36px"}
+    }
+    ${cssId} .g__form_action_description{
+        ont-family: var(--font-regular);
+        font-weight: 300;
+        color: var(--font-color);
+        font-size: ${o.description_font_size || "16px"}
     }
     /* ------------------------ Global Field Styles ------------------------*/
     ${cssId} .g__inline_row {
@@ -124,13 +145,22 @@ function granite_form(formsBlock, jsonTheme){
         color: var(--font-color);
       }
     ${cssId} .g__form_field input.invalid{
-        border-right: 1px solid var(--error-color);
+        border-right: 2px solid var(--error-color);
+    }
+    ${cssId} .g__form_field textarea.invalid{
+        border-right: 2px solid var(--error-color);
     }
     ${cssId} .g__form_field input.valid{
-        border-right: 1px solid green;
+        border-right: 2px solid green;
+    }
+    ${cssId} .g__form_field textarea.valid{
+        border-right: 2px solid green;
+    }
+    ${cssId} .g__error_msg.active{
+        display: flex;
     }
     ${cssId} .g__error_msg{
-        display: flex;
+        display: none;
         justify-content: flex-end;
         padding: 5px 0;
         color: var(--error-color);
@@ -182,6 +212,13 @@ function granite_form(formsBlock, jsonTheme){
         -webkit-text-fill-color: var(--font-color);
         -webkit-box-shadow: 0 0 0px 1000px var(--background) inset;
         transition: background-color 5000s ease-in-out 0s;
+    }
+    @media only screen and (max-width: 768px) {
+        ${cssId} .g__inline_row {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: no-wrap;
+        }
     }
     /* ------------------------ Content ------------------------------*/
     ${cssId} .g__form_header{
@@ -250,7 +287,7 @@ function granite_form(formsBlock, jsonTheme){
         display: none;
     }
     ${cssId} .dep_show{
-        display: block;
+        display: flex;
     }
     /* ------------------------ Password ------------------------------*/
     ${cssId} .g__password_container{
@@ -608,11 +645,12 @@ function granite_form(formsBlock, jsonTheme){
     }
     ${cssId} .g__radio_option{
         display: flex;
-        justify-content: center;
         align-items: center;
         position: relative;
         flex-direction: row;
         padding-right: 25px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
     ${cssId} .g__radio_container {
         display: flex;
@@ -634,11 +672,10 @@ function granite_form(formsBlock, jsonTheme){
         margin: 0;
         padding-left: 10px;
     }
-    ${cssId} .g__radio::after {
-        content: ' ';
+    ${cssId} .g__radio {
         height: 20px;
         width: 20px;
-        background-color: white;
+        background-color: var(--background);
         border-radius: 50%;
     }
     ${cssId} .g__radio_option:hover input ~ .g__radio {
@@ -664,9 +701,14 @@ function granite_form(formsBlock, jsonTheme){
         border-radius: 50%;
         background: white;
    }
+   @media only screen and (max-width: 768px) {
+    ${cssId} .g__radio_container{
+        flex-direction: column;
+    }
+   }
     /* ------------------------ checkbox ------------------------------*/
     ${cssId} .g__check_container {
-        display: block;
+        display: flex;
         position: relative;
         cursor: pointer;
         -webkit-user-select: none;
@@ -691,10 +733,10 @@ function granite_form(formsBlock, jsonTheme){
         width: 25px;
         background-color: var(--background);
     }
-    ${cssId} .g__check_container:hover input ~ .g__checkmark {
+    ${cssId} .g__field_checkbox:hover ~ .g__checkmark {
         background-color: #ccc;
     }
-    ${cssId} .g__check_container input:checked ~ .g__checkmark {
+    ${cssId} .g__field_checkbox:checked ~ .g__checkmark {
         background-color: var(--primary);
     }
     ${cssId} .g__checkmark:after {
@@ -756,18 +798,113 @@ function granite_form(formsBlock, jsonTheme){
         cursor: pointer;
         background: var(--background-hover);
     }
-
+    /* ------------------------ Picklist Multiple ------------------------------*/
+    ${cssId} .chosen-container-multi{
+        display: flex;
+        background-color: var(--background);
+        border: var(--border);
+        border-radius: var(--border-radius);
+    }
+    ${cssId} .chosen-container-multi .chosen-choices{
+        display: flex;
+        align-items:center;
+        background-color: var(--background);
+        border: var(--border);
+        border-radius: var(--border-radius);
+        height: var(--field-height);
+        background-image: none;
+    }
+    ${cssId} .chosen-container .chosen-drop{
+        background: var(--background);
+        box-shadow: none;
+        border: var(--border);
+    }
+    ${cssId} .chosen-container .chosen-results{
+        color: var(--font-color) !important;
+    }
+    ${cssId} .chosen-container .chosen-results li{
+        color: var(--font-color);
+        padding: var(--field-padding);
+        cursor: pointer;
+    }
+    ${cssId} .chosen-container .chosen-results li.highlighted{
+        background-image: none;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    ${cssId} .chosen-container-multi .chosen-drop .result-selected{
+        color: var(--background-darker);
+    }
+    ${cssId} .chosen-container-multi .chosen-choices li.search-field{
+        display: flex;
+        align-items: center;
+    }
+    ${cssId} .chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+        color: var(--font-color) !important;
+    }
+    ${cssId} .chosen-container-multi .chosen-choices li.search-choice{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        background-color: var(--background-darker);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--font-color);
+        background-image: none;
+        height: calc(var(--field-height) - 10px);
+        padding: 5px 10px;
+        box-shadow: none;
+    }
+    ${cssId} .chosen-container-multi .chosen-choices li.search-choice .search-choice-close{
+        position: relative;
+        display: block;
+        top: auto;
+        right: auto;
+        margin-left: 10px;
+        width: 12px;
+        height: 12px;
+        background: url(https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/granite/chosen-sprite.png) -42px 1px no-repeat;
+        font-size: 1px;
+    }
+    @media only screen and (max-width: 768px) {
+        ${cssId} .g__picklist_multiple select {
+            display: flex;
+        }
+        ${cssId} .g__select_multiple {
+            flex: 1;
+            display: block;
+            position: relative;
+            width: 100%;
+            padding: var(--field-padding);
+            line-height: 1.5;
+            background: var(--background);
+            border: var(--border);
+            border-radius: var(--border-radius);
+            color: var(--font-color);
+            font-family: var(--font-regular);
+            font-weight: 300;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        ${cssId} .g__picklist_multiple:after {
+            display: none;
+        }
+        ${cssId} .chosen-container {
+            display: none;
+        }
+    }
     /* ------------------------ Picklist ------------------------------*/
     ${cssId} .g__picklist {
         position: relative;
     }
     ${cssId} .g__picklist select {
-        display: none; /*hide original SELECT element: */
+        display: none;
     }
     ${cssId} .g__picklist{
         background-color: var(--background);
         border: var(--border);
         border-radius: var(--border-radius);
+        height: var(--field-height);
     }
     /* Style the arrow inside the select element: */
     ${cssId} .select-selected:after {
@@ -780,6 +917,9 @@ function granite_form(formsBlock, jsonTheme){
         border: 6px solid transparent;
         border-color: var(--font-color) transparent transparent transparent;
     }
+    ${cssId} .select-selected.invalid {
+        border-right: 2px solid var(--error-color);
+    }
     /* Point the arrow upwards when the select box is open (active): */
     ${cssId} .select-selected.select-arrow-active:after {
         border-color: transparent transparent var(--font-color) transparent;
@@ -787,9 +927,12 @@ function granite_form(formsBlock, jsonTheme){
     }
     /* style the items (options), including the selected item: */
     ${cssId} .select-items div,.select-selected {
+        display: flex;
+        align-items: center;
         color: var(--font-color);
         padding: var(--field-padding);
         cursor: pointer;
+        height: calc(var(--field-height) - 13px);
     }
     /* Style items (options): */
     ${cssId} .select-items {
@@ -798,14 +941,23 @@ function granite_form(formsBlock, jsonTheme){
         flex-direction: column;
         background: var(--background);
         border: var(--border);
+        border-top: 1px solid var(--body);
+        border-bottom: 1px solid var(--background-darker);
         top: 100%;
         left: 0;
         right: 0;
         z-index: 99;
+        max-height: 50vh;
+        overflow: auto;
+    }
+    ${cssId} .g__search .g__select_search{
+        display: block;
+    }
+    ${cssId} .g__select_search{
+        display: none;
     }
     ${cssId} .select-items .g__select_search {
-        background: var(--background);
-        border: 1px solid white;
+        background: var(--background-darker);
         margin: var(--field-padding);
         border-radius: var(--border-radius);
     }
@@ -814,7 +966,7 @@ function granite_form(formsBlock, jsonTheme){
         display: none;
     }
     ${cssId} .select-items div:hover, .same-as-selected {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.2);
     }
     @media only screen and (max-width: 768px) {
         ${cssId} .g__picklist select {
@@ -862,6 +1014,28 @@ function granite_form(formsBlock, jsonTheme){
         email: '[-a-zA-Z0-9.-_]{1,}@[-a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}[a-zA-Z0-9.]{0,}'
         //             yourname @ domain   .  com          ( .uk )
     };
+    /* -------------------- Form Header ----------------------*/
+    if (!!o.title || o.description){
+        const form_action_row = document.createElement('div');
+        form_action_row.setAttribute('class', 'g__form_action_row');
+
+        if (!!o.title){
+            const form_title = document.createElement('h2');
+            form_title.setAttribute('class', 'g__form_action_title');
+            form_title.innerHTML = o.title;
+            form_action_row.appendChild(form_title);
+        }
+
+        if (!!o.description){
+            const form_description = document.createElement('p');
+            form_description.setAttribute('class', 'g__form_action_description');
+            form_description.innerHTML = o.description;
+            form_action_row.appendChild(form_description);
+        }
+
+        document.getElementById(id).appendChild(form_action_row);
+    }
+
 
     /* -------------------- Form Container ----------------------*/
     const form_container = document.createElement('form');
@@ -896,7 +1070,6 @@ function granite_form(formsBlock, jsonTheme){
         hidden.setAttribute('value', value);
         return hidden
     }
-
 
     /* -------------------- Form Fields (Record Loop) ----------------------*/
     // Section attributes
@@ -937,7 +1110,7 @@ function granite_form(formsBlock, jsonTheme){
                         label.innerText = r.title;
                     field_info_container.appendChild(label);
                 }
-                if (r.length > 0){
+                if (r.length > 0 && r.show_count){
                     let count_container = document.createElement('div');
                         count_container.setAttribute('class', 'g__char_remain')
                         count_container.innerText = '0/' + r.length;
@@ -1094,21 +1267,35 @@ function granite_form(formsBlock, jsonTheme){
                 pass_container.appendChild(input);
                 pass_container.appendChild(pass_show)
                 form_field.appendChild(pass_container);
+                form_field.appendChild(error_field);
             break;
             case "picklist":
                 const picklist_options = r.options;
+                const picklist_double_arr = (Array.isArray(picklist_options)) && (Array.isArray(picklist_options[0]));
                 input = document.createElement('div');
-                input.setAttribute('id', r.id);
-                input.setAttribute('class', 'g__picklist')
+                r.multiple ? input.setAttribute('class', 'g__picklist_multiple') : input.setAttribute('class', 'g__picklist');
+                r.picklist_search ? input.classList.add('g__search'): "";
                 let select = document.createElement('select');
                 basicAttributes(r, select, class_name)
-                select.setAttribute('class', 'g__select_default');
-                for(let i = 0; i < picklist_options.length; i++){
-                    let option = document.createElement('option');
-                    option.setAttribute('value', picklist_options[i])
-                    option.innerHTML = picklist_options[i];
-                    select.appendChild(option);
+                select.setAttribute('id', r.id);
+                r.multiple ? select.setAttribute('class', 'g__select_multiple') : select.setAttribute('class', 'g__select_default');
+                r.multiple ? select.setAttribute('multiple', 'true') : '' ;
+                if(picklist_double_arr){
+                    for(let i = 0; i < picklist_options.length; i++){
+                        let option = document.createElement('option');
+                        option.setAttribute('value', picklist_options[i][0])
+                        option.innerHTML = picklist_options[i][1];
+                        select.appendChild(option);
+                    }
+                } else {
+                    for(let i = 0; i < picklist_options.length; i++){
+                        let option = document.createElement('option');
+                        option.setAttribute('value', picklist_options[i])
+                        option.innerHTML = picklist_options[i];
+                        select.appendChild(option);
+                    }
                 }
+
                 input.appendChild(select);
                 form_field.appendChild(input);
                 form_field.appendChild(error_field);
@@ -1221,30 +1408,28 @@ function granite_form(formsBlock, jsonTheme){
                 form_field.appendChild(error_field);
         }
 
-
-        if (r.inline_field || inline_arr.length){
-            if(r.inline_field){
-                inline_arr.push(form_field)
-                section ? section_count-- : "";
-            } else if (inline_arr.length > 0){
-                inline_arr.push(form_field)
-                let inline_row = document.createElement('div');
-                inline_row.setAttribute('class', "g__inline_row");
-                inline_arr.forEach( (field) => {
-                    inline_row.appendChild(field);
-                });
-                inline_arr = [];
-                if (section){
-                    section_group.push(inline_row);
-                } else {
-                    form_container.appendChild(inline_row);
-                    inline_count = 0;
-                }
-            }
-        } else if (section){
+        if (section){
             if(r.type != 'section'){
-                section_group.push(form_field);
-                section_count--;
+                if (r.inline_field || inline_arr.length){
+                    if(r.inline_field){
+                        inline_arr.push(form_field)
+                        section_count--;
+                    } else if (inline_arr.length > 0){
+                        inline_arr.push(form_field)
+                        let inline_row = document.createElement('div');
+                        inline_row.setAttribute('class', "g__inline_row");
+                        inline_arr.forEach( (field) => {
+                            inline_row.appendChild(field);
+                        });
+                        inline_arr = [];
+                        section_group.push(inline_row);
+                        section_count--;
+                    }
+                } else {
+                    section_group.push(form_field);
+                    section_count--;
+                }
+
             }
             section_count ? section = true : section = false;
             if(!section){
@@ -1279,6 +1464,25 @@ function granite_form(formsBlock, jsonTheme){
                 section_group = [];
                 section_title = '';
                 form_container.appendChild(form_section_container);
+            }
+        } else if ((r.inline_field || inline_arr.length) && !section){
+            if(r.inline_field){
+                inline_arr.push(form_field)
+                section ? section_count-- : "";
+            } else if (inline_arr.length > 0){
+                inline_arr.push(form_field)
+                let inline_row = document.createElement('div');
+                inline_row.setAttribute('class', "g__inline_row");
+                inline_arr.forEach( (field) => {
+                    inline_row.appendChild(field);
+                });
+                inline_arr = [];
+                if (section){
+                    section_group.push(inline_row);
+                } else {
+                    form_container.appendChild(inline_row);
+                    inline_count = 0;
+                }
             }
         } else {
             if(r.type != 'section'){
@@ -1339,13 +1543,42 @@ function granite_form(formsBlock, jsonTheme){
         let errors_arr = [];
         all_field_containers.forEach((field) => {
             let input = field.querySelector('input');
+            let textarea = field.querySelector('textarea');
+            let select = field.querySelector('g__select_default');
             let error_msg = field.querySelector('.g__error_msg');
-            if(input){
+            if(!!input){
                 if(!input.checkValidity()){
                     input.classList.add('invalid');
                     errors_arr.push(input);
+                    error_msg.classList.add('active');
                     error_msg.innerText = input.validationMessage;
+                } else {
+                    input.classList.add('valid');
+                    error_msg.classList.remove('active');
                 }
+            }
+            if(!!textarea){
+                if(!textarea.checkValidity()){
+                    textarea.classList.add('invalid');
+                    errors_arr.push(textarea);
+                    error_msg.classList.add('active');
+                    error_msg.innerText = textarea.validationMessage;
+                } else {
+                    textarea.classList.add('valid');
+                    error_msg.classList.remove('active');
+                }
+            }
+            if(!!select){
+                    if(!select.checkValidity()){
+                        select.nextSibling.classList.add('invalid');
+                        errors_arr.push(select);
+                        error_msg.classList.add('active');
+                        error_msg.innerText = select.validationMessage;
+                    } else {
+
+                        select.nextSibling.classList.remove('invalid');
+                        error_msg.classList.remove('active');
+                    }
             }
         })
         if(all_sections.length){
@@ -1364,10 +1597,18 @@ function granite_form(formsBlock, jsonTheme){
             })
         }
         if(!errors_arr.length){
+            console.log('sending');
             form.submit();
         }
-
     });
+    /* -------------------- Reset ----------------------*/
+    if(!!o.cancel_label){
+        let canel = document.getElementById('g__cancel_btn')
+        canel.addEventListener('click', () => {
+            form.reset();
+        })
+    }
+
     /* -------------------- Currency Field ----------------------*/
     let all_currency = document.querySelectorAll('.g__field_currency');
 
@@ -1492,25 +1733,6 @@ function granite_form(formsBlock, jsonTheme){
         output.value = val;
     };
 
-    /* -------------------- Pattern Check ----------------------*/
-    let all_field_containers = document.querySelectorAll('.g__form_field');
-    all_field_containers.forEach((field) => {
-        let input = field.querySelector('input');
-        let error_msg = field.querySelector('.g__error_msg');
-        if(input){
-            input.addEventListener('change', (e) => {
-                let valid_input = input.checkValidity();
-                if(valid_input){
-                    input.classList.add('valid');
-                    input.classList.remove('invalid');
-                    error_msg.innerText = '';
-                } else {
-                    input.classList.add('invalid');
-                }
-            });
-        }
-    });
-
     /* -------------------- Quil Editors ----------------------*/
     let quil_fields = document.getElementsByClassName('g__quil_editor');
     if(quil_fields.length){
@@ -1596,74 +1818,75 @@ function granite_form(formsBlock, jsonTheme){
         $( '#ui-datepicker-div' ).attr("mode", mode);
 
     /* -------------------- Custom Select Field ----------------------*/
-    var x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
+    var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
     /* Look for any elements with the class "g__picklist": */
-    x = document.getElementsByClassName("g__picklist");
+    f = document.getElementById(id);
+    x = f.getElementsByClassName("g__picklist");
+    console.log(x);
     if(x.length > 0){
         l = x.length;
         for (i = 0; i < l; i++) {
-        selElmnt = x[i].getElementsByTagName("select")[0];
-        ll = selElmnt.length;
-        /* For each element, create a new DIV that will act as the selected item: */
-        a = document.createElement("div");
-        a.setAttribute("class", "select-selected");
-        a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-        x[i].appendChild(a);
-        /* For each element, create a new DIV that will contain the option list: */
-        b = document.createElement("div");
-        b.setAttribute("class", "select-items select-hide");
-        search = document.createElement("input");
-        search.setAttribute('type', 'text');
-        search.setAttribute('class', 'g__select_search');
-        search.setAttribute('placeholder', 'Search');
-        search.addEventListener("click", function(e) {
-            e.stopPropagation();
-        });
-        b.appendChild(search);
-        for (j = 1; j < ll; j++) {
-            /* For each option in the original select element,
-            create a new DIV that will act as an option item: */
-            c = document.createElement("div");
-            c.setAttribute('class', 'g__select_option')
-            c.innerHTML = selElmnt.options[j].innerHTML;
-            c.addEventListener("click", function(e) {
-                /* When an item is clicked, update the original select box,
-                and the selected item: */
-                var y, i, k, s, h, sl, yl;
-                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                sl = s.length;
-                h = this.parentNode.previousSibling;
-                for (i = 0; i < sl; i++) {
-                if (s.options[i].innerHTML == this.innerHTML) {
-                    s.selectedIndex = i;
-                    h.innerHTML = this.innerHTML;
-                    s.value = this.innerHTML;
-                    y = this.parentNode.getElementsByClassName("same-as-selected");
-                    yl = y.length;
-                    for (k = 0; k < yl; k++) {
-                    y[k].removeAttribute("class");
-                    }
-                    this.setAttribute("class", "same-as-selected");
-                    break;
-                }
-                }
-                h.click();
+            selElmnt = x[i].getElementsByTagName("select")[0];
+            ll = selElmnt.length;
+            /* For each element, create a new DIV that will act as the selected item: */
+            a = document.createElement("div");
+            a.setAttribute("class", "select-selected");
+            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+            x[i].appendChild(a);
+            /* For each element, create a new DIV that will contain the option list: */
+            b = document.createElement("div");
+            b.setAttribute("class", "select-items select-hide");
+            search = document.createElement("input");
+            search.setAttribute('type', 'text');
+            search.setAttribute('class', 'g__select_search');
+            search.setAttribute('placeholder', 'Search');
+            search.addEventListener("click", function(e) {
+                e.stopPropagation();
             });
-            b.appendChild(c);
-        }
-        x[i].appendChild(b);
-        a.addEventListener("click", function(e) {
-            /* When the select box is clicked, close any other select boxes,
-            and open/close the current select box: */
-            e.stopPropagation();
-            closeAllSelect(this);
-            this.nextSibling.classList.toggle("select-hide");
-            this.classList.toggle("select-arrow-active");
-        });
+            b.appendChild(search);
+            for (j = 1; j < ll; j++) {
+                /* For each option in the original select element,
+                create a new DIV that will act as an option item: */
+                c = document.createElement("div");
+                c.setAttribute('class', 'g__select_option')
+                c.innerHTML = selElmnt.options[j].innerHTML;
+                c.addEventListener("click", function(e) {
+                    /* When an item is clicked, update the original select box,
+                    and the selected item: */
+                    var y, i, k, s, h, sl, yl;
+                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                    sl = s.length;
+                    h = this.parentNode.previousSibling;
+                    for (i = 0; i < sl; i++) {
+                    if (s.options[i].innerHTML == this.innerHTML) {
+                        s.selectedIndex = i;
+                        h.innerHTML = this.innerHTML;
+                        s.value = this.innerHTML;
+                        y = this.parentNode.getElementsByClassName("same-as-selected");
+                        yl = y.length;
+                        for (k = 0; k < yl; k++) {
+                        y[k].removeAttribute("class");
+                        }
+                        this.setAttribute("class", "same-as-selected");
+                        break;
+                    }
+                    }
+                    h.click();
+                });
+                b.appendChild(c);
+            }
+            x[i].appendChild(b);
+            a.addEventListener("click", function(e) {
+                /* When the select box is clicked, close any other select boxes,
+                and open/close the current select box: */
+                e.stopPropagation();
+                closeAllSelect(this);
+                this.nextSibling.classList.toggle("select-hide");
+                this.classList.toggle("select-arrow-active");
+            });
         }
 
         search.addEventListener("keyup", function(value) {
-            console.log('searching');
             let input = this.value.toUpperCase();
             let options_container = this.parentElement;
             let options_arr = options_container.querySelectorAll('.g__select_option');
@@ -1703,7 +1926,13 @@ function granite_form(formsBlock, jsonTheme){
         then close all select boxes: */
         document.addEventListener("click", closeAllSelect);
     }
-
+    /* -------------------- Picklist Multi ----------------------*/
+    let multiple_field = document.getElementsByClassName("g__select_multiple");
+    if(multiple_field.length > 0){
+        $('.g__select_multiple').chosen({
+            width: "auto"
+        });
+    }
     /* -------------------- checkbox ----------------------*/
     const all_checkboxes = document.querySelectorAll('.g__field_checkbox');
 
@@ -1734,7 +1963,7 @@ function granite_form(formsBlock, jsonTheme){
             });
         });
 
-        let arr_selects = document.querySelectorAll('.g__field_picklist');
+        let arr_selects = document.querySelectorAll('.g__select_default, g__select_multiple');
         arr_selects.forEach((field) => {
             field.addEventListener('click', () => {
                 let form_id = field.getAttribute('form_id');
@@ -1834,89 +2063,312 @@ function granite_form(formsBlock, jsonTheme){
             }
         }
     }
+    /* -------------------- Pattern Check ----------------------*/
+    let all_field_containers = document.querySelectorAll('.g__form_field');
+    all_field_containers.forEach((field) => {
+        let input = field.querySelector('input');
+        let select = field.querySelector('select');
+        let select_desktop = field.querySelector('.select-selected');
+        let error_msg = field.querySelector('.g__error_msg');
+        if(!!input){
+            input.addEventListener('change', (e) => {
+                let valid_input = input.checkValidity();
+                if(valid_input){
+                    input.classList.add('valid');
+                    input.classList.remove('invalid');
+                    error_msg.innerText = '';
+                } else {
+                    input.classList.add('invalid');
+                }
+            });
+        }
+        if(!!select_desktop){
+            select_desktop.addEventListener('click', () => {
+                let valid_input = select_desktop.previousSibling.checkValidity();
+                if(valid_input){
+                    select_desktop.classList.add('valid');
+                    select_desktop.classList.remove('invalid');
+                    error_msg.innerText = '';
+                } else {
+                    select_desktop.classList.add('invalid');
+                }
+            });
+
+        }
+    });
     /* -------------------- Dependency Field ----------------------*/
     r.forEach(function(r, num){
-        if(!!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank)){
-
-            let dep_master_field_value = document.getElementsByName(r.dependency_field);
-            let dep_field_id = dep_master_field_value[0].id
-            let dep_master_field = document.getElementById(dep_field_id);
-            // let dep_master_field_type = dep_master_field.getAttribute('type');
-            // let dep_master_field_selected = dep_master_field.querySelector('.select-selected').innerHTML;
-            let dep_master_value = dep_master_field.value;
-            let dep_child_values = r.dependency_values;
-            let dep_child_arr;
-
-
-
-            if(typeof dep_child_values === 'boolean' ){
-                dep_child_type = 'boolean';
-                console.log(dep_child_type)
-            }else if (dep_child_values.includes(',')){
-                dep_child_type = 'array';
-                dep_child_arr = dep_child_values.split(', ')
-                console.log(dep_child_type)
-            }else{
-                dep_child_type = 'single';
+        const is_dep = (!!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank));
+        if (is_dep){
+            let dep_name = document.getElementsByName(r.dependency_field);
+            let dep_type = dep_name[0].type;
+            let dep_parent = document.getElementById(dep_name[0].id);
+            let dep_child = document.getElementById(r.id);
+            let dep_blank = r.dependency_not_blank;
+                switch (dep_type) {
+                    case 'select-one':
+                        dep_select(dep_type, dep_parent, dep_child, r.dependency_values, dep_blank)
+                    break;
+                    case 'checkbox':
+                        checkbox_event(dep_type, dep_parent, dep_child, r.dependency_values)
+                        checkbox(dep_type, dep_parent, dep_child, r.dependency_values)
+                    break;
+                    case 'text':
+                        text_event(dep_type, dep_parent, dep_child, r.dependency_values, dep_blank)
+                        text(dep_type, dep_parent, dep_child, r.dependency_values, dep_blank)
+                    break;
             }
+        }
 
-            let dep_child_field = document.getElementById(r.id);
-            let dep_child_container = dep_child_field.closest('.g__form_field');
-            switch (dep_child_type) {
-                case 'boolean':
-                  if(dep_master_field.checked && (dep_child_values)){
-                    dep_child_container.classList.remove('dep_hide');
-                  } else {
-                    dep_child_container.classList.add('dep_hide');
-                  };
-                  break;
-                case 'single':
-                    if(dep_master_field.value === val){
-                        dep_child_container.classList.remove('dep_hide');
-                    } else {
-                        dep_child_container.classList.add('dep_hide');
-                    };
-                break;
-                case 'array':
-                    dep_child_arr.forEach((val) => {
-                        if(dep_master_field.value === val){
-                            dep_child_container.classList.remove('dep_hide');
-                        } else {
-                            dep_child_container.classList.add('dep_hide');
-                        };
-                    })
-                break;
-              }
+        function values_arr(values){
+            let arr = [];
+            if(values.includes(',')){
+                arr = values.split(',');
+            } else {
+                arr.push(values);
+            }
+            return arr;
+        }
 
-            dep_master_field.addEventListener('input', (val) => {
-                switch (dep_child_type) {
-                    case 'boolean':
-                      if(dep_master_field.checked && dep_child_values){
-                        dep_child_container.classList.remove('dep_hide');
-                      } else {
-                        dep_child_container.classList.add('dep_hide');
-                      };
-                      break;
-                    case 'number':
-                        if(dep_master_field.value === dep_child_values){
-                            dep_child_container.classList.remove('dep_hide');
-                          } else {
-                            dep_child_container.classList.add('dep_hide');
-                          };
-                    break;
-                    case 'array':
-                        let is_match;
-                        dep_child_arr.forEach((val) => {
-                            if(dep_master_field.value === val){
-                                is_match = true;
-                                dep_child_container.classList.remove('dep_hide');
-                            } else if (!is_match) {
-                                dep_child_container.classList.add('dep_hide');
-                            };
-                        })
-                    break;
-                  }
+        function text_event(type, parent, child, values, blank){
+            parent.addEventListener('keyup', () => {
+                text(type, parent, child, values, blank)
             })
         }
+        function text(type, parent, child, values, blank){
+            const arr_values = values_arr(values);
+                const dep_text = parent.value.toUpperCase();
+                const dep_child = child;
+                const dep_blank = blank;
+                let is_match;
+                arr_values.forEach((val) => {
+                    let child_text = val.toUpperCase().trim();
+                    let container = dep_child.closest('.g__form_field');
+                    if(dep_text === child_text){
+                        is_match = true;
+                        container.classList.remove('dep_hide');
+                    } else if((dep_text != "") && dep_blank){
+                        is_match = true;
+                        container.classList.remove('dep_hide');
+                    } else if (!is_match) {
+                        container.classList.add('dep_hide');
+                    }
+                })
+        }
+        function checkbox(type, parent, child, values){
+            const dep_values = values;
+                const child_value = (values === 'true') ? true : false;
+                const dep_checked = parent.checked;
+                const dep_child = child;
+                let container = dep_child.closest('.g__form_field');
+                if(dep_checked === child_value){
+                    container.classList.remove('dep_hide');
+                    container.classList.add('dep_show');
+                } else {
+                    container.classList.add('dep_hide');
+                    container.classList.remove('dep_show');
+                }
+        }
+        function checkbox_event(type, parent, child, values){
+            parent.addEventListener('click', () => {
+                checkbox(type, parent, child, values)
+            })
+        }
+
+        function dep_select(type, parent, child, values, blank){
+            let dep_desktop_select = parent.nextSibling;
+            dep_desktop_select.addEventListener('click', () => {
+                const dep_values = values;
+                const arr_values = values_arr(values);
+                const dep_selected = parent.nextSibling.innerText.toUpperCase();
+                const dep_child = child;
+                const dep_blank = blank;
+                arr_values.forEach((val) => {
+                    let child = val.toUpperCase().trim();
+                    let container = dep_child.closest('.g__form_field');
+                    if(dep_selected === child){
+                        container.classList.remove('dep_hide');
+                        container.classList.add('dep_show');
+                    } else if ((dep_selected != "") && dep_blank){
+                        container.classList.remove('dep_hide');
+                        container.classList.add('dep_show');
+                    } else {
+                        container.classList.add('dep_hide');
+                        container.classList.remove('dep_show');
+                    }
+                })
+            })
+            dep_desktop_select.click();
+            dep_desktop_select.click();
+        }
     })
+
+
+
+
+
+
+
+
+
+
+
+    /* -------------------- Dependency Field ----------------------*/
+    // r.forEach(function(r, num){
+    //     if(!!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank)){
+    //         let dep_master_field_value = document.getElementsByName(r.dependency_field);
+    //         let dep_field_id = dep_master_field_value[0].id
+    //         let dep_master_field = document.getElementById(dep_field_id);
+    //         let dep_master_field_type = dep_master_field.getAttribute('type');
+    //         let dep_master_field_selected
+    //         if(dep_master_field_type === 'picklist'){
+    //             dep_master_field_desktop = dep_master_field.nextSibling;
+    //             dep_master_field_selected = dep_master_field.nextSibling.innerHTML;
+    //         }
+    //         let dep_child_values = r.dependency_values;
+    //         let dep_child_arr;
+
+    //         if((dep_child_values === 'true') || (dep_child_values === 'false') ){
+    //             dep_child_type = 'boolean';
+    //         }else if (dep_child_values.includes(',')){
+    //             dep_child_type = 'array';
+    //             dep_child_arr = dep_child_values.split(', ')
+    //         }else{
+    //             dep_child_type = 'single';
+    //         }
+
+    //         let dep_child_field = document.getElementById(r.id);
+    //         let dep_child_container = dep_child_field.closest('.g__form_field');
+    //         switch (dep_child_type) {
+    //             case 'boolean':
+    //               if(dep_master_field.checked && (dep_child_values)){
+    //                 dep_child_container.classList.remove('dep_hide');
+    //               } else {
+    //                 dep_child_container.classList.add('dep_hide');
+    //               };
+    //               break;
+    //             case 'single':
+    //                 if (dep_master_field_type === 'picklist'){
+    //                     if(dep_master_field_selected === dep_child_values){
+    //                         dep_child_container.classList.remove('dep_hide');
+    //                     } else {
+    //                         dep_child_container.classList.add('dep_hide');
+    //                     };
+    //                 } else {
+    //                     if(dep_master_field.value === dep_child_values){
+    //                         dep_child_container.classList.remove('dep_hide');
+    //                     } else {
+    //                         dep_child_container.classList.add('dep_hide');
+    //                     };
+    //                 }
+
+    //             break;
+    //             case 'array':
+    //                 if (dep_master_field_type === 'picklist'){
+    //                     dep_child_arr.forEach((val) => {
+    //                         if(dep_master_field_selected === val){
+    //                             dep_child_container.classList.remove('dep_hide');
+    //                         } else {
+    //                             dep_child_container.classList.add('dep_hide');
+    //                         };
+    //                     })
+    //                 } else {
+    //                     dep_child_arr.forEach((val) => {
+    //                         if(dep_master_field.value === val){
+    //                             dep_child_container.classList.remove('dep_hide');
+    //                         } else {
+    //                             dep_child_container.classList.add('dep_hide');
+    //                         };
+    //                     })
+    //                 }
+    //             break;
+    //           }
+
+    //         dep_master_field_desktop.addEventListener('click', (val) => {
+    //             console.log(dep_child_type);
+    //             switch (dep_child_type) {
+    //                 case 'boolean':
+    //                   if(dep_master_field.checked && (dep_child_values)){
+    //                     dep_child_container.classList.remove('dep_hide');
+    //                   } else {
+    //                     dep_child_container.classList.add('dep_hide');
+    //                   };
+    //                   break;
+    //                 case 'single':
+    //                     if (dep_master_field_type === 'picklist'){
+    //                         let new_select = dep_master_field.nextSibling.innerHTML;
+    //                         if(new_select === dep_child_values){
+    //                             dep_child_container.classList.remove('dep_hide');
+    //                         } else {
+    //                             dep_child_container.classList.add('dep_hide');
+    //                         };
+    //                     } else {
+    //                         if(dep_master_field.value === dep_child_values){
+    //                             dep_child_container.classList.remove('dep_hide');
+    //                         } else {
+    //                             dep_child_container.classList.add('dep_hide');
+    //                         };
+    //                     }
+
+    //                 break;
+    //                 case 'array':
+    //                     if (dep_master_field_type === 'picklist'){
+    //                         dep_child_arr.forEach((val) => {
+    //                             if(dep_master_field_selected === val){
+    //                                 dep_child_container.classList.remove('dep_hide');
+    //                             } else {
+    //                                 dep_child_container.classList.add('dep_hide');
+    //                             };
+    //                         })
+    //                     } else {
+    //                         dep_child_arr.forEach((val) => {
+    //                             if(dep_master_field.value === val){
+    //                                 dep_child_container.classList.remove('dep_hide');
+    //                             } else {
+    //                                 dep_child_container.classList.add('dep_hide');
+    //                             };
+    //                         })
+    //                     }
+    //                 break;
+    //               }
+    //         })
+    //         dep_master_field.addEventListener('input', (val) => {
+    //             console.log('click');
+    //             switch (dep_child_type) {
+    //                 case 'boolean':
+    //                   if(dep_master_field.checked && dep_child_values){
+    //                     dep_child_container.classList.remove('dep_hide');
+    //                   } else {
+    //                     dep_child_container.classList.add('dep_hide');
+    //                   };
+    //                   break;
+    //                 case 'number':
+    //                     if(dep_master_field.value === dep_child_values){
+    //                         dep_child_container.classList.remove('dep_hide');
+    //                       } else {
+    //                         dep_child_container.classList.add('dep_hide');
+    //                       };
+    //                 break;
+    //                 case 'single':
+    //                 if(dep_master_field.value === dep_child_values){
+    //                     dep_child_container.classList.remove('dep_hide');
+    //                 } else {
+    //                     dep_child_container.classList.add('dep_hide');
+    //                 };
+    //                 break;
+    //                 case 'array':
+    //                     let is_match;
+    //                     dep_child_arr.forEach((val) => {
+    //                         if(dep_master_field.value === val){
+    //                             is_match = true;
+    //                             dep_child_container.classList.remove('dep_hide');
+    //                         } else if (!is_match) {
+    //                             dep_child_container.classList.add('dep_hide');
+    //                         };
+    //                     })
+    //                 break;
+    //               }
+    //         })
+    //     }
+    // })
 }
