@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Page Title</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
     <link rel="stylesheet" href="homepage.css">
 </head>
 <body>
@@ -15,24 +16,25 @@
     </nav>
 
     <div class="g__doc_template g__row container">
-        <div class="g__doc_sidebar g__col">
+        <div class="g__doc_sidebar">
             <ul class="g__table_contents">
                 <li class="g__side_link"><a href="#function">Form Function</a></li>
                 <li class="g__side_link"><a href="#form-settings">Form Settings</a></li>
                 <li class="g__side_link"><a href="#dependency">Dependency</a></li>
                 <li class="g__side_link"><a href="#color-picker">Color Picker</a></li>
                 <li class="g__side_link"><a href="#checkbox">Checkbox</a></li>
+                <li class="g__side_link"><a href="#date">Date</a></li>
                 <li class="g__side_link"><a href="#email">Email</a></li>
             </ul>
         </div>
         <div class="g__goc_main g__col">
             <h1>Form</h1>
-            <p>We set out to create an easy, powerful and versatile form builder.</p>
             <p>Examples and usage guidelines for form attributes and layout options for creating a wide variety of forms.</p>
             <h2>Function</h2>
-                <code>granite_form(json, theme)</code>
+                <p>granite_form(json, theme)</p>
+                <p>https://deployment-engine.herokuapp.com/storage?action_type=get_blob&container_name=addapptation&blob_name=granite/granite_form.js</p>
             <h2>Form Settings</h2>
-            <p>The option level settings attributes containing interactive controls for submitting information.</p>
+            <p>The settings level defines a form and attributes that determine the form's behavior.</p>
             <table id="g__table">
                 <tr>
                   <th>Attribute</th>
@@ -75,9 +77,69 @@
                     <td>The enctype attribute specifies how the form-data should be encoded when submitting it to the server.<br><b>Note</b> The enctype attribute can be used only if method="post".</td>
                 </tr>
                 <tr>
+                    <td>ID</td>
+                    <td>Text</td>
+                    <td>Add a custom DIV ID</td>
+                </tr>
+                <tr>
                     <td>Form ID</td>
                     <td>Text</td>
                     <td>Specifies the form element the input element belongs to. The value of this attribute must be the id attribute of a form element in the same document.</td>
+                </tr>
+                <tr>
+                    <td>Database Action</td>
+                    <td>Picklist</td>
+                    <td>How would you like to edit your database. You can create, update or delete.</td>
+                </tr>
+                <tr>
+                    <td>Database Object</td>
+                    <td>Text</td>
+                    <td>What database object are you modifying. Example: user__c</td>
+                </tr>
+                <tr>
+                    <td>Record ID</td>
+                    <td>Text</td>
+                    <td>What record do you want to target when updating or deleting a record.</td>
+                </tr>
+                <tr>
+                    <td>Redirect URL</td>
+                    <td>Text</td>
+                    <td>After successfully completeing a form, where would you like to redirect the user</td>
+                </tr>
+                <tr>
+                    <td>Flash Message</td>
+                    <td>Text</td>
+                    <td>Message to display after successfully compeleting a form</td>
+                </tr>
+                <tr>
+                    <td>Custom Button Label</td>
+                    <td>Text</td>
+                    <td>Custom button will appear at the top of your form with this text</td>
+                </tr>
+                <tr>
+                    <td>Custom Button Link</td>
+                    <td>Text</td>
+                    <td>The URL for your custom button</td>
+                </tr>
+                <tr>
+                    <td>Hide Submit Button</td>
+                    <td>Boolean</td>
+                    <td>Removed the submit button from the form</td>
+                </tr>
+                <tr>
+                    <td>Submit Label</td>
+                    <td>text</td>
+                    <td>Change the default 'Submit' text</td>
+                </tr>
+                <tr>
+                    <td>Enable Cancel Button</td>
+                    <td>Boolean</td>
+                    <td>Display the cancel button</td>
+                </tr>
+                <tr>
+                    <td>Cancel Label</td>
+                    <td>text</td>
+                    <td>Change the default 'Cancel' text</td>
                 </tr>
             </table>
             <h2>Form Fields</h2>
@@ -144,17 +206,38 @@
                     <td>Text</td>
                     <td>The parent field value(s) that will display the field.</td>
                 </tr>
+                <tr>
+                    <td>Display Inline with Next Field - NEW</td>
+                    <td>boolean</td>
+                    <td>The <b>Next</b> form field will display on the same row. You can repeat this as many times as youd like.</td>
+                </tr>
+                <tr>
+                    <td>Custom Regex Pattern - NEW</td>
+                    <td>text</td>
+                    <td>Override the default HTML validation check with your own custom Regular Expression</td>
+                </tr>
+                <tr>
+                    <td>Invalid Message - NEW</td>
+                    <td>text</td>
+                    <td>Override the default HTML validation error with your own text</td>
+                </tr>
 
             </table>
             <!-- Dependency -->
             <h3 id="dependecy">Dependency</h3>
-            <p>The parent dependency field is set using the field name attribute. You can use the checkbox, email, number, picklist and text field as parent fields.</p>
-            <p>The dependency field(s) field accepts boolean values (true or false), multple values seperated by at comma or a single value</p>
+                <p>The name attribute is used to set the parent dependecy field. The following field types can be used as a parent dependecy field: checkbox, text and picklist.</p>
+                <p>The dependent field can accept a boolean values (true or false) single text values or multiple values separated by a comma.</p>
             <h4>Dependency Picklist Demo</h4>
+                <p>Depdendency Field: states (The fields name attribute)</p>
+                <p>Depedency Value(s): Texas, Montana</p>
             <div id="g-dependency" class="g__sample"></div>
-            <h4>Dependency Checkbox Demo</h4>
+                <h4>Dependency Checkbox Demo</h4>
+                <p>Depdendency Field: checkbox (The fields name attribute)</p>
+                <p>Depedency Value: True</p>
             <div id="g-dependency-checkbox" class="g__sample"></div>
-            <h4>Dependency Text Demo (Mutiple Values)</h4>
+                <h4>Dependency Text Demo (Mutiple Values)</h4>
+                <p>Depdendency Field: fruit (The fields name attribute)</p>
+                <p>Depedency Value(s): Orange, Appple, Banana</p>
             <div id="g-dependency-text" class="g__sample"></div>
             <!-- Color Picker -->
             <h3 id="color-picker">Color Picker</h3>
@@ -189,32 +272,104 @@
             </table>
             <!-- Checkbox -->
             <h3 id="checkbox">Checkbox</h3>
-            <div id="g-color-checkbox" class="g__sample"></div>
-            <p>The checkbox is shown as a square box that is ticked (checked) when activated.</p>
+                <p>The checkbox is shown as a square box that is ticked (checked) when activated.</p>
+                <div id="g-color-checkbox" class="g__sample"></div>
+            <!-- Date -->
+            <h3 id="date">Date</h3>
+                <p>The date field currently uses jQuery UI as a dependecy due to the lack to browser support. With that being said, native functionaloty on mobile devices is overridden.</p>
+                <div id="g-date" class="g__sample"></div>
+            <!-- File -->
+            <h3 id="file">File</h3>
+                <p>let the user choose one or more files from their device storage.</p>
+                <div id="g-file" class="g__sample"></div>
+                <h4>Attributes Specific to File</h4>
+                <table id="g__table">
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Accepted Values</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>accept</td>
+                        <td>text</td>
+                        <td>all file types</td>
+                        <td>image/*, audio/*, video/*, .pdf, .png, .doc, docx, .xml</td>
+                        <td>Attribute takes as its value a string containing one or more of these unique file type specifiers, separated by commas.</td>
+                    </tr>
+                </table>
             <!-- Email -->
-            <h3 id=email>Email</h3>
-            <div id="g-color-email" class="g__sample"></div>
-            <p>The input value is automatically validated to ensure it is a properly formatted e-mail address.</p>
-            <h4>Attributes Specific to Email</h4>
+            <h3 id="email">Email</h3>
+                <p>The input value is automatically validated to ensure it is a properly formatted e-mail address.</p>
+                <div id="g-color-email" class="g__sample"></div>
+                <h4>Attributes Specific to Email</h4>
+                <table id="g__table">
+                    <tr>
+                    <th>Attribute</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    </tr>
+                    <tr>
+                    <td>Multiple</td>
+                    <td>Boolean</td>
+                    <td>Allows multiple e-mail addresses when true</td>
+                    </tr>
+                </table>
+            <!-- Hidden Field -->
+            <h3 id="hidden-field">Hidden Field</h3>
+            <p>A hidden field lets developers include data that cannot be seen or modified by users when a form is submitted. This often stores what database record that needs to be updated when the form is submitted.</p>
+            <!-- Number -->
+            <h3 id="number">Number</h3>
+            <p>They number field include built-in validation to reject non-numerical entries. The User may opt to provide min and max values.</p>
+            <div id="g-number" class="g__sample"></div>
+            <h4>Attributes Specific to Number</h4>
             <table id="g__table">
                 <tr>
-                  <th>Attribute</th>
-                  <th>Type</th>
-                  <th>Description</th>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Description</th>
                 </tr>
                 <tr>
-                  <td>Multiple</td>
-                  <td>Boolean</td>
-                  <td>Allows multiple e-mail addresses when true</td>
+                    <td>Show Counter</td>
+                    <td>Boolean</td>
+                    <td>Hide the counter for increasing or decreasing the number</td>
+                </tr>
+                <tr>
+                    <td>Stepper (Increase or Decrease Number by)</td>
+                    <td>Number</td>
+                    <td>Specifies the legal number intervals</td>
+                </tr>
+                <tr>
+                    <td>Max Number</td>
+                    <td>Number</td>
+                    <td>Specifies the maximum value allowed</td>
+                </tr>
+                <tr>
+                    <td>Min Number</td>
+                    <td>Number</td>
+                    <td>Specifies the minimum value allowed</td>
                 </tr>
             </table>
         </div>
     </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src='https://cdn.addapptation.com/addapptation-stylesheets/chosen.jquery.min.js'></script>
     <script src='data.js'></script>
     <script src='../form/granite_form.js'></script>
     <script src='homepage.js'></script>
+    <script>
+        granite_form(form_range, jsonTheme);
+        granite_form(form_checkbox, jsonTheme);
+        granite_form(form_email, jsonTheme);
+        granite_form(form_dependency_picklist, jsonTheme);
+        granite_form(form_dependency_checkbox, jsonTheme);
+        granite_form(form_dependency_text, jsonTheme);
+        granite_form(form_date, jsonTheme);
+        granite_form(form_file, jsonTheme);
+        granite_form(form_number, jsonTheme);
+    </script>
 </body>
 </html>

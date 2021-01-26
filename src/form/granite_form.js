@@ -46,6 +46,7 @@ function granite_form(formsBlock, jsonTheme){
         --field-padding: 0.375rem 0.75rem;
         --field-height: 37px;
         --error-color: #ea386e;
+        --green: #00B28B;
 
         /* Mode Dependent */
         --background: #eaeaea;
@@ -55,7 +56,7 @@ function granite_form(formsBlock, jsonTheme){
         --background-hover: #eeeeee;
         --body: #ffffff;
         --font-color-reverse: #f5f5f5;
-        --border: 0px solid #5d5d5d;
+        --border: 1px solid #a1a1a1;
         --font-color: #5d5d5d;
 
         /* css */
@@ -63,13 +64,13 @@ function granite_form(formsBlock, jsonTheme){
     }
     ${cssId}[mode="midnight"],
     #ui-datepicker-div[mode="midnight"]{
-        --background: #2a2a2a;
+        --background: #303030;
         --background-darker: #151515;
         --background-reverse: #ffffff;
         --background-range: #2a2a2a;
         --background-hover: #3b3b3b;
         --body: #101010;
-        --border: 1px solid #2a2a2a;
+        --border: 1px solid #a1a1a1;
         --font-color: #ffffff;
     }
     /* ------------------------ Action Row ------------------------*/
@@ -309,7 +310,7 @@ function granite_form(formsBlock, jsonTheme){
         right: 1px;
         border-radius: 0 3px 3px 0;
         height: var(--field-height);
-        border-left: 1px solid var(--body);
+        border-left: var(--border);
     }
     ${cssId} .g__password_show:hover{
         cursor: pointer;
@@ -332,6 +333,9 @@ function granite_form(formsBlock, jsonTheme){
         align-items: center;
         position: relative;
     }
+    ${cssId} .g__hide_counter .g__number_plus_minus{
+        display: none;
+    }
     ${cssId} .g__field_number{
         flex: 1;
     }
@@ -342,7 +346,7 @@ function granite_form(formsBlock, jsonTheme){
         border-radius: 0 3px 3px 0;
         width: 20px;
         height: var(--field-height);
-        border-left: 1px solid var(--body);
+        border-left: var(--border);
     }
     ${cssId} .g__number_increase{
         width: 100%;
@@ -438,7 +442,7 @@ function granite_form(formsBlock, jsonTheme){
         border-radius: 0 3px 3px 0;
         width: 20px;
         height: var(--field-height);
-        border-left: 1px solid var(--body);
+        border-left: var(--border);
     }
     ${cssId} .g__range_increase{
         width: 100%;
@@ -511,7 +515,9 @@ function granite_form(formsBlock, jsonTheme){
         border-left: 0;
         border-top: 0;
         background: var(--background);
-        border-bottom: 2px solid var(--body);
+        border-top: var(--border);
+        border-right: var(--border);
+        border-left: var(--border);
     }
     ${cssId} .ql-container {
        border-right: 0;
@@ -521,6 +527,7 @@ function granite_form(formsBlock, jsonTheme){
     ${cssId} .ql-editor {
         font-family: var(--font-regular);
         font-weight: 300;
+        border: var(--border);
         color: var(--font-color);
         background: var(--background);
         height: 200px;
@@ -564,7 +571,7 @@ function granite_form(formsBlock, jsonTheme){
       }
     ${cssId} .g__calendar_icon{
         position: absolute;
-        border-left: 1px solid var(--body);
+        border-left: var(--border);
         color: var(--font-color);
         font-size: 1.4rem;
         padding: 8px 0 8px 15px;
@@ -675,6 +682,7 @@ function granite_form(formsBlock, jsonTheme){
     ${cssId} .g__radio {
         height: 20px;
         width: 20px;
+        border: var(--border);
         background-color: var(--background);
         border-radius: 50%;
     }
@@ -708,56 +716,94 @@ function granite_form(formsBlock, jsonTheme){
    }
     /* ------------------------ checkbox ------------------------------*/
     ${cssId} .g__check_container {
-        display: flex;
-        position: relative;
-        cursor: pointer;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
-    ${cssId} .g__check_container {
-        display: flex;
-        position: relative;
+    ${cssId} .g__check_container [type="checkbox"]:not(:checked),
+	${cssId} [type="checkbox"]:checked {
+		position: absolute;
+		left: 0;
+		opacity: 0.01;
     }
-    ${cssId} .g__field_checkbox {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 25px;
-        width: 25px;
+    ${cssId} .g__check_container [type="checkbox"]:not(:checked) + label,
+	${cssId} .g__check_container [type="checkbox"]:checked + label {
+		position: relative;
+		padding-left: 2.3em;
+		color: var(--font-color);
+		line-height: 1.7;
+		cursor: pointer;
     }
-    ${cssId} .g__checkmark {
-        display: flex;
-        height: 25px;
-        width: 25px;
-        background-color: var(--background);
+    ${cssId} [type="checkbox"]:not(:checked) + label:before{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 25px;
+		height: 25px;
+		border: var(--border);
+		background: var(--background);
+		border-radius: var(--border-radius);
+		box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
+		-webkit-transition: all .275s;
+				transition: all .275s;
     }
-    ${cssId} .g__field_checkbox:hover ~ .g__checkmark {
-        background-color: #ccc;
+	${cssId} [type="checkbox"]:checked + label:before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 25px;
+		height: 25px;
+		border: var(--border);
+		background: var(--green);
+		border-radius: var(--border-radius);
+		box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
+		-webkit-transition: all .275s;
+				transition: all .275s;
     }
-    ${cssId} .g__field_checkbox:checked ~ .g__checkmark {
-        background-color: var(--primary);
-    }
-    ${cssId} .g__checkmark:after {
-        content: "";
-        position: absolute;
-        display: none;
-      }
-    ${cssId} .g__check_container input:checked ~ .g__checkmark:after {
-        display: block;
-      }
-    ${cssId} .g__check_container .g__checkmark:after {
-        left: 9px;
-        top: 5px;
-        width: 7px;
-        height: 12px;
+    ${cssId} [type="checkbox"]:not(:checked) + label:after,
+	${cssId} [type="checkbox"]:checked + label:after {
+		content: '';
+		position: absolute;
+		top: 4px;
+		left: 8px;
+		font-size: 1.375em;
+        color: #fff;
+        background-color: var(--green);
+        line-height: 0;
+        border: solid white;
+        width: 8px;
+        height: 15px;
         border: solid white;
         border-width: 0 3px 3px 0;
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
-      }
+		-webkit-transition: all .2s;
+				transition: all .2s;
+    }
+    ${cssId} [type="checkbox"]:not(:checked) + label:after {
+		opacity: 0;
+	}
+
+	${cssId} [type="checkbox"]:checked + label:after {
+		opacity: 1;
+    }
+    ${cssId} [type="checkbox"]:disabled:not(:checked) + label:before,
+	${cssId} [type="checkbox"]:disabled:checked + label:before {
+		box-shadow: none;
+		border-color: #bbb;
+		background-color: #e9e9e9;
+	}
+
+	${cssId} [type="checkbox"]:disabled:checked + label:after {
+		color: #777;
+	}
+
+	${cssId} [type="checkbox"]:disabled + label {
+		color: #aaa;
+	}
+
 
     /* ------------------------ File ------------------------------*/
     ${cssId} .g__file_container{
@@ -775,6 +821,7 @@ function granite_form(formsBlock, jsonTheme){
     }
     ${cssId} .g__file_text{
         flex: 1;
+        box-sizing: border-box;
         overflow: hidden;
         padding: var(--field-padding);
         color: var(--font-color);
@@ -786,6 +833,7 @@ function granite_form(formsBlock, jsonTheme){
     }
     ${cssId} .g__file_delete{
         overflow: hidden;
+        box-sizing: border-box;
         padding: var(--field-padding);
         color: var(--font-color);
         height: var(--field-height);
@@ -802,7 +850,6 @@ function granite_form(formsBlock, jsonTheme){
     ${cssId} .chosen-container-multi{
         display: flex;
         background-color: var(--background);
-        border: var(--border);
         border-radius: var(--border-radius);
     }
     ${cssId} .chosen-container-multi .chosen-choices{
@@ -817,7 +864,9 @@ function granite_form(formsBlock, jsonTheme){
     ${cssId} .chosen-container .chosen-drop{
         background: var(--background);
         box-shadow: none;
-        border: var(--border);
+        border-bottom: var(--border);
+        border-right: var(--border);
+        border-left: var(--border);
     }
     ${cssId} .chosen-container .chosen-results{
         color: var(--font-color) !important;
@@ -932,7 +981,7 @@ function granite_form(formsBlock, jsonTheme){
         color: var(--font-color);
         padding: var(--field-padding);
         cursor: pointer;
-        height: calc(var(--field-height) - 13px);
+        height: var(--field-height);
     }
     /* Style items (options): */
     ${cssId} .select-items {
@@ -1099,7 +1148,7 @@ function granite_form(formsBlock, jsonTheme){
             form_field.setAttribute('class', "g__form_field");
 
             //Global labels and character counter
-            if(!!r.title || !!r.length){
+            if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
                 let field_info_container = document.createElement('div');
                     field_info_container.setAttribute('class', 'g__field_info')
                 form_field.appendChild(field_info_container);
@@ -1131,10 +1180,12 @@ function granite_form(formsBlock, jsonTheme){
                 input = document.createElement('input');
                 input.setAttribute('id', r.id);
                 basicAttributes(r, input, class_name);
-                let check = document.createElement('span');
-                check.setAttribute('class', 'g__checkmark');
+                let label = document.createElement('label');
+                !!r.required ? label.classList.add('required'): '';
+                label.setAttribute('for', r.id);
+                label.innerText = r.title;
                 check_container.appendChild(input);
-                check_container.appendChild(check);
+                check_container.appendChild(label);
                 form_field.appendChild(check_container);
                 form_field.appendChild(error_field);
             break;
@@ -1192,10 +1243,8 @@ function granite_form(formsBlock, jsonTheme){
             case "email":
                 input = document.createElement('input');
                 input.setAttribute('id', r.id);
-                input.setAttribute('pattern', patterns.email);
-                !!r.pattern ? input.setAttribute('pattern', r.pattern) : input.setAttribute('pattern', patterns.email);
+                !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
                 basicAttributes(r, input, class_name)
-                input.setAttribute('form', attr__form_id);
                 form_field.appendChild(input);
                 form_field.appendChild(error_field);
             break;
@@ -1204,6 +1253,8 @@ function granite_form(formsBlock, jsonTheme){
                 file_container.setAttribute('class', 'g__file_container');
                 input = document.createElement('input');
                 input.setAttribute('id', r.id);
+                !!r.accepted_file_types ? input.setAttribute('accept', r.accepted_file_types) : '';
+                r.multiple ? input.setAttribute('multiple', 'true') : '';
                 input.setAttribute('hidden', 'hidden');
                 basicAttributes(r, input, class_name)
                 file_btn = document.createElement('button');
@@ -1224,13 +1275,15 @@ function granite_form(formsBlock, jsonTheme){
                 form_field.appendChild(error_field);
             break;
             case "number":
-                let num_min = r.min || 0;
-                let num_max = r.max || 100;
                 let num_container = document.createElement('div');
                 num_container.setAttribute('class', "g__number_container");
+                r.show_counter ? '' : num_container.classList.add('g__hide_counter');
                 input = document.createElement('input');
                 input.setAttribute('id', r.id);
                 basicAttributes(r, input, class_name)
+                !!r.max_number ? input.max = r.max_number : '';
+                !!r.min_number ? input.min = r.min_number : '';
+                !!r.step ? input.step = r.step : '';
                 !!r.pattern ? input.setAttribute('pattern', r.pattern) : input.setAttribute('pattern', patterns.number);
                 // Increase decrease container
                 let num_counter = document.createElement('div');
@@ -1313,14 +1366,15 @@ function granite_form(formsBlock, jsonTheme){
                     input.name = r.title;
                     input.id = radio_options[i];
                     input.value = radio_options[i];
-                    label = document.createElement('label');
-                    label.setAttribute('class', 'g__radio_label');
-                    label.innerHTML = radio_options[i];
+                    let radio_label = document.createElement('label');
+                    radio_label.setAttribute('class', 'g__radio_label');
+                    radio_label.id = radio_options[i];
+                    radio_label.innerHTML = radio_options[i];
                     let radio = document.createElement('div');
                     radio.setAttribute('class', 'g__radio');
                     input_container.appendChild(input);
                     input_container.appendChild(radio);
-                    input_container.appendChild(label);
+                    input_container.appendChild(radio_label);
                     radio_container.appendChild(input_container);
                     ;
                 }
@@ -1515,14 +1569,14 @@ function granite_form(formsBlock, jsonTheme){
     }
 
     // Submit & Cancel Button
-    if(!!o.submit_label){
+    if(!o.hide_submit){
         let submit = document.createElement('button');
         submit.setAttribute('id', 'g__submit_btn');
         submit.setAttribute('type', 'submit');
-        submit.innerText = o.submit_label;
+        submit.innerText = o.submit_label || 'Submit';
         form_container.appendChild(submit);
     }
-    if(!!o.cancel_label){
+    if(o.allow_cancel){
         let cancel = document.createElement('button');
         cancel.setAttribute('id', 'g__cancel_btn');
         cancel.setAttribute('type', 'reset');
@@ -1602,7 +1656,7 @@ function granite_form(formsBlock, jsonTheme){
         }
     });
     /* -------------------- Reset ----------------------*/
-    if(!!o.cancel_label){
+    if(o.allow_cancel){
         let canel = document.getElementById('g__cancel_btn')
         canel.addEventListener('click', () => {
             form.reset();
@@ -1680,15 +1734,30 @@ function granite_form(formsBlock, jsonTheme){
     let all_numbers = document.querySelectorAll(".g__number_container");
     all_numbers.forEach(wrap => {
         const output = wrap.querySelector(".g__field_number");
+        const step = output.step;
         const increase = wrap.querySelector(".g__number_increase");
         const decrease = wrap.querySelector(".g__number_decrease");
         increase.addEventListener('click', () => {
+            let curr_num = output.value;
             const val = parseInt(output.value);
-            output.value = val + 1;
+            if (curr_num === ''){
+                output.value = parseInt(step);
+            } else if (!!step){
+                output.value = val + parseInt(step);
+            } else {
+                output.value = val + 1;
+            }
         });
         decrease.addEventListener('click', () => {
+            let curr_num = output.value;
             const val = parseInt(output.value);
-            output.value = val - 1;
+            if (curr_num === ''){
+                output.value =  - parseInt(step);
+            } else if(!!step){
+                output.value = val - parseInt(step);
+            } else {
+                output.value = val - 1;
+            }
         });
     })
     /* -------------------- Range Output ----------------------*/
@@ -2013,19 +2082,19 @@ function granite_form(formsBlock, jsonTheme){
 
             console.log(`FORM DATA: ${JSON.stringify(form_data, null, 4)}`)
 
-            // $.ajax({
-            //     type: o.method,
-            //     url: o.action,
-            //     data: form_data
-            // })
-            // .done(function(data) {
-            //     console.log("autosave successful")
-            // })
-            // .fail(function(data) {
-            //     console.log("autosave failed")
-            // });
-            // forms = [];
-            // count = 0;
+            $.ajax({
+                type: o.method,
+                url: o.action,
+                data: form_data
+            })
+            .done(function(data) {
+                console.log("autosave successful")
+            })
+            .fail(function(data) {
+                console.log("autosave failed")
+            });
+            forms = [];
+            count = 0;
             });
             return false;
         }

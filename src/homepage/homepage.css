@@ -10,7 +10,7 @@ body{
     --secondary: #26252D;
     --border-radius: 5px;
 }
-html {font-size: 112.5%;} /*18px*/
+html {font-size: 100%;} /*16px*/
 
 p {
     margin-bottom: .3rem;
@@ -84,8 +84,6 @@ small, .text_small {font-size: 0.8rem;}
 .g__row{
     display: flex;
     flex-direction: row;
-    padding-left: 30px;
-    padding-right: 30px;
 }
 .g__col{
     flex: 1;
@@ -169,10 +167,17 @@ small, .text_small {font-size: 0.8rem;}
 nav.g__navigation{
     display: flex;
     flex-direction: row;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
     justify-content: space-between;
     align-items: center;
     background: #141414;
-    padding: 5px 30px;
+    height: 65px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 nav.g__navigation .logo a{
     color: #fff;
@@ -308,6 +313,16 @@ a.g__micro_item{
     position: relative;
 }
 .g__doc_sidebar{
+    box-sizing: border-box;
+    height: calc(100vh - 65px);
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 65px;
+    left: 0;
+    background: #fff;
+    overflow-x: hidden;
+    padding: 15px;
     border-right: 1px solid #504F5A;
 }
 .g__table_contents{
@@ -326,9 +341,10 @@ a.g__micro_item{
 }
 .g__doc_sidebar{
     flex: 1;
+    flex-shrink: 0;
 }
 .g__goc_main{
-    flex: 6;
+    margin-left: 200px;
 }
 @media only screen and (max-width: 768px) {
     .g__row{

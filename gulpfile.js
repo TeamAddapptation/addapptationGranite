@@ -37,9 +37,16 @@ function tiles(){
     .pipe(minify())
     .pipe(dest('dist/tiles'));
 }
+function table(){
+    return src('src/table/*.js')
+    .pipe(babel())
+    .pipe(minify())
+    .pipe(dest('dist/table'));
+}
 
 exports.serve = serve;
 exports.hero = hero;
 exports.tiles = tiles;
+exports.table = table;
 exports.carousel = carousel;
 exports.default = serve;

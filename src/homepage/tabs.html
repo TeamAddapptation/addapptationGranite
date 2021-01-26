@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css">
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <nav class="g__navigation">
+        <div class="logo">
+            <a href="/">G</a>
+        </div>
+        <ul class="g__nav_links">
+            <li>Docs</li>
+        </ul>
+    </nav>
+
+    <div class="g__doc_template g__row container">
+        <div class="g__doc_sidebar g__col">
+            <ul class="g__table_contents">
+                <li class="g__side_link"><a href="#function">Tabs Function & CDN</a></li>
+                <li class="g__side_link"><a href="#style">Style</a></li>
+                <li class="g__side_link"><a href="#visibility-Parameters">Visibility Parameters</a></li>
+            </ul>
+        </div>
+        <div class="g__goc_main g__col">
+            <h1>Tabs</h1>
+                <p>Tabs aids the navigating through the application and can display content based on parameters. Users will have the option to click and open new tabs and navigate through the website.</p>
+            <h2 id="function">Function & CDN</h2>
+                <pre><code class="language-js">granite_tabs(json, theme)</code></pre>
+                <pre><code class="language-html">&lt;script src="https://deployment-engine.herokuapp.com/storage?action_type=get_blob&container_name=addapptation&blob_name=granite/granite_tabs.js"&gt;&lt;/script&gt;</code></pre>
+
+            <h2 id="style">Style</h2>
+                <p>The tabs micros offers two styles. The basic style is designed to replicate your typibal tabbed navigation. The second option, multi step, gives the user the ability to see their progress though steps.</p>
+                <h3>Basic Style</h3>
+                <div id="g-tabs-basic" class="g__sample"></div>
+                <h3>Multi Step Style</h3>
+                <div id="g-tabs-multi" class="g__sample"></div>
+            <h2="visibility-Parameters">Visibility Parameters</h2>
+                <p>Tabs automatically adds paramets to the end of you url, like the sample below:</p>
+                <pre><code class="language-html">?tab=1</code></pre>
+                <p>When tabs is present on the page, other micros can use this parameter as a visibility option. All micros have a visibility attribute at the settings level. In here you can set your conditional logic to display the micro if certain parameters are met.</p>
+                <p>The code snippit above will display the micro if the url parameter is '1' or if no parameter is present.</p>
+                <pre><code class="language-ruby">params[:tab].present? == false || params[:tab] == "1"</code></pre>
+                <p>This code snippit will display the micros if the url parameter is '4'</p>
+                <pre><code class="language-ruby">params[:tab] == "4"</code></pre>
+                <p>The visibility attribute is very flexible and can be used with an array of values. Check out the visibility page for more information</p>
+        </div>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='https://cdn.addapptation.com/addapptation-stylesheets/chosen.jquery.min.js'></script>
+    <script src='data.js'></script>
+    <script src='../form/granite_form.js'></script>
+    <script src='../tabs/granite_tabs.js'></script>
+    <script src='homepage.js'></script>
+    <script>
+        granite_tabs(tabs_basic, jsonTheme);
+        granite_tabs(tabs_multi, jsonTheme);
+    </script>
+</body>
+</html>

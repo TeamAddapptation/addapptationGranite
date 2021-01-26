@@ -137,16 +137,16 @@ function granite_content(jsonContent, jsonTheme){
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
     }
-    ${cssID}.g__no-records{
+    ${cssID} .g__no-records{
         --font-color: #101010;
     }
-    ${cssID}.g__no-records[mode="midnight"]{
+    ${cssID}[mode="midnight"] .g__no-records{
         --font-color: #ffffff;
     }
     /*---------------------------------------------
     No Records
     ---------------------------------------------*/
-    ${cssID}.g__no-records{
+    ${cssID} .g__no-records{
         display: flex;
         justify-content: center;
         background: transparent;
@@ -156,7 +156,7 @@ function granite_content(jsonContent, jsonTheme){
         margin-top: 50px;
         border: 2px dashed #5d5d5d;
     }
-    ${cssID}.g__no-records h2{
+    ${cssID} .g__no-records h2{
         font-family: var(--font-regular);
         font-weight: 300;
         font-size: 2rem;
@@ -382,36 +382,29 @@ function granite_content(jsonContent, jsonTheme){
     document.head.appendChild(contentCss);
     /* content Wrapper */
     var content_wrapper = document.createElement('div');
-    content_wrapper.setAttribute('id', graniteID);
-    if(r.length){
+        content_wrapper.setAttribute('id', graniteID);
         content_wrapper.setAttribute('class', 'g__content_wrapper');
         content_wrapper.setAttribute('style', contentBkg(o));
-    } else {
-        content_wrapper.setAttribute('class', 'g__no-records');
-        let copy = document.createElement('h2');
-        copy.innerHTML = 'Content';
-        content_wrapper.appendChild(copy);
-    }
-    content_wrapper.setAttribute('mode', mode(t));
-    content_wrapper.classList.add( themeStyle(o) );
+        content_wrapper.setAttribute('mode', mode(t));
+        content_wrapper.classList.add( themeStyle(o) );
 
     if(!!o.action_header || !!o.action_description){
         /* Action RowContainer*/
         var action_container = document.createElement('div');
-        action_container.setAttribute('class',`g__action_container ${o.action_border ? "g__action_border" : "g__action_no_border"}`);
+            action_container.setAttribute('class',`g__action_container ${o.action_border ? "g__action_border" : "g__action_no_border"}`);
         content_wrapper.appendChild(action_container);
         /* Action Row Content */
         if(!!o.action_header){
             var action_header = document.createElement('h2');
-            action_header.setAttribute('class','g__action_header');
-            action_header.innerHTML = o.action_header;
+                action_header.setAttribute('class','g__action_header');
+                action_header.innerHTML = o.action_header;
             action_container.appendChild(action_header);
         }
         /* Action Row Description */
         if(!!o.action_description){
             var action_description = document.createElement('p');
-            action_description.setAttribute('class','g__action_description');
-            action_description.innerHTML = o.action_description;
+                action_description.setAttribute('class','g__action_description');
+                action_description.innerHTML = o.action_description;
             action_container.appendChild(action_description);
         }
     }
@@ -528,6 +521,13 @@ function granite_content(jsonContent, jsonTheme){
 
             }
         })
+    } else {
+        let no_content = document.createElement('div');
+        no_content.setAttribute('class', 'g__no-records');
+        let copy = document.createElement('h2');
+        copy.innerHTML = 'Content';
+        no_content.appendChild(copy);
+        content_wrapper.appendChild(no_content);
     }
     /*---------------------------------------------
     Functions
