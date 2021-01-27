@@ -43,7 +43,7 @@ function granite_form(formsBlock, jsonTheme){
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
         --border-radius: 2px;
-        --field-padding: 0.375rem 0.75rem;
+        --field-padding: 9px 12px;
         --field-height: 37px;
         --error-color: #ea386e;
         --green: #00B28B;
@@ -177,7 +177,7 @@ function granite_form(formsBlock, jsonTheme){
         border-radius: var(--border-radius);
         color: var(--font-color);
         font-size: 1rem;
-        padding: 0.375rem 0.75rem;
+        padding: var(--field-padding);
         outline: none;
     }
 
@@ -1738,10 +1738,11 @@ function granite_form(formsBlock, jsonTheme){
         const increase = wrap.querySelector(".g__number_increase");
         const decrease = wrap.querySelector(".g__number_decrease");
         increase.addEventListener('click', () => {
+
             let curr_num = output.value;
             const val = parseInt(output.value);
             if (curr_num === ''){
-                output.value = parseInt(step);
+                output.value = !!step ? parseInt(step) : 1;
             } else if (!!step){
                 output.value = val + parseInt(step);
             } else {
@@ -1749,10 +1750,11 @@ function granite_form(formsBlock, jsonTheme){
             }
         });
         decrease.addEventListener('click', () => {
+
             let curr_num = output.value;
             const val = parseInt(output.value);
             if (curr_num === ''){
-                output.value =  - parseInt(step);
+                output.value = !!step ? parseInt(step) : -1;
             } else if(!!step){
                 output.value = val - parseInt(step);
             } else {
@@ -2271,173 +2273,4 @@ function granite_form(formsBlock, jsonTheme){
             dep_desktop_select.click();
         }
     })
-
-
-
-
-
-
-
-
-
-
-
-    /* -------------------- Dependency Field ----------------------*/
-    // r.forEach(function(r, num){
-    //     if(!!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank)){
-    //         let dep_master_field_value = document.getElementsByName(r.dependency_field);
-    //         let dep_field_id = dep_master_field_value[0].id
-    //         let dep_master_field = document.getElementById(dep_field_id);
-    //         let dep_master_field_type = dep_master_field.getAttribute('type');
-    //         let dep_master_field_selected
-    //         if(dep_master_field_type === 'picklist'){
-    //             dep_master_field_desktop = dep_master_field.nextSibling;
-    //             dep_master_field_selected = dep_master_field.nextSibling.innerHTML;
-    //         }
-    //         let dep_child_values = r.dependency_values;
-    //         let dep_child_arr;
-
-    //         if((dep_child_values === 'true') || (dep_child_values === 'false') ){
-    //             dep_child_type = 'boolean';
-    //         }else if (dep_child_values.includes(',')){
-    //             dep_child_type = 'array';
-    //             dep_child_arr = dep_child_values.split(', ')
-    //         }else{
-    //             dep_child_type = 'single';
-    //         }
-
-    //         let dep_child_field = document.getElementById(r.id);
-    //         let dep_child_container = dep_child_field.closest('.g__form_field');
-    //         switch (dep_child_type) {
-    //             case 'boolean':
-    //               if(dep_master_field.checked && (dep_child_values)){
-    //                 dep_child_container.classList.remove('dep_hide');
-    //               } else {
-    //                 dep_child_container.classList.add('dep_hide');
-    //               };
-    //               break;
-    //             case 'single':
-    //                 if (dep_master_field_type === 'picklist'){
-    //                     if(dep_master_field_selected === dep_child_values){
-    //                         dep_child_container.classList.remove('dep_hide');
-    //                     } else {
-    //                         dep_child_container.classList.add('dep_hide');
-    //                     };
-    //                 } else {
-    //                     if(dep_master_field.value === dep_child_values){
-    //                         dep_child_container.classList.remove('dep_hide');
-    //                     } else {
-    //                         dep_child_container.classList.add('dep_hide');
-    //                     };
-    //                 }
-
-    //             break;
-    //             case 'array':
-    //                 if (dep_master_field_type === 'picklist'){
-    //                     dep_child_arr.forEach((val) => {
-    //                         if(dep_master_field_selected === val){
-    //                             dep_child_container.classList.remove('dep_hide');
-    //                         } else {
-    //                             dep_child_container.classList.add('dep_hide');
-    //                         };
-    //                     })
-    //                 } else {
-    //                     dep_child_arr.forEach((val) => {
-    //                         if(dep_master_field.value === val){
-    //                             dep_child_container.classList.remove('dep_hide');
-    //                         } else {
-    //                             dep_child_container.classList.add('dep_hide');
-    //                         };
-    //                     })
-    //                 }
-    //             break;
-    //           }
-
-    //         dep_master_field_desktop.addEventListener('click', (val) => {
-    //             console.log(dep_child_type);
-    //             switch (dep_child_type) {
-    //                 case 'boolean':
-    //                   if(dep_master_field.checked && (dep_child_values)){
-    //                     dep_child_container.classList.remove('dep_hide');
-    //                   } else {
-    //                     dep_child_container.classList.add('dep_hide');
-    //                   };
-    //                   break;
-    //                 case 'single':
-    //                     if (dep_master_field_type === 'picklist'){
-    //                         let new_select = dep_master_field.nextSibling.innerHTML;
-    //                         if(new_select === dep_child_values){
-    //                             dep_child_container.classList.remove('dep_hide');
-    //                         } else {
-    //                             dep_child_container.classList.add('dep_hide');
-    //                         };
-    //                     } else {
-    //                         if(dep_master_field.value === dep_child_values){
-    //                             dep_child_container.classList.remove('dep_hide');
-    //                         } else {
-    //                             dep_child_container.classList.add('dep_hide');
-    //                         };
-    //                     }
-
-    //                 break;
-    //                 case 'array':
-    //                     if (dep_master_field_type === 'picklist'){
-    //                         dep_child_arr.forEach((val) => {
-    //                             if(dep_master_field_selected === val){
-    //                                 dep_child_container.classList.remove('dep_hide');
-    //                             } else {
-    //                                 dep_child_container.classList.add('dep_hide');
-    //                             };
-    //                         })
-    //                     } else {
-    //                         dep_child_arr.forEach((val) => {
-    //                             if(dep_master_field.value === val){
-    //                                 dep_child_container.classList.remove('dep_hide');
-    //                             } else {
-    //                                 dep_child_container.classList.add('dep_hide');
-    //                             };
-    //                         })
-    //                     }
-    //                 break;
-    //               }
-    //         })
-    //         dep_master_field.addEventListener('input', (val) => {
-    //             console.log('click');
-    //             switch (dep_child_type) {
-    //                 case 'boolean':
-    //                   if(dep_master_field.checked && dep_child_values){
-    //                     dep_child_container.classList.remove('dep_hide');
-    //                   } else {
-    //                     dep_child_container.classList.add('dep_hide');
-    //                   };
-    //                   break;
-    //                 case 'number':
-    //                     if(dep_master_field.value === dep_child_values){
-    //                         dep_child_container.classList.remove('dep_hide');
-    //                       } else {
-    //                         dep_child_container.classList.add('dep_hide');
-    //                       };
-    //                 break;
-    //                 case 'single':
-    //                 if(dep_master_field.value === dep_child_values){
-    //                     dep_child_container.classList.remove('dep_hide');
-    //                 } else {
-    //                     dep_child_container.classList.add('dep_hide');
-    //                 };
-    //                 break;
-    //                 case 'array':
-    //                     let is_match;
-    //                     dep_child_arr.forEach((val) => {
-    //                         if(dep_master_field.value === val){
-    //                             is_match = true;
-    //                             dep_child_container.classList.remove('dep_hide');
-    //                         } else if (!is_match) {
-    //                             dep_child_container.classList.add('dep_hide');
-    //                         };
-    //                     })
-    //                 break;
-    //               }
-    //         })
-    //     }
-    // })
 }

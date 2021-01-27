@@ -419,6 +419,82 @@ let form_number = {
         },
    ]
 }
+let form_password = {
+   "id":"g-password",
+   "options":{
+      "title":"",
+      "addapptation_action":"/",
+      "description":"",
+      "title_font_size":"40px",
+      "description_font_size":"20px",
+      "db_action":"",
+      "db_object":"",
+      "db_id":"",
+      "db_redirect":"",
+      "flash_message":"",
+      "form_id":"g__test_92",
+      "button_1_label":"",
+      "button_1_href":"",
+      "submit_label":"",
+      "cancel_label":"",
+      "max_width":"",
+      "enctype":"application/x-www-form-urlencoded",
+      "method":"POST",
+      "visibility_settings":"",
+      "hide_submit":false,
+      "allow_cancel":false,
+      "activate_recaptcha":false,
+      "auto_superscript":false,
+      "autosave":false,
+      "action":"/"
+   },
+   "records": [
+       {
+           "title":"Password",
+           "name":"g_password",
+           "type":"password",
+           "value":"",
+        },
+   ]
+}
+let form_phone = {
+   "id":"g-phone",
+   "options":{
+      "title":"",
+      "addapptation_action":"/",
+      "description":"",
+      "title_font_size":"40px",
+      "description_font_size":"20px",
+      "db_action":"",
+      "db_object":"",
+      "db_id":"",
+      "db_redirect":"",
+      "flash_message":"",
+      "form_id":"g__test_92",
+      "button_1_label":"",
+      "button_1_href":"",
+      "submit_label":"",
+      "cancel_label":"",
+      "max_width":"",
+      "enctype":"application/x-www-form-urlencoded",
+      "method":"POST",
+      "visibility_settings":"",
+      "hide_submit":false,
+      "allow_cancel":false,
+      "activate_recaptcha":false,
+      "auto_superscript":false,
+      "autosave":false,
+      "action":"/"
+   },
+   "records": [
+       {
+           "title":"Phone",
+           "name":"g_phone",
+           "type":"tel",
+           "value":"",
+        },
+   ]
+}
 
 
 /* Tabs */

@@ -1,4 +1,5 @@
 function granite_table(tableBlock, jsonTheme){
+    console.log('table micro v1')
     const id = tableBlock.id;
     const cssId = '#' +tableBlock.id;
     const t = jsonTheme
@@ -1916,9 +1917,6 @@ Search Bar
 
             if (o.searchable) {
                 classList.add(that.wrapper, "searchable");
-            }
-            if (o.container) {
-                classList.add(that.wrapper, "container");
             }
 
             if (o.fixedHeight) {

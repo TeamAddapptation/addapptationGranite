@@ -345,6 +345,7 @@ a.g__micro_item{
 }
 .g__goc_main{
     margin-left: 200px;
+    margin-top: 65px;
 }
 @media only screen and (max-width: 768px) {
     .g__row{

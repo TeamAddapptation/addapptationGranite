@@ -37,6 +37,11 @@ function tiles(){
     .pipe(minify())
     .pipe(dest('dist/tiles'));
 }
+function json(){
+    return src('src/json/*.js')
+    .pipe(minify())
+    .pipe(dest('dist/json'));
+}
 function table(){
     return src('src/table/*.js')
     .pipe(babel())
@@ -48,5 +53,6 @@ exports.serve = serve;
 exports.hero = hero;
 exports.tiles = tiles;
 exports.table = table;
+exports.json = json;
 exports.carousel = carousel;
 exports.default = serve;

@@ -25,6 +25,9 @@
                 <li class="g__side_link"><a href="#checkbox">Checkbox</a></li>
                 <li class="g__side_link"><a href="#date">Date</a></li>
                 <li class="g__side_link"><a href="#email">Email</a></li>
+                <li class="g__side_link"><a href="#number">Number</a></li>
+                <li class="g__side_link"><a href="#password">Password</a></li>
+                <li class="g__side_link"><a href="#phone">Phone</a></li>
             </ul>
         </div>
         <div class="g__goc_main g__col">
@@ -321,36 +324,45 @@
             <p>A hidden field lets developers include data that cannot be seen or modified by users when a form is submitted. This often stores what database record that needs to be updated when the form is submitted.</p>
             <!-- Number -->
             <h3 id="number">Number</h3>
-            <p>They number field include built-in validation to reject non-numerical entries. The User may opt to provide min and max values.</p>
-            <div id="g-number" class="g__sample"></div>
-            <h4>Attributes Specific to Number</h4>
-            <table id="g__table">
-                <tr>
-                <th>Attribute</th>
-                <th>Type</th>
-                <th>Description</th>
-                </tr>
-                <tr>
-                    <td>Show Counter</td>
-                    <td>Boolean</td>
-                    <td>Hide the counter for increasing or decreasing the number</td>
-                </tr>
-                <tr>
-                    <td>Stepper (Increase or Decrease Number by)</td>
-                    <td>Number</td>
-                    <td>Specifies the legal number intervals</td>
-                </tr>
-                <tr>
-                    <td>Max Number</td>
-                    <td>Number</td>
-                    <td>Specifies the maximum value allowed</td>
-                </tr>
-                <tr>
-                    <td>Min Number</td>
-                    <td>Number</td>
-                    <td>Specifies the minimum value allowed</td>
-                </tr>
-            </table>
+                <p>They number field include built-in validation to reject non-numerical entries. The User may opt to provide min and max values.</p>
+                <div id="g-number" class="g__sample"></div>
+                <h4>Attributes Specific to Number</h4>
+                <table id="g__table">
+                    <tr>
+                    <th>Attribute</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Show Counter</td>
+                        <td>Boolean</td>
+                        <td>Hide the counter for increasing or decreasing the number</td>
+                    </tr>
+                    <tr>
+                        <td>Stepper (Increase or Decrease Number by)</td>
+                        <td>Number</td>
+                        <td>Specifies the legal number intervals</td>
+                    </tr>
+                    <tr>
+                        <td>Max Number</td>
+                        <td>Number</td>
+                        <td>Specifies the maximum value allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Min Number</td>
+                        <td>Number</td>
+                        <td>Specifies the minimum value allowed</td>
+                    </tr>
+                </table>
+            <!-- Password -->
+            <h3 id="password">Password</h3>
+                <p>provide a way for the user to securely enter a password. The element is presented as a one-line plain text editor control in which the text is obscured so that it cannot be read.</p>
+                <div id="g-password" class="g__sample"></div>
+            <!-- Phone -->
+            <h3 id="phone">Phone</h3>
+                <p>used to let the user enter and edit a telephone number. Unlike email and url , the input value is not automatically validated to a particular format before the form can be submitted, because formats for telephone numbers vary so much around the world.</p>
+                <p>We recommend using the Custom Regex Pattern attribute if youd like a formatted number.</p>
+                <div id="g-phone" class="g__sample"></div>
         </div>
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
@@ -370,6 +382,8 @@
         granite_form(form_date, jsonTheme);
         granite_form(form_file, jsonTheme);
         granite_form(form_number, jsonTheme);
+        granite_form(form_password, jsonTheme);
+        granite_form(form_phone, jsonTheme);
     </script>
 </body>
 </html>
