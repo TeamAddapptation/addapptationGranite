@@ -43,7 +43,7 @@ function granite_form(formsBlock, jsonTheme){
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
         --border-radius: 2px;
-        --field-padding: 9px 12px;
+        --field-padding: 6px 12px;
         --field-height: 37px;
         --error-color: #ea386e;
         --green: #00B28B;
@@ -72,6 +72,26 @@ function granite_form(formsBlock, jsonTheme){
         --body: #101010;
         --border: 1px solid #a1a1a1;
         --font-color: #ffffff;
+    }
+    /*---------------------------------------------
+    No Records
+    ---------------------------------------------*/
+    ${cssId} .g__no_records{
+        display: flex;
+        justify-content: center;
+        background: transparent;
+        align-items: center;
+        color: var(--font-color);
+        height: 225px;
+        margin-top: 50px;
+        border: 2px dashed #5d5d5d;
+    }
+    ${cssId} .g__no_records h2{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        font-size: 2rem;
+        color: var(--font-color);
+
     }
     /* ------------------------ Action Row ------------------------*/
     ${cssId} .g__form_action_row{
@@ -1132,421 +1152,422 @@ function granite_form(formsBlock, jsonTheme){
     let is_inline = false;
     let inline_arr = [];
     let inline_count = 0;
+    if(r.length > 0){
+        r.forEach(function(r, num){
 
-    r.forEach(function(r, num){
+            /* -------------------- Error Field ----------------------*/
+            let error_field = document.createElement('div');
+            error_field.setAttribute('class', 'g__error_msg');
 
-        /* -------------------- Error Field ----------------------*/
-        let error_field = document.createElement('div');
-        error_field.setAttribute('class', 'g__error_msg');
+            r.id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
+            let class_name = "g__field_" + r.type;
 
-        r.id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
-        let class_name = "g__field_" + r.type;
+            //Create field wrapper
+            if ((r.type != 'subheader') || (r.type !='description')){
+                form_field = document.createElement('div');
+                form_field.setAttribute('class', "g__form_field");
 
-        //Create field wrapper
-        if ((r.type != 'subheader') || (r.type !='description')){
-            form_field = document.createElement('div');
-            form_field.setAttribute('class', "g__form_field");
-
-            //Global labels and character counter
-            if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
-                let field_info_container = document.createElement('div');
-                    field_info_container.setAttribute('class', 'g__field_info')
-                form_field.appendChild(field_info_container);
-                if (!!r.title){
-                    let label = document.createElement('label');
-                        !!r.required ? label.classList.add('required'): '';
-                        label.setAttribute('for', r.name);
-                        label.innerText = r.title;
-                    field_info_container.appendChild(label);
-                }
-                if (r.length > 0 && r.show_count){
-                    let count_container = document.createElement('div');
-                        count_container.setAttribute('class', 'g__char_remain')
-                        count_container.innerText = '0/' + r.length;
-                    field_info_container.appendChild(count_container);
+                //Global labels and character counter
+                if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
+                    let field_info_container = document.createElement('div');
+                        field_info_container.setAttribute('class', 'g__field_info')
+                    form_field.appendChild(field_info_container);
+                    if (!!r.title){
+                        let label = document.createElement('label');
+                            !!r.required ? label.classList.add('required'): '';
+                            label.setAttribute('for', r.name);
+                            label.innerText = r.title;
+                        field_info_container.appendChild(label);
+                    }
+                    if (r.length > 0 && r.show_count){
+                        let count_container = document.createElement('div');
+                            count_container.setAttribute('class', 'g__char_remain')
+                            count_container.innerText = '0/' + r.length;
+                        field_info_container.appendChild(count_container);
+                    }
                 }
             }
-        }
 
 
 
 
-        //build each field depending on the type
-        let input;
-        switch (r.type){
-            case "checkbox":
-                check_container = document.createElement('div');
-                check_container.setAttribute('class', 'g__check_container');
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name);
-                let label = document.createElement('label');
-                !!r.required ? label.classList.add('required'): '';
-                label.setAttribute('for', r.id);
-                label.innerText = r.title;
-                check_container.appendChild(input);
-                check_container.appendChild(label);
-                form_field.appendChild(check_container);
-                form_field.appendChild(error_field);
-            break;
-            case "color":
-                let color_container = document.createElement('div');
-                color_container.setAttribute('class', 'g__color_container');
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name);
-                input.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
-                var hex_display = document.createElement('input');
-                hex_display.setAttribute('class', 'g__hex_value');
-                hex_display.setAttribute('value', '#101010');
-                hex_display.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
-                color_container.appendChild(input)
-                color_container.appendChild(hex_display);
-                form_field.appendChild(color_container);
-                form_field.appendChild(error_field);
-            break;
-            case "currency":
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name);
-                input.setAttribute('type', 'text');
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-            break;
-            case "date":
-                let date_container = document.createElement('div');
-                date_container.setAttribute('class', 'g__date_container')
-                input = document.createElement('input');
-                input.setAttribute('type', 'text');
-                input.setAttribute('class', 'g__date_field');
-                input.setAttribute('id', r.id);
-                let calendar_icon = document.createElement('i')
-                calendar_icon.setAttribute('class', 'fal fa-calendar-alt g__calendar_icon')
-                !!attr__form_id ? input.setAttribute('form_id', attr__form_id) : "";
-                !!r.name ? input.setAttribute('name', r.name) : "";
-                !!r.value ? input.setAttribute('value', r.value) : "";
-                !!r.placeholder ? input.setAttribute('placeholder', r.placeholder) : "";
-                input.required = r.required;
-                input.disabled = r.disabled;
-                input.autocomplete = "false"
-                date_container.appendChild(input);
-                date_container.appendChild(calendar_icon);
-                form_field.appendChild(date_container);
-                form_field.appendChild(error_field);
-            break;
-            case "description":
-                form_field = document.createElement('p');
-                form_field.setAttribute('class', 'g__form_description');
-                form_field.setAttribute('style', `font-size:${r.font_size};`);
-                form_field.innerHTML = r.value;
-            break;
-            case "email":
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
-                basicAttributes(r, input, class_name)
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-            break;
-            case "file":
-                let file_container = document.createElement('div');
-                file_container.setAttribute('class', 'g__file_container');
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                !!r.accepted_file_types ? input.setAttribute('accept', r.accepted_file_types) : '';
-                r.multiple ? input.setAttribute('multiple', 'true') : '';
-                input.setAttribute('hidden', 'hidden');
-                basicAttributes(r, input, class_name)
-                file_btn = document.createElement('button');
-                file_btn.setAttribute('type', 'button');
-                file_btn.setAttribute('class', 'g__file_btn');
-                file_btn.innerText = 'Choose File';
-                file_text = document.createElement('div');
-                file_text.setAttribute('class', 'g__file_text');
-                file_text.innerText = 'No file chosen, yet.';
-                let file_delete = document.createElement('div');
-                file_delete.setAttribute('class', 'g__file_delete');
-                file_delete.innerText = 'X';
-                file_container.appendChild(input);
-                file_container.appendChild(file_btn);
-                file_container.appendChild(file_text);
-                file_container.appendChild(file_delete);
-                form_field.appendChild(file_container);
-                form_field.appendChild(error_field);
-            break;
-            case "number":
-                let num_container = document.createElement('div');
-                num_container.setAttribute('class', "g__number_container");
-                r.show_counter ? '' : num_container.classList.add('g__hide_counter');
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                !!r.max_number ? input.max = r.max_number : '';
-                !!r.min_number ? input.min = r.min_number : '';
-                !!r.step ? input.step = r.step : '';
-                !!r.pattern ? input.setAttribute('pattern', r.pattern) : input.setAttribute('pattern', patterns.number);
-                // Increase decrease container
-                let num_counter = document.createElement('div');
-                num_counter.setAttribute('class', 'g__number_plus_minus');
-                // Increase container
-                let num_increase = document.createElement('div');
-                num_increase.setAttribute('class', 'g__number_increase');
-                num_counter.appendChild(num_increase);
-                // Decrease container
-                let num_decrease = document.createElement('div');
-                num_decrease.setAttribute('class', 'g__number_decrease');
-                num_counter.appendChild(num_decrease);
-                //Append the parent elements
-                num_container.appendChild(input);
-                num_container.appendChild(num_counter);
-                form_field.appendChild(num_container)
-                form_field.appendChild(error_field);
-            break;
-            case "subheader":
-                form_field = document.createElement('h2');
-                form_field.setAttribute('class', 'g__form_header');
-                form_field.innerText = r.value;
-            break;
-            case "password":
-                let pass_container = document.createElement('div');
-                pass_container.setAttribute('class', "g__password_container");
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
-                let pass_show = document.createElement('div');
-                pass_show.setAttribute('class', 'g__password_show');
-                pass_show.innerHTML = '<i class="far fa-eye"></i>'
-                pass_container.appendChild(input);
-                pass_container.appendChild(pass_show)
-                form_field.appendChild(pass_container);
-                form_field.appendChild(error_field);
-            break;
-            case "picklist":
-                const picklist_options = r.options;
-                const picklist_double_arr = (Array.isArray(picklist_options)) && (Array.isArray(picklist_options[0]));
-                input = document.createElement('div');
-                r.multiple ? input.setAttribute('class', 'g__picklist_multiple') : input.setAttribute('class', 'g__picklist');
-                r.picklist_search ? input.classList.add('g__search'): "";
-                let select = document.createElement('select');
-                basicAttributes(r, select, class_name)
-                select.setAttribute('id', r.id);
-                r.multiple ? select.setAttribute('class', 'g__select_multiple') : select.setAttribute('class', 'g__select_default');
-                r.multiple ? select.setAttribute('multiple', 'true') : '' ;
-                if(picklist_double_arr){
-                    for(let i = 0; i < picklist_options.length; i++){
-                        let option = document.createElement('option');
-                        option.setAttribute('value', picklist_options[i][0])
-                        option.innerHTML = picklist_options[i][1];
-                        select.appendChild(option);
-                    }
-                } else {
-                    for(let i = 0; i < picklist_options.length; i++){
-                        let option = document.createElement('option');
-                        option.setAttribute('value', picklist_options[i])
-                        option.innerHTML = picklist_options[i];
-                        select.appendChild(option);
-                    }
-                }
-
-                input.appendChild(select);
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-            break;
-            case "radio":
-                const radio_options = r.options;
-                radio_container = document.createElement('div');
-                radio_container.setAttribute('class', 'g__radio_container');
-                for(let i = 0; i < radio_options.length; i++){
-                    input_container = document.createElement('div');
-                    input_container.setAttribute('class', 'g__radio_option');
+            //build each field depending on the type
+            let input;
+            switch (r.type){
+                case "checkbox":
+                    check_container = document.createElement('div');
+                    check_container.setAttribute('class', 'g__check_container');
                     input = document.createElement('input');
-                    input.setAttribute('class', 'g__field_radio');
-                    input.type = 'radio';
-                    input.name = r.title;
-                    input.id = radio_options[i];
-                    input.value = radio_options[i];
-                    let radio_label = document.createElement('label');
-                    radio_label.setAttribute('class', 'g__radio_label');
-                    radio_label.id = radio_options[i];
-                    radio_label.innerHTML = radio_options[i];
-                    let radio = document.createElement('div');
-                    radio.setAttribute('class', 'g__radio');
-                    input_container.appendChild(input);
-                    input_container.appendChild(radio);
-                    input_container.appendChild(radio_label);
-                    radio_container.appendChild(input_container);
-                    ;
-                }
-                form_field.appendChild(radio_container);
-                form_field.appendChild(error_field);
-            break;
-            case "range":
-                let min = r.min || 0;
-                let max = r.max || 100;
-                let range_container = document.createElement('div');
-                range_container.setAttribute('class', "g__range_container");
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                input.setAttribute('min', min);
-                input.setAttribute('max', max);
-                let output = document.createElement('input');
-                output.setAttribute('class', 'g__range_output');
-                output.setAttribute('type', 'number');
-                // Unit indicator
-                let unit = document.createElement('div');
-                unit.setAttribute('class', 'g__range_unit');
-                unit.innerHTML = r.range_unit || "";
-                // Increase decrease container
-                let plusMinus = document.createElement('div');
-                plusMinus.setAttribute('class', 'g__range_plus_minus');
-                // Increase container
-                let increase = document.createElement('div');
-                increase.setAttribute('class', 'g__range_increase');
-                plusMinus.appendChild(increase);
-                // Decrease container
-                let decrease = document.createElement('div');
-                decrease.setAttribute('class', 'g__range_decrease');
-                plusMinus.appendChild(decrease);
-                //Append the parent elements
-                range_container.appendChild(input);
-                range_container.appendChild(output);
-                range_container.appendChild(unit);
-                range_container.appendChild(plusMinus);
-                form_field.appendChild(error_field);
-                form_field.appendChild(range_container)
-            break;
-            case "section":
-                section_title = r.title;
-                section_id = r.section_id;
-                section = true;
-                section_count = parseInt(r.number_fields);
-            break;
-            case "tel":
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                input.setAttribute('form', attr__form_id);
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-            break;
-            case "textarea":
-                input = document.createElement('textarea');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                input.setAttribute('rows', '4');
-                input.setAttribute('cols', '50');
-                input.setAttribute('form', attr__form_id);
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-            break;
-            case "quill":
-                let quil = document.createElement('div');
-                quil.setAttribute('class', 'g__quil_editor');
-                quil.setAttribute('id', r.id);
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name)
-                input.setAttribute('type', 'hidden')
-                form_field.appendChild(quil);
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name);
+                    let label = document.createElement('label');
+                    !!r.required ? label.classList.add('required'): '';
+                    label.setAttribute('for', r.id);
+                    label.innerText = r.title;
+                    check_container.appendChild(input);
+                    check_container.appendChild(label);
+                    form_field.appendChild(check_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "color":
+                    let color_container = document.createElement('div');
+                    color_container.setAttribute('class', 'g__color_container');
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name);
+                    input.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+                    var hex_display = document.createElement('input');
+                    hex_display.setAttribute('class', 'g__hex_value');
+                    hex_display.setAttribute('value', '#101010');
+                    hex_display.setAttribute('pattern', '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+                    color_container.appendChild(input)
+                    color_container.appendChild(hex_display);
+                    form_field.appendChild(color_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "currency":
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name);
+                    input.setAttribute('type', 'text');
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+                break;
+                case "date":
+                    let date_container = document.createElement('div');
+                    date_container.setAttribute('class', 'g__date_container')
+                    input = document.createElement('input');
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('class', 'g__date_field');
+                    input.setAttribute('id', r.id);
+                    let calendar_icon = document.createElement('i')
+                    calendar_icon.setAttribute('class', 'fal fa-calendar-alt g__calendar_icon')
+                    !!attr__form_id ? input.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? input.setAttribute('name', r.name) : "";
+                    !!r.value ? input.setAttribute('value', r.value) : "";
+                    !!r.placeholder ? input.setAttribute('placeholder', r.placeholder) : "";
+                    input.required = r.required;
+                    input.disabled = r.disabled;
+                    input.autocomplete = "false"
+                    date_container.appendChild(input);
+                    date_container.appendChild(calendar_icon);
+                    form_field.appendChild(date_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "description":
+                    form_field = document.createElement('p');
+                    form_field.setAttribute('class', 'g__form_description');
+                    form_field.setAttribute('style', `font-size:${r.font_size};`);
+                    form_field.innerHTML = r.value;
+                break;
+                case "email":
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
+                    basicAttributes(r, input, class_name)
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+                break;
+                case "file":
+                    let file_container = document.createElement('div');
+                    file_container.setAttribute('class', 'g__file_container');
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    !!r.accepted_file_types ? input.setAttribute('accept', r.accepted_file_types) : '';
+                    r.multiple ? input.setAttribute('multiple', 'true') : '';
+                    input.setAttribute('hidden', 'hidden');
+                    basicAttributes(r, input, class_name)
+                    file_btn = document.createElement('button');
+                    file_btn.setAttribute('type', 'button');
+                    file_btn.setAttribute('class', 'g__file_btn');
+                    file_btn.innerText = 'Choose File';
+                    file_text = document.createElement('div');
+                    file_text.setAttribute('class', 'g__file_text');
+                    file_text.innerText = 'No file chosen, yet.';
+                    let file_delete = document.createElement('div');
+                    file_delete.setAttribute('class', 'g__file_delete');
+                    file_delete.innerText = 'X';
+                    file_container.appendChild(input);
+                    file_container.appendChild(file_btn);
+                    file_container.appendChild(file_text);
+                    file_container.appendChild(file_delete);
+                    form_field.appendChild(file_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "number":
+                    let num_container = document.createElement('div');
+                    num_container.setAttribute('class', "g__number_container");
+                    r.show_counter ? '' : num_container.classList.add('g__hide_counter');
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    !!r.max_number ? input.max = r.max_number : '';
+                    !!r.min_number ? input.min = r.min_number : '';
+                    !!r.step ? input.step = r.step : '';
+                    !!r.pattern ? input.setAttribute('pattern', r.pattern) : input.setAttribute('pattern', patterns.number);
+                    // Increase decrease container
+                    let num_counter = document.createElement('div');
+                    num_counter.setAttribute('class', 'g__number_plus_minus');
+                    // Increase container
+                    let num_increase = document.createElement('div');
+                    num_increase.setAttribute('class', 'g__number_increase');
+                    num_counter.appendChild(num_increase);
+                    // Decrease container
+                    let num_decrease = document.createElement('div');
+                    num_decrease.setAttribute('class', 'g__number_decrease');
+                    num_counter.appendChild(num_decrease);
+                    //Append the parent elements
+                    num_container.appendChild(input);
+                    num_container.appendChild(num_counter);
+                    form_field.appendChild(num_container)
+                    form_field.appendChild(error_field);
+                break;
+                case "subheader":
+                    form_field = document.createElement('h2');
+                    form_field.setAttribute('class', 'g__form_header');
+                    form_field.innerText = r.value;
+                break;
+                case "password":
+                    let pass_container = document.createElement('div');
+                    pass_container.setAttribute('class', "g__password_container");
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
+                    let pass_show = document.createElement('div');
+                    pass_show.setAttribute('class', 'g__password_show');
+                    pass_show.innerHTML = '<i class="far fa-eye"></i>'
+                    pass_container.appendChild(input);
+                    pass_container.appendChild(pass_show)
+                    form_field.appendChild(pass_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "picklist":
+                    const picklist_options = r.options;
+                    const picklist_double_arr = (Array.isArray(picklist_options)) && (Array.isArray(picklist_options[0]));
+                    input = document.createElement('div');
+                    r.multiple ? input.setAttribute('class', 'g__picklist_multiple') : input.setAttribute('class', 'g__picklist');
+                    r.picklist_search ? input.classList.add('g__search'): "";
+                    let select = document.createElement('select');
+                    basicAttributes(r, select, class_name)
+                    select.setAttribute('id', r.id);
+                    r.multiple ? select.setAttribute('class', 'g__select_multiple') : select.setAttribute('class', 'g__select_default');
+                    r.multiple ? select.setAttribute('multiple', 'true') : '' ;
+                    if(picklist_double_arr){
+                        for(let i = 0; i < picklist_options.length; i++){
+                            let option = document.createElement('option');
+                            option.setAttribute('value', picklist_options[i][0])
+                            option.innerHTML = picklist_options[i][1];
+                            select.appendChild(option);
+                        }
+                    } else {
+                        for(let i = 0; i < picklist_options.length; i++){
+                            let option = document.createElement('option');
+                            option.setAttribute('value', picklist_options[i])
+                            option.innerHTML = picklist_options[i];
+                            select.appendChild(option);
+                        }
+                    }
 
-            break;
-            default:
-                input = document.createElement('input');
-                input.setAttribute('id', r.id);
-                basicAttributes(r, input, class_name);
-                form_field.appendChild(input);
-                form_field.appendChild(error_field);
-        }
+                    input.appendChild(select);
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+                break;
+                case "radio":
+                    const radio_options = r.options;
+                    radio_container = document.createElement('div');
+                    radio_container.setAttribute('class', 'g__radio_container');
+                    for(let i = 0; i < radio_options.length; i++){
+                        input_container = document.createElement('div');
+                        input_container.setAttribute('class', 'g__radio_option');
+                        input = document.createElement('input');
+                        input.setAttribute('class', 'g__field_radio');
+                        input.type = 'radio';
+                        input.name = r.title;
+                        input.id = radio_options[i];
+                        input.value = radio_options[i];
+                        let radio_label = document.createElement('label');
+                        radio_label.setAttribute('class', 'g__radio_label');
+                        radio_label.id = radio_options[i];
+                        radio_label.innerHTML = radio_options[i];
+                        let radio = document.createElement('div');
+                        radio.setAttribute('class', 'g__radio');
+                        input_container.appendChild(input);
+                        input_container.appendChild(radio);
+                        input_container.appendChild(radio_label);
+                        radio_container.appendChild(input_container);
+                        ;
+                    }
+                    form_field.appendChild(radio_container);
+                    form_field.appendChild(error_field);
+                break;
+                case "range":
+                    let min = r.min || 0;
+                    let max = r.max || 100;
+                    let range_container = document.createElement('div');
+                    range_container.setAttribute('class', "g__range_container");
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    input.setAttribute('min', min);
+                    input.setAttribute('max', max);
+                    let output = document.createElement('input');
+                    output.setAttribute('class', 'g__range_output');
+                    output.setAttribute('type', 'number');
+                    // Unit indicator
+                    let unit = document.createElement('div');
+                    unit.setAttribute('class', 'g__range_unit');
+                    unit.innerHTML = r.range_unit || "";
+                    // Increase decrease container
+                    let plusMinus = document.createElement('div');
+                    plusMinus.setAttribute('class', 'g__range_plus_minus');
+                    // Increase container
+                    let increase = document.createElement('div');
+                    increase.setAttribute('class', 'g__range_increase');
+                    plusMinus.appendChild(increase);
+                    // Decrease container
+                    let decrease = document.createElement('div');
+                    decrease.setAttribute('class', 'g__range_decrease');
+                    plusMinus.appendChild(decrease);
+                    //Append the parent elements
+                    range_container.appendChild(input);
+                    range_container.appendChild(output);
+                    range_container.appendChild(unit);
+                    range_container.appendChild(plusMinus);
+                    form_field.appendChild(error_field);
+                    form_field.appendChild(range_container)
+                break;
+                case "section":
+                    section_title = r.title;
+                    section_id = r.section_id;
+                    section = true;
+                    section_count = parseInt(r.number_fields);
+                break;
+                case "tel":
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    input.setAttribute('form', attr__form_id);
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+                break;
+                case "textarea":
+                    input = document.createElement('textarea');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    input.setAttribute('rows', '4');
+                    input.setAttribute('cols', '50');
+                    input.setAttribute('form', attr__form_id);
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+                break;
+                case "quill":
+                    let quil = document.createElement('div');
+                    quil.setAttribute('class', 'g__quil_editor');
+                    quil.setAttribute('id', r.id);
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name)
+                    input.setAttribute('type', 'hidden')
+                    form_field.appendChild(quil);
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
 
-        if (section){
-            if(r.type != 'section'){
-                if (r.inline_field || inline_arr.length){
-                    if(r.inline_field){
-                        inline_arr.push(form_field)
-                        section_count--;
-                    } else if (inline_arr.length > 0){
-                        inline_arr.push(form_field)
-                        let inline_row = document.createElement('div');
-                        inline_row.setAttribute('class', "g__inline_row");
-                        inline_arr.forEach( (field) => {
-                            inline_row.appendChild(field);
-                        });
-                        inline_arr = [];
-                        section_group.push(inline_row);
+                break;
+                default:
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name);
+                    form_field.appendChild(input);
+                    form_field.appendChild(error_field);
+            }
+
+            if (section){
+                if(r.type != 'section'){
+                    if (r.inline_field || inline_arr.length){
+                        if(r.inline_field){
+                            inline_arr.push(form_field)
+                            section_count--;
+                        } else if (inline_arr.length > 0){
+                            inline_arr.push(form_field)
+                            let inline_row = document.createElement('div');
+                            inline_row.setAttribute('class', "g__inline_row");
+                            inline_arr.forEach( (field) => {
+                                inline_row.appendChild(field);
+                            });
+                            inline_arr = [];
+                            section_group.push(inline_row);
+                            section_count--;
+                        }
+                    } else {
+                        section_group.push(form_field);
                         section_count--;
                     }
-                } else {
-                    section_group.push(form_field);
-                    section_count--;
+
+                }
+                section_count ? section = true : section = false;
+                if(!section){
+                    let form_section_container = document.createElement('div');
+                    form_section_container.setAttribute('class', "g__form_section_container");
+
+                    //Form text
+                    let section_header = document.createElement('div');
+                    section_header.setAttribute('class', 'g__section_header');
+                    !!section_id ? section_header.setAttribute('id', section_id) : "";
+                    form_section_container.appendChild(section_header);
+                    let title = document.createElement('h3');
+                    title.setAttribute('class', 'g__section_title');
+                    title.innerText = section_title || 'Section'
+                    let line = document.createElement('div');
+                    line.setAttribute('class', 'g__section_line');
+                    let icon = document.createElement('div');
+                    icon.setAttribute('class', 'g__section_icon');
+                    icon.innerHTML = '<i class="far fa-chevron-right"></i>'
+                    section_header.appendChild(title);
+                    section_header.appendChild(line);
+                    section_header.appendChild(icon);
+
+                    //Form Section
+                    let form_section = document.createElement('div');
+                    form_section.setAttribute('class', "g__form_section");
+                    form_section_container.appendChild(form_section);
+
+                    section_group.forEach( (field) => {
+                        form_section.appendChild(field);
+                    })
+                    section_group = [];
+                    section_title = '';
+                    form_container.appendChild(form_section_container);
+                }
+            } else if ((r.inline_field || inline_arr.length) && !section){
+                if(r.inline_field){
+                    inline_arr.push(form_field)
+                    section ? section_count-- : "";
+                } else if (inline_arr.length > 0){
+                    inline_arr.push(form_field)
+                    let inline_row = document.createElement('div');
+                    inline_row.setAttribute('class', "g__inline_row");
+                    inline_arr.forEach( (field) => {
+                        inline_row.appendChild(field);
+                    });
+                    inline_arr = [];
+                    if (section){
+                        section_group.push(inline_row);
+                    } else {
+                        form_container.appendChild(inline_row);
+                        inline_count = 0;
+                    }
+                }
+            } else {
+                if(r.type != 'section'){
+                    form_container.appendChild(form_field);
                 }
 
             }
-            section_count ? section = true : section = false;
-            if(!section){
-                let form_section_container = document.createElement('div');
-                form_section_container.setAttribute('class', "g__form_section_container");
 
-                //Form text
-                let section_header = document.createElement('div');
-                section_header.setAttribute('class', 'g__section_header');
-                !!section_id ? section_header.setAttribute('id', section_id) : "";
-                form_section_container.appendChild(section_header);
-                let title = document.createElement('h3');
-                title.setAttribute('class', 'g__section_title');
-                title.innerText = section_title || 'Section'
-                let line = document.createElement('div');
-                line.setAttribute('class', 'g__section_line');
-                let icon = document.createElement('div');
-                icon.setAttribute('class', 'g__section_icon');
-                icon.innerHTML = '<i class="far fa-chevron-right"></i>'
-                section_header.appendChild(title);
-                section_header.appendChild(line);
-                section_header.appendChild(icon);
+        });
 
-                //Form Section
-                let form_section = document.createElement('div');
-                form_section.setAttribute('class', "g__form_section");
-                form_section_container.appendChild(form_section);
-
-                section_group.forEach( (field) => {
-                    form_section.appendChild(field);
-                })
-                section_group = [];
-                section_title = '';
-                form_container.appendChild(form_section_container);
-            }
-        } else if ((r.inline_field || inline_arr.length) && !section){
-            if(r.inline_field){
-                inline_arr.push(form_field)
-                section ? section_count-- : "";
-            } else if (inline_arr.length > 0){
-                inline_arr.push(form_field)
-                let inline_row = document.createElement('div');
-                inline_row.setAttribute('class', "g__inline_row");
-                inline_arr.forEach( (field) => {
-                    inline_row.appendChild(field);
-                });
-                inline_arr = [];
-                if (section){
-                    section_group.push(inline_row);
-                } else {
-                    form_container.appendChild(inline_row);
-                    inline_count = 0;
-                }
-            }
-        } else {
-            if(r.type != 'section'){
-                form_container.appendChild(form_field);
-            }
-
-        }
-
-    });
-    /* -------------------- Hidden Fields ----------------------*/
+        /* -------------------- Hidden Fields ----------------------*/
     if(!!o.db_id){
         hidden = document.createElement('input');
         hiddenFields(hidden, "id", o.db_id)
@@ -2273,4 +2294,11 @@ function granite_form(formsBlock, jsonTheme){
             dep_desktop_select.click();
         }
     })
+    }else{
+        let no_records = document.createElement('div');
+        no_records.setAttribute('class', 'g__no_records');
+        no_records.innerHTML = '<h2>Form</h2>'
+        form_container.appendChild(no_records);
+        document.getElementById(id).appendChild(no_records);
+    }
 }
