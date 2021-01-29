@@ -70,6 +70,25 @@ function granite_table(tableBlock, jsonTheme){
         --font-color: #ffffff;
     }
     /*---------------------------------------------
+    No Records
+    ---------------------------------------------*/
+    ${cssId} .g__no_records{
+        display: flex;
+        justify-content: center;
+        background: transparent;
+        align-items: center;
+        color: var(--font-color);
+        height: 225px;
+        border: 2px dashed #5d5d5d;
+    }
+    ${cssId} .g__no_records h2{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        font-size: 2rem;
+        color: var(--font-color);
+
+    }
+    /*---------------------------------------------
     Global
     ---------------------------------------------*/
     ${cssId} .g__datatable_wrapper {
@@ -218,6 +237,7 @@ function granite_table(tableBlock, jsonTheme){
     /* Row Formats */
     ${cssId} .g__datatable_wrapper td.g__delete {
         text-align: center;
+        color: var(--font-color);
     }
     ${cssId} .g__datatable_wrapper td.g__currency,
     ${cssId} .g__datatable_wrapper td.g__currency .g__inline_input{
@@ -253,6 +273,43 @@ function granite_table(tableBlock, jsonTheme){
         padding: 0 0.25rem;
         margin-left: -0.25rem;
         background: rgba(255, 255, 255, 0.75);
+    }
+    /*---------------------------------------------
+    Select - Picklist
+    ---------------------------------------------*/
+    ${cssId} .dataTable-selector{
+        color: var(--font-color);
+        background: transparent;
+    }
+    ${cssId} .g__picklist select {
+        display: flex;
+    }
+    ${cssId} .g__select_default {
+        display: block;
+        position: relative;
+        width: 170px;
+        padding: var(--field-padding);
+        padding-right: 30px;
+        line-height: 1.5;
+        background: transparent;
+        border: var(--border);
+        border-radius: var(--border-radius);
+        color: var(--font-color);
+        font-family: var(--font-regular);
+        font-weight: 300;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    ${cssId} .g__picklist:after {
+        position: absolute;
+        content: "";
+        top: 23px;
+        right: 18px;
+        width: 0;
+        height: 0;
+        border: 6px solid transparent;
+        border-color: var(--font-color) transparent transparent transparent;
     }
     /*---------------------------------------------
     Pagination
@@ -771,13 +828,15 @@ Search Bar
                     var options = record['options'];
                     var editable = record['editable'] === true ? `<i class='fal fa-angle-down g__select_icon g__editable_shown'</i>` : "";
                     var hidden = `<span class='g__hidden_input_value'>${value}</span>`;
-                    cell = `<div id="${id}" class='g__picklist'><select>${options.map(selectOptions).join(" ")}</select></div>`
+                    cell = `<div id="${id}" class='g__picklist'><select class='g__select_default'>${options.map(selectOptions).join(" ")}</select></div>`
                 break;
                 case 'string':
                     var length = record['value'].length;
                     var tooltip = length > 18 ? `data-toggle="tooltip" data-placement="top" title="${value}"` : "";
-                    var editIcon = ((record['editable'] === true)) ? "<i class='fas fa-pencil-alt g__edit_btn' onclick='inputEdit(this)'></i>" : "";
-                    cell = `<input type="text" class="g__inline_input" data-content="${value}" ${tooltip} value="${value}" ${disabled}> ${editIcon}`;
+                    cell = `<div class="g__inline_input" data-content="${value}" ${disabled} ${tooltip}>${value}</div>`
+
+                    // var editIcon = ((record['editable'] === true)) ? "<i class='fas fa-pencil-alt g__edit_btn' onclick='inputEdit(this)'></i>" : "";
+                    // cell = `<input type="text" class="g__inline_input" data-content="${value}" ${tooltip} value="${value}" ${disabled}> ${editIcon}`;
                     break;
                 case 'html':
                     cell = `<span class='g__hidden_input_value'>${value}</span>${value}`;
@@ -789,7 +848,7 @@ Search Bar
                     // var hidden = `<span class='g__hidden_input_value'>${date}</span>`;
                     var editable = record['editable'] === true ? `<i class="far fa-calendar-alt g__calendar_btn"></i>` : "";
                     // cell = `${hidden}<input class="g__inline_input" id='${id}' type="text" value="${date}">${editable}`;
-                    cell = `${editable}<input type="text" data-content="${value}" class="g__inline_input g__date_selector" ${disabled} value="${value}">`;
+                    cell = `<div data-content="${value}" class="g__inline_input g__date_selector" ${disabled}">${value}</div>`;
                 break;
                 case 'delete':
                     cell = "<i class='fas fa-trash-alt g__delete_btn notify'></i>";
@@ -797,12 +856,12 @@ Search Bar
                 case 'number':
                     var editIcon = ((record['editable'] === true) && (record['editable_shown'] === true)) ? "<i class='fas fa-pencil-alt g__edit_btn' onclick='inputEdit(this)'></i>" : "";
                     var hidden = `<span class='g__hidden_input_value'>${value}</span>`;
-                    cell = `${hidden}<input type="number" data-content="${value}" class="g__inline_input" value="${value}" ${disabled}>${editIcon}`;
+                    cell = `<div data-content="${value}" class="g__inline_input" value="${value}" ${disabled}>${value}</div>`;
                     break
                 case 'currency':
                     var editIcon = ((record['editable'] === "true") && (record['editable_shown'] === "true")) ? "<i class='fas fa-pencil-alt g__edit_btn' onclick='inputEdit(this)'></i>" : "";
                     var hidden = `<span class='g__hidden_input_value'>${value}</span>`;
-                    cell = `${hidden}<input type="text" data-content="${value}" class="g__inline_input" value="${formatter.format(value)}" ${disabled}>${editIcon}`;
+                    cell = `<div data-content="${value}" class="g__inline_input" value="${formatter.format(value)}" ${disabled}>${value}</div>`;
                 break;
                 case 'checkbox':
                     var checked = record['checked'] === true ? "checked" : "";
@@ -831,13 +890,12 @@ Search Bar
          * Parse data to HTML table
          */
         var dataToTable = function (data) {
-            var thead = false,
-                tbody = false;
-
             data = data || this.options.data;
-            var columns = data.records[0].columns;
-            var records = data.records;
-
+            if(data.records.length > 0){
+                var columns = data.records[0].columns;
+                var records = data.records;
+                var thead = false,
+                tbody = false;
             if (columns) {
                 thead = createElement("thead");
                 var tr = createElement("tr");
@@ -888,6 +946,14 @@ Search Bar
                 }
                 this.table.appendChild(tbody);
             }
+            } else {
+                var empty = createElement("div", {
+                    html: '<h2>Table</h2>',
+                    'class': `g__no_records`,
+                });
+                this.table.appendChild(empty);
+            }
+
         };
 
         /**
@@ -1757,7 +1823,7 @@ Search Bar
         /* ACTION ROW START */
 
         // Per Page Select
-            if (o.perPageSelect) {
+            if (o.perPageSelect && this.options.data.length > 0) {
             var wrap = "<div class='dataTable-dropdown'><label>";
             wrap += o.labels.perPage;
             wrap += "</label></div>";
@@ -3118,23 +3184,23 @@ Search Bar
     /*---------------------------------------------
     Date Edit
     ---------------------------------------------*/
-    var input = document.getElementsByClassName('g__date_selector');
-    for (i = 0; i < input.length; i++) {
-        var cal = input[i];
-        var date = input[i].value;
-        var datepicker = new TheDatepicker.Datepicker(cal);
-        datepicker.options.setInputFormat("n/j/Y");
-        datepicker.options.setInitialDate(date);
-        datepicker.options.setShowDeselectButton(false);
-        datepicker.options.setShowCloseButton();
-        datepicker.render();
-    }
-    var elements = document.getElementsByClassName("g__calendar_btn");
-    for (var i = 0; i < elements.length; i++) {
-    elements[i].addEventListener("click", function() {
-        this.nextSibling.focus();
-    });
-    }
+    // var input = document.getElementsByClassName('g__date_selector');
+    // for (i = 0; i < input.length; i++) {
+    //     var cal = input[i];
+    //     var date = input[i].value;
+    //     var datepicker = new TheDatepicker.Datepicker(cal);
+    //     datepicker.options.setInputFormat("n/j/Y");
+    //     datepicker.options.setInitialDate(date);
+    //     datepicker.options.setShowDeselectButton(false);
+    //     datepicker.options.setShowCloseButton();
+    //     datepicker.render();
+    // }
+    // var elements = document.getElementsByClassName("g__calendar_btn");
+    // for (var i = 0; i < elements.length; i++) {
+    // elements[i].addEventListener("click", function() {
+    //     this.nextSibling.focus();
+    // });
+    // }
 
     /*---------------------------------------------
     Picklist

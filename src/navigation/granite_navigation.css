@@ -121,6 +121,7 @@
       flex-direction: column;
       overflow: hidden;
       text-align: center;
+      align-items: center;
     }
     .a__nav_container .a__sidebar_header_label {
       color: rgba(var(--color), 1);

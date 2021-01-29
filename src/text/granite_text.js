@@ -37,6 +37,7 @@ function granite_text(jsonText, jsonTheme){
     ---------------------------------------------*/
     var textCss = document.createElement('style');
     textCss.innerHTML = `
+
     ${cssId}{
         --font-color: #101010;
     }
@@ -44,7 +45,26 @@ function granite_text(jsonText, jsonTheme){
     ${cssId}[mode="midnight"]{
         --font-color: #ffffff;
     }
+    /*---------------------------------------------
+    No Records
+    ---------------------------------------------*/
+    ${cssId} .g__no_records{
+        display: flex;
+        justify-content: center;
+        background: transparent;
+        align-items: center;
+        color: var(--font-color);
+        height: 225px;
+        margin-top: 50px;
+        border: 2px dashed #5d5d5d;
+    }
+    ${cssId} .g__no_records h2{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        font-size: 2rem;
+        color: var(--font-color);
 
+    }
     ${cssId} .g__text_block{
         width: ${o.width || "auto"};
         padding: ${o.padding || "25px"};
@@ -55,10 +75,18 @@ function granite_text(jsonText, jsonTheme){
     `
     document.head.appendChild(textCss);
 
-    let text_container = document.createElement('div');
+    let text_container;
+    if(o.text.length > 0) {
+        text_container = document.createElement('div');
         text_container.setAttribute('class', 'g__text_block');
         !!o.classes ? text_container.classList.add(o.classes) : "";
         text_container.innerHTML = o.text;
+    } else {
+        text_container = document.createElement('div');
+        text_container.setAttribute('class', 'g__no_records');
+        text_container.innerHTML = '<h2>Text Block</h2>';
+    }
+
 
     /*---------------------------------------------
     Append micro to the DOM

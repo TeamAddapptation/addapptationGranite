@@ -1,4 +1,4 @@
-function granite_form(formsBlock, jsonTheme){
+function granite_form_dev(formsBlock, jsonTheme){
     const id = formsBlock.id;
     const o = formsBlock.options;
     const r = formsBlock.records;
@@ -200,7 +200,10 @@ function granite_form(formsBlock, jsonTheme){
         padding: var(--field-padding);
         outline: none;
     }
-
+    ${cssId} .g__field_options{
+        color: var(--font-color);
+        margin: 5px 15px;
+    }
     ${cssId} button{
         cursor: pointer;
     }
@@ -866,6 +869,42 @@ function granite_form(formsBlock, jsonTheme){
         cursor: pointer;
         background: var(--background-hover);
     }
+    /* ------------------------ Space ------------------------------*/
+    ${cssId} .g__spacing_container{
+        display: flex;
+        flex-direction: row;
+        margin-top: 5px;
+    }
+    ${cssId} .g__space_field.g__link{
+        color: var(--background-hover);
+        padding-top: 7px;
+        margin: 0 10px;
+
+    }
+    ${cssId} .g__space_field.g__link:hover{
+        color: var(--font-color);
+        cursor: pointer;
+    }
+    ${cssId} .g__space_field.g__top,
+    ${cssId} .g__space_field.g__bottom,
+    ${cssId} .g__space_field.g__left,
+    ${cssId} .g__space_field.g__right{
+        flex: 1;
+    }
+    ${cssId} .g__space_field.g__bottom{
+        margin-right: 30px;
+        border-right: 1px solid var(--font-color);
+        padding-right: 30px;
+    }
+    ${cssId} .g__space_field input{
+        width: 100%;
+    }
+    ${cssId} .g__space_field p{
+        color: var(--font-color);
+        margin-top: 4px;
+        margin-bottom: 0;
+        text-align: center;
+    }
     /* ------------------------ Picklist Multiple ------------------------------*/
     ${cssId} .chosen-container-multi{
         display: flex;
@@ -1131,6 +1170,30 @@ function granite_form(formsBlock, jsonTheme){
         input.disabled = r.disabled;
         return input
     }
+    /* -------------------- Labels and Info ----------------------*/
+    function addLabels(field_info_container, r){
+        //Global labels and character counter
+        if (!!r.title){
+            let label = document.createElement('label');
+                !!r.required ? label.classList.add('required'): '';
+                label.setAttribute('for', r.name);
+                label.innerText = r.title;
+            field_info_container.appendChild(label);
+        }
+        if (r.length > 0 && r.show_count){
+            let count_container = document.createElement('div');
+                count_container.setAttribute('class', 'g__char_remain')
+                count_container.innerText = '0/' + r.length;
+            field_info_container.appendChild(count_container);
+        }
+        if (r.mobile_spacing){
+            let field_options = document.createElement('div');
+                field_options.setAttribute('class', 'g__field_options')
+                field_options.innerHTML = '<i class="fas fa-mobile-android-alt"></i>';
+            field_info_container.appendChild(field_options);
+        }
+        return field_info_container
+    }
     /* -------------------- Hidden Fields ----------------------*/
     function hiddenFields(hidden, name, value){
         hidden.setAttribute('type', 'hidden');
@@ -1162,31 +1225,36 @@ function granite_form(formsBlock, jsonTheme){
             r.id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
             let class_name = "g__field_" + r.type;
 
-            //Create field wrapper
             if ((r.type != 'subheader') || (r.type !='description')){
                 form_field = document.createElement('div');
                 form_field.setAttribute('class', "g__form_field");
-
-                //Global labels and character counter
-                if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
-                    let field_info_container = document.createElement('div');
-                        field_info_container.setAttribute('class', 'g__field_info')
-                    form_field.appendChild(field_info_container);
-                    if (!!r.title){
-                        let label = document.createElement('label');
-                            !!r.required ? label.classList.add('required'): '';
-                            label.setAttribute('for', r.name);
-                            label.innerText = r.title;
-                        field_info_container.appendChild(label);
-                    }
-                    if (r.length > 0 && r.show_count){
-                        let count_container = document.createElement('div');
-                            count_container.setAttribute('class', 'g__char_remain')
-                            count_container.innerText = '0/' + r.length;
-                        field_info_container.appendChild(count_container);
-                    }
-                }
             }
+
+            //Create field wrapper
+            // if ((r.type != 'subheader') || (r.type !='description')){
+            //     form_field = document.createElement('div');
+            //     form_field.setAttribute('class', "g__form_field");
+
+            //     //Global labels and character counter
+            //     if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
+            //         let field_info_container = document.createElement('div');
+            //             field_info_container.setAttribute('class', 'g__field_info')
+            //         form_field.appendChild(field_info_container);
+            //         if (!!r.title){
+            //             let label = document.createElement('label');
+            //                 !!r.required ? label.classList.add('required'): '';
+            //                 label.setAttribute('for', r.name);
+            //                 label.innerText = r.title;
+            //             field_info_container.appendChild(label);
+            //         }
+            //         if (r.length > 0 && r.show_count){
+            //             let count_container = document.createElement('div');
+            //                 count_container.setAttribute('class', 'g__char_remain')
+            //                 count_container.innerText = '0/' + r.length;
+            //             field_info_container.appendChild(count_container);
+            //         }
+            //     }
+            // }
 
 
 
@@ -1401,6 +1469,45 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(radio_container);
                     form_field.appendChild(error_field);
                 break;
+                case 'spacing':
+                    let field_info_container = document.createElement('div');
+                    field_info_container.setAttribute('class', 'g__field_info')
+                    addLabels(field_info_container, r)
+                    form_field.appendChild(field_info_container);
+                    const spacing_arr = ['top', 'link', 'bottom', 'left', 'link', 'right'];
+                    const spacing_container = document.createElement('div')
+                    spacing_container.setAttribute('class', 'g__spacing_container')
+                    const space_hidden = document.createElement('input')
+                    space_hidden.setAttribute('class', 'g__space_hidden')
+                    space_hidden.type = 'hidden';
+                    !!attr__form_id ? space_hidden.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? space_hidden.setAttribute('name', r.name) : "";
+                    !!r.title ? space_hidden.setAttribute('title', r.title) : "";
+                    spacing_container.appendChild(space_hidden);
+                    spacing_arr.forEach(val => {
+                        let field_container = document.createElement('div')
+                            field_container.setAttribute('class', `g__space_field g__${val}`)
+                            spacing_container.appendChild(field_container);
+                        if (val === 'link'){
+                            let link = document.createElement('div')
+                            link.setAttribute('class', 'g__space_link');
+                            link.innerHTML = '<i class="far fa-link"></i>';
+                            field_container.appendChild(link);
+                            form_field.appendChild(spacing_container);
+                        } else {
+                            let input = document.createElement('input');
+                            input.type = 'text'
+                            input.setAttribute('class', `g__input_${val}`)
+                            field_container.appendChild(input);
+                            let label = document.createElement('p');
+                            label.setAttribute('class', `g__label_${val}`)
+                            label.innerText = val;
+                            field_container.appendChild(label);
+                            form_field.appendChild(spacing_container);
+                        }
+
+                    })
+                break;
                 case "range":
                     let min = r.min || 0;
                     let max = r.max || 100;
@@ -1481,7 +1588,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(input);
                     form_field.appendChild(error_field);
             }
-            let inline_field = !!r.inline_field ? true : false;
+            console.log(r.inline_field);
             if (section){
                 if(r.type != 'section'){
                     if (r.inline_field || inline_arr.length){
@@ -1540,7 +1647,7 @@ function granite_form(formsBlock, jsonTheme){
                     section_title = '';
                     form_container.appendChild(form_section_container);
                 }
-            } else if ((inline_field || inline_arr.length) && !section){
+            } else if ((r.inline_field.toString() == 'true' || inline_arr.length) && !section){
                 console.log('inline')
                 if(r.inline_field){
                     inline_arr.push(form_field)
@@ -1851,6 +1958,10 @@ function granite_form(formsBlock, jsonTheme){
             })
         }
     }
+    /* -------------------- Spacing Values ----------------------*/
+    let spacing_field_arr = document.querySelectorAll('.g__spacing_container');
+    console.log(spacing_field_arr);
+
     /* -------------------- Character Limit ----------------------*/
     let char_count_field_arr = document.querySelectorAll('.g__form_field');
     char_count_field_arr.forEach((field) => {

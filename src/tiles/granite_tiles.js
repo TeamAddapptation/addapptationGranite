@@ -2,6 +2,7 @@
 Block Name: Granite.js Tile Block
 ---------------------------------------------*/
 function granite_tiles(jsonTiles, jsonTheme) {
+    console.log('v2');
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -50,7 +51,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     if (!!o.filter_label && !!o.filter_tag_options){
       var aFilters = !!o.filter_label ? true : false;
     }
-    var aSearch = o.search === "true" ? true : false;
+    var aSearch = o.search ? true : false;
     var action = (aTitle || aDescription || aButtons || aFilters || aSearch);
     /*---------------------------------------------
     User Generated CSS
@@ -1178,6 +1179,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
                   for (i = 0; i < cont.length; i++) {
                       var tileCont = cont[i].getElementsByClassName("g__tile_header")[0];
                       var tileBody = cont[i].getElementsByClassName("g__tile_body")[0];
+                      console.log(tileCont);
+                      console.log(tileBody);
                       var txtValue = tileCont.textContent || tileCont.innerText;
                       var tags = tileBody.getAttribute("data-tags");
                       if(tags && tags.toUpperCase().includes(filter)){
@@ -1415,7 +1418,7 @@ for (var i = 0; i < dt_search.length; i++){
 
 
 window['tileSearch'] = function (id, el) {
-  var input, filter, tiles, t, a, i, txtValue, parent;
+  var input, filter, tiles, t, a, i, body, txtValue, bodyValue, parent, content;
   input = document.getElementById(el.id);
   filter = input.value.toUpperCase();
   parent = document.getElementById(id);
@@ -1423,12 +1426,23 @@ window['tileSearch'] = function (id, el) {
   t = parent.getElementsByClassName('g__tile_container');
   for (i = 0; i < t.length; i++) {
       a = t[i].getElementsByClassName("g__tile_header")[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      body = t[i].getElementsByClassName("g__desc")[0];
+      content = ''
+      if(a != undefined){
+        txtValue = a.textContent || a.innerText;
+        content += txtValue;
+      }
+      if(body != undefined){
+        bodyValue = body.textContent || body.innerText;
+        content += ' ' + bodyValue;
+      }
+      console.log(content);
+      if (content.toUpperCase().indexOf(filter) > -1) {
           t[i].style.display = "";
           } else {
           t[i].style.display = "none";
       }
+      content = '';
   }
 }
 /*---------------------------------------------
