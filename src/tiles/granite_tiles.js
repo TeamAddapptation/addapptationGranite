@@ -1412,6 +1412,16 @@ for (var i = 0; i < dt_search.length; i++){
       }
   });
 }
+if(o.pagination){
+  const tiles_per_page = o.tiles_per_page;
+  console.log(tiles_per_page);
+  const arr_tiles = document.querySelectorAll('.g__tile_container');
+  console.log(arr_tiles.length);
+}
+
+
+
+
 
 //End Main Function
 };

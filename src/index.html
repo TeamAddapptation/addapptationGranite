@@ -36,15 +36,20 @@
         <div id="granite-table"></div>
         <div id="granite-button"></div>
         <div id="granite-tiles"></div>
+        <div id="granite-header"></div>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdn.addapptation.com/addapptation-stylesheets/anychart-bundle.js"></script>
     <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-base.min.js"></script>
     <script src='https://cdn.addapptation.com/addapptation-stylesheets/chosen.jquery.min.js'></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- JSON DATA -->
     <script src='json/data.js'></script>
     <script src='json/table.js'></script>
     <script src='json/button.js'></script>
+    <script src='json/tiles.js'></script>
+    <script src='json/header.js'></script>
+    <!--JS FILES GRANITE -->
     <script src='template/granite_template.js'></script>
     <script src='navigation/granite_navigation.js'></script>
     <script src='hero/granite_hero.js'></script>
@@ -60,14 +65,18 @@
     <script src='form/granite_form.js'></script>
     <script src='table/granite_table.js'></script>
     <script src='elements/granite_button.js'></script>
+    <script src='elements/granite_header.js'></script>
     <script src='main.js'></script>
 
 
   </body>
   <script>
-    const render = ["form"];
+    const render = ["header"];
     render.forEach((micro) => {
         switch (micro){
+        case "header":
+            granite_header(headerBlock, jsonTheme);
+        break;
         case "text":
             granite_text(textBlock, jsonTheme);
         break;
