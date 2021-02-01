@@ -42,9 +42,9 @@ function granite_form_dev(formsBlock, jsonTheme){
         --primary: ${primary};
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
-        --border-radius: 2px;
-        --field-padding: 6px 12px;
-        --field-height: 37px;
+        --border-radius: 5px;
+        --field-padding: 2px 10px;
+        --field-height: 30px;
         --error-color: #ea386e;
         --green: #00B28B;
 
@@ -875,14 +875,38 @@ function granite_form_dev(formsBlock, jsonTheme){
         flex-direction: row;
         margin-top: 5px;
     }
-    ${cssId} .g__space_field.g__link{
-        color: var(--background-hover);
-        padding-top: 7px;
-        margin: 0 10px;
-
+    ${cssId} .g__field_options{
+        display: flex;
     }
-    ${cssId} .g__space_field.g__link:hover{
+    ${cssId} .g__field_options:hover{
+        cursor: pointer;
+    }
+    ${cssId} .g__field_options .active i{
+        opacity: 1;
+    }
+    ${cssId} .g__field_options i{
         color: var(--font-color);
+        opacity: .3;
+        padding-right: 15px;
+        transition: opacity .3s ease;
+    }
+    ${cssId} .g__field_options i:hover{
+        opacity: .7;
+        cursor: pointer;
+    }
+    ${cssId} .g__link{
+        color: var(--font-color);
+        opacity: .5;
+        padding-top: 6px;
+        margin: 0 7px;
+        font-size: .7rem;
+        transition: opacity .3s ease;
+    }
+    ${cssId} .g__link.active{
+        opacity: 1;
+    }
+    ${cssId} .g__link:hover{
+        opacity: .7;
         cursor: pointer;
     }
     ${cssId} .g__space_field.g__top,
@@ -902,6 +926,7 @@ function granite_form_dev(formsBlock, jsonTheme){
     ${cssId} .g__space_field p{
         color: var(--font-color);
         margin-top: 4px;
+        font-size: .8rem;
         margin-bottom: 0;
         text-align: center;
     }
@@ -1189,7 +1214,7 @@ function granite_form_dev(formsBlock, jsonTheme){
         if (r.mobile_spacing){
             let field_options = document.createElement('div');
                 field_options.setAttribute('class', 'g__field_options')
-                field_options.innerHTML = '<i class="fas fa-mobile-android-alt"></i>';
+                field_options.innerHTML = '<div class="g__device_icon active"></i><i class="far fa-desktop-alt"></i></div><div class="g__device_icon"><i class="fas fa-mobile-android-alt"></div>';
             field_info_container.appendChild(field_options);
         }
         return field_info_container
@@ -1477,27 +1502,40 @@ function granite_form_dev(formsBlock, jsonTheme){
                     const spacing_arr = ['top', 'link', 'bottom', 'left', 'link', 'right'];
                     const spacing_container = document.createElement('div')
                     spacing_container.setAttribute('class', 'g__spacing_container')
-                    const space_hidden = document.createElement('input')
-                    space_hidden.setAttribute('class', 'g__space_hidden')
-                    space_hidden.type = 'hidden';
-                    !!attr__form_id ? space_hidden.setAttribute('form_id', attr__form_id) : "";
-                    !!r.name ? space_hidden.setAttribute('name', r.name) : "";
-                    !!r.title ? space_hidden.setAttribute('title', r.title) : "";
-                    spacing_container.appendChild(space_hidden);
-                    spacing_arr.forEach(val => {
-                        let field_container = document.createElement('div')
-                            field_container.setAttribute('class', `g__space_field g__${val}`)
-                            spacing_container.appendChild(field_container);
+                    //Desktop hidden field
+                    const hidden_desktop = document.createElement('input')
+                    hidden_desktop.setAttribute('class', 'g__space_desktop_hidden')
+                    hidden_desktop.type = 'hidden';
+                    !!attr__form_id ? hidden_desktop.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? hidden_desktop.name = r.name : "";
+                    !!r.title ? hidden_desktop.title = r.title : "";
+                    spacing_container.appendChild(hidden_desktop);
+                    //mobile hidden field
+                    const hidden_mobile = document.createElement('input')
+                    hidden_mobile.setAttribute('class', 'g__space_desktop_hidden')
+                    hidden_mobile.type = 'hidden';
+                    !!attr__form_id ? hidden_mobile.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? hidden_mobile.name = r.name : "";
+                    !!r.title ? hidden_mobile.title = r.title : "";
+                    spacing_container.appendChild(hidden_mobile);
+                    spacing_arr.forEach((val, num) => {
                         if (val === 'link'){
+                            let field_container = document.createElement('div')
+                            num === 1 ? field_container.setAttribute('class', `g__link g__link_tb`) : field_container.setAttribute('class', `g__link g__link_lr`)
+                            spacing_container.appendChild(field_container);
                             let link = document.createElement('div')
                             link.setAttribute('class', 'g__space_link');
                             link.innerHTML = '<i class="far fa-link"></i>';
                             field_container.appendChild(link);
                             form_field.appendChild(spacing_container);
                         } else {
+                            let field_container = document.createElement('div');
+                            field_container.setAttribute('class', `g__space_field g__${val}`);
+                            spacing_container.appendChild(field_container);
                             let input = document.createElement('input');
                             input.type = 'text'
                             input.setAttribute('class', `g__input_${val}`)
+                            input.setAttribute('data-side', `${val}`)
                             field_container.appendChild(input);
                             let label = document.createElement('p');
                             label.setAttribute('class', `g__label_${val}`)
@@ -1960,7 +1998,47 @@ function granite_form_dev(formsBlock, jsonTheme){
     }
     /* -------------------- Spacing Values ----------------------*/
     let spacing_field_arr = document.querySelectorAll('.g__spacing_container');
-    console.log(spacing_field_arr);
+    if(spacing_field_arr.length){
+        spacing_field_arr.forEach(space => {
+            let parent = space.parentNode;
+            let fields_arr = parent.querySelectorAll('.g__space_field');
+            let spacing_values ={'top': '', 'right': '', 'bottom': '', 'left': ''}
+            fields_arr.forEach(field => {
+                // Field input change
+                field.addEventListener('input', (val) => {
+                    let desktop_hidden = parent.querySelector('.g__space_desktop_hidden');
+                    let focus_field = val.target;
+                    let side = focus_field.getAttribute('data-side');
+                    spacing_values[side] = focus_field.value;
+                    console.log(spacing_values);
+                    let is_linked = focus_field.parentElement.classList.contains('g__linked');
+
+                    desktop_hidden.value = `${!!spacing_values.top} ${!!spacing_values.right} ${!!spacing_values.bottom} ${!!spacing_values.left}`;
+                    console.log(desktop_hidden.value);
+                })
+            })
+            // Linke fields
+            let link_arr = parent.querySelectorAll('.g__link');
+            link_arr.forEach(link_field => {
+                link_field.addEventListener('click', () => {
+                    link_field.classList.toggle('active');
+                    link_field.previousSibling.classList.toggle('g__linked');
+                    link_field.nextSibling.classList.toggle('g__linked');
+                })
+            })
+            // Device selector
+            let device_icons = parent.querySelectorAll('.g__device_icon');
+            device_icons.forEach(selected => {
+                selected.addEventListener('click', () => {
+                    let device_arr = selected.parentNode.children;
+                    for(let i = 0; i < device_arr.length; i++){
+                        device_arr[i].classList.remove('active');
+                    }
+                    selected.classList.add('active');
+                })
+            })
+        })
+    }
 
     /* -------------------- Character Limit ----------------------*/
     let char_count_field_arr = document.querySelectorAll('.g__form_field');

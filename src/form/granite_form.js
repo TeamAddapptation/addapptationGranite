@@ -42,7 +42,7 @@ function granite_form(formsBlock, jsonTheme){
         --primary: ${primary};
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
-        --border-radius: 2px;
+        --border-radius: 4px;
         --field-padding: 6px 12px;
         --field-height: 37px;
         --error-color: #ea386e;
@@ -318,6 +318,9 @@ function granite_form(formsBlock, jsonTheme){
     }
     ${cssId} .g__field_password{
         flex: 1;
+    }
+    ${cssId} .g__password_container .g__hide_password_btn{
+        display: none;
     }
     ${cssId} .g__password_show{
         position: absolute;
@@ -1336,6 +1339,7 @@ function granite_form(formsBlock, jsonTheme){
                     !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
                     let pass_show = document.createElement('div');
                     pass_show.setAttribute('class', 'g__password_show');
+                    r.show_password_option ? '' : pass_show.classList.add('g__hide_password_btn');
                     pass_show.innerHTML = '<i class="far fa-eye"></i>'
                     pass_container.appendChild(input);
                     pass_container.appendChild(pass_show)
@@ -1481,7 +1485,9 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(input);
                     form_field.appendChild(error_field);
             }
-            let inline_field = !!r.inline_field ? true : false;
+
+            let push_inline = !!r.inline_field && (r.inline_field.toString() == 'true') ? true : false;
+
             if (section){
                 if(r.type != 'section'){
                     if (r.inline_field || inline_arr.length){
@@ -1507,7 +1513,6 @@ function granite_form(formsBlock, jsonTheme){
                 }
                 section_count ? section = true : section = false;
                 if(!section){
-                    console.log('section')
                     let form_section_container = document.createElement('div');
                     form_section_container.setAttribute('class', "g__form_section_container");
 
@@ -1540,8 +1545,7 @@ function granite_form(formsBlock, jsonTheme){
                     section_title = '';
                     form_container.appendChild(form_section_container);
                 }
-            } else if ((inline_field || inline_arr.length) && !section){
-                console.log('inline')
+            } else if ((push_inline || inline_arr.length) && !section){
                 if(r.inline_field){
                     inline_arr.push(form_field)
                     section ? section_count-- : "";
@@ -1562,7 +1566,6 @@ function granite_form(formsBlock, jsonTheme){
                 }
             } else {
                 if(r.type != 'section'){
-                    console.log('appending to form container')
                     form_container.appendChild(form_field);
                 }
 
@@ -2158,8 +2161,9 @@ function granite_form(formsBlock, jsonTheme){
         }
     }
     /* -------------------- Pattern Check ----------------------*/
-    let all_field_containers = document.querySelectorAll('.g__form_field');
-    all_field_containers.forEach((field) => {
+    if(o.inline_validation){
+        let all_field_containers = document.querySelectorAll('.g__form_field');
+        all_field_containers.forEach((field) => {
         let input = field.querySelector('input');
         let select = field.querySelector('select');
         let select_desktop = field.querySelector('.select-selected');
@@ -2188,8 +2192,10 @@ function granite_form(formsBlock, jsonTheme){
                 }
             });
 
-        }
-    });
+            }
+        });
+    }
+
     /* -------------------- Dependency Field ----------------------*/
     r.forEach(function(r, num){
         const is_dep = (!!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank));

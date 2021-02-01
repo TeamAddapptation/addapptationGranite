@@ -1757,7 +1757,6 @@ let formsBlock = {
          "collapsed":false,
          "disabled":false,
          "dependency_not_blank":false,
-         "inline_field":false,
          "action":"hash_builder"
       },
       {
@@ -1860,7 +1859,7 @@ let formsBlock = {
          "super_text":true,
          "dependency_field":"",
          "dependency_values":"",
-         "inline_field":true,
+         "inline_field":"true",
          "pattern":"",
          "invalid_message":"",
          "range_unit":"",
@@ -2333,6 +2332,7 @@ let formsBlock = {
          "name":"f_password",
          "type":"password",
          "value":"",
+         "show_password_option": true,
          "required":true,
          "options":[
 
