@@ -1,5 +1,4 @@
 function granite_tabs(jsonTabs, jsonTheme) {
-    console.log('tabs V1.3.1')
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -17,7 +16,6 @@ function granite_tabs(jsonTabs, jsonTheme) {
     const urlParams = new URLSearchParams(queryString);
     const tab_param = urlParams.get('tab');
     const style_param = urlParams.get('style');
-    console.log('Tabs Disabled: ' +  o.cursor_disabled)
     /*---------------------------------------------
     Add Font Family To Header
     ---------------------------------------------*/
@@ -1151,43 +1149,53 @@ function granite_tabs(jsonTabs, jsonTheme) {
       }
       ticking = true;
     });
-    pnAdvancerLeft.addEventListener("click", function() {
-      if (SETTINGS.navBarTravelling === true) {
-          return;
-      }
-      if (determineOverflow(gContents, gTabsContainer) === "left" || determineOverflow(gContents, gTabsContainer) === "both") {
-          var availableScrollLeft = gTabsContainer.scrollLeft;
-          if (availableScrollLeft < SETTINGS.navBarTravelDistance * 2) {
-              gContents.style.transform = "translateX(" + availableScrollLeft + "px)";
-          } else {
-              gContents.style.transform = "translateX(" + SETTINGS.navBarTravelDistance + "px)";
-          }
-          gContents.classList.remove("g__contents-no-transition");
-          SETTINGS.navBarTravelDirection = "left";
-          SETTINGS.navBarTravelling = true;
-      }
-      gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
-    });
-    pnAdvancerRight.addEventListener("click", function() {
-      if (SETTINGS.navBarTravelling === true) {
-          return;
-      }
-      if (determineOverflow(gContents, gTabsContainer) === "right" || determineOverflow(gContents, gTabsContainer) === "both") {
-          var navBarRightEdge = gContents.getBoundingClientRect().right;
-          var navBarScrollerRightEdge = gTabsContainer.getBoundingClientRect().right;
-          var availableScrollRight = Math.floor(navBarRightEdge - navBarScrollerRightEdge);
-          if (availableScrollRight < SETTINGS.navBarTravelDistance * 2) {
-              gContents.style.transform = "translateX(-" + availableScrollRight + "px)";
-          } else {
-              gContents.style.transform = "translateX(-" + SETTINGS.navBarTravelDistance + "px)";
-          }
-          gContents.classList.remove("g__contents-no-transition");
-          SETTINGS.navBarTravelDirection = "right";
-          SETTINGS.navBarTravelling = true;
-      }
-      // Now update the attribute in the DOM
-      gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
-    });
+
+    if(!!pnAdvancerLeft){
+      pnAdvancerLeft.addEventListener("click", function() {
+        if (SETTINGS.navBarTravelling === true) {
+            return;
+        }
+        if (determineOverflow(gContents, gTabsContainer) === "left" || determineOverflow(gContents, gTabsContainer) === "both") {
+            var availableScrollLeft = gTabsContainer.scrollLeft;
+            if (availableScrollLeft < SETTINGS.navBarTravelDistance * 2) {
+                gContents.style.transform = "translateX(" + availableScrollLeft + "px)";
+            } else {
+                gContents.style.transform = "translateX(" + SETTINGS.navBarTravelDistance + "px)";
+            }
+            gContents.classList.remove("g__contents-no-transition");
+            SETTINGS.navBarTravelDirection = "left";
+            SETTINGS.navBarTravelling = true;
+        }
+        gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
+      });
+    }
+
+
+    if(!!pnAdvancerRight){
+      pnAdvancerRight.addEventListener("click", function() {
+        if (SETTINGS.navBarTravelling === true) {
+            return;
+        }
+        if (determineOverflow(gContents, gTabsContainer) === "right" || determineOverflow(gContents, gTabsContainer) === "both") {
+            var navBarRightEdge = gContents.getBoundingClientRect().right;
+            var navBarScrollerRightEdge = gTabsContainer.getBoundingClientRect().right;
+            var availableScrollRight = Math.floor(navBarRightEdge - navBarScrollerRightEdge);
+            if (availableScrollRight < SETTINGS.navBarTravelDistance * 2) {
+                gContents.style.transform = "translateX(-" + availableScrollRight + "px)";
+            } else {
+                gContents.style.transform = "translateX(-" + SETTINGS.navBarTravelDistance + "px)";
+            }
+            gContents.classList.remove("g__contents-no-transition");
+            SETTINGS.navBarTravelDirection = "right";
+            SETTINGS.navBarTravelling = true;
+        }
+        // Now update the attribute in the DOM
+        gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
+      });
+    }
+
+
+
     gContents.addEventListener(
       "transitionend",
       function() {

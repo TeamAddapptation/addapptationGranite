@@ -1167,7 +1167,7 @@ function granite_form(formsBlock, jsonTheme){
             let class_name = "g__field_" + r.type;
 
             //Create field wrapper
-            if ((r.type != 'subheader') || (r.type !='description')){
+            if ((r.type != 'subheader') && (r.type != 'description') && (r.type != 'hidden')){
                 form_field = document.createElement('div');
                 form_field.setAttribute('class', "g__form_field");
 
@@ -1190,6 +1190,9 @@ function granite_form(formsBlock, jsonTheme){
                         field_info_container.appendChild(count_container);
                     }
                 }
+            } else if (r.type === 'hidden'){
+                form_field = document.createElement('div');
+                form_field.setAttribute('class', "g__hidden_field");
             }
 
 
@@ -1298,6 +1301,12 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(file_container);
                     form_field.appendChild(error_field);
                 break;
+                case 'hidden':
+                    input = document.createElement('input');
+                    input.setAttribute('id', r.id);
+                    basicAttributes(r, input, class_name);
+                    form_field.appendChild(input);
+                break;
                 case "number":
                     let num_container = document.createElement('div');
                     num_container.setAttribute('class', "g__number_container");
@@ -1325,11 +1334,6 @@ function granite_form(formsBlock, jsonTheme){
                     num_container.appendChild(num_counter);
                     form_field.appendChild(num_container)
                     form_field.appendChild(error_field);
-                break;
-                case "subheader":
-                    form_field = document.createElement('h2');
-                    form_field.setAttribute('class', 'g__form_header');
-                    form_field.innerHTML = r.value;
                 break;
                 case "password":
                     let pass_container = document.createElement('div');
@@ -1448,6 +1452,11 @@ function granite_form(formsBlock, jsonTheme){
                     section_id = r.section_id;
                     section = true;
                     section_count = parseInt(r.number_fields);
+                break;
+                case "subheader":
+                    form_field = document.createElement('h2');
+                    form_field.setAttribute('class', 'g__form_header');
+                    form_field.innerHTML = r.value;
                 break;
                 case "tel":
                     input = document.createElement('input');
@@ -1575,10 +1584,10 @@ function granite_form(formsBlock, jsonTheme){
 
         });
 
-    /* -------------------- Hidden Fields ----------------------*/
+    /* -------------------- Hidden Option Fields ----------------------*/
     if(!!o.db_id || !!o.db_object || !!o.db_action || !!o.db_redirect){
         let hidden_container = document.createElement('div');
-            hidden_container.classList.add('g__form_field');
+            hidden_container.classList.add('g__hidden_field');
         if(!!o.db_id){
             hidden = document.createElement('input');
             hiddenFields(hidden, "db_id", o.db_id);
@@ -1633,7 +1642,6 @@ function granite_form(formsBlock, jsonTheme){
         let all_sections = document.querySelectorAll('.g__form_section_container');
         let errors_arr = [];
         all_field_containers.forEach((field) => {
-            console.log(attr__form_id);
             let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
             let textarea = field.querySelector(`textarea[form_id="${attr__form_id}"]`);
             let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
@@ -1661,7 +1669,6 @@ function granite_form(formsBlock, jsonTheme){
                 }
             }
             if(!!select){
-                console.log(select);
                     if(!select.checkValidity()){
                         select.nextSibling.classList.add('invalid');
                         errors_arr.push(select);
@@ -1690,7 +1697,7 @@ function granite_form(formsBlock, jsonTheme){
         }
         if(!errors_arr.length){
             console.log('sending');
-            // form.submit();
+            form.submit();
         }
     });
     /* -------------------- Reset ----------------------*/
@@ -1869,7 +1876,7 @@ function granite_form(formsBlock, jsonTheme){
     let char_count_field_arr = document.querySelectorAll('.g__form_field');
     char_count_field_arr.forEach((field) => {
         let input = field.querySelector('input');
-        if(input){
+        if(!!input){
             let char_limit = input.getAttribute('maxlength');
             if(char_limit > 0){
             input.addEventListener('keyup', () => {
@@ -2060,7 +2067,6 @@ function granite_form(formsBlock, jsonTheme){
         let textarea_arr = [];
         let save_data = {};
         let arr_form_fields = document.querySelectorAll(`${cssId} .g__form_field`);
-        console.log(`Granite ID: ${cssId}  Form_Id: ${attr__form_id}`);
         arr_form_fields.forEach((field) => {
             let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
             input_arr.push(input);
@@ -2106,7 +2112,6 @@ function granite_form(formsBlock, jsonTheme){
                     save_data[property] = value
                 }
             })
-            console.log(save_data);
             $.ajax({
                 type: o.method,
                 url: o.action,

@@ -348,88 +348,67 @@ let dataVisualizationBlock = {
 Tabs
 ---------------------------------------------*/
 let tabsBlock = {
-  "id":"granite-tabs",
-  "options":{
-     "style":"multi",
-     "font_size":"10px",
-     "highlight_color":"",
-     "align":"center",
-     "padding":"large",
-     "full_width":true,
-     "action_header":"",
-     "action_header_size":"28px",
-     "action_header_color":"#5d5d5d",
-     "action_header_bottom_margin":"20px",
-     "action_description":"",
-     "action_description_size":"18px",
-     "action_description_color":"#5d5d5d",
-     "action_description_bottom_margin":"20px",
-     "action_align_text":"left",
-     "micro_top_margin":"150px",
-     "action_bottom_margin":"25px",
-     "action_border":true,
-     "classes":"",
-     "visibility_settings":"",
-     "cursor_disabled":true,
-     "action":"hash_builder"
-  },
-  "records":[
-     {
-        "name":"Super long step name",
-        "href":"",
-        "dropdown":true,
-        "dropdown_item":[
-           {
-              "name":"Basic Info",
-              "href":""
-           },
-           {
-              "name":"Registration History",
-              "href":""
-           },
-           {
-              "name":"Sign Out",
-              "href":""
-           }
-        ],
-        "addapptation_component":true,
-        "addapptation_name":"Step",
-        "addapptation_type":"step",
-        "addapptation_code_id":"a0R1I00000FfTXsUAN",
-        "addapptation_id":"05952000947539011",
-        "addapptation_navigation":"",
-        "completed":false,
-        "action":"hash_builder"
-     },
-     {
-        "name":"Step 2",
-        "icon":"",
-        "href":"",
-        "dropdown_item":"",
-        "addapptation_component":true,
-        "addapptation_name":"Step",
-        "addapptation_type":"step",
-        "addapptation_code_id":"a0R1I00000FfTXsUAN",
-        "addapptation_id":"011691597196079817",
-        "addapptation_navigation":"",
-        "dropdown":false,
-        "action":"hash_builder"
-     },
-     {
-        "name":"Step 3",
-        "href":"?id=",
-        "dropdown_item":"",
-        "addapptation_component":true,
-        "addapptation_name":"Tab",
-        "addapptation_type":"step",
-        "addapptation_code_id":"a0R1I00000FfTXsUAN",
-        "addapptation_id":"07800309315918004",
-        "addapptation_navigation":"",
-        "completed":false,
-        "dropdown":false,
-        "action":"hash_builder"
-     }
-  ]
+   "id":"granite-tabs",
+   "options":{
+      "style":"multi",
+      "font_size":"medium",
+      "highlight_color":"#bf458a",
+      "align":"left",
+      "padding":"medium",
+      "full_width":true,
+      "action_header":"",
+      "action_header_size":"28px",
+      "action_header_color":"#5d5d5d",
+      "action_header_bottom_margin":"20px",
+      "action_description":"",
+      "action_description_size":"18px",
+      "action_description_color":"#5d5d5d",
+      "action_description_bottom_margin":"20px",
+      "action_align_text":"left",
+      "action_bottom_margin":"25px",
+      "action_border":true,
+      "classes":"",
+      "cursor_disabled":false,
+      "action":"hash_builder"
+   },
+   "records":[
+      {
+         "name":"Builder",
+         "href":"/block_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR&code_id=a0R1I00000J7xvNUAR&page_id=a0Q1I00000XfIB5UAN&solution_id=a0P1I000008Oy6iUAC"
+      },
+      {
+         "name":"Settings",
+         "href":"/attribute_settings?in_sidepane=true&id=a0R1I00000J7xvNUAR&code_id=a0R1I00000J7xvNUAR&page_id=a0Q1I00000XfIB5UAN&solution_id=a0P1I000008Oy6iUAC&addapptation_navigation="
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      },
+      {
+         "name":"Query Builder",
+         "href":"/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR"
+      }
+   ]
 }
 /*---------------------------------------------
 Tiles
