@@ -1,0 +1,51 @@
+<% json ||= {
+  "options": {
+    "background_color": "red",
+    "background_image": "https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/granite/granite_homepage_hero.png",
+    "background_size": "cover",
+    "background_position": "center center",
+    "padding": "100px 200px",
+    "margin": "15px"
+  }
+} %>
+<% options = json[:options] || {}
+background_color = options[:background_color].present? ? options[:background_color] : "#fff"
+background_image = options[:background_image].present? ? options[:background_image] : ""
+background_repeat = options[:background_repeat].present? ? options[:background_repeat] : "no-repeat"
+background_position = options[:background_position].present? ? options[:background_position] : "center center"
+background_size = options[:background_size].present? ? options[:background_size] : "cover"
+max_width = options[:max_width].present? ? options[:max_width] : "none"
+height = options[:height].present? ? options[:height] : ""
+padding = options[:padding].present? ? options[:padding] : "15px"
+margin = options[:margin].present? ? options[:margin] : "15px"
+
+style_arr = []
+
+if background_image.present?
+  background_css = "background: " + background_color + " url('" + background_image  + "') " + background_repeat + " " + background_position + ";" + "background-size: " + background_size + ";"
+  style_arr.push(background_css)
+else
+  background_css = "background-color:" + background_color + ";"
+  style_arr.push(background_css)
+end
+
+if height.present?
+  height_css = "height:" + height + ";"
+  style_arr.push(height_css)
+end
+
+padding_css = "padding:" + padding + ";"
+style_arr.push(padding_css)
+margin_css = "margin:" + margin + ";"
+style_arr.push(margin_css)
+max_width_css = "max-width:" + max_width + ";"
+style_arr.push(max_width_css)
+
+inline_style = ""
+style_arr.each do |style|
+  inline_style +=  style
+end
+
+%>
+
+<div class="row" style="<%= inline_style %>"></div>

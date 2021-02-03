@@ -1669,7 +1669,7 @@ let formsBlock_signup = {
       }
    ]
 }
-let formsBlock = {
+let formsBlockDISABLE = {
    "id":"granite-form",
    "options":{
       "title":"",
@@ -1677,10 +1677,10 @@ let formsBlock = {
       "description":"",
       "title_font_size":"40px",
       "description_font_size":"20px",
-      "db_action":"",
-      "db_object":"",
-      "db_id":"",
-      "db_redirect":"",
+      "db_action":"db_action",
+      "db_object":"db_object_343",
+      "db_id":"g__uh23undw",
+      "db_redirect":"redirect.com",
       "flash_message":"",
       "form_id":"g__test_92",
       "button_1_label":"",
@@ -1695,7 +1695,7 @@ let formsBlock = {
       "allow_cancel":false,
       "activate_recaptcha":false,
       "auto_superscript":false,
-      "autosave":false,
+      "autosave":true,
       "action":"/"
    },
    "records":[
@@ -2540,6 +2540,535 @@ let formsBlock = {
          "disabled":false,
          "dependency_not_blank":false,
          "inline_field":false,
+         "action":"hash_builder"
+      }
+   ]
+}
+let formsBlock = {
+   "id":"granite-form",
+   "options":{
+      "title":"Case",
+      "description":"",
+      "form_id":"",
+      "addapptation_action":"/form_submission",
+      "db_action":"",
+      "enctype":"application/x-www-form-urlencoded",
+      "method":"POST",
+      "db_object":"Case",
+      "db_id":"",
+      "db_redirect":"/case?id={record.Id}",
+      "button_1_label":"",
+      "button_1_href":"",
+      "submit_label":"Submit",
+      "cancel_label":"Cancel",
+      "allow_cancel":true,
+      "max_width":"",
+      "flash_message":"Case saved",
+      "hide_submit":false,
+      "autosave":true,
+      "action":"/form_submission"
+   },
+   "records":[
+      {
+         "title":"Subject",
+         "name":"Subject",
+         "required":true,
+         "type":"string",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+
+         ],
+         "id":"Subject",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Subject",
+         "addapptation_type":"string",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"07033929441252922",
+         "addapptation_navigation":"",
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Status",
+         "name":"Status",
+         "required":true,
+         "type":"picklist",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+            "Submitted",
+            "In Progress",
+            "Ready for Customer Review",
+            "Additional Information Requested",
+            "Completed",
+            "Waiting on Product Team",
+            "Duplicate",
+            "Canceled"
+         ],
+         "id":"Status",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Status",
+         "addapptation_type":"picklist",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"075160566892094",
+         "addapptation_navigation":"",
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"App",
+         "name":"addapptation_Solution__c",
+         "type":"picklist",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+            [
+               "a0P1I000006IQ1dUAG",
+               "Cards"
+            ],
+            [
+               "a0P1I000006IODMUA4",
+               "Chart"
+            ],
+            [
+               "a0P1I000006LqO8UAK",
+               "Comet Competition Cloned"
+            ],
+            [
+               "a0P1I000006IPzcUAG",
+               "Datatable"
+            ],
+            [
+               "a0P1I000006KnjXUAS",
+               "Dispatcher"
+            ],
+            [
+               "a0P1I0000098ajHUAQ",
+               "Emerson"
+            ],
+            [
+               "a0P1I000006IQONUA4",
+               "Form"
+            ],
+            [
+               "a0P1I000006J7VGUA0",
+               "Geovisualization"
+            ],
+            [
+               "a0P1I000008Oy6iUAC",
+               "Granite"
+            ],
+            [
+               "a0P1I000006J0t2UAC",
+               "Heatmap"
+            ],
+            [
+               "a0P1I000006IkLhUAK",
+               "Hero"
+            ],
+            [
+               "a0P1I000006L1XgUAK",
+               "Impersonate"
+            ],
+            [
+               "a0P1I000006IeqaUAC",
+               "Loader"
+            ],
+            [
+               "a0P1I0000098cSNUAY",
+               "Micro Documentation"
+            ],
+            [
+               "a0P1I000006KmlHUAS",
+               "Micro README"
+            ],
+            [
+               "a0P1I000006KwzwUAC",
+               "MPM"
+            ],
+            [
+               "a0P1I000006IO6aUAG",
+               "Navigation"
+            ],
+            [
+               "a0P1I000006Ia43UAC",
+               "Router"
+            ],
+            [
+               "a0P1I000006K8axUAC",
+               "SevenOfNine"
+            ],
+            [
+               "a0P1I000006IOBkUAO",
+               "Side Pane"
+            ],
+            [
+               "a0P1I000006ILWOUA4",
+               "Tabs"
+            ],
+            [
+               "a0P1I000006IgkZUAS",
+               "TestWorkflowBuilder"
+            ],
+            [
+               "a0P1I000006INV8UAO",
+               "Tiles"
+            ],
+            [
+               "a0P1I000006IPPyUAO",
+               "Workflow Builder"
+            ],
+            [
+               "a0P1I000006JLM1UAO",
+               "Workflow Builder Cloned"
+            ]
+         ],
+         "id":"addapptation_Solution__c",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"addapptation Solution",
+         "addapptation_type":"reference",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"05365685737544359",
+         "addapptation_navigation":"",
+         "required":false,
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Please copy the Page URL and Paste it here",
+         "name":"Page_URL__c",
+         "type":"url",
+         "value":"",
+         "required":true,
+         "options":[
+
+         ],
+         "placeholder":"",
+         "autocomplete":"on",
+         "length":"255",
+         "rows":"",
+         "classes":"",
+         "id":"Page_URL__c",
+         "super_text":true,
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Page URL",
+         "addapptation_type":"url",
+         "addapptation_code_id":"a0R1I00000FDtH6UAL",
+         "addapptation_id":"06311304039629062",
+         "addapptation_navigation":"",
+         "inline":false,
+         "use_options_from_database":false,
+         "multiple":false,
+         "collapsed":false,
+         "disabled":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Description",
+         "name":"Description",
+         "required":true,
+         "type":"textarea",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+
+         ],
+         "id":"Description",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Description",
+         "addapptation_type":"textarea",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"046165146065892304",
+         "addapptation_navigation":"",
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Reason",
+         "name":"Reason",
+         "type":"picklist",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+            "New Feature",
+            "Change Request",
+            "Bug",
+            "Training",
+            "Technical Question",
+            "Reporting",
+            "Salesforce Administration",
+            "Billing Question",
+            "Other"
+         ],
+         "id":"Reason",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Case Reason",
+         "addapptation_type":"picklist",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"0050306812824970404",
+         "addapptation_navigation":"",
+         "required":false,
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Priority",
+         "name":"Priority",
+         "required":true,
+         "type":"picklist",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+            [
+               "",
+               ""
+            ],
+            [
+               "High",
+               "High"
+            ],
+            [
+               "Medium",
+               "Medium"
+            ],
+            [
+               "Low",
+               "Low"
+            ]
+         ],
+         "id":"Priority",
+         "placeholder":"",
+         "length":"",
+         "use_options_from_database":true,
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Priority",
+         "addapptation_type":"picklist",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"09929087058422819",
+         "addapptation_navigation":"",
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Rank",
+         "name":"Rank__c",
+         "type":"number",
+         "value":"",
+         "use_options_from_database":true,
+         "options":null,
+         "placeholder":"",
+         "autocomplete":"on",
+         "length":"",
+         "rows":"",
+         "classes":"",
+         "id":"Rank__c",
+         "super_text":true,
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Rank",
+         "addapptation_type":"double",
+         "addapptation_code_id":"a0R1I00000FDtH6UAL",
+         "addapptation_id":"022671748009777715",
+         "addapptation_navigation":"",
+         "required":false,
+         "inline":false,
+         "multiple":false,
+         "collapsed":false,
+         "disabled":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Additional Customer Notes",
+         "name":"Additional_Customer_Notes__c",
+         "type":"quill",
+         "classes":"",
+         "value":"",
+         "super_text":true,
+         "options":[
+
+         ],
+         "id":"Additional_Customer_Notes__c",
+         "placeholder":"",
+         "length":"",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Additional Customer Notes",
+         "addapptation_type":"textarea",
+         "addapptation_code_id":"a0R1I00000FDtH6UAL",
+         "addapptation_id":"0053338102273265076",
+         "addapptation_navigation":"",
+         "required":false,
+         "collapsed":false,
+         "disabled":false,
+         "multiple":false,
+         "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"Type",
+         "value":"External (Displayed In Portal)",
+         "id":"a__3c1cc0fcf2baf041ee9d",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"03906095902401958",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"Origin",
+         "value":"addapptation Portal",
+         "id":"a__71e8bf0bb1d7a9246a2c",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"0397816579189467",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"AccountId",
+         "value":null,
+         "id":"a__42654f255d54268ca01a",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"001804555911093564",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"addapptation_Organization__c",
+         "value":"a0T1I000007neMOUAY",
+         "id":"a__5a48ece5eb1cfa7f5737",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"022030515884602053",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"addapptation_User__c",
+         "value":"a0S1I00000NcnjUUAR",
+         "id":"a__fb39e8415af4047b4f14",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"03123866919855154",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"ContactId",
+         "value":null,
+         "id":"a__0c226eb897b3b7d993bc",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"0012361893928353629",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "type":"hidden",
+         "name":"OwnerId",
+         "value":"00G1I000000YFld",
+         "id":"a__e3d94a2fcde88710f9f5",
+         "addapptation_component":true,
+         "addapptation_name":"Hidden Field",
+         "addapptation_type":"hidden",
+         "addapptation_code_id":"a0R1I00000FDtGmUAL",
+         "addapptation_id":"09875373381235402",
+         "addapptation_navigation":"",
+         "action":"hash_builder"
+      },
+      {
+         "title":"File Upload",
+         "name":"file_upload",
+         "id":"a__0c244b2a2a5e2a73a904",
+         "type":"file",
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":true,
+         "addapptation_name":"File Upload",
+         "addapptation_type":"file",
+         "addapptation_code_id":"a0R1I00000FDtH6UAL",
+         "addapptation_id":"05184545133307628",
+         "addapptation_navigation":"",
+         "required":false,
+         "dependency_not_blank":false,
          "action":"hash_builder"
       }
    ]

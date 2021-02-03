@@ -8,7 +8,7 @@ let formsBlock = {
        "description_font_size":"20px",
        "db_action":"",
        "db_object":"",
-       "db_id":"",
+       "db_id":"g_sf2dsdsf33",
        "db_redirect":"",
        "flash_message":"",
        "form_id":"",

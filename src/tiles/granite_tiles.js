@@ -2,7 +2,6 @@
 Block Name: Granite.js Tile Block
 ---------------------------------------------*/
 function granite_tiles(jsonTiles, jsonTheme) {
-    console.log('v2');
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -112,6 +111,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
             var filter_one = blk;
             var filter_two = blk;
             var hover_color = !!o.hover_color ? o.hover_color : "#000000";
+            var border_color = '#ffffff';
+            var pagination_hover = '#f5f5f5';
         break;
         case "standard":
           var header_color =  !!o.header_color ? o.header_color : blk;
@@ -120,6 +121,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
           var filter_one = wht;
           var filter_two = wht;
           var hover_color = !!o.hover_color ? o.hover_color : "#ffffff";
+          var border_color = '#5d5d5d';
+          var pagination_hover = '#f5f5f5';
         break;
         default:
           var header_color =  !!o.header_color ? o.header_color : wht;
@@ -128,6 +131,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
           var filter_one = blk;
           var filter_two = blk;
           var hover_color = !!o.hover_color ? o.hover_color : "#000000";
+          var border_color = '#ffffff';
+          var pagination_hover = '#f5f5f5';
     }
     if(o.no_overlay){
       var filter_one = "";
@@ -138,8 +143,10 @@ function granite_tiles(jsonTiles, jsonTheme) {
     }
     var filter_one_opacity = o.filter_one_opacity || ".5";
     var filter_two_opacity = o.filter_two_opacity || ".5";
-
-
+    /*---------------------------------------------
+    Pagination Position
+    ---------------------------------------------*/
+    var pagination_position = o.pagination_position || 'center';
     /*---------------------------------------------
     Layout Case Block
     ---------------------------------------------*/
@@ -536,7 +543,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
       }
       .g__inline-m-inline{
         display:flex;
-        flex-direction: row;
+        flex-direction: column;
       }
       .g__align-bottom{
         display: flex;
@@ -782,6 +789,65 @@ function granite_tiles(jsonTiles, jsonTheme) {
         background-color: rgba(0, 0, 0, 0.1);
       }
       /*---------------------------------------------
+      Pagination
+      ---------------------------------------------*/
+      .g__pagination_wrapper{
+        display: flex;
+        flex-direction: row;
+        justify-content: ${o.pagination_info_text ? 'space-between' : 'flex-end'};
+        align-items: center;
+        margin: 30px 15px;
+      }
+      .g__pagination_wrapper #g__info_text p{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        margin: 0;
+      }
+      ul.g__pagination_container{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        list-style-type: none;
+        display: flex;
+        overflow: auto;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 0;
+      }
+      ul.g__pagination_container li{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: ${header_color};
+        font-size: 1rem;
+        border-top: 1px solid ${border_color};
+        border-bottom: 1px solid ${border_color};
+        border-right: 1px solid ${border_color};
+        height: 30px;
+        min-width: 30px;
+        transition: background .3s ease;
+      }
+      ul.g__pagination_container li:first-child{
+        border: 1px solid ${border_color};
+        border-radius: 4px 0 0 4px;
+      }
+      ul.g__pagination_container li:last-child{
+        border-radius: 0 4px 4px 0;
+      }
+      ul.g__pagination_container li:hover{
+        cursor: pointer;
+        background: ${pagination_hover};
+      }
+      ul.g__pagination_container li.active{
+        background: #eaeaea;
+      }
+      .g__pagination_hidden{
+        display: none;
+      }
+      .g__pagination_show{
+        display: block;
+      }
+      /*---------------------------------------------
       Mobile Styles
       ---------------------------------------------*/
       @media (max-width: 991.98px) {
@@ -800,7 +866,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
           position: relative;
           flex-direction: column;
           padding: 5px;
-          height: auto;
+          height: 180px;
           opacity: 1;
         }
         .a__tile_wrapper .a__basic_tile .g__desc_container .g__desc{
@@ -850,25 +916,25 @@ function granite_tiles(jsonTiles, jsonTheme) {
         .g__center-align-m-left{
           align-items: flex-start;
         }
-        .g__search-search input#a__search_input {
-          height: 30px;
-          width: 30px;
-          color: transparent;
-          background: #fff;
-          border: 0;
-        }
-        .g__search-search.active input#a__search_input {
-          height: 30px;
-          width: 300px;
-          color: transparent;
-          font-size: 14px;
-          background: #fff;
-          border: 1px solid #b4b4b4;
-          padding-left: 2rem;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          border-radius: 5px;
-        }
+        // .g__search-search input#a__search_input {
+        //   height: 30px;
+        //   width: 30px;
+        //   color: transparent;
+        //   background: #fff;
+        //   border: 0;
+        // }
+        // .g__search-search.active input#a__search_input {
+        //   height: 30px;
+        //   width: 300px;
+        //   color: transparent;
+        //   font-size: 14px;
+        //   background: #fff;
+        //   border: 1px solid #b4b4b4;
+        //   padding-left: 2rem;
+        //   -webkit-border-radius: 5px;
+        //   -moz-border-radius: 5px;
+        //   border-radius: 5px;
+        // }
       }
       @media (max-width: 575.98px) {
         ${cssID}.a__tile_wrapper .g__no_wrap .g__col{
@@ -1179,8 +1245,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
                   for (i = 0; i < cont.length; i++) {
                       var tileCont = cont[i].getElementsByClassName("g__tile_header")[0];
                       var tileBody = cont[i].getElementsByClassName("g__tile_body")[0];
-                      console.log(tileCont);
-                      console.log(tileBody);
                       var txtValue = tileCont.textContent || tileCont.innerText;
                       var tags = tileBody.getAttribute("data-tags");
                       if(tags && tags.toUpperCase().includes(filter)){
@@ -1272,25 +1336,21 @@ function granite_tiles(jsonTiles, jsonTheme) {
             }
             // search only
             if(!aTitle && !aDescription && !aButtons && !aFilters && aSearch){
-                console.log('Search Only');
                 wrapper.classList.add("g__inline-m-inline");
                 wrapper.classList.add("g__end");
             }
             // filter only
             if(aTitle && !aDescription && !aButtons && aFilters && !aSearch){
-              console.log('Filter Only');
               wrapper.classList.add("g__inline-m-inline");
               wrapper.classList.add("g__end");
             }
             // buttons only
             if(aTitle && !aDescription && aButtons && !aFilters && !aSearch){
-                console.log('Buttons Only');
                 wrapper.classList.add("g__inline-m-inline");
                 wrapper.classList.add("g__end");
             }
             // Search and buttons
             if(aTitle && !aDescription && aButtons && !aFilters && aSearch){
-              console.log('Search and Buttons');
                 wrapper.classList.add("g__inline-m-inline");
                 wrapper.classList.add("g__end");
                 content.classList.add("g__inline-m-inline");
@@ -1360,7 +1420,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
             }
             //Header, description, search and buttons
             if(aTitle && aDescription && aButtons && !aFilters && aSearch){
-              console.log('Header, Description, Search and Buttons');
                 wrapper.classList.add("g__block-m-block");
                 content.classList.add("g__inline-m-inline");
                 content.classList.add("g__end");
@@ -1368,7 +1427,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
             }
             //Header, description, search and filter
             if(aTitle && aDescription && !aButtons && aFilters && aSearch){
-              console.log('Header, Description, Search and Filter');
                 wrapper.classList.add("g__block-m-block");
                 content.classList.add("g__inline-m-inline");
                 content.classList.add("g__end");
@@ -1376,14 +1434,12 @@ function granite_tiles(jsonTiles, jsonTheme) {
             }
             //Header, description and search
             if(aTitle && aDescription && !aButtons && !aFilters && aSearch){
-              console.log('Header, Description and search');
                 wrapper.classList.add("g__block-m-block");
                 content.classList.add("g__inline-m-inline");
                 content.classList.add("g__end");
             }
             //Header, description and filters
             if(aTitle && aDescription && !aButtons && aFilters && !aSearch){
-              console.log('Header, Description and search');
                 wrapper.classList.add("g__block-m-block");
                 content.classList.add("g__inline-m-inline");
                 content.classList.add("g__end");
@@ -1413,10 +1469,98 @@ for (var i = 0; i < dt_search.length; i++){
   });
 }
 if(o.pagination){
-  const tiles_per_page = o.tiles_per_page;
-  console.log(tiles_per_page);
+  const tiles_per_page = parseInt(o.tiles_per_page);
+  let current_page = 1;
   const arr_tiles = document.querySelectorAll('.g__tile_container');
-  console.log(arr_tiles.length);
+  let page_count = Math.ceil(arr_tiles.length / tiles_per_page);
+
+  let pagination_wrapper = document.createElement('div');
+  pagination_wrapper.classList.add('g__pagination_wrapper');
+  tileContainer.appendChild(pagination_wrapper);
+
+  if(o.pagination_info_text){
+    let info_text = document.createElement('div');
+    info_text.id = 'g__info_text';
+    pagination_wrapper.appendChild(info_text);
+  }
+
+
+  let pagination_container = document.createElement('ul')
+  pagination_container.classList.add('g__pagination_container');
+
+  let paginated_back = document.createElement('li');
+  paginated_back.id = 'g__pagination_back';
+  paginated_back.innerHTML = '<i class="fal fa-angle-double-left"></i>';
+  pagination_container.appendChild(paginated_back);
+  for (let i = 1; i < page_count + 1; i++) {
+    let paginated_button = document.createElement('li');
+    paginated_button.classList.add('g__pagination_page')
+    paginated_button.innerText = i;
+    current_page == i ? paginated_button.classList.add('active'): '';
+    pagination_container.appendChild(paginated_button);
+    pagination_wrapper.appendChild(pagination_container);
+
+    paginated_button.addEventListener('click', function () {
+      let page_num = paginated_button.innerText;
+      current_page = parseInt(page_num);
+      displayTiles(current_page, arr_tiles, tiles_per_page);
+      let current_btn = document.querySelector('.g__pagination_container li.active');
+      current_btn.classList.remove('active');
+      paginated_button.classList.add('active');
+    });
+  }
+  let paginated_forward = document.createElement('li');
+    paginated_forward.id = 'g__pagination_next';
+    paginated_forward.innerHTML = '<i class="fal fa-angle-double-right"></i>';
+    pagination_container.appendChild(paginated_forward);
+
+  function displayTiles(current_page, arr_tiles, tiles_per_page){
+    let tiles_max = current_page * tiles_per_page;
+    let tiles_min = tiles_max - tiles_per_page;
+    if(o.pagination_info_text){
+      let info = document.getElementById('g__info_text');
+      info.innerHTML = `<p>Showing ${tiles_min + 1} to ${tiles_max} of ${arr_tiles.length}</p>`
+    }
+    arr_tiles.forEach((tile, num) => {
+      tile.classList.add('g__pagination_hidden');
+      tile.classList.remove('g__pagination_show');
+      if(num < tiles_max && num >= tiles_min){
+        tile.classList.add('g__pagination_show');
+      }
+    })
+  }
+
+  function backNextBtn(btn, direction){
+    btn.addEventListener('click', () => {
+      let parent = btn.parentElement;
+      let pages = parent.children;
+      let page_count = pages.length - 2;
+      let active_page;
+      let next_page;
+      for (let i = 1; i < pages.length; i++) {
+        let is_active = pages[i].classList.contains('active');
+        if(is_active){
+          active_page = pages[i].innerText;
+          next_page = direction ? pages[i+1] : pages[i-1];
+        }
+      }
+      if((direction && active_page < page_count) || (!direction && active_page != 1)){
+        current_page = direction ? parseInt(active_page) + 1 : parseInt(active_page) - 1;
+        displayTiles(current_page, arr_tiles, tiles_per_page)
+        let current_btn = document.querySelector('.g__pagination_container li.active');
+        current_btn.classList.remove('active');
+        next_page.classList.add('active');
+      }
+    })
+  };
+
+  let next_btn = document.getElementById('g__pagination_next');
+  let back_btn = document.getElementById('g__pagination_back');
+  backNextBtn(next_btn, true);
+  backNextBtn(back_btn, false);
+
+
+  displayTiles(current_page, arr_tiles, tiles_per_page)
 }
 
 
@@ -1446,9 +1590,9 @@ window['tileSearch'] = function (id, el) {
         bodyValue = body.textContent || body.innerText;
         content += ' ' + bodyValue;
       }
-      console.log(content);
       if (content.toUpperCase().indexOf(filter) > -1) {
           t[i].style.display = "";
+          t[i].classList.remove('g__pagination_hidden');
           } else {
           t[i].style.display = "none";
       }

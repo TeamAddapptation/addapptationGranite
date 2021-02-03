@@ -1,53 +1,47 @@
-function granite_button(jsonButton, jsonTheme){
+function granite_header(jsonHeader, jsonTheme){
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
-    const id = jsonButton.id;
-    const o = jsonButton.options;
-    const r = jsonButton.records;
+    const id = jsonHeader.id;
+    const o = jsonHeader.options;
+    const r = jsonHeader.records;
     const t = jsonTheme;
-    const mode = t.mode || 'midnight';
+    const mode = t.mode || 'midight';
     const cssId = "#" + id;
     const granite_div = document.getElementById(id);
-
     /*---------------------------------------------
     Set The mode
     ---------------------------------------------*/
     granite_div.setAttribute('mode', mode);
-
     /*---------------------------------------------
     Attributes
     ---------------------------------------------*/
+    //mode
+    let font_color = mode === 'midnight' ? '#ffffff' : '#101010';
     //text
-    let btn_text = o.btn_text || 'Click Here';
-    let text_color = o.text_color || '#ffffff';
+    let header_tag = o.header_tag || 'h2';
+    let header_text = o.header_text || 'Heading';
+    let text_color = o.text_color || font_color;
     let font_style = o.font_style || 'hero-new, sans-serif';
     let font_weight = o.font_weight || '300';
-
     //style
-    let btn_color = o.button_color || t.primary || '#D44697';
-    let border_width = o.border_width || '2px';
-    let border_color = o.border_color || btn_color;
-    let border_radius = o.border_radius || '4px';
-    let btn_padding_top = o.btn_padding_top || '10px';
-    let btn_padding_right = o.btn_padding_right || '25px';
-    let btn_padding_bottom = o.btn_padding_bottom || '10px';
-    let btn_padding_left = o.btn_padding_left || '25px';
-    let btn_margin_top = o.btn_margin_top || '5px';
-    let btn_margin_right = o.btn_margin_right || '5px';
-    let btn_margin_bottom = o.btn_margin_bottom || '5px';
-    let btn_margin_left = o.btn_margin_left || '5px';
-
-    //hover
-    let btn_color_hover = o.button_color_hover || t.secondary || '#FF8BCD';
-    let text_color_hover = o.text_color_hover || '#ffffff';
-    let border_width_hover = o.border_width_hover || '2px';
-    let border_color_hover = o.border_color_hover || btn_color;
-
+    let background_color = o.background_color || 'transparent';
+    let border_width = o.border_width || 'none';
+    let border_color = o.border_color || 'none';
+    let border_radius = o.border_radius || '0';
+    let header_padding_top = o.header_padding_top || '10px';
+    let header_padding_right = o.header_padding_right || '25px';
+    let header_padding_bottom = o.header_padding_bottom || '10px';
+    let header_padding_left = o.header_padding_left || '25px';
+    let header_margin_top = o.header_margin_top || '5px';
+    let header_margin_right = o.header_margin_right || '5px';
+    let header_margin_bottom = o.header_margin_bottom || '5px';
+    let header_margin_left = o.header_margin_left || '5px';
     //layout
-    let align_btn = o.align_btn || "flex-start";
-    let btn_width = o.btn_width || 'auto';
-
+    let vertical_align = o.vertical_align || 'flex-start';
+    let horizontal_align = o.horizontal_align || 'flex-start';
+    let align_header = o.align_header || 'center'; //left,right, center
+    let header_width = o.header_width || 'auto';
     /*---------------------------------------------
     Add Font Family To Header
     ---------------------------------------------*/
@@ -61,51 +55,43 @@ function granite_button(jsonButton, jsonTheme){
         fontLink.href = "https://use.typekit.net/ihq4dbs.css";
         head.appendChild(fontLink);
     }
-
     /*---------------------------------------------
     CSS Block
     ---------------------------------------------*/
-    var buttonCss = document.createElement('style');
-    buttonCss.innerHTML = `
+    var headerCss = document.createElement('style');
+    headerCss.innerHTML = `
     ${cssId}{
         display: flex;
-        justify-content: ${align_btn};
+        justify-content: ${vertical_align};
+        align-items: ${horizontal_align};
     }
-    ${cssId} .g__elm_btn{
+    ${cssId} .g__elm_header{
         font-style: ${font_style};
         font-weight: ${font_weight};
         color: ${text_color};
-        width: ${btn_width};
-        padding-top: ${btn_padding_top};
-        padding-right: ${btn_padding_right};
-        padding-bottom: ${btn_padding_bottom};
-        padding-left: ${btn_padding_left};
-        margin-top: ${btn_margin_top};
-        margin-right: ${btn_margin_right};
-        margin-bottom: ${btn_margin_bottom};
-        margin-left: ${btn_margin_left};
+        width: ${header_width};
+        padding-top: ${header_padding_top};
+        padding-right: ${header_padding_right};
+        padding-bottom: ${header_padding_bottom};
+        padding-left: ${header_padding_left};
+        margin-top: ${header_margin_top};
+        margin-right: ${header_margin_right};
+        margin-bottom: ${header_margin_bottom};
+        margin-left: ${header_margin_left};
         border-radius: ${border_radius};
         border: ${border_width} solid ${border_color};
-        background: ${btn_color};
-        transition: all .5s ease;
-    }
-    ${cssId} .g__elm_btn:hover{
-        background: ${btn_color_hover};
-        color: ${text_color_hover};
-        border: ${border_width_hover} solid ${border_color_hover};
-        cursor: pointer;
+        background: ${background_color};
     }
     `
-    document.head.appendChild(buttonCss);
+    document.head.appendChild(headerCss);
     /*---------------------------------------------
-    Wrapper
+    Wrapper and Element
     ---------------------------------------------*/
-    const button = document.createElement('a');
-    button.setAttribute('class','g__elm_btn');
-    button.innerHTML = btn_text;
-
+    const header = document.createElement(header_tag);
+    header.setAttribute('class','g__elm_header');
+    header.innerHTML = header_text;
     /*---------------------------------------------
     Append micro to the DOM
     ---------------------------------------------*/
-    granite_div.appendChild(button);
+    granite_div.appendChild(header);
 }
