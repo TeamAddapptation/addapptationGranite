@@ -2554,6 +2554,8 @@ let formsBlock = {
          "required":true,
          "type":"string",
          "classes":"",
+         "show_count": true,
+         "char_limit": "10",
          "value":"",
          "super_text":true,
          "options":[

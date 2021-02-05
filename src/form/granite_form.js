@@ -1129,7 +1129,7 @@ function granite_form(formsBlock, jsonTheme){
         !!r.value ? input.setAttribute('value', r.value) : input.setAttribute('value', '');
         !!r.title ? input.setAttribute('title', r.title) : "";
         !!r.placeholder ? input.setAttribute('placeholder', r.placeholder) : "";
-        r.length > 0 ? input.setAttribute('maxlength', r.length) : "";
+        r.char_limit > 0 ? input.setAttribute('maxlength', r.char_limit) : "";
         !!r.invalid_message ? input.setAttribute('oninvalid', `this.setCustomValidity("${r.invalid_message}")`) : "";
         input.required = r.required;
         input.disabled = r.disabled;
@@ -1172,7 +1172,7 @@ function granite_form(formsBlock, jsonTheme){
                 form_field.setAttribute('class', "g__form_field");
 
                 //Global labels and character counter
-                if((!!r.title || !!r.length) && (r.type != 'checkbox') && (r.type != 'hidden')){
+                if((!!r.title || !!r.char_limit) && (r.type != 'checkbox') && (r.type != 'hidden')){
                     let field_info_container = document.createElement('div');
                         field_info_container.setAttribute('class', 'g__field_info')
                     form_field.appendChild(field_info_container);
@@ -1183,10 +1183,10 @@ function granite_form(formsBlock, jsonTheme){
                             label.innerHTML = r.title;
                         field_info_container.appendChild(label);
                     }
-                    if (r.length > 0 && r.show_count){
+                    if (r.char_limit > 0 && r.show_count){
                         let count_container = document.createElement('div');
                             count_container.setAttribute('class', 'g__char_remain')
-                            count_container.innerHTML = '0/' + r.length;
+                            count_container.innerHTML = '0/' + r.char_limit;
                         field_info_container.appendChild(count_container);
                     }
                 }
@@ -1310,7 +1310,7 @@ function granite_form(formsBlock, jsonTheme){
                 case "number":
                     let num_container = document.createElement('div');
                     num_container.setAttribute('class', "g__number_container");
-                    r.show_counter ? '' : num_container.classList.add('g__hide_counter');
+                    r.show_stepper_arrow ? '' : num_container.classList.add('g__hide_counter');
                     input = document.createElement('input');
                     input.setAttribute('id', r.id);
                     basicAttributes(r, input, class_name)

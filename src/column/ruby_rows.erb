@@ -1,3 +1,13 @@
+<% json ||= {
+  "options": {
+    "background_color": "red",
+    "background_image": "https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/granite/granite_homepage_hero.png",
+    "background_size": "cover",
+    "background_position": "center center",
+    "padding": "100px 200px",
+    "margin": "15px"
+  }
+} %>
 <% options = json[:options] || {}
 background_color = options[:background_color].present? ? options[:background_color] : "#fff"
 background_image = options[:background_image].present? ? options[:background_image] : ""

@@ -1,47 +1,57 @@
-function granite_header(jsonHeader, jsonTheme){
+function granite_button(jsonButton, jsonTheme){
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
-    const id = jsonHeader.id;
-    const o = jsonHeader.options;
-    const r = jsonHeader.records;
+    const id = jsonButton.id;
+    const o = jsonButton.options;
+    const r = jsonButton.records;
     const t = jsonTheme;
-    const mode = t.mode || 'midight';
+    const mode = t.mode || 'midnight';
     const cssId = "#" + id;
     const granite_div = document.getElementById(id);
+
     /*---------------------------------------------
     Set The mode
     ---------------------------------------------*/
     granite_div.setAttribute('mode', mode);
+
     /*---------------------------------------------
     Attributes
     ---------------------------------------------*/
-    //mode
-    let font_color = mode === 'midnight' ? '#ffffff' : '#101010';
+    //action
+    let btn_url = o.btn_url || '';
+    let btn_target = o.btn_target ? '_blank' : '_self';
+    let btn_classes = o.btn_classes;
+    let btn_id = o.btn_id;
+
     //text
-    let header_tag = o.header_tag || 'h2';
-    let header_text = o.header_text || 'Heading';
-    let text_color = o.text_color || font_color;
+    let btn_text = o.btn_text || 'Click Here';
+    let text_color = o.text_color || '#ffffff';
     let font_style = o.font_style || 'hero-new, sans-serif';
     let font_weight = o.font_weight || '300';
+
     //style
-    let background_color = o.background_color || 'transparent';
-    let border_width = o.border_width || 'none';
-    let border_color = o.border_color || 'none';
-    let border_radius = o.border_radius || '0';
-    let header_padding_top = o.header_padding_top || '10px';
-    let header_padding_right = o.header_padding_right || '25px';
-    let header_padding_bottom = o.header_padding_bottom || '10px';
-    let header_padding_left = o.header_padding_left || '25px';
-    let header_margin_top = o.header_margin_top || '5px';
-    let header_margin_right = o.header_margin_right || '5px';
-    let header_margin_bottom = o.header_margin_bottom || '5px';
-    let header_margin_left = o.header_margin_left || '5px';
+    let btn_color = o.button_color || t.primary || '#D44697';
+    let border_width = o.border_width || '2px';
+    let border_color = o.border_color || btn_color;
+    let border_radius = o.border_radius || '4px';
+    let btn_padding = o.btn_padding || '10px 25px';
+    let btn_margin = o.btn_margin || '0px';
+
+    //hover
+    let btn_color_hover = o.btn_color_hover || t.secondary || '#FF8BCD';
+    let text_color_hover = o.text_color_hover || '#ffffff';
+    let border_width_hover = o.border_width_hover || '2px';
+    let border_color_hover = o.border_color_hover || btn_color;
+
     //layout
-    let vertical_align = o.vertical_align || 'flex-start';
-    let horizontal_align = o.horizontal_align || 'flex-start';
-    let align_header = o.align_header || 'center'; //left,right, center
-    let header_width = o.header_width || 'auto';
+    let align_btn = o.align_btn || "flex-start";
+    let btn_width = o.btn_width || 'auto';
+
+    //button Only
+    let btn_type = o.btn_type || 'button';
+
+
     /*---------------------------------------------
     Add Font Family To Header
     ---------------------------------------------*/
@@ -55,43 +65,62 @@ function granite_header(jsonHeader, jsonTheme){
         fontLink.href = "https://use.typekit.net/ihq4dbs.css";
         head.appendChild(fontLink);
     }
+
     /*---------------------------------------------
     CSS Block
     ---------------------------------------------*/
-    var headerCss = document.createElement('style');
-    headerCss.innerHTML = `
+    var buttonCss = document.createElement('style');
+    buttonCss.innerHTML = `
     ${cssId}{
         display: flex;
-        justify-content: ${vertical_align};
-        align-items: ${horizontal_align};
+        justify-content: ${align_btn};
     }
-    ${cssId} .g__elm_header{
+    ${cssId} .g__elm_btn{
         font-style: ${font_style};
         font-weight: ${font_weight};
         color: ${text_color};
-        width: ${header_width};
-        padding-top: ${header_padding_top};
-        padding-right: ${header_padding_right};
-        padding-bottom: ${header_padding_bottom};
-        padding-left: ${header_padding_left};
-        margin-top: ${header_margin_top};
-        margin-right: ${header_margin_right};
-        margin-bottom: ${header_margin_bottom};
-        margin-left: ${header_margin_left};
+        width: ${btn_width};
+        padding: ${btn_padding};
+        margin: ${btn_margin};
         border-radius: ${border_radius};
         border: ${border_width} solid ${border_color};
-        background: ${background_color};
+        background: ${btn_color};
+        transition: all .5s ease;
+    }
+    ${cssId} .g__elm_btn:hover{
+        background: ${btn_color_hover};
+        color: ${text_color_hover};
+        border: ${border_width_hover} solid ${border_color_hover};
+        cursor: pointer;
     }
     `
-    document.head.appendChild(headerCss);
+    document.head.appendChild(buttonCss);
     /*---------------------------------------------
-    Wrapper and Element
+    Wrapper
     ---------------------------------------------*/
-    const header = document.createElement(header_tag);
-    header.setAttribute('class','g__elm_header');
-    header.innerHTML = header_text;
+    let button;
+    if(!!btn_url){
+        button = document.createElement('a');
+        !!o.btn_classes ? button.setAttribute('class', o.btn_classes): '';
+        button.classList.add('g__elm_btn');
+        !!o.btn_id ? button.id = o.btn_id : '';
+        o.btn_disabled ? button.disabled = o.btn_disabled  : '';
+        button.href = btn_url;
+        button.target = btn_target;
+        button.innerHTML = btn_text;
+    } else {
+        button = document.createElement('button');
+        !!o.btn_classes ? button.setAttribute('class', o.btn_classes): '';
+        button.classList.add('g__elm_btn');
+        !!o.btn_id ? button.id = o.btn_id : '';
+        button.type = btn_type;
+        button.target = btn_target;
+        button.innerHTML = btn_text;
+    }
+
+
     /*---------------------------------------------
     Append micro to the DOM
     ---------------------------------------------*/
-    granite_div.appendChild(header);
+    granite_div.appendChild(button);
 }
