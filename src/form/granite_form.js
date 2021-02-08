@@ -61,6 +61,7 @@ function granite_form(formsBlock, jsonTheme){
 
         /* css */
         padding: 15px;
+        max-width: ${o.max_width || 'auto'};
     }
     ${cssId}[mode="midnight"],
     #ui-datepicker-div[mode="midnight"]{
@@ -126,7 +127,7 @@ function granite_form(formsBlock, jsonTheme){
         display: flex;
         flex-direction: column;
         margin: 15px;
-        flex: 1;
+        flex-grow: 1;
     }
     ${cssId} .g__form_copy{
         position: relative;
@@ -167,16 +168,16 @@ function granite_form(formsBlock, jsonTheme){
         color: var(--font-color);
       }
     ${cssId} .g__form_field input.invalid{
-        border-right: 2px solid var(--error-color);
+        border: 2px solid var(--error-color);
     }
     ${cssId} .g__form_field textarea.invalid{
-        border-right: 2px solid var(--error-color);
+        border: 2px solid var(--error-color);
     }
     ${cssId} .g__form_field input.valid{
-        border-right: 2px solid green;
+        border: 2px solid green;
     }
     ${cssId} .g__form_field textarea.valid{
-        border-right: 2px solid green;
+        border: 2px solid green;
     }
     ${cssId} .g__error_msg.active{
         display: flex;
@@ -870,6 +871,69 @@ function granite_form(formsBlock, jsonTheme){
         cursor: pointer;
         background: var(--background-hover);
     }
+    /* ------------------------ Spacing ------------------------------*/
+    ${cssId} .g__spacing_container{
+        display: flex;
+        flex-direction: row;
+        margin-top: 5px;
+    }
+    ${cssId} .g__field_options{
+        display: flex;
+        margin-left: 20px;
+        margin-bottom: 5px;
+    }
+    ${cssId} .g__field_options:hover{
+        cursor: pointer;
+    }
+    ${cssId} .g__field_options .active i{
+        opacity: 1;
+    }
+    ${cssId} .g__field_options i{
+        color: var(--font-color);
+        opacity: .3;
+        padding-right: 15px;
+        transition: opacity .3s ease;
+    }
+    ${cssId} .g__field_options i:hover{
+        opacity: .7;
+        cursor: pointer;
+    }
+    ${cssId} .g__link{
+        color: var(--font-color);
+        opacity: .5;
+        padding-top: 13px;
+        margin: 0 7px;
+        font-size: .7rem;
+        transition: opacity .3s ease;
+    }
+    ${cssId} .g__link.active{
+        opacity: 1;
+    }
+    ${cssId} .g__link:hover{
+        opacity: .7;
+        cursor: pointer;
+    }
+    ${cssId} .g__space_field.g__top,
+    ${cssId} .g__space_field.g__bottom,
+    ${cssId} .g__space_field.g__left,
+    ${cssId} .g__space_field.g__right{
+        flex: 1;
+    }
+    ${cssId} .g__space_field.g__bottom{
+        margin-right: 30px;
+        border-right: 1px solid var(--font-color);
+        padding-right: 30px;
+    }
+    ${cssId} .g__space_field input{
+        width: 100%;
+    }
+    ${cssId} .g__space_field p{
+        color: var(--font-color);
+        margin-top: 4px;
+        font-size: .8rem;
+        margin-bottom: 0;
+        text-align: center;
+    }
     /* ------------------------ Picklist Multiple ------------------------------*/
     ${cssId} .chosen-container-multi{
         display: flex;
@@ -967,13 +1031,48 @@ function granite_form(formsBlock, jsonTheme){
         }
     }
     /* ------------------------ Picklist ------------------------------*/
+
+    /* Default picklist with no custom dropdown */
+    ${cssId} .g__picklist.g__default_picklist select {
+        display: flex;
+    }
+    ${cssId} .g__default_picklist .g__select_default {
+        display: block;
+        position: relative;
+        width: 100%;
+        padding: var(--field-padding);
+        line-height: 1.5;
+        background: var(--background);
+        border: var(--border);
+        border-radius: var(--border-radius);
+        color: var(--font-color);
+        font-family: var(--font-regular);
+        font-weight: 300;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    ${cssId} .g__default_picklist .g__select_default.invalid {
+        border: 2px solid var(--error-color);
+    }
+    ${cssId} .g__picklist.g__default_picklist:after {
+        position: absolute;
+        content: "";
+        top: 16px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border: 6px solid transparent;
+        border-color: var(--font-color) transparent transparent transparent;
+    }
+    /* Custom picklist with custom dropdown */
     ${cssId} .g__picklist {
         position: relative;
     }
-    ${cssId} .g__picklist select {
+    ${cssId} .g__picklist.g__custom_picklist select {
         display: none;
     }
-    ${cssId} .g__picklist{
+    ${cssId} .g__picklist.g__custom_picklist{
         background-color: var(--background);
         border: var(--border);
         border-radius: var(--border-radius);
@@ -991,7 +1090,7 @@ function granite_form(formsBlock, jsonTheme){
         border-color: var(--font-color) transparent transparent transparent;
     }
     ${cssId} .select-selected.invalid {
-        border-right: 2px solid var(--error-color);
+        border: 2px solid var(--error-color);
     }
     /* Point the arrow upwards when the select box is open (active): */
     ${cssId} .select-selected.select-arrow-active:after {
@@ -1119,7 +1218,30 @@ function granite_form(formsBlock, jsonTheme){
     form_container.setAttribute('method', attr__method);
     form_container.setAttribute('enctype', attr__enctype);
     form_container.setAttribute('novalidate', 'false');
-
+    // /* -------------------- Labels and Info ----------------------*/
+    function addLabels(field_info_container, r){
+        //Global labels and character counter
+        if (!!r.title){
+            let label = document.createElement('label');
+                !!r.required ? label.classList.add('required'): '';
+                label.setAttribute('for', r.name);
+                label.innerText = r.title;
+            field_info_container.appendChild(label);
+        }
+        if (r.length > 0 && r.show_count){
+            let count_container = document.createElement('div');
+                count_container.setAttribute('class', 'g__char_remain')
+                count_container.innerText = '0/' + r.length;
+            field_info_container.appendChild(count_container);
+        }
+        if (r.type === 'spacing'){
+            let field_options = document.createElement('div');
+                field_options.setAttribute('class', 'g__field_options')
+                field_options.innerHTML = '<div class="g__device_icon active"></i><i class="far fa-desktop-alt"></i></div><div class="g__device_icon"><i class="fas fa-mobile-android-alt"></div>';
+            field_info_container.appendChild(field_options);
+        }
+        form_field.appendChild(field_info_container);
+    }
     /* -------------------- Standard Field Attributes ----------------------*/
     function basicAttributes(r, input, class_name){
         input.setAttribute('class', class_name);
@@ -1166,34 +1288,45 @@ function granite_form(formsBlock, jsonTheme){
             r.id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
             let class_name = "g__field_" + r.type;
 
-            //Create field wrapper
+            let field_info_container;
             if ((r.type != 'subheader') && (r.type != 'description') && (r.type != 'hidden')){
-                form_field = document.createElement('div');
-                form_field.setAttribute('class', "g__form_field");
+                    form_field = document.createElement('div');
+                    form_field.setAttribute('class', "g__form_field");
 
-                //Global labels and character counter
-                if((!!r.title || !!r.char_limit) && (r.type != 'checkbox') && (r.type != 'hidden')){
-                    let field_info_container = document.createElement('div');
-                        field_info_container.setAttribute('class', 'g__field_info')
-                    form_field.appendChild(field_info_container);
-                    if (!!r.title){
-                        let label = document.createElement('label');
-                            !!r.required ? label.classList.add('required'): '';
-                            label.setAttribute('for', r.name);
-                            label.innerHTML = r.title;
-                        field_info_container.appendChild(label);
-                    }
-                    if (r.char_limit > 0 && r.show_count){
-                        let count_container = document.createElement('div');
-                            count_container.setAttribute('class', 'g__char_remain')
-                            count_container.innerHTML = '0/' + r.char_limit;
-                        field_info_container.appendChild(count_container);
-                    }
-                }
-            } else if (r.type === 'hidden'){
-                form_field = document.createElement('div');
-                form_field.setAttribute('class', "g__hidden_field");
+                    field_info_container = document.createElement('div');
+                    field_info_container.setAttribute('class', 'g__field_info')
+                } else if (r.type === 'hidden'){
+                    form_field = document.createElement('div');
+                    form_field.setAttribute('class', "g__hidden_field");
             }
+            //Create field wrapper
+            // if ((r.type != 'subheader') && (r.type != 'description') && (r.type != 'hidden')){
+            //     form_field = document.createElement('div');
+            //     form_field.setAttribute('class', "g__form_field");
+
+            //     //Global labels and character counter
+            //     if((!!r.title || !!r.char_limit) && (r.type != 'checkbox') && (r.type != 'hidden')){
+            //         let field_info_container = document.createElement('div');
+            //             field_info_container.setAttribute('class', 'g__field_info')
+            //         form_field.appendChild(field_info_container);
+            //         if (!!r.title){
+            //             let label = document.createElement('label');
+            //                 !!r.required ? label.classList.add('required'): '';
+            //                 label.setAttribute('for', r.name);
+            //                 label.innerHTML = r.title;
+            //             field_info_container.appendChild(label);
+            //         }
+            //         if (r.char_limit > 0 && r.show_count){
+            //             let count_container = document.createElement('div');
+            //                 count_container.setAttribute('class', 'g__char_remain')
+            //                 count_container.innerHTML = '0/' + r.char_limit;
+            //             field_info_container.appendChild(count_container);
+            //         }
+            //     }
+            // } else if (r.type === 'hidden'){
+            //     form_field = document.createElement('div');
+            //     form_field.setAttribute('class', "g__hidden_field");
+            // }
 
 
 
@@ -1217,6 +1350,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "color":
+                    addLabels(field_info_container, r);
                     let color_container = document.createElement('div');
                     color_container.setAttribute('class', 'g__color_container');
                     input = document.createElement('input');
@@ -1233,6 +1367,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "currency":
+                    addLabels(field_info_container, r);
                     input = document.createElement('input');
                     input.setAttribute('id', r.id);
                     basicAttributes(r, input, class_name);
@@ -1241,6 +1376,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "date":
+                    addLabels(field_info_container, r);
                     let date_container = document.createElement('div');
                     date_container.setAttribute('class', 'g__date_container')
                     input = document.createElement('input');
@@ -1268,6 +1404,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.innerHTML = r.value;
                 break;
                 case "email":
+                    addLabels(field_info_container, r);
                     input = document.createElement('input');
                     input.setAttribute('id', r.id);
                     !!r.pattern ? input.setAttribute('pattern', r.pattern) : "";
@@ -1276,6 +1413,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "file":
+                    addLabels(field_info_container, r);
                     let file_container = document.createElement('div');
                     file_container.setAttribute('class', 'g__file_container');
                     input = document.createElement('input');
@@ -1308,6 +1446,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(input);
                 break;
                 case "number":
+                    addLabels(field_info_container, r);
                     let num_container = document.createElement('div');
                     num_container.setAttribute('class', "g__number_container");
                     r.show_stepper_arrow ? '' : num_container.classList.add('g__hide_counter');
@@ -1336,6 +1475,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "password":
+                    addLabels(field_info_container, r);
                     let pass_container = document.createElement('div');
                     pass_container.setAttribute('class', "g__password_container");
                     input = document.createElement('input');
@@ -1352,10 +1492,12 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "picklist":
+                    addLabels(field_info_container, r);
                     const picklist_options = r.options;
                     const picklist_double_arr = (Array.isArray(picklist_options)) && (Array.isArray(picklist_options[0]));
                     input = document.createElement('div');
                     r.multiple ? input.setAttribute('class', 'g__picklist_multiple') : input.setAttribute('class', 'g__picklist');
+                    o.default_picklists ? input.classList.add('g__default_picklist') : input.classList.add('g__custom_picklist') ;
                     r.picklist_search ? input.classList.add('g__search'): "";
                     let select = document.createElement('select');
                     basicAttributes(r, select, class_name)
@@ -1383,6 +1525,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "radio":
+                    addLabels(field_info_container, r);
                     const radio_options = r.options;
                     radio_container = document.createElement('div');
                     radio_container.setAttribute('class', 'g__radio_container');
@@ -1412,6 +1555,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "range":
+                    addLabels(field_info_container, r);
                     let min = r.min || 0;
                     let max = r.max || 100;
                     let range_container = document.createElement('div');
@@ -1453,12 +1597,62 @@ function granite_form(formsBlock, jsonTheme){
                     section = true;
                     section_count = parseInt(r.number_fields);
                 break;
+                case 'spacing':
+                    addLabels(field_info_container, r)
+                    const spacing_arr = ['top', 'link', 'bottom', 'left', 'link', 'right'];
+                    const spacing_container = document.createElement('div')
+                    spacing_container.setAttribute('class', 'g__spacing_container')
+                    //Desktop hidden field
+                    const hidden_desktop = document.createElement('input')
+                    hidden_desktop.setAttribute('class', 'g__space_desktop_hidden')
+                    hidden_desktop.type = 'hidden';
+                    !!attr__form_id ? hidden_desktop.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? hidden_desktop.name = r.name : "";
+                    !!r.title ? hidden_desktop.title = r.title : "";
+                    spacing_container.appendChild(hidden_desktop);
+                    //mobile hidden field
+                    const hidden_mobile = document.createElement('input')
+                    hidden_mobile.setAttribute('class', 'g__space_desktop_hidden')
+                    hidden_mobile.type = 'hidden';
+                    !!attr__form_id ? hidden_mobile.setAttribute('form_id', attr__form_id) : "";
+                    !!r.name ? hidden_mobile.name = r.name : "";
+                    !!r.title ? hidden_mobile.title = r.title : "";
+                    spacing_container.appendChild(hidden_mobile);
+                    spacing_arr.forEach((val, num) => {
+                        if (val === 'link'){
+                            let field_container = document.createElement('div')
+                            num === 1 ? field_container.setAttribute('class', `g__link g__link_tb`) : field_container.setAttribute('class', `g__link g__link_lr`)
+                            spacing_container.appendChild(field_container);
+                            let link = document.createElement('div')
+                            link.setAttribute('class', 'g__space_link');
+                            link.innerHTML = '<i class="far fa-link"></i>';
+                            field_container.appendChild(link);
+                            form_field.appendChild(spacing_container);
+                        } else {
+                            let field_container = document.createElement('div');
+                            field_container.setAttribute('class', `g__space_field g__${val}`);
+                            spacing_container.appendChild(field_container);
+                            let input = document.createElement('input');
+                            input.type = 'text'
+                            input.setAttribute('class', `g__input_${val}`)
+                            input.setAttribute('data-side', `${val}`)
+                            field_container.appendChild(input);
+                            let label = document.createElement('p');
+                            label.setAttribute('class', `g__label_${val}`)
+                            label.innerText = val;
+                            field_container.appendChild(label);
+                            form_field.appendChild(spacing_container);
+                        }
+
+                    })
+                break;
                 case "subheader":
                     form_field = document.createElement('h2');
                     form_field.setAttribute('class', 'g__form_header');
                     form_field.innerHTML = r.value;
                 break;
                 case "tel":
+                    addLabels(field_info_container, r);
                     input = document.createElement('input');
                     input.setAttribute('id', r.id);
                     basicAttributes(r, input, class_name)
@@ -1467,6 +1661,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "textarea":
+                    addLabels(field_info_container, r);
                     input = document.createElement('textarea');
                     input.setAttribute('id', r.id);
                     basicAttributes(r, input, class_name)
@@ -1477,6 +1672,7 @@ function granite_form(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case "quill":
+                    addLabels(field_info_container, r);
                     let quil = document.createElement('div');
                     quil.setAttribute('class', 'g__quil_editor');
                     quil.setAttribute('id', r.id);
@@ -1490,6 +1686,7 @@ function granite_form(formsBlock, jsonTheme){
 
                 break;
                 default:
+                    addLabels(field_info_container, r);
                     input = document.createElement('input');
                     input.setAttribute('id', r.id);
                     basicAttributes(r, input, class_name);
@@ -1669,13 +1866,23 @@ function granite_form(formsBlock, jsonTheme){
                 }
             }
             if(!!select){
+                let select_type;
                     if(!select.checkValidity()){
-                        select.nextSibling.classList.add('invalid');
+                        select_type = select.parentElement.classList.contains('g__custom_picklist');
+                        if(select_type){
+                            select.nextSibling.classList.add('invalid');
+                        } else {
+                            select.classList.add('invalid');
+                        }
                         errors_arr.push(select);
                         error_msg.classList.add('active');
                         error_msg.innerHTML = select.validationMessage;
                     } else {
-                        select.nextSibling.classList.remove('invalid');
+                        if(select_type){
+                            select.nextSibling.classList.remove('invalid');
+                        } else {
+                            select.classList.remove('invalid');
+                        }
                         error_msg.classList.remove('active');
                     }
             }
@@ -1807,6 +2014,49 @@ function granite_form(formsBlock, jsonTheme){
             }
         });
     })
+    /* -------------------- Spacing Values ----------------------*/
+    let spacing_field_arr = document.querySelectorAll('.g__spacing_container');
+    if(spacing_field_arr.length){
+        spacing_field_arr.forEach(space => {
+            let parent = space.parentNode;
+            let fields_arr = parent.querySelectorAll('.g__space_field');
+            let spacing_values ={'top': '', 'right': '', 'bottom': '', 'left': ''}
+            fields_arr.forEach(field => {
+                // Field input change
+                field.addEventListener('input', (val) => {
+                    let desktop_hidden = parent.querySelector('.g__space_desktop_hidden');
+                    let focus_field = val.target;
+                    let side = focus_field.getAttribute('data-side');
+                    spacing_values[side] = focus_field.value;
+                    console.log(spacing_values);
+                    let is_linked = focus_field.parentElement.classList.contains('g__linked');
+
+                    desktop_hidden.value = `${!!spacing_values.top} ${!!spacing_values.right} ${!!spacing_values.bottom} ${!!spacing_values.left}`;
+                    console.log(desktop_hidden.value);
+                })
+            })
+            // Link fields
+            let link_arr = parent.querySelectorAll('.g__link');
+            link_arr.forEach(link_field => {
+                link_field.addEventListener('click', () => {
+                    link_field.classList.toggle('active');
+                    link_field.previousSibling.classList.toggle('g__linked');
+                    link_field.nextSibling.classList.toggle('g__linked');
+                })
+            })
+            // Device selector
+            let device_icons = parent.querySelectorAll('.g__device_icon');
+            device_icons.forEach(selected => {
+                selected.addEventListener('click', () => {
+                    let device_arr = selected.parentNode.children;
+                    for(let i = 0; i < device_arr.length; i++){
+                        device_arr[i].classList.remove('active');
+                    }
+                    selected.classList.add('active');
+                })
+            })
+        })
+    }
     /* -------------------- Range Output ----------------------*/
     let all_ranges = document.querySelectorAll(".g__range_container");
     let all_range_increase = document.querySelectorAll(".g__range_increase");
@@ -1934,113 +2184,118 @@ function granite_form(formsBlock, jsonTheme){
         $( '#ui-datepicker-div' ).attr("mode", mode);
 
     /* -------------------- Custom Select Field ----------------------*/
-    var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
-    /* Look for any elements with the class "g__picklist": */
-    f = document.getElementById(id);
-    x = f.getElementsByClassName("g__picklist");
-    if(x.length > 0){
-        l = x.length;
-        for (i = 0; i < l; i++) {
-            selElmnt = x[i].getElementsByTagName("select")[0];
-            ll = selElmnt.length;
-            /* For each element, create a new DIV that will act as the selected item: */
-            a = document.createElement("div");
-            a.setAttribute("class", "select-selected");
-            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-            x[i].appendChild(a);
-            /* For each element, create a new DIV that will contain the option list: */
-            b = document.createElement("div");
-            b.setAttribute("class", "select-items select-hide");
-            search = document.createElement("input");
-            search.setAttribute('type', 'text');
-            search.setAttribute('class', 'g__select_search');
-            search.setAttribute('placeholder', 'Search');
-            search.addEventListener("click", function(e) {
-                e.stopPropagation();
-            });
-            b.appendChild(search);
-            for (j = 1; j < ll; j++) {
-                /* For each option in the original select element,
-                create a new DIV that will act as an option item: */
-                c = document.createElement("div");
-                c.setAttribute('class', 'g__select_option')
-                c.innerHTML = selElmnt.options[j].innerHTML;
-                c.addEventListener("click", function(e) {
-                    /* When an item is clicked, update the original select box,
-                    and the selected item: */
-                    var y, i, k, s, h, sl, yl;
-                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                    sl = s.length;
-                    h = this.parentNode.previousSibling;
-                    for (i = 0; i < sl; i++) {
-                    if (s.options[i].innerHTML == this.innerHTML) {
-                        s.selectedIndex = i;
-                        h.innerHTML = this.innerHTML;
-                        s.value = this.innerHTML;
-                        y = this.parentNode.getElementsByClassName("same-as-selected");
-                        yl = y.length;
-                        for (k = 0; k < yl; k++) {
-                        y[k].removeAttribute("class");
-                        }
-                        this.setAttribute("class", "same-as-selected");
-                        break;
-                    }
-                    }
-                    h.click();
+    if(!o.default_picklists){
+        var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
+        /* Look for any elements with the class "g__picklist": */
+        f = document.getElementById(id);
+        x = f.getElementsByClassName("g__picklist");
+        if(x.length > 0){
+            l = x.length;
+            for (i = 0; i < l; i++) {
+                selElmnt = x[i].getElementsByTagName("select")[0];
+                ll = selElmnt.length;
+                /* For each element, create a new DIV that will act as the selected item: */
+                a = document.createElement("div");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                x[i].appendChild(a);
+                /* For each element, create a new DIV that will contain the option list: */
+                b = document.createElement("div");
+                b.setAttribute("class", "select-items select-hide");
+                search = document.createElement("input");
+                search.setAttribute('type', 'text');
+                search.setAttribute('class', 'g__select_search');
+                search.setAttribute('placeholder', 'Search');
+                search.addEventListener("click", function(e) {
+                    e.stopPropagation();
                 });
-                b.appendChild(c);
+                b.appendChild(search);
+                for (j = 1; j < ll; j++) {
+                    /* For each option in the original select element,
+                    create a new DIV that will act as an option item: */
+                    c = document.createElement("div");
+                    c.setAttribute('class', 'g__select_option')
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function(e) {
+                        /* When an item is clicked, update the original select box,
+                        and the selected item: */
+                        var y, i, k, s, h, sl, yl;
+                        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        sl = s.length;
+                        h = this.parentNode.previousSibling;
+                        for (i = 0; i < sl; i++) {
+                            if (s.options[i].innerHTML == this.innerHTML) {
+                                s.selectedIndex = i;
+                                h.innerHTML = this.innerHTML;
+                                // s.options[i].setAttribute('selected', 'selected');
+                                s.value = this.innerHTML;
+                                y = this.parentNode.getElementsByClassName("same-as-selected");
+                                yl = y.length;
+                                for (k = 0; k < yl; k++) {
+                                y[k].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                x[i].appendChild(b);
+                a.addEventListener("click", function(e) {
+                    /* When the select box is clicked, close any other select boxes,
+                    and open/close the current select box: */
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
             }
-            x[i].appendChild(b);
-            a.addEventListener("click", function(e) {
-                /* When the select box is clicked, close any other select boxes,
-                and open/close the current select box: */
-                e.stopPropagation();
-                closeAllSelect(this);
-                this.nextSibling.classList.toggle("select-hide");
-                this.classList.toggle("select-arrow-active");
-            });
-        }
 
-        search.addEventListener("keyup", function(value) {
-            let input = this.value.toUpperCase();
-            let options_container = this.parentElement;
-            let options_arr = options_container.querySelectorAll('.g__select_option');
-            for (i = 0; i < options_arr.length; i++) {
-                let txtValue = options_arr[i].textContent || options_arr[i].innerText;
-                if (txtValue.toUpperCase().indexOf(input) > -1) {
-                    options_arr[i].style.display = "";
+            search.addEventListener("keyup", function(value) {
+                let input = this.value.toUpperCase();
+                let options_container = this.parentElement;
+                let options_arr = options_container.querySelectorAll('.g__select_option');
+                for (i = 0; i < options_arr.length; i++) {
+                    let txtValue = options_arr[i].textContent || options_arr[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(input) > -1) {
+                        options_arr[i].style.display = "";
+                    } else {
+                        options_arr[i].style.display = "none";
+                    }
+                }
+            });
+
+            function closeAllSelect(elmnt) {
+            /* A function that will close all select boxes in the document,
+            except the current select box: */
+            var x, y, i, xl, yl, arrNo = [];
+            x = document.getElementsByClassName("select-items");
+            y = document.getElementsByClassName("select-selected");
+            xl = x.length;
+            yl = y.length;
+            for (i = 0; i < yl; i++) {
+                if (elmnt == y[i]) {
+                arrNo.push(i)
                 } else {
-                    options_arr[i].style.display = "none";
+                y[i].classList.remove("select-arrow-active");
                 }
             }
-        });
-
-        function closeAllSelect(elmnt) {
-        /* A function that will close all select boxes in the document,
-        except the current select box: */
-        var x, y, i, xl, yl, arrNo = [];
-        x = document.getElementsByClassName("select-items");
-        y = document.getElementsByClassName("select-selected");
-        xl = x.length;
-        yl = y.length;
-        for (i = 0; i < yl; i++) {
-            if (elmnt == y[i]) {
-            arrNo.push(i)
-            } else {
-            y[i].classList.remove("select-arrow-active");
+            for (i = 0; i < xl; i++) {
+                if (arrNo.indexOf(i)) {
+                x[i].classList.add("select-hide");
+                }
             }
-        }
-        for (i = 0; i < xl; i++) {
-            if (arrNo.indexOf(i)) {
-            x[i].classList.add("select-hide");
             }
-        }
-        }
 
-        /* If the user clicks anywhere outside the select box,
-        then close all select boxes: */
-        document.addEventListener("click", closeAllSelect);
+            /* If the user clicks anywhere outside the select box,
+            then close all select boxes: */
+            document.addEventListener("click", closeAllSelect);
+        }
     }
+
+
     /* -------------------- Picklist Multi ----------------------*/
     let multiple_field = document.getElementsByClassName("g__select_multiple");
     if(multiple_field.length > 0){

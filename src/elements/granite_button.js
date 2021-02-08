@@ -42,7 +42,7 @@ function granite_button(jsonButton, jsonTheme){
     let btn_color_hover = o.btn_color_hover || t.secondary || '#FF8BCD';
     let text_color_hover = o.text_color_hover || '#ffffff';
     let border_width_hover = o.border_width_hover || '2px';
-    let border_color_hover = o.border_color_hover || btn_color;
+    let border_color_hover = o.border_color_hover || btn_color_hover;
 
     //layout
     let align_btn = o.align_btn || "flex-start";

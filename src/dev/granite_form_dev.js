@@ -869,7 +869,7 @@ function granite_form_dev(formsBlock, jsonTheme){
         cursor: pointer;
         background: var(--background-hover);
     }
-    /* ------------------------ Space ------------------------------*/
+    /* ------------------------ Spacing ------------------------------*/
     ${cssId} .g__spacing_container{
         display: flex;
         flex-direction: row;
@@ -1253,6 +1253,8 @@ function granite_form_dev(formsBlock, jsonTheme){
             if ((r.type != 'subheader') || (r.type !='description')){
                 form_field = document.createElement('div');
                 form_field.setAttribute('class', "g__form_field");
+
+
             }
 
             //Create field wrapper
@@ -1495,10 +1497,10 @@ function granite_form_dev(formsBlock, jsonTheme){
                     form_field.appendChild(error_field);
                 break;
                 case 'spacing':
-                    let field_info_container = document.createElement('div');
-                    field_info_container.setAttribute('class', 'g__field_info')
-                    addLabels(field_info_container, r)
-                    form_field.appendChild(field_info_container);
+                    // field_info_container = document.createElement('div');
+                    // field_info_container.setAttribute('class', 'g__field_info')
+                    // addLabels(field_info_container, r)
+                    // form_field.appendChild(field_info_container);
                     const spacing_arr = ['top', 'link', 'bottom', 'left', 'link', 'right'];
                     const spacing_container = document.createElement('div')
                     spacing_container.setAttribute('class', 'g__spacing_container')

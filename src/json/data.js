@@ -4,7 +4,7 @@ Themes and Mode
 let jsonTheme = {
     "primary": "#ff5d00",
     "secondary": "#3fd0d4",
-    "mode": "standard"
+    "mode": "midnight"
 }
 if(jsonTheme.mode === "midnight"){
     document.body.style.backgroundColor = "#101010";
@@ -2545,6 +2545,7 @@ let formsBlock = {
       "flash_message":"Case saved",
       "hide_submit":false,
       "autosave":true,
+      "default_picklists": true,
       "action":"/form_submission"
    },
    "records":[
@@ -2740,6 +2741,38 @@ let formsBlock = {
          "disabled":false,
          "multiple":false,
          "use_options_from_database":false,
+         "dependency_not_blank":false,
+         "action":"hash_builder"
+      },
+      {
+         "title":"Padding",
+         "name":"g__spacing",
+         "type":"spacing",
+         "value":"This is a header",
+         "required":true,
+         "options":[
+
+         ],
+         "placeholder":"",
+         "autocomplete":"on",
+         "length":"255",
+         "rows":"",
+         "classes":"",
+         "id":"Page_URL__c",
+         "super_text":true,
+         "dependency_field":"",
+         "dependency_values":"",
+         "addapptation_component":"",
+         "addapptation_name":"Page URL",
+         "addapptation_type":"url",
+         "addapptation_code_id":"a0R1I00000FDtH6UAL",
+         "addapptation_id":"06311304039629062",
+         "addapptation_navigation":"",
+         "inline":false,
+         "use_options_from_database":false,
+         "multiple":false,
+         "collapsed":false,
+         "disabled":false,
          "dependency_not_blank":false,
          "action":"hash_builder"
       },
