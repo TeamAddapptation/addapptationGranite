@@ -27,6 +27,7 @@ function granite_button(jsonButton, jsonTheme){
     //text
     let btn_text = o.btn_text || 'Click Here';
     let text_color = o.text_color || '#ffffff';
+    let font_size = o.text_size || '16px';
     let font_style = o.font_style || 'hero-new, sans-serif';
     let font_weight = o.font_weight || '300';
 
@@ -36,7 +37,7 @@ function granite_button(jsonButton, jsonTheme){
     let border_color = o.border_color || btn_color;
     let border_radius = o.border_radius || '4px';
     let btn_padding = o.btn_padding || '10px 25px';
-    let btn_margin = o.btn_margin || '0px';
+    let btn_margin = o.btn_margin || '5px 5px 5px 5px';
 
     //hover
     let btn_color_hover = o.btn_color_hover || t.secondary || '#FF8BCD';
@@ -47,10 +48,6 @@ function granite_button(jsonButton, jsonTheme){
     //layout
     let align_btn = o.align_btn || "flex-start";
     let btn_width = o.btn_width || 'auto';
-
-    //button Only
-    let btn_type = o.btn_type || 'button';
-
 
     /*---------------------------------------------
     Add Font Family To Header
