@@ -293,11 +293,13 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         margin: 15px;
     }
-    ${cssId} .g__section_header .g__section_title{
+    ${cssId} .g__section_header h3.g__section_title{
         position: relative;
         font-family: var(--font-regular);
         font-weight: 300;
         flex-direction: row;
+        color: var(--font-color);
+        margin: 5px;
     }
     ${cssId} .g__section_header .g__section_line{
         flex: 1;
@@ -1045,8 +1047,32 @@ function granite_form(formsBlock, jsonTheme) {
             display: none;
         }
     }
+    /* ------------------------ Multi Drag and Drop ------------------------------*/
+    .g__select_main{
+      display: flex;
+      flex-direction: row;
+      background: var(--background);
+      padding:15px;
+      border: var(--border);
+    }
+    .g__drag_parent{
+      flex: 1;
+    }
+    .g__select_home{
+    }
+    .g__select_drop{
+    }
+    .g__multi_option{
+      padding: 10px;
+      color: var(--font-color);
+      margin: 10px;
+      border: var(--border);
+      background: var(--background-darker);
+    }
+    .g__multi_option.drag{
+      background: var(--background-hover);
+    }
     /* ------------------------ Picklist ------------------------------*/
-
     /* Default picklist with no custom dropdown */
     ${cssId} .g__picklist.g__default_picklist select {
         display: flex;
@@ -1470,6 +1496,34 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
           form_field.appendChild(input);
+          break;
+        case "multi":
+          addLabels(field_info_container, r);
+          let multi_container = document.createElement("div");
+          multi_container.setAttribute("class", "g__multi_container");
+          let multi_options = r.options;
+          let multi_double_arr =
+            Array.isArray(multi_options) && Array.isArray(multi_options[0]);
+          let multi_select = document.createElement("select");
+          multi_select.multiple = true;
+          if (multi_double_arr) {
+            for (let i = 0; i < multi_options.length; i++) {
+              let option = document.createElement("option");
+              option.setAttribute("value", multi_options[i][0]);
+              option.innerHTML = multi_options[i][1];
+              multi_select.appendChild(option);
+            }
+          } else {
+            for (let i = 0; i < multi_options.length; i++) {
+              let option = document.createElement("option");
+              option.setAttribute("value", multi_options[i]);
+              option.innerHTML = multi_options[i];
+              multi_select.appendChild(option);
+            }
+          }
+          multi_container.appendChild(multi_select);
+          form_field.appendChild(multi_container);
+
           break;
         case "number":
           addLabels(field_info_container, r);
@@ -2005,7 +2059,7 @@ function granite_form(formsBlock, jsonTheme) {
       }
     });
     /* -------------------- File Upload ----------------------*/
-    let all_files = document.querySelectorAll(".g__file_container");
+    let all_files = granite_div.querySelectorAll(".g__file_container");
     all_files.forEach((file) => {
       let real_file_field = file.querySelector(".g__field_file");
       let file_btn = file.querySelector(".g__file_btn");
@@ -2036,7 +2090,7 @@ function granite_form(formsBlock, jsonTheme) {
     });
 
     /* -------------------- Section ----------------------*/
-    const all_sections = document.querySelectorAll(".g__section_header");
+    const all_sections = granite_div.querySelectorAll(".g__section_header");
 
     all_sections.forEach((form_section) => {
       form_section.addEventListener("click", () => {
@@ -2051,8 +2105,9 @@ function granite_form(formsBlock, jsonTheme) {
       });
     });
     /* -------------------- Number ----------------------*/
-    let all_numbers = document.querySelectorAll(".g__number_container");
+    let all_numbers = granite_div.querySelectorAll(".g__number_container");
     all_numbers.forEach((wrap) => {
+      console.log(wrap);
       const output = wrap.querySelector(".g__field_number");
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
@@ -2128,7 +2183,7 @@ function granite_form(formsBlock, jsonTheme) {
       });
     }
     /* -------------------- Range Output ----------------------*/
-    let all_ranges = document.querySelectorAll(".g__range_container");
+    let all_ranges = granite_div.querySelectorAll(".g__range_container");
     let all_range_increase = document.querySelectorAll(".g__range_increase");
 
     all_ranges.forEach((wrap) => {
@@ -2169,7 +2224,7 @@ function granite_form(formsBlock, jsonTheme) {
     }
 
     /* -------------------- Quil Editors ----------------------*/
-    let quil_fields = document.getElementsByClassName("g__quil_editor");
+    let quil_fields = granite_div.getElementsByClassName("g__quil_editor");
     if (quil_fields.length) {
       for (let i = 0; i < quil_fields.length; i++) {
         let quil_id = "#" + quil_fields[i].id;
@@ -2192,7 +2247,7 @@ function granite_form(formsBlock, jsonTheme) {
       }
     }
     /* -------------------- Character Limit ----------------------*/
-    let char_count_field_arr = document.querySelectorAll(".g__form_field");
+    let char_count_field_arr = granite_div.querySelectorAll(".g__form_field");
     char_count_field_arr.forEach((field) => {
       let input = field.querySelector("input");
       if (!!input) {
@@ -2217,14 +2272,14 @@ function granite_form(formsBlock, jsonTheme) {
     });
 
     /* -------------------- Color field values ----------------------*/
-    let color_fields = document.getElementsByClassName("g__hex_value");
+    let color_fields = granite_div.getElementsByClassName("g__hex_value");
     for (let i = 0; i < color_fields.length; i++) {
       color_fields[i].addEventListener("keydown", function () {
         let color = this.value;
         this.previousSibling.value = color;
       });
     }
-    let color_pickers = document.getElementsByClassName("g__field_color");
+    let color_pickers = granite_div.getElementsByClassName("g__field_color");
     for (let i = 0; i < color_pickers.length; i++) {
       color_pickers[i].addEventListener("change", function () {
         let color = this.value;
@@ -2252,6 +2307,95 @@ function granite_form(formsBlock, jsonTheme) {
       date.datepicker("show");
     });
     $("#ui-datepicker-div").attr("mode", mode);
+    /* -------------------- Custom Multi Drag & Drop ----------------------*/
+    let arr_multi = form.getElementsByClassName("g__multi_container");
+    let length = arr_multi.length;
+    if (length) {
+      for (i = 0; i < length; i++) {
+        let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
+        let options_length = multi_elm.length;
+        let main_container = document.createElement("div");
+        main_container.setAttribute("class", "g__select_main");
+
+        let left_container = document.createElement("div");
+        left_container.setAttribute("class", "g__drag_parent g__select_home");
+        left_container.addEventListener("dragover", (event) => {
+          event.preventDefault();
+        });
+        left_container.addEventListener("drop", (event) => {
+          const id = event.dataTransfer.getData("text");
+          const draggableElement = document.getElementById(id);
+          const dropzone = left_container;
+          dropzone.appendChild(draggableElement);
+          event.dataTransfer.clearData();
+          let options_left = left_container.children;
+          options_left.length
+            ? optionAddDrop(options_left, multi_elm, "unselected")
+            : "";
+        });
+
+        let right_container = document.createElement("div");
+        right_container.setAttribute("class", "g__drag_parent g__select_drop");
+        right_container.addEventListener("dragover", (event) => {
+          event.preventDefault();
+        });
+        right_container.addEventListener("drop", (event) => {
+          const id = event.dataTransfer.getData("text");
+          const draggableElement = document.getElementById(id);
+          const dropzone = right_container;
+          dropzone.appendChild(draggableElement);
+          event.dataTransfer.clearData();
+
+          let options_right = right_container.children;
+          options_right.length
+            ? optionAddDrop(options_right, multi_elm, "selected")
+            : "";
+        });
+
+        main_container.appendChild(left_container);
+        main_container.appendChild(right_container);
+
+        let option_block;
+        for (j = 0; j < options_length; j++) {
+          option_block = document.createElement("div");
+          option_block.id = "draggable-" + j;
+          option_block.setAttribute("class", "g__multi_option");
+          option_block.setAttribute("draggable", true);
+          option_block.innerText = multi_elm.options[j].innerHTML;
+          left_container.appendChild(option_block);
+          option_block.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", event.target.id);
+            event.currentTarget.classList.add("drag");
+          });
+          option_block.addEventListener("dragend", (event) => {
+            // event.currentTarget.classList.add("drag");
+          });
+        }
+        arr_multi[i].appendChild(main_container);
+      }
+      function optionAddDrop(options, original_list, side) {
+        console.clear();
+        for (let option of options) {
+          //loop through original select options
+          for (let item of original_list) {
+            if (option.innerHTML === item.innerHTML && side === "selected") {
+              item.selected = true;
+            } else if (
+              option.innerHTML === item.innerHTML &&
+              side === "unselected"
+            ) {
+              item.selected = false;
+            }
+          }
+        }
+        //print out selected values
+        for (i = 0; i < original_list.length; i++) {
+          if (original_list.options[i].selected === true) {
+            console.log(original_list.options[i]);
+          }
+        }
+      }
+    }
 
     /* -------------------- Custom Select Field ----------------------*/
     if (!o.default_picklists) {
