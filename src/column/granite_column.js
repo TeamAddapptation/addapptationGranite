@@ -1,28 +1,25 @@
-function granite_column(jsonColumns, jsonTheme){
-    const id = jsonColumns.id;
-    const o = jsonColumns.options;
-    const column_type = "-" + (!!o.type ? o.type : "md");
-    const column_width = "-" + (!!o.width ? o.width :"");
-    const offset_type = !!o.offset_type ? o.offset_type : "";
-    const offset_width = !!o.offset_width ? o.offset_width : "";
-    const hide_row = !!o.hide_row ? o.hide_row : "";
-    const end_of_row = !!o.end_of_row ? o.end_of_row : false;
-    column_present = false;
+function granite_column(jsonBlock, jsonTheme) {
+  const id = jsonBlock.id;
+  const o = jsonBlock.options;
+  const hide_row = !!o.hide_row ? o.hide_row : "";
 
-    // Column Container
-    let container;
-    if (!column_present){
-        container = '<div class="container-fluid">';
-        container += '<div class="row">';
-        container += '<div class="col' + column_type + column_width + '">';
-    } else {
-        container = '</div>';
-        container += '<div class="col' + column_type + column_width + '">';
-    }
-    if (end_of_row){
-        container = '</div></div></div>'
-    }
-    var dom_nodes = $(container);
-    console.log(dom_nodes);
-    document.getElementById(id).outerHTML += container;
+  const padding = o.padding || "15px";
+  const margin = o.margin || "15px";
+
+  const bkg_img = o.bkg_img || "image/url.jpg";
+  const bkg_size = o.bkg_size || "";
+  const bkg_repeat = o.bkg_repeat || "";
+  const bkg_position = o.bkg_position || "";
+
+  const bkg_color = o.bkg_color || "transparent";
+
+  // Column Container
+  let column = document.createElement("div");
+  column.style.padding = padding;
+  column.style.margin = margin;
+  !!bkg_img ? (column.style.backgroundImage = bkg_img) : "";
+  column.style.backgroundColor = bkg_color;
+  column.setAttribute("class", "g__column");
+
+  console.log(column);
 }

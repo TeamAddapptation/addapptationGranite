@@ -381,17 +381,19 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__number_plus_minus{
         position: absolute;
-        bottom: 0;
+        bottom: 1px;
         right: 1px;
         border-radius: 0 3px 3px 0;
         width: 20px;
-        height: var(--field-height);
+        height: calc(var(--field-height) - 1px);
         border-left: var(--border);
+        background: var(--inner-background);
     }
     ${cssId} .g__number_increase{
         width: 100%;
         height: 50%;
         position: relative;
+        border-bottom: var(--border);
     }
     ${cssId} .g__number_increase:active{
         background: #dce2e8;
@@ -400,7 +402,7 @@ function granite_form(formsBlock, jsonTheme) {
         position: absolute;
         content: " ";
         left: 6px;
-        top: 6px;
+        top: 5px;
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
         border-bottom: 5px solid var(--font-color);
@@ -414,7 +416,7 @@ function granite_form(formsBlock, jsonTheme) {
         width: 0;
         height: 0;
         left: 6px;
-        top: 4px;
+        top: 7px;
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
         border-top: 5px solid var(--font-color);
@@ -616,8 +618,10 @@ function granite_form(formsBlock, jsonTheme) {
         border-left: var(--border);
         color: var(--font-color);
         font-size: 1.4rem;
-        padding: 8px 0 8px 15px;
-        right: 15px;
+        padding: 8px 15px 8px 15px;
+        right: 0;
+        border-radius: var(--border-radius);
+        background: var(--inner-background);
     }
     #ui-datepicker-div{
         background: var(--background);
@@ -873,6 +877,12 @@ function granite_form(formsBlock, jsonTheme) {
         border-radius: var(border-radius);
         border-left: 1px solid var(--body);
     }
+    ${cssId} .g__selected_file{
+      background: var(--background-darker);
+      display: inline-block;
+      padding: 0px 5px;
+      border-radius: var(--border-radius);
+    }
     ${cssId} .g__file_delete{
         overflow: hidden;
         box-sizing: border-box;
@@ -1052,10 +1062,14 @@ function granite_form(formsBlock, jsonTheme) {
       display: flex;
       flex-direction: row;
       background: var(--background);
-      padding:15px;
       border: var(--border);
     }
+
     .g__drag_parent{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      padding:15px;
       flex: 1;
     }
     .g__select_home{
@@ -1063,11 +1077,27 @@ function granite_form(formsBlock, jsonTheme) {
     .g__select_drop{
     }
     .g__multi_option{
+      width: 100%;
       padding: 10px;
       color: var(--font-color);
-      margin: 10px;
+      margin-bottom: 10px;
       border: var(--border);
       background: var(--background-darker);
+    }
+    .g__add_options{
+      background: transparent;
+      border: 0;
+      color: var(--font-color);
+      margin: 0 auto;
+    }
+    .g__remove_options{
+      background: transparent;
+      border: 0;
+      color: var(--font-color);
+      margin: 0 auto;
+    }
+    .g__select_main .g__multi_option.g__selected{
+      background: var(--primary);
     }
     .g__multi_option.drag{
       background: var(--background-hover);
@@ -1299,7 +1329,7 @@ function granite_form(formsBlock, jsonTheme) {
       : input.setAttribute("value", "");
     !!r.title ? input.setAttribute("title", r.title) : "";
     !!r.placeholder ? input.setAttribute("placeholder", r.placeholder) : "";
-    r.char_limit > 0 ? input.setAttribute("maxlength", r.char_limit) : "";
+    parseInt(r.length) > 0 ? input.setAttribute("maxlength", r.length) : "";
     !!r.invalid_message
       ? input.setAttribute(
           "oninvalid",
@@ -2026,7 +2056,6 @@ function granite_form(formsBlock, jsonTheme) {
         });
       }
       if (!errors_arr.length) {
-        console.log("sending");
         form.submit();
       }
     });
@@ -2073,9 +2102,13 @@ function granite_form(formsBlock, jsonTheme) {
 
       real_file_field.addEventListener("change", () => {
         if (real_file_field.value) {
-          file_text.innerHTML = real_file_field.value.match(
+          file_text.innerHTML = "";
+          let file_container = document.createElement("div");
+          file_container.classList.add("g__selected_file");
+          file_container.innerHTML = real_file_field.value.match(
             /[\/\\]([\w\d\s\.\-\(\)]+)$/
           )[1];
+          file_text.appendChild(file_container);
         } else {
           file_text.innerText = "No file chosen, yet.";
         }
@@ -2107,7 +2140,6 @@ function granite_form(formsBlock, jsonTheme) {
     /* -------------------- Number ----------------------*/
     let all_numbers = granite_div.querySelectorAll(".g__number_container");
     all_numbers.forEach((wrap) => {
-      console.log(wrap);
       const output = wrap.querySelector(".g__field_number");
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
@@ -2151,13 +2183,11 @@ function granite_form(formsBlock, jsonTheme) {
             let focus_field = val.target;
             let side = focus_field.getAttribute("data-side");
             spacing_values[side] = focus_field.value;
-            console.log(spacing_values);
             let is_linked = focus_field.parentElement.classList.contains(
               "g__linked"
             );
 
             desktop_hidden.value = `${!!spacing_values.top} ${!!spacing_values.right} ${!!spacing_values.bottom} ${!!spacing_values.left}`;
-            console.log(desktop_hidden.value);
           });
         });
         // Link fields
@@ -2247,7 +2277,7 @@ function granite_form(formsBlock, jsonTheme) {
       }
     }
     /* -------------------- Character Limit ----------------------*/
-    let char_count_field_arr = granite_div.querySelectorAll(".g__form_field");
+    let char_count_field_arr = document.querySelectorAll(".g__form_field");
     char_count_field_arr.forEach((field) => {
       let input = field.querySelector("input");
       if (!!input) {
@@ -2318,7 +2348,16 @@ function granite_form(formsBlock, jsonTheme) {
         main_container.setAttribute("class", "g__select_main");
 
         let left_container = document.createElement("div");
-        left_container.setAttribute("class", "g__drag_parent g__select_home");
+        left_container.id = "g__select_home";
+        left_container.setAttribute("class", "g__drag_parent");
+
+        let add_btn = document.createElement("button");
+        add_btn.type = "button";
+        add_btn.setAttribute("class", "g__add_options");
+        add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
+
+        left_container.appendChild(add_btn);
+
         left_container.addEventListener("dragover", (event) => {
           event.preventDefault();
         });
@@ -2335,10 +2374,20 @@ function granite_form(formsBlock, jsonTheme) {
         });
 
         let right_container = document.createElement("div");
-        right_container.setAttribute("class", "g__drag_parent g__select_drop");
+        right_container.id = "g__select_drop";
+        right_container.setAttribute("class", "g__drag_parent");
+
+        let remove_btn = document.createElement("button");
+        remove_btn.type = "button";
+        remove_btn.setAttribute("class", "g__remove_options");
+        remove_btn.innerHTML =
+          "<i class='far fa-chevron-double-left'></i> Remove";
+        right_container.appendChild(remove_btn);
+
         right_container.addEventListener("dragover", (event) => {
           event.preventDefault();
         });
+
         right_container.addEventListener("drop", (event) => {
           const id = event.dataTransfer.getData("text");
           const draggableElement = document.getElementById(id);
@@ -2355,6 +2404,38 @@ function granite_form(formsBlock, jsonTheme) {
         main_container.appendChild(left_container);
         main_container.appendChild(right_container);
 
+        add_btn.addEventListener("click", (event) => {
+          let home = event.target.parentElement;
+          let drop = home.nextSibling;
+          let arr_selected = [];
+          let selected_fields = home.querySelectorAll(".g__selected");
+          selected_fields.forEach((field) => {
+            arr_selected.push(field);
+            field.remove();
+          });
+          arr_selected.forEach((val) => {
+            drop.appendChild(val);
+            val.classList.remove("g__selected");
+          });
+          optionAddDrop(arr_selected, multi_elm, "selected");
+        });
+
+        remove_btn.addEventListener("click", (event) => {
+          let drop = event.target.parentElement;
+          let home = drop.previousSibling;
+          let arr_selected = [];
+          let selected_fields = drop.querySelectorAll(".g__selected");
+          selected_fields.forEach((field) => {
+            arr_selected.push(field);
+            field.remove();
+          });
+          arr_selected.forEach((val) => {
+            home.appendChild(val);
+            val.classList.remove("g__selected");
+          });
+          optionAddDrop(arr_selected, multi_elm, "unselected");
+        });
+
         let option_block;
         for (j = 0; j < options_length; j++) {
           option_block = document.createElement("div");
@@ -2363,18 +2444,24 @@ function granite_form(formsBlock, jsonTheme) {
           option_block.setAttribute("draggable", true);
           option_block.innerText = multi_elm.options[j].innerHTML;
           left_container.appendChild(option_block);
+
+          option_block.addEventListener("click", (event) => {
+            event.target.classList.toggle("g__selected");
+          });
+
           option_block.addEventListener("dragstart", (event) => {
             event.dataTransfer.setData("text/plain", event.target.id);
             event.currentTarget.classList.add("drag");
           });
+
           option_block.addEventListener("dragend", (event) => {
             // event.currentTarget.classList.add("drag");
           });
         }
         arr_multi[i].appendChild(main_container);
       }
+
       function optionAddDrop(options, original_list, side) {
-        console.clear();
         for (let option of options) {
           //loop through original select options
           for (let item of original_list) {

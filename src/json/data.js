@@ -1466,6 +1466,7 @@ let formsBlock_disable = {
       options: [],
       placeholder: "",
       autocomplete: "on",
+      show_stepper_arrow: true,
       length: "0",
       rows: "",
       classes: "",
@@ -1750,7 +1751,7 @@ let formsBlock_signup = {
     },
   ],
 };
-let formsBlockDisable2 = {
+let formsBlock = {
   id: "granite-form",
   options: {
     title: "",
@@ -1928,6 +1929,7 @@ let formsBlockDisable2 = {
       placeholder: "Character Counter",
       autocomplete: "on",
       length: "20",
+      char_limit: "5",
       rows: "",
       classes: "",
       id: "",
@@ -1952,7 +1954,7 @@ let formsBlockDisable2 = {
       disabled: false,
       dependency_not_blank: false,
       picklist_search: false,
-      show_count: false,
+      show_count: true,
       action: "hash_builder",
     },
     {
@@ -2127,13 +2129,14 @@ let formsBlockDisable2 = {
       super_text: true,
       dependency_field: "",
       dependency_values: "",
+      show_stepper_arrow: true,
       pattern: "",
       invalid_message: "",
       range_unit: "",
       show_counter: true,
       max_number: "300",
       min_number: "100",
-      step: "20",
+      step: "",
       addapptation_component: true,
       addapptation_name: "Custom Field",
       addapptation_type: "custom_field",
@@ -2582,7 +2585,7 @@ let formsBlockDisable2 = {
     },
   ],
 };
-let formsBlockDisable = {
+let formsBlockDisable1 = {
   id: "granite-form",
   options: {
     title: "Case",
@@ -3073,7 +3076,7 @@ let formsBlockDisable = {
     },
   ],
 };
-let formsBlock = {
+let formsBlockDisable = {
   id: "granite-form",
   options: {
     title: "",
@@ -3099,7 +3102,7 @@ let formsBlock = {
     allow_cancel: false,
     activate_recaptcha: false,
     auto_superscript: false,
-    autosave: true,
+    autosave: false,
     default_picklists: true,
     action: "/",
   },
