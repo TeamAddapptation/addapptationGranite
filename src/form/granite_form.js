@@ -52,13 +52,13 @@ function granite_form(formsBlock, jsonTheme) {
         --font-regular: hero-new, sans-serif;
         --font-bold: hero-new, sans-serif;
         --border-radius: 4px;
-        --field-padding: 6px 12px;
         --field-height: 37px;
+        --field-padding: 6px 12px;
         --error-color: #ea386e;
         --green: #00B28B;
 
         /* Mode Dependent */
-        --background: #eaeaea;
+        --background: #ffffff;
         --background-darker: #ffffff;
         --background-reverse: #000000;
         --background-range: #eaeaea;
@@ -67,6 +67,7 @@ function granite_form(formsBlock, jsonTheme) {
         --body: #ffffff;
         --font-color-reverse: #f5f5f5;
         --border: 1px solid #a1a1a1;
+        --border-disabled: 1px solid #eaeaea;
         --font-color: #5d5d5d;
 
         /* css */
@@ -83,7 +84,11 @@ function granite_form(formsBlock, jsonTheme) {
         --inner-background: #5d5d5d;
         --body: #101010;
         --border: 1px solid #a1a1a1;
+        --border-disabled: 1px solid #5d5d5d;
         --font-color: #ffffff;
+        --font-color-disabled: #5d5d5d;
+        --font-color-placeholder: #a1a1a1;
+        --btn-fill-disabled: #404040
     }
     /*---------------------------------------------
     No Records
@@ -130,6 +135,7 @@ function granite_form(formsBlock, jsonTheme) {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        align-items: center;
     }
     ${cssId} .g__form_field{
         position: relative;
@@ -137,7 +143,7 @@ function granite_form(formsBlock, jsonTheme) {
         font-weight: 300;
         display: flex;
         flex-direction: column;
-        margin: 15px;
+        padding: 10px;
         flex-grow: 1;
     }
     ${cssId} .g__form_copy{
@@ -158,6 +164,9 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         justify-content: flex-start;
         margin-bottom: 5px;
+    }
+    ${cssId} .g__disabled{
+      opacity: .5;
     }
     ${cssId} .g__char_remain{
         display: flex;
@@ -184,25 +193,15 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .g__form_field textarea.invalid{
         border: 2px solid var(--error-color);
     }
-    ${cssId} .g__form_field input.valid{
-        border: 0px solid green;
-    }
-    ${cssId} .g__form_field textarea.valid{
-        border: 0px solid green;
-    }
     ${cssId} .g__error_msg.active{
         display: flex;
     }
     ${cssId} .g__error_msg{
         display: none;
         justify-content: flex-end;
-        padding: 5px 0;
+        padding: 2px 0;
         color: var(--error-color);
         font-size: .8rem;
-    }
-    ${cssId} .g__form_field input:disabled {
-        color: #202020;
-        background: #202020;
     }
     ${cssId} .g__form_field input{
         background: var(--background);
@@ -213,32 +212,46 @@ function granite_form(formsBlock, jsonTheme) {
         padding: var(--field-padding);
         outline: none;
     }
-
+    ${cssId} .g__form_field input::placeholder {
+      color: var(--font-color-placeholder);
+    }
     ${cssId} button{
         cursor: pointer;
+    }
+    ${cssId} .g__button_container{
+      display:flex;
+      flex-direction: row;
     }
     ${cssId} #g__submit_btn{
         display: inline-flex;
         font-family: var(--font-regular);
         font-weight: 300;
         background: var(--primary);
-        padding: 10px 50px;
+        padding: 10px 40px;
         color: #ffffff;
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
+        transition: all .5s ease;
+    }
+    ${cssId} #g__submit_btn:hover{
+     filter: brightness(85%);
     }
     ${cssId} #g__cancel_btn{
         display: inline-flex;
         font-family: var(--font-regular);
         font-weight: 300;
         background: #5d5d5d;
-        padding: 10px 50px;
+        padding: 10px 40px;
         color: #ffffff;
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
+        transition: all .5s ease;
     }
+    ${cssId} #g__cancel_btn:hover{
+      filter: brightness(85%);
+     }
     ${cssId} input:-webkit-autofill,
     ${cssId} input:-webkit-autofill:hover,
     ${cssId} input:-webkit-autofill:focus{
@@ -359,15 +372,39 @@ function granite_form(formsBlock, jsonTheme) {
         width: 30px;
         text-align: center;
     }
+    /* ------------------------ Currency ------------------------------*/
+    // ${cssId} .g__field_currency[type=number] {
+    //     -moz-appearance: textfield;
+    // }
+    // ${cssId} .g__field_currency::-webkit-outer-spin-button,
+    // ${cssId} .g__field_currency::-webkit-inner-spin-button {
+    //     -webkit-appearance: none;
+    //     margin: 0;
+    // }
+    ${cssId} .g__currency_container{
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    ${cssId} .g__form_field input.g__field_currency{
+      flex: 1;
+      padding-left: 25px;
+    }
+    ${cssId} .g__currency_format {
+      position: absolute;
+      left: 10px;
+      color: var(--font-color);
+      opacity: .5;
+    }
     /* ------------------------ Number ------------------------------*/
-    ${cssId} .g__field_number[type=number] {
-        -moz-appearance: textfield;
-    }
-    ${cssId} .g__field_number::-webkit-outer-spin-button,
-    ${cssId} .g__field_number::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+    // ${cssId} .g__field_number[type=number] {
+    //     -moz-appearance: textfield;
+    // }
+    // ${cssId} .g__field_number::-webkit-outer-spin-button,
+    // ${cssId} .g__field_number::-webkit-inner-spin-button {
+    //     -webkit-appearance: none;
+    //     margin: 0;
+    // }
     ${cssId} .g__number_container{
         display: flex;
         align-items: center;
@@ -426,18 +463,43 @@ function granite_form(formsBlock, jsonTheme) {
         height: 50%;
         position: relative;
     }
+    // Disabled
+    ${cssId} .g__disabled .g__number_decrease:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__number_plus_minus{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__number_plus_minus:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__number_increase:active{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__number_decrease:active{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__number_increase:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__number_decrease:before{
+      border-top: 5px solid var(--font-color-disabled);
+    }
+    ${cssId} .g__disabled .g__number_increase:before{
+      border-bottom: 5px solid var(--font-color-disabled);
+    }
     @media only screen and (max-width: 768px) {
-        ${cssId} .g__number_plus_minus{
-            display: none;
-        }
-        ${cssId} .g__field_number[type=number] {
-            -moz-appearance: textfield;
-        }
-        ${cssId} .g__field_number::-webkit-outer-spin-button,
-        ${cssId} .g__field_number::-webkit-inner-spin-button {
-            -webkit-appearance: block;
-            margin: 0;
-        }
+        // ${cssId} .g__number_plus_minus{
+        //     display: none;
+        // }
+        // ${cssId} .g__field_number[type=number] {
+        //     -moz-appearance: textfield;
+        // }
+        // ${cssId} .g__field_number::-webkit-outer-spin-button,
+        // ${cssId} .g__field_number::-webkit-inner-spin-button {
+        //     -webkit-appearance: block;
+        //     margin: 0;
+        // }
     }
     /* ------------------------ Range ------------------------------*/
     ${cssId} .g__range_container{
@@ -467,8 +529,7 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__range_unit{
         position: absolute;
-        bottom: 0;
-        right: 30px;
+        right: 35px;
         display:flex;
         justify-content: center;
         align-items: center;
@@ -479,9 +540,8 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__range_plus_minus{
         position: absolute;
-        bottom: 1;
         background: var(--inner-background);
-        right: 1px;
+        right: 11px;
         border-radius: 0 3px 3px 0;
         width: 20px;
         height: calc(var(--field-height) - 1px);
@@ -532,15 +592,19 @@ function granite_form(formsBlock, jsonTheme) {
         padding: 0;
         height: 9px;
         background-color: var(--background-range);
-        border: 0;
+        border: var(--border);
         border-radius: 5px;
+    }
+    ${cssId} input[type='range']::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
+      color: #13bba4;
     }
     ${cssId} .g__field_range::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
         width: 20px;
         height: 20px;
-        background: var(--font-color);
+        background: var(--font-color-placeholder);
         border-radius: 15px;
         cursor: pointer;
     }
@@ -553,6 +617,31 @@ function granite_form(formsBlock, jsonTheme) {
         border-radius: 15px;
         cursor: pointer;
     }
+    // Disabled
+    ${cssId} .g__disabled .g__range_decrease:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__range_plus_minus{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__range_plus_minus:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__range_increase:active{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__range_decrease:active{
+      background: var(--btn-fill-disabled);
+    }
+    ${cssId} .g__disabled .g__range_increase:hover{
+      pointer-events: none;
+    }
+    ${cssId} .g__disabled .g__range_decrease:before{
+      border-top: 5px solid var(--font-color-disabled);
+    }
+    ${cssId} .g__disabled .g__range_increase:before{
+      border-bottom: 5px solid var(--font-color-disabled);
+    }
     /* ------------------------ Quil ------------------------------*/
     ${cssId} .ql-toolbar {
         border-right: 0;
@@ -562,6 +651,9 @@ function granite_form(formsBlock, jsonTheme) {
         border-top: var(--border);
         border-right: var(--border);
         border-left: var(--border);
+    }
+    ${cssId} .ql-toolbar.invalid {
+      border: 2px solid var(--error-color);
     }
     ${cssId} .ql-container {
        border-right: 0;
@@ -575,6 +667,9 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         background: var(--background);
         height: 200px;
+    }
+    ${cssId} .ql-editor.invalid {
+      border: 2px solid var(--error-color);
     }
     ${cssId} .ql-stroke{
         stroke: var(--font-color);
@@ -606,7 +701,7 @@ function granite_form(formsBlock, jsonTheme) {
         display: flex;
     }
     ${cssId} .g__date_field{
-        line-height: var(--height);
+        height: var(--field-height);
         flex: 1;
     }
     ${cssId} .g__date_field::-webkit-calendar-picker-indicator {
@@ -617,10 +712,11 @@ function granite_form(formsBlock, jsonTheme) {
         position: absolute;
         border-left: var(--border);
         color: var(--font-color);
-        font-size: 1.4rem;
-        padding: 8px 15px 8px 15px;
-        right: 0;
-        border-radius: var(--border-radius);
+        font-size: 1.2rem;
+        padding: 4px 15px;
+        right: 1px;
+        top: 1px;
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
         background: var(--inner-background);
     }
     #ui-datepicker-div{
@@ -676,7 +772,7 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__color_container input.g__hex_value{
         padding-left: 50px;
-        flex: 1;
+        width: 100%;
     }
     ${cssId} .g__form_field input[type=color] {
         padding: 0;
@@ -732,6 +828,9 @@ function granite_form(formsBlock, jsonTheme) {
         background-color: var(--background);
         border-radius: 50%;
     }
+    ${cssId} .g__radio_option input.invalid ~ .g__radio {
+      border: 2px solid var(--error-color)
+  }
     ${cssId} .g__radio_option:hover input ~ .g__radio {
         background-color: #ccc;
         cursor: pointer;
@@ -761,93 +860,91 @@ function granite_form(formsBlock, jsonTheme) {
     }
    }
     /* ------------------------ checkbox ------------------------------*/
-    ${cssId} .g__check_container {
-        margin-top: 15px;
-        margin-bottom: 15px;
-    }
     ${cssId} .g__check_container [type="checkbox"]:not(:checked),
-	${cssId} [type="checkbox"]:checked {
-		position: absolute;
-		left: 0;
-		opacity: 0.01;
+	  ${cssId} [type="checkbox"]:checked {
+      position: absolute;
+      left: 0;
+      opacity: 0.01;
     }
     ${cssId} .g__check_container [type="checkbox"]:not(:checked) + label,
-	${cssId} .g__check_container [type="checkbox"]:checked + label {
-		position: relative;
-		padding-left: 2.3em;
-		color: var(--font-color);
-		line-height: 1.7;
-		cursor: pointer;
+	  ${cssId} .g__check_container [type="checkbox"]:checked + label {
+      position: relative;
+      padding-left: 2.3em;
+      color: var(--font-color);
+      line-height: 1.7;
+      cursor: pointer;
     }
     ${cssId} [type="checkbox"]:not(:checked) + label:before{
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 25px;
-		height: 25px;
-		border: var(--border);
-		background: var(--background);
-		border-radius: var(--border-radius);
-		box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
-		-webkit-transition: all .275s;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 25px;
+      height: 25px;
+      border: var(--border);
+      background: var(--background);
+      border-radius: var(--border-radius);
+      box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
+      -webkit-transition: all .275s;
 				transition: all .275s;
     }
 	${cssId} [type="checkbox"]:checked + label:before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 25px;
-		height: 25px;
-		border: var(--border);
-		background: var(--green);
-		border-radius: var(--border-radius);
-		box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
-		-webkit-transition: all .275s;
-				transition: all .275s;
-    }
-    ${cssId} [type="checkbox"]:not(:checked) + label:after,
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 25px;
+      height: 25px;
+      border: var(--border);
+      background: var(--green);
+      border-radius: var(--border-radius);
+      box-shadow: inset 0 1px 3px rgba(0,0,0, .1), 0 0 0 rgba(203, 34, 237, .2);
+      -webkit-transition: all .275s;
+			transition: all .275s;
+  }
+  ${cssId} [type="checkbox"]:not(:checked):hover + label:before {
+    background: var(--inner-background);
+}
+  ${cssId} [type="checkbox"]:not(:checked) + label:after,
 	${cssId} [type="checkbox"]:checked + label:after {
-		content: '';
-		position: absolute;
-		top: 4px;
-		left: 9px;
-		font-size: 1.375em;
-        color: #fff;
-        background-color: var(--green);
-        line-height: 0;
-        border: solid white;
-        width: 8px;
-        height: 15px;
-        border: solid white;
-        border-width: 0 3px 3px 0;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-		-webkit-transition: all .2s;
-				transition: all .2s;
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 9px;
+      font-size: 1.375em;
+      color: #fff;
+      background-color: var(--green);
+      line-height: 0;
+      border: solid white;
+      width: 8px;
+      height: 15px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      -webkit-transition: all .2s;
+      transition: all .2s;
     }
-    ${cssId} [type="checkbox"]:not(:checked) + label:after {
+  ${cssId} [type="checkbox"]:not(:checked) + label:after {
 		opacity: 0;
 	}
 
 	${cssId} [type="checkbox"]:checked + label:after {
 		opacity: 1;
     }
-    ${cssId} [type="checkbox"]:disabled:not(:checked) + label:before,
+  ${cssId} [type="checkbox"]:disabled:not(:checked) + label:before,
 	${cssId} [type="checkbox"]:disabled:checked + label:before {
 		box-shadow: none;
-		border-color: #bbb;
-		background-color: #e9e9e9;
+		border: var(--border-disabled);
 	}
 
 	${cssId} [type="checkbox"]:disabled:checked + label:after {
 		color: #777;
 	}
 
-	${cssId} [type="checkbox"]:disabled + label {
-		color: #aaa;
+	${cssId} .g__check_container [type="checkbox"]:disabled + label {
+		color: var(--font-color-disabled);
 	}
 
 
@@ -1212,6 +1309,9 @@ function granite_form(formsBlock, jsonTheme) {
         background-color: rgba(0, 0, 0, 0.2);
     }
     @media only screen and (max-width: 768px) {
+        ${cssId} .g__inline_row{
+          align-items: initial;
+        }
         ${cssId} .g__picklist select {
             display: flex;
         }
@@ -1254,6 +1354,7 @@ function granite_form(formsBlock, jsonTheme) {
     granite_css.remove();
   }
   document.head.appendChild(formStyles);
+
   /* -------------------- Regex Expressions ----------------------*/
   const patterns = {
     tel: "[0-9]{2}/[0-9]{2}/[0-9]{4}",
@@ -1393,6 +1494,7 @@ function granite_form(formsBlock, jsonTheme) {
       ) {
         form_field = document.createElement("div");
         form_field.setAttribute("class", "g__form_field");
+        r.disabled ? form_field.classList.add("g__disabled") : "";
 
         field_info_container = document.createElement("div");
         field_info_container.setAttribute("class", "g__field_info");
@@ -1413,9 +1515,9 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
           let label = document.createElement("label");
-          !!r.required ? label.classList.add("required") : "";
           label.setAttribute("for", r.id);
           label.innerHTML = r.title;
+          !!r.required ? (label.innerHTML += "*") : "";
           check_container.appendChild(input);
           check_container.appendChild(label);
           form_field.appendChild(check_container);
@@ -1432,6 +1534,7 @@ function granite_form(formsBlock, jsonTheme) {
           var hex_display = document.createElement("input");
           hex_display.setAttribute("class", "g__hex_value");
           hex_display.setAttribute("value", "#101010");
+          r.disabled ? (hex_display.disabled = true) : "";
           hex_display.setAttribute(
             "pattern",
             "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$"
@@ -1443,11 +1546,38 @@ function granite_form(formsBlock, jsonTheme) {
           break;
         case "currency":
           addLabels(field_info_container, r);
+          let curr_container = document.createElement("div");
+          curr_container.setAttribute("class", "g__currency_container");
+          r.show_stepper_arrow
+            ? ""
+            : curr_container.classList.add("g__hide_counter");
+          let curr_format = document.createElement("div");
+          curr_format.setAttribute("class", "g__currency_format");
+          curr_format.innerHTML = r.curr_format;
           input = document.createElement("input");
           input.setAttribute("id", r.id);
+          r.type = "number";
           basicAttributes(r, input, class_name);
-          input.setAttribute("type", "text");
-          form_field.appendChild(input);
+          !!r.max_number ? (input.max = r.max_number) : "";
+          !!r.min_number ? (input.min = r.min_number) : "";
+          !!r.step ? (input.step = r.step) : "";
+          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
+          //Increase decrease container
+          let curr_counter = document.createElement("div");
+          curr_counter.setAttribute("class", "g__number_plus_minus");
+          // Increase container
+          let curr_increase = document.createElement("div");
+          curr_increase.setAttribute("class", "g__number_increase");
+          curr_counter.appendChild(curr_increase);
+          // Decrease container
+          let curr_decrease = document.createElement("div");
+          curr_decrease.setAttribute("class", "g__number_decrease");
+          curr_counter.appendChild(curr_decrease);
+          //Append the parent elements
+          curr_container.appendChild(curr_format);
+          curr_container.appendChild(input);
+          curr_container.appendChild(curr_counter);
+          form_field.appendChild(curr_container);
           form_field.appendChild(error_field);
           break;
         case "date":
@@ -1455,25 +1585,25 @@ function granite_form(formsBlock, jsonTheme) {
           let date_container = document.createElement("div");
           date_container.setAttribute("class", "g__date_container");
           input = document.createElement("input");
-          input.setAttribute("type", "text");
+          input.setAttribute("type", "date");
           input.setAttribute("class", "g__date_field");
           input.setAttribute("id", r.id);
-          let calendar_icon = document.createElement("i");
-          calendar_icon.setAttribute(
-            "class",
-            "fal fa-calendar-alt g__calendar_icon"
-          );
           !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
           !!r.name ? input.setAttribute("name", r.name) : "";
           !!r.value ? input.setAttribute("value", r.value) : "";
+          dateRange(r, input);
           !!r.placeholder
             ? input.setAttribute("placeholder", r.placeholder)
             : "";
           input.required = r.required;
           input.disabled = r.disabled;
           input.autocomplete = "false";
+          let date_icon = document.createElement("div");
+          date_icon.setAttribute("class", "g__calendar_icon");
+          date_icon.innerHTML = "<i class='fal fa-calendar-alt'></i>";
+          date_icon.style.display = "none";
           date_container.appendChild(input);
-          date_container.appendChild(calendar_icon);
+          date_container.appendChild(date_icon);
           form_field.appendChild(date_container);
           form_field.appendChild(error_field);
           break;
@@ -1568,9 +1698,7 @@ function granite_form(formsBlock, jsonTheme) {
           !!r.max_number ? (input.max = r.max_number) : "";
           !!r.min_number ? (input.min = r.min_number) : "";
           !!r.step ? (input.step = r.step) : "";
-          !!r.pattern
-            ? input.setAttribute("pattern", r.pattern)
-            : input.setAttribute("pattern", patterns.number);
+          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           // Increase decrease container
           let num_counter = document.createElement("div");
           num_counter.setAttribute("class", "g__number_plus_minus");
@@ -1661,6 +1789,8 @@ function granite_form(formsBlock, jsonTheme) {
             !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
             input.type = "radio";
             input.name = r.title;
+            input.required = r.required;
+            input.disabled = r.disabled;
             input.id = radio_options[i];
             input.value = radio_options[i];
             let radio_label = document.createElement("label");
@@ -1679,8 +1809,8 @@ function granite_form(formsBlock, jsonTheme) {
           break;
         case "range":
           addLabels(field_info_container, r);
-          let min = r.min || 0;
-          let max = r.max || 100;
+          let min = r.min_number || 0;
+          let max = r.max_number || 100;
           let range_container = document.createElement("div");
           range_container.setAttribute("class", "g__range_container");
           input = document.createElement("input");
@@ -1689,12 +1819,13 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("min", min);
           input.setAttribute("max", max);
           let output = document.createElement("input");
+          output.disabled = r.disabled;
           output.setAttribute("class", "g__range_output");
           output.setAttribute("type", "number");
           // Unit indicator
           let unit = document.createElement("div");
           unit.setAttribute("class", "g__range_unit");
-          unit.innerHTML = r.range_unit || "";
+          unit.innerHTML = r.range_unit || "px";
           // Increase decrease container
           let plusMinus = document.createElement("div");
           plusMinus.setAttribute("class", "g__range_plus_minus");
@@ -1958,21 +2089,26 @@ function granite_form(formsBlock, jsonTheme) {
         form_container.appendChild(hidden_container);
       }
     }
-
-    // Submit & Cancel Button
-    if (!o.hide_submit) {
-      let submit = document.createElement("button");
-      submit.setAttribute("id", "g__submit_btn");
-      submit.setAttribute("type", "submit");
-      submit.innerHTML = o.submit_label || "Submit";
-      form_container.appendChild(submit);
-    }
-    if (o.allow_cancel) {
-      let cancel = document.createElement("button");
-      cancel.setAttribute("id", "g__cancel_btn");
-      cancel.setAttribute("type", "reset");
-      cancel.innerHTML = o.cancel_label;
-      form_container.appendChild(cancel);
+    // Submit & Cancal Container
+    if (!o.hide_submit || o.allow_cancel) {
+      let button_container = document.createElement("div");
+      button_container.setAttribute("class", "g__button_container");
+      // Submit & Cancel Button
+      if (!o.hide_submit) {
+        let submit = document.createElement("button");
+        submit.setAttribute("id", "g__submit_btn");
+        submit.setAttribute("type", "submit");
+        submit.innerHTML = o.submit_label || "Submit";
+        button_container.appendChild(submit);
+      }
+      if (o.allow_cancel) {
+        let cancel = document.createElement("button");
+        cancel.setAttribute("id", "g__cancel_btn");
+        cancel.setAttribute("type", "reset");
+        cancel.innerHTML = o.cancel_label;
+        button_container.appendChild(cancel);
+      }
+      form_container.appendChild(button_container);
     }
 
     // append the form to the page
@@ -1987,6 +2123,7 @@ function granite_form(formsBlock, jsonTheme) {
         ".g__form_section_container"
       );
       let errors_arr = [];
+
       all_field_containers.forEach((field) => {
         let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
         let textarea = field.querySelector(
@@ -1994,25 +2131,48 @@ function granite_form(formsBlock, jsonTheme) {
         );
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         let error_msg = field.querySelector(".g__error_msg");
+        let is_quill = input.classList.contains("g__field_quill");
+        let is_required = input.required;
+        if (is_quill && is_required) {
+          let quill_toolbar = field.querySelector(".ql-toolbar");
+          let quill_editor = field.querySelector(".ql-editor");
+          let quill_content = quill_editor.innerHTML;
+          if (quill_content === "<p><br></p>") {
+            errors_arr.push(input);
+            error_msg.classList.add("active");
+            quill_toolbar.classList.add("invalid");
+            quill_editor.classList.add("invalid");
+            error_msg.innerHTML = "Enter a valid value.";
+          } else {
+            error_msg.classList.remove("active");
+            quill_toolbar.classList.remove("invalid");
+            quill_editor.classList.remove("invalid");
+            quill_editor.classList.add("valid");
+          }
+        }
         if (!!input && input.type != "hidden") {
           if (!input.checkValidity()) {
+            input.classList.remove("valid");
             input.classList.add("invalid");
             errors_arr.push(input);
             error_msg.classList.add("active");
             error_msg.innerHTML = input.validationMessage;
           } else {
             input.classList.add("valid");
+            input.classList.remove("invalid");
             error_msg.classList.remove("active");
           }
         }
         if (!!textarea) {
           if (!textarea.checkValidity()) {
             textarea.classList.add("invalid");
+            textarea.classList.remove("valid");
             errors_arr.push(textarea);
             error_msg.classList.add("active");
             error_msg.innerHTML = textarea.validationMessage;
           } else {
             textarea.classList.add("valid");
+            textarea.classList.remove("invalid");
             error_msg.classList.remove("active");
           }
         }
@@ -2068,15 +2228,33 @@ function granite_form(formsBlock, jsonTheme) {
     }
 
     /* -------------------- Currency Field ----------------------*/
-    let all_currency = document.querySelectorAll(".g__field_currency");
-
-    all_currency.forEach((curr) => {
-      curr.addEventListener("input", () => {
-        const formatter = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2,
-        });
+    let all_curr = granite_div.querySelectorAll(".g__currency_container");
+    all_curr.forEach((wrap) => {
+      const output = wrap.querySelector(".g__field_currency");
+      const step = output.step;
+      const increase = wrap.querySelector(".g__number_increase");
+      const decrease = wrap.querySelector(".g__number_decrease");
+      increase.addEventListener("click", () => {
+        let curr_num = output.value;
+        const val = parseFloat(output.value);
+        if (curr_num === "") {
+          output.value = !!step ? parseFloat(step) : 1;
+        } else if (!!step) {
+          output.value = val + parseFloat(step);
+        } else {
+          output.value = val + 1;
+        }
+      });
+      decrease.addEventListener("click", () => {
+        let curr_num = output.value;
+        const val = parseFloat(output.value);
+        if (curr_num === "") {
+          output.value = !!step ? parseFloat(step) : -1;
+        } else if (!!step) {
+          output.value = val - parseFloat(step);
+        } else {
+          output.value = val - 1;
+        }
       });
     });
     /* -------------------- File Enctype Change ----------------------*/
@@ -2130,11 +2308,11 @@ function granite_form(formsBlock, jsonTheme) {
         const section_header = form_section.nextSibling;
         form_section.classList.toggle("g__section_active");
         section_header.classList.toggle("g__section_active");
-        // if (section_header.style.maxHeight) {
-        //     section_header.style.maxHeight = null;
-        //   } else {
-        //     section_header.style.maxHeight = section_header.scrollHeight + "px";
-        // }
+        if (section_header.style.maxHeight) {
+          section_header.style.maxHeight = null;
+        } else {
+          section_header.style.maxHeight = section_header.scrollHeight + "px";
+        }
       });
     });
     /* -------------------- Number ----------------------*/
@@ -2221,16 +2399,22 @@ function granite_form(formsBlock, jsonTheme) {
       const output = wrap.querySelector(".g__range_output");
       const increase = wrap.querySelector(".g__range_increase");
       const decrease = wrap.querySelector(".g__range_decrease");
+      const range_min = range.min;
+      const range_max = range.max;
 
       increase.addEventListener("click", () => {
         const val = parseInt(output.value);
-        output.value = val + 1;
-        setRange(range, output.value);
+        if (val < range_max) {
+          output.value = val + 1;
+          setRange(range, output.value);
+        }
       });
       decrease.addEventListener("click", () => {
         const val = parseInt(output.value);
-        output.value = val - 1;
-        setRange(range, output.value);
+        if (val > range_min) {
+          output.value = val - 1;
+          setRange(range, output.value);
+        }
       });
 
       output.addEventListener("change", () => {
@@ -2279,7 +2463,9 @@ function granite_form(formsBlock, jsonTheme) {
     /* -------------------- Character Limit ----------------------*/
     let char_count_field_arr = document.querySelectorAll(".g__form_field");
     char_count_field_arr.forEach((field) => {
-      let input = field.querySelector("input");
+      let input = field.querySelector("input, textarea");
+      let quill = field.querySelector(".ql-editor");
+      console.log(quill);
       if (!!input) {
         let char_limit = input.getAttribute("maxlength");
         if (char_limit > 0) {
@@ -2299,12 +2485,37 @@ function granite_form(formsBlock, jsonTheme) {
           });
         }
       }
+      //Quill Counter
+      if (!!quill) {
+        let quill_hidden = field.querySelector(".g__field_quill");
+        let char_limit = quill_hidden.getAttribute("maxlength");
+        if (char_limit > 0) {
+          quill.addEventListener("input", () => {
+            console.log("working");
+            let counter_div = field.querySelector(".g__char_remain");
+            let text = quill_hidden.value;
+            let strippedString = text.replace(/(<([^>]+)>)/gi, "");
+            let count = strippedString.length;
+            let limit = parseInt(char_limit);
+            if (!!counter_div) {
+              counter_div.innerText = count + "/" + char_limit;
+              if (count >= limit) {
+                counter_div.classList.add("g__limit");
+              } else {
+                counter_div.classList.remove("g__limit");
+              }
+            }
+          });
+        }
+      }
     });
 
     /* -------------------- Color field values ----------------------*/
     let color_fields = granite_div.getElementsByClassName("g__hex_value");
     for (let i = 0; i < color_fields.length; i++) {
-      color_fields[i].addEventListener("keydown", function () {
+      color_fields[i].addEventListener("keyup", function () {
+        let first_char = this.value.substr(0, 1);
+        first_char != "#" ? (this.value = "#" + this.value) : "";
         let color = this.value;
         this.previousSibling.value = color;
       });
@@ -2318,25 +2529,89 @@ function granite_form(formsBlock, jsonTheme) {
     }
 
     /* -------------------- Datepicker **jQuery** ----------------------*/
-    let date_fields = document.getElementsByClassName("g__date_field");
-    for (let i = 0; i < date_fields.length; i++) {
-      let date_id = "#" + date_fields[i].id;
-      $(date_id).datepicker({
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        startDate: "+1d",
-        showAnim: "slideDown",
-        changeMonth: true,
-        changeYear: true,
-        prevText: '<i class="far fa-fw fa-chevron-left"></i>',
-        nextText: '<i class="far fa-fw fa-chevron-right"></i>',
-      });
+    function dateRange(r, input) {
+      if (r.date_future || r.date_past || r.date_range) {
+        let date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth() + 1; //January is 0!
+        let year = date.getFullYear();
+        if (month < 10) {
+          month = "0" + month.toString();
+        }
+        if (day < 10) {
+          day = "0" + day.toString();
+        }
+        let today = year + "-" + month + "-" + day;
+        let range,
+          date_min_max,
+          range_day,
+          range_month,
+          range_year,
+          range_full_date,
+          is_range_pos;
+        if (!!r.date_range) {
+          var d = new Date();
+          let range_num = parseInt(r.date_range);
+          is_range_pos = range_num > 0;
+          r.date_future ? d.setDate(d.getDate() - range_num) : "";
+          r.date_past ? d.setDate(d.getDate() + range_num) : "";
+          if (!r.date_future && !r.date_past && !!range_num) {
+            d.setDate(d.getDate() + range_num);
+          }
+          range_day = d.getDate();
+          range_month = d.getMonth() + 1;
+          range_year = d.getFullYear();
+          if (range_month < 10) {
+            range_month = "0" + range_month.toString();
+          }
+          if (range_day < 10) {
+            range_day = "0" + range_day.toString();
+          }
+          range_full_date = range_year + "-" + range_month + "-" + range_day;
+        }
+
+        if (!!r.date_range && r.date_future) {
+          input.setAttribute("min", range_full_date);
+          input.setAttribute("max", today);
+        } else if (!!r.date_range && r.date_past) {
+          input.setAttribute("max", range_full_date);
+          input.setAttribute("min", today);
+        } else if (r.date_future || r.date_past) {
+          r.date_future ? input.setAttribute("max", today) : "";
+          r.date_past ? input.setAttribute("min", today) : "";
+        } else if (!!r.date_range && is_range_pos) {
+          input.setAttribute("max", range_full_date);
+        } else if (!!r.date_range && !is_range_pos) {
+          input.setAttribute("min", range_full_date);
+        }
+        return input;
+      }
     }
-    $(".g__calendar_icon").on("click", function (field) {
-      let date = $(this).prev();
-      date.datepicker("show");
-    });
-    $("#ui-datepicker-div").attr("mode", mode);
+    let date_fields = granite_div.getElementsByClassName("g__date_field");
+    for (let i = 0; i < date_fields.length; i++) {
+      let type = date_fields[i].type;
+      let icon = date_fields[i].nextSibling;
+      if (type === "text") {
+        icon.style.display = "block";
+        let date_id = "#" + date_fields[i].id;
+        $(date_id).datepicker({
+          format: "yyyy-mm-dd",
+          autoclose: true,
+          startDate: "+1d",
+          showAnim: "slideDown",
+          changeMonth: true,
+          changeYear: true,
+          prevText: '<i class="far fa-fw fa-chevron-left"></i>',
+          nextText: '<i class="far fa-fw fa-chevron-right"></i>',
+        });
+      }
+      $(".g__calendar_icon").on("click", function (field) {
+        let date = $(this).prev();
+        date.datepicker("show");
+      });
+      $("#ui-datepicker-div").attr("mode", mode);
+    }
+
     /* -------------------- Custom Multi Drag & Drop ----------------------*/
     let arr_multi = form.getElementsByClassName("g__multi_container");
     let length = arr_multi.length;
