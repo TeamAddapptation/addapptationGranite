@@ -130,7 +130,28 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         font-size: ${o.description_font_size || "16px"}
     }
+    ${cssId} .g__form_action_btn{
+      display: inline-flex;
+      font-family: var(--font-regular);
+      font-weight: 300;
+      background: var(--inner-background);
+      padding: 5px 20px;
+      color: var(--font-color);
+      border: var(--border);
+      margin-left: auto;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      transition: all .5s ease;
+    }
+    ${cssId} .g__form_action_btn:hover{
+      filter: brightness(85%);
+     }
     /* ------------------------ Global Field Styles ------------------------*/
+    ${cssId} {
+      padding: ${o.form_padding || "15px"};
+    }
     ${cssId} .g__inline_row {
         display: flex;
         flex-direction: row;
@@ -228,7 +249,7 @@ function granite_form(formsBlock, jsonTheme) {
         font-weight: 300;
         background: var(--primary);
         padding: 10px 40px;
-        color: #ffffff;
+        color: var(--font-color);
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
@@ -243,7 +264,7 @@ function granite_form(formsBlock, jsonTheme) {
         font-weight: 300;
         background: #5d5d5d;
         padding: 10px 40px;
-        color: #ffffff;
+        color: var(--font-color);
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
@@ -351,6 +372,9 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .g__password_container .g__hide_password_btn{
         display: none;
     }
+    ${cssId} .g__disabled .g__password_show{
+        pointer-events: none;
+    }
     ${cssId} .g__password_show{
         position: absolute;
         display: flex;
@@ -373,14 +397,14 @@ function granite_form(formsBlock, jsonTheme) {
         text-align: center;
     }
     /* ------------------------ Currency ------------------------------*/
-    // ${cssId} .g__field_currency[type=number] {
-    //     -moz-appearance: textfield;
-    // }
-    // ${cssId} .g__field_currency::-webkit-outer-spin-button,
-    // ${cssId} .g__field_currency::-webkit-inner-spin-button {
-    //     -webkit-appearance: none;
-    //     margin: 0;
-    // }
+    ${cssId} .g__show_counter .g__field_currency[type=number] {
+        -moz-appearance: textfield;
+    }
+    ${cssId} .g__show_counter .g__field_currency::-webkit-outer-spin-button,
+    ${cssId} .g__show_counter .g__field_currency::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
     ${cssId} .g__currency_container{
       display: flex;
       align-items: center;
@@ -397,14 +421,14 @@ function granite_form(formsBlock, jsonTheme) {
       opacity: .5;
     }
     /* ------------------------ Number ------------------------------*/
-    // ${cssId} .g__field_number[type=number] {
-    //     -moz-appearance: textfield;
-    // }
-    // ${cssId} .g__field_number::-webkit-outer-spin-button,
-    // ${cssId} .g__field_number::-webkit-inner-spin-button {
-    //     -webkit-appearance: none;
-    //     margin: 0;
-    // }
+    ${cssId} .g__show_counter .g__field_number[type=number] {
+        -moz-appearance: textfield;
+    }
+    ${cssId} .g__show_counter .g__field_number::-webkit-outer-spin-button,
+    ${cssId} .g__show_counter .g__field_number::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
     ${cssId} .g__number_container{
         display: flex;
         align-items: center;
@@ -489,17 +513,17 @@ function granite_form(formsBlock, jsonTheme) {
       border-bottom: 5px solid var(--font-color-disabled);
     }
     @media only screen and (max-width: 768px) {
-        // ${cssId} .g__number_plus_minus{
-        //     display: none;
-        // }
-        // ${cssId} .g__field_number[type=number] {
-        //     -moz-appearance: textfield;
-        // }
-        // ${cssId} .g__field_number::-webkit-outer-spin-button,
-        // ${cssId} .g__field_number::-webkit-inner-spin-button {
-        //     -webkit-appearance: block;
-        //     margin: 0;
-        // }
+        ${cssId} .g__show_counter .g__number_plus_minus{
+            display: none;
+        }
+        ${cssId} .g__show_counter .g__field_number[type=number] {
+            -moz-appearance: textfield;
+        }
+        ${cssId} .g__show_counter .g__field_number::-webkit-outer-spin-button,
+        ${cssId} .g__show_counter .g__field_number::-webkit-inner-spin-button {
+            -webkit-appearance: block;
+            margin: 0;
+        }
     }
     /* ------------------------ Range ------------------------------*/
     ${cssId} .g__range_container{
@@ -529,7 +553,7 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__range_unit{
         position: absolute;
-        right: 35px;
+        right: 40px;
         display:flex;
         justify-content: center;
         align-items: center;
@@ -644,13 +668,12 @@ function granite_form(formsBlock, jsonTheme) {
     }
     /* ------------------------ Quil ------------------------------*/
     ${cssId} .ql-toolbar {
-        border-right: 0;
-        border-left: 0;
-        border-top: 0;
         background: var(--background);
         border-top: var(--border);
         border-right: var(--border);
         border-left: var(--border);
+        border-bottom: 0;
+        border-radius:  var(--border-radius) var(--border-radius) 0 0;
     }
     ${cssId} .ql-toolbar.invalid {
       border: 2px solid var(--error-color);
@@ -667,6 +690,7 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         background: var(--background);
         height: 200px;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
     }
     ${cssId} .ql-editor.invalid {
       border: 2px solid var(--error-color);
@@ -784,6 +808,9 @@ function granite_form(formsBlock, jsonTheme) {
         height: 38px;
     }
     /* ------------------------ radio ------------------------------*/
+    ${cssId} .g__disabled .g__radio_container {
+      pointer-events: none;
+    }
     ${cssId} .g__radio_container {
         display: block;
         position: relative;
@@ -804,6 +831,7 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .g__radio_container {
         display: flex;
         position: relative;
+        flex-wrap: wrap;
     }
     ${cssId} .g__field_radio{
         position:absolute;
@@ -836,7 +864,19 @@ function granite_form(formsBlock, jsonTheme) {
         cursor: pointer;
     }
     ${cssId} .g__radio_container input:checked ~ .g__radio {
-        background-color: var(--primary);
+        background-color: var(--background);
+        border: 1px solid #a1a1a1;
+    }
+    ${cssId} .g__radio_container input:checked ~ .g__radio:before {
+        content: " ";
+        position: absolute;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        top: 15px;
+        left: 5px;
+        bottom: 0;
+        background: var(--green);
     }
     ${cssId} .g__radio:after {
         content: "";
@@ -860,6 +900,9 @@ function granite_form(formsBlock, jsonTheme) {
     }
    }
     /* ------------------------ checkbox ------------------------------*/
+    ${cssId} .g__disabled .g__check_container{
+      pointer-events: none;
+    }
     ${cssId} .g__check_container [type="checkbox"]:not(:checked),
 	  ${cssId} [type="checkbox"]:checked {
       position: absolute;
@@ -959,41 +1002,44 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         background: var(--background);
         border: var(--border);
-        border-radius: var(border-radius);
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
         cursor: pointer;
     }
     ${cssId} .g__file_text{
         flex: 1;
+        display: flex;
+        align-items: center;
         box-sizing: border-box;
         overflow: hidden;
         padding: var(--field-padding);
-        color: var(--font-color);
+        color: var(--font-color-placeholder);
         height: var(--field-height);
         background: var(--background);
         border: var(--border);
-        border-radius: var(border-radius);
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
         border-left: 1px solid var(--body);
     }
-    ${cssId} .g__selected_file{
+    ${cssId} .g__selected_container{
       background: var(--background-darker);
-      display: inline-block;
-      padding: 0px 5px;
+      display: inline-flex;
+      align-items: center;
+      height: 25px;
+      flex-direction: row;
+      padding: 0px 10px;
       border-radius: var(--border-radius);
     }
+    ${cssId} .g__selected_file{
+      font-size: .8rem;
+      color: var(--font-color);
+    }
     ${cssId} .g__file_delete{
-        overflow: hidden;
-        box-sizing: border-box;
-        padding: var(--field-padding);
+        padding-left: 10px;
         color: var(--font-color);
-        height: var(--field-height);
-        background: var(--background);
-        border: var(--border);
-        border-radius: var(border-radius);
-        border-left: 1px solid var(--body);
+        font-size: .6rem;
     }
     ${cssId} .g__file_delete:hover{
         cursor: pointer;
-        background: var(--background-hover);
+        filter: brightness(85%);
     }
     /* ------------------------ Spacing ------------------------------*/
     ${cssId} .g__spacing_container{
@@ -1079,6 +1125,9 @@ function granite_form(formsBlock, jsonTheme) {
         border-bottom: var(--border);
         border-right: var(--border);
         border-left: var(--border);
+    }
+    ${cssId} .chosen-search-input.default{
+      color: var(--font-color-placeholder);
     }
     ${cssId} .chosen-container .chosen-results{
         color: var(--font-color) !important;
@@ -1219,6 +1268,9 @@ function granite_form(formsBlock, jsonTheme) {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+    }
+    ${cssId} .g__disabled .g__select_selected{
+      pointer-events: none;
     }
     ${cssId} .g__default_picklist .g__select_default.invalid {
         border: 2px solid var(--error-color);
@@ -1364,7 +1416,7 @@ function granite_form(formsBlock, jsonTheme) {
     //             yourname @ domain   .  com          ( .uk )
   };
   /* -------------------- Form Header ----------------------*/
-  if (!!o.title || o.description) {
+  if (!!o.title || o.description || o.button_1_label) {
     const form_action_row = document.createElement("div");
     form_action_row.setAttribute("class", "g__form_action_row");
 
@@ -1380,6 +1432,14 @@ function granite_form(formsBlock, jsonTheme) {
       form_description.setAttribute("class", "g__form_action_description");
       form_description.innerHTML = o.description;
       form_action_row.appendChild(form_description);
+    }
+
+    if (!!o.button_1_label) {
+      const form_custom_btn = document.createElement("a");
+      form_custom_btn.href = o.form_1_href;
+      form_custom_btn.setAttribute("class", "g__form_action_btn");
+      form_custom_btn.innerHTML = o.button_1_label;
+      form_action_row.appendChild(form_custom_btn);
     }
 
     document.getElementById(id).appendChild(form_action_row);
@@ -1549,7 +1609,7 @@ function granite_form(formsBlock, jsonTheme) {
           let curr_container = document.createElement("div");
           curr_container.setAttribute("class", "g__currency_container");
           r.show_stepper_arrow
-            ? ""
+            ? curr_container.classList.add("g__show_counter")
             : curr_container.classList.add("g__hide_counter");
           let curr_format = document.createElement("div");
           curr_format.setAttribute("class", "g__currency_format");
@@ -1640,14 +1700,14 @@ function granite_form(formsBlock, jsonTheme) {
           file_btn.innerText = "Choose File";
           file_text = document.createElement("div");
           file_text.setAttribute("class", "g__file_text");
-          file_text.innerText = "No file chosen, yet.";
-          let file_delete = document.createElement("div");
-          file_delete.setAttribute("class", "g__file_delete");
-          file_delete.innerText = "X";
+          file_text.innerText = r.placeholder || "No file chosen, yet.";
+          // let file_delete = document.createElement("div");
+          // file_delete.setAttribute("class", "g__file_delete");
+          // file_delete.innerText = "X";
           file_container.appendChild(input);
           file_container.appendChild(file_btn);
           file_container.appendChild(file_text);
-          file_container.appendChild(file_delete);
+          // file_container.appendChild(file_delete);
           form_field.appendChild(file_container);
           form_field.appendChild(error_field);
           break;
@@ -1690,7 +1750,7 @@ function granite_form(formsBlock, jsonTheme) {
           let num_container = document.createElement("div");
           num_container.setAttribute("class", "g__number_container");
           r.show_stepper_arrow
-            ? ""
+            ? num_container.classList.add("g__show_counter")
             : num_container.classList.add("g__hide_counter");
           input = document.createElement("input");
           input.setAttribute("id", r.id);
@@ -1756,6 +1816,14 @@ function granite_form(formsBlock, jsonTheme) {
             ? select.setAttribute("class", "g__select_multiple")
             : select.setAttribute("class", "g__select_default");
           r.multiple ? select.setAttribute("multiple", "true") : "";
+          if (o.default_picklists && r.placeholder) {
+            let option_placeholder = document.createElement("option");
+            option_placeholder.disabled = true;
+            option_placeholder.selected = true;
+            option_placeholder.hidden = true;
+            option_placeholder.innerHTML = r.placeholder;
+            select.appendChild(option_placeholder);
+          }
           if (picklist_double_arr) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
@@ -2131,8 +2199,11 @@ function granite_form(formsBlock, jsonTheme) {
         );
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         let error_msg = field.querySelector(".g__error_msg");
-        let is_quill = input.classList.contains("g__field_quill");
-        let is_required = input.required;
+        let is_quill, is_required;
+        if (!!input) {
+          is_quill = input.classList.contains("g__field_quill");
+          is_required = input.required;
+        }
         if (is_quill && is_required) {
           let quill_toolbar = field.querySelector(".ql-toolbar");
           let quill_editor = field.querySelector(".ql-editor");
@@ -2271,7 +2342,7 @@ function granite_form(formsBlock, jsonTheme) {
       let real_file_field = file.querySelector(".g__field_file");
       let file_btn = file.querySelector(".g__file_btn");
       let file_text = file.querySelector(".g__file_text");
-      let file_delete = file.querySelector(".g__file_delete");
+      // let file_delete = file.querySelector(".g__file_delete");
 
       // Activate the real file field on click
       file_btn.addEventListener("click", () => {
@@ -2282,19 +2353,26 @@ function granite_form(formsBlock, jsonTheme) {
         if (real_file_field.value) {
           file_text.innerHTML = "";
           let file_container = document.createElement("div");
-          file_container.classList.add("g__selected_file");
-          file_container.innerHTML = real_file_field.value.match(
+          file_container.classList.add("g__selected_container");
+          let file_selected = document.createElement("div");
+          file_selected.classList.add("g__selected_file");
+          let file_delete = document.createElement("div");
+          file_delete.innerHTML = "<i class='fal fa-times'></i>";
+          file_delete.setAttribute("class", "g__file_delete");
+          file_delete.addEventListener("click", () => {
+            if (real_file_field.value) {
+              file_selected.innerHTML = "";
+              file_text.innerText = "No file chosen, yet.";
+              real_file_field.value = "";
+            }
+          });
+          file_selected.innerHTML = real_file_field.value.match(
             /[\/\\]([\w\d\s\.\-\(\)]+)$/
           )[1];
+          file_container.appendChild(file_selected);
+          file_container.appendChild(file_delete);
           file_text.appendChild(file_container);
         } else {
-          file_text.innerText = "No file chosen, yet.";
-        }
-      });
-
-      file_delete.addEventListener("click", () => {
-        if (real_file_field.value) {
-          file_text.innerHTML = "";
           file_text.innerText = "No file chosen, yet.";
         }
       });
@@ -2322,26 +2400,35 @@ function granite_form(formsBlock, jsonTheme) {
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
       const decrease = wrap.querySelector(".g__number_decrease");
+      const max = output.max;
+      const min = output.min;
+      console.log(!!max);
       increase.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-        if (curr_num === "") {
-          output.value = !!step ? parseInt(step) : 1;
-        } else if (!!step) {
-          output.value = val + parseInt(step);
-        } else {
-          output.value = val + 1;
+        if (output.value < max || !max) {
+          if (curr_num === "" && curr_num < min) {
+            output.value = min;
+          } else if (curr_num === "") {
+            output.value = !!step ? parseInt(step) : 1;
+          } else if (!!step) {
+            output.value = val + parseInt(step);
+          } else {
+            output.value = val + 1;
+          }
         }
       });
       decrease.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-        if (curr_num === "") {
-          output.value = !!step ? parseInt(step) : -1;
-        } else if (!!step) {
-          output.value = val - parseInt(step);
-        } else {
-          output.value = val - 1;
+        if (output.value > min) {
+          if (curr_num === "") {
+            output.value = !!step ? parseInt(step) : -1;
+          } else if (!!step) {
+            output.value = val - parseInt(step);
+          } else {
+            output.value = val - 1;
+          }
         }
       });
     });
