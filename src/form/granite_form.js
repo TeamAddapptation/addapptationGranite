@@ -309,8 +309,8 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__form_section{
         display: none;
-        // max-height: 0;
-        // overflow: hidden;
+        max-height: 0;
+        overflow: hidden;
         margin: 0 15px;
         transition: max-height 0.5s ease-out;
     }
@@ -352,6 +352,56 @@ function granite_form(formsBlock, jsonTheme) {
         -o-transform: rotate(90deg);
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
+    }
+    /* ------------------------ Section Progess ------------------------------*/
+    ${cssId} .g__form_progress_section{
+      display: block;
+      animation-duration: 1s;
+      animation-name: slidein;
+    }
+    @keyframes slidein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    ${cssId} .g__form_progress_section.g__progress_hidden{
+      display: none;
+    }
+    ${cssId} .g__form_progress_section .g__form_section{
+      display: block;
+      max-height: max-content;
+      overflow: inherit;
+      margin: 0 15px;
+    }
+    ${cssId} .g__form_progress_section .g__section_line{
+      display: none;
+    }
+    ${cssId} .g__form_progress_section .g__section_icon{
+      display: none;
+    }
+    ${cssId} .g__form_progress_section .g__btn_step_container{
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      margin-top: 15px;
+      border-top: 1px solid var(--background);
+    }
+    ${cssId} .g__form_progress_section .g__next_btn{
+      padding: 5px 15px;
+      background: #D44697;
+      border: 0;
+      color: var(--font-color);
+      margin-left: auto;
+    }
+    ${cssId} .g__form_progress_section .g__back_btn{
+      padding: 5px 15px;
+      background: var(--inner-background);
+      border: 0;
+      color: var(--font-color);
+      margin-right: auto;
     }
     /* ------------------------ Dependency ------------------------------*/
     ${cssId} .dep_hide{
@@ -1519,7 +1569,10 @@ function granite_form(formsBlock, jsonTheme) {
   let section_group = [];
   let arr_section_titles = [];
   let section_num = 0;
-  let section_all = false;
+  let total_sections = 0;
+  r.forEach((r) => {
+    r.type === "section" ? total_sections++ : "";
+  });
   let section_obj = {
     record_count: r.length - 1,
     start: false,
@@ -2066,11 +2119,38 @@ function granite_form(formsBlock, jsonTheme) {
 
         if (!section || section_obj.end || section_obj.is_last_record) {
           let form_section_container = document.createElement("div");
-          form_section_container.setAttribute(
-            "class",
-            "g__form_section_container"
-          );
-
+          if (o.section_slider) {
+            form_section_container.setAttribute(
+              "class",
+              "g__form_progress_section g__progress_hidden"
+            );
+            //Back and next button container
+            let btn_container = document.createElement("div");
+            btn_container.setAttribute("class", "g__btn_step_container");
+            //Back button
+            if (section_num) {
+              let back_btn = document.createElement("button");
+              back_btn.setAttribute("class", "g__back_btn");
+              back_btn.type = "button";
+              back_btn.innerHTML = "Back";
+              btn_container.appendChild(back_btn);
+            }
+            //Next button
+            if (section_num + 1 != total_sections) {
+              let next_btn = document.createElement("button");
+              next_btn.setAttribute("class", "g__next_btn");
+              next_btn.type = "button";
+              next_btn.innerHTML = "Next";
+              btn_container.appendChild(next_btn);
+            }
+            //push button container to array
+            section_group.push(btn_container);
+          } else {
+            form_section_container.setAttribute(
+              "class",
+              "g__form_section_container"
+            );
+          }
           //Form text
           let section_header = document.createElement("div");
           section_header.setAttribute("class", "g__section_header");
@@ -2096,6 +2176,7 @@ function granite_form(formsBlock, jsonTheme) {
           section_group.forEach((field) => {
             form_section.appendChild(field);
           });
+
           section_group = [];
           section_title = "";
           section_obj.end = false;
@@ -2160,6 +2241,7 @@ function granite_form(formsBlock, jsonTheme) {
     // Submit & Cancal Container
     if (!o.hide_submit || o.allow_cancel) {
       let button_container = document.createElement("div");
+      button_container.id = "g__submit_cancel";
       button_container.setAttribute("class", "g__button_container");
       // Submit & Cancel Button
       if (!o.hide_submit) {
@@ -2379,20 +2461,56 @@ function granite_form(formsBlock, jsonTheme) {
     });
 
     /* -------------------- Section ----------------------*/
-    const all_sections = granite_div.querySelectorAll(".g__section_header");
+    if (o.section_slider) {
+      const progress_section = granite_div.querySelectorAll(
+        ".g__form_progress_section"
+      );
+      const submit = granite_div.querySelector("#g__submit_cancel");
+      submit.remove();
+      if (progress_section) {
+        progress_section.forEach((section, count) => {
+          count ? "" : section.classList.toggle("g__progress_hidden");
+          let btn_container = section.querySelector(".g__btn_step_container");
+          let next_btn = section.querySelector(".g__next_btn");
+          let back_btn = section.querySelector(".g__back_btn");
+          let next_section = section.nextSibling;
+          let prev_section = section.previousSibling;
+          if (next_btn) {
+            next_btn.addEventListener("click", () => {
+              section.classList.toggle("g__progress_hidden");
+              next_section.classList.toggle("g__progress_hidden");
+            });
+          }
+          if (back_btn) {
+            back_btn.addEventListener("click", () => {
+              section.classList.toggle("g__progress_hidden");
+              prev_section.classList.toggle("g__progress_hidden");
+            });
+          }
+          if (section_num - 1 === count) {
+            btn_container.before(submit);
+          }
+        });
+      }
+    } else {
+      const all_sections = granite_div.querySelectorAll(".g__section_header");
+      if (all_sections) {
+        all_sections.forEach((form_section) => {
+          form_section.addEventListener("click", () => {
+            const section_header = form_section.nextSibling;
+            form_section.classList.toggle("g__section_active");
+            section_header.classList.toggle("g__section_active");
+            if (section_header.style.maxHeight) {
+              section_header.style.maxHeight = null;
+            } else {
+              section_header.style.maxHeight =
+                section_header.scrollHeight + "px";
+            }
+          });
+        });
+      }
+    }
 
-    all_sections.forEach((form_section) => {
-      form_section.addEventListener("click", () => {
-        const section_header = form_section.nextSibling;
-        form_section.classList.toggle("g__section_active");
-        section_header.classList.toggle("g__section_active");
-        if (section_header.style.maxHeight) {
-          section_header.style.maxHeight = null;
-        } else {
-          section_header.style.maxHeight = section_header.scrollHeight + "px";
-        }
-      });
-    });
     /* -------------------- Number ----------------------*/
     let all_numbers = granite_div.querySelectorAll(".g__number_container");
     all_numbers.forEach((wrap) => {
@@ -2402,7 +2520,6 @@ function granite_form(formsBlock, jsonTheme) {
       const decrease = wrap.querySelector(".g__number_decrease");
       const max = output.max;
       const min = output.min;
-      console.log(!!max);
       increase.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
@@ -2552,7 +2669,6 @@ function granite_form(formsBlock, jsonTheme) {
     char_count_field_arr.forEach((field) => {
       let input = field.querySelector("input, textarea");
       let quill = field.querySelector(".ql-editor");
-      console.log(quill);
       if (!!input) {
         let char_limit = input.getAttribute("maxlength");
         if (char_limit > 0) {
