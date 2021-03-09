@@ -34,7 +34,7 @@ let templateBlock = {
 /*---------------------------------------------
 Navigation
 ---------------------------------------------*/
-let navigationBlock = {
+let navigationBlock_disable = {
   id: "granite-navigation",
   feature: "navigation",
   // "records": [
@@ -1006,7 +1006,7 @@ let heatmapBlock = {
 /*---------------------------------------------
 Forms
 ---------------------------------------------*/
-let formsBlock_disable = {
+let formsBlock_All = {
   id: "granite-form",
   options: {
     title: "",
@@ -1236,7 +1236,7 @@ let formsBlock_disable = {
       collapsed: false,
       disabled: false,
       dependency_not_blank: false,
-      inline_field: false,
+      inline_field: true,
       action: "hash_builder",
     },
     {
@@ -1701,7 +1701,7 @@ let formsBlock_disable = {
       placeholder: "",
       autocomplete: "on",
       length: "0",
-      rows: "",
+      rows: "10",
       classes: "",
       id: "",
       super_text: true,
@@ -1751,7 +1751,7 @@ let formsBlock_signup = {
     },
   ],
 };
-let formsBlock = {
+let formsBlockSlider = {
   id: "granite-form",
   options: {
     title: "",
@@ -1778,7 +1778,7 @@ let formsBlock = {
     activate_recaptcha: false,
     auto_superscript: false,
     autosave: false,
-    default_picklists: true,
+    default_picklists: false,
     action: "/",
     section_slider: false,
   },
@@ -1793,6 +1793,7 @@ let formsBlock = {
       title: "Email",
       name: "email",
       type: "email",
+      required: true,
       value: "",
     },
     {
@@ -1834,62 +1835,7 @@ let formsBlock = {
         "Alabama",
         "Alaska",
         "American Samoa",
-        "Arizona",
-        "Arkansas",
-        "California",
-        "Colorado",
-        "Connecticut",
-        "Delaware",
-        "District of Columbia",
-        "Federated States of Micronesia",
-        "Florida",
-        "Georgia",
-        "Guam",
-        "Hawaii",
-        "Idaho",
-        "Illinois",
-        "Indiana",
-        "Iowa",
-        "Kansas",
-        "Kentucky",
-        "Louisiana",
-        "Maine",
-        "Marshall Islands",
-        "Maryland",
-        "Massachusetts",
-        "Michigan",
-        "Minnesota",
-        "Mississippi",
-        "Missouri",
-        "Montana",
-        "Nebraska",
-        "Nevada",
-        "New Hampshire",
-        "New Jersey",
-        "New Mexico",
-        "New York",
-        "North Carolina",
-        "North Dakota",
-        "Northern Mariana Islands",
-        "Ohio",
-        "Oklahoma",
-        "Oregon",
-        "Palau",
-        "Pennsylvania",
-        "Puerto Rico",
-        "Rhode Island",
-        "South Carolina",
-        "South Dakota",
-        "Tennessee",
-        "Texas",
-        "Utah",
-        "Vermont",
-        "Virgin Island",
-        "Virginia",
-        "Washington",
-        "West Virginia",
-        "Wisconsin",
-        "Wyoming",
+        "Arizona"
       ],
       value: "",
       inline_field: true,
@@ -2484,6 +2430,1599 @@ let formsBlock_multi = {
     },
   ],
 };
+let formsBlockCase = {
+  "id":"granite-form",
+  "options":{
+     "title":"Case",
+     "description":"",
+     "form_id":"",
+     "addapptation_action":"/form_submission",
+     "db_action":"",
+     "enctype":"application/x-www-form-urlencoded",
+     "method":"POST",
+     "db_object":"Case",
+     "db_id":"5001I00000YbPX8QAN",
+     "db_redirect":"/case?id={record.Id}",
+     "button_1_label":"",
+     "button_1_href":"",
+     "submit_label":"Submit",
+     "cancel_label":"Cancel",
+     "allow_cancel":true,
+     "max_width":"",
+     "flash_message":"Case saved",
+     "hide_submit":false,
+     "autosave":false,
+     "action":"/form_submission"
+  },
+  "records":[
+     {
+        "value":"\u003cp\u003eCase Number: 00003227\u003c/p\u003e",
+        "type":"description",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Description",
+        "addapptation_type":"description",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"04612278143454611",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "title":"Subject",
+        "name":"Subject",
+        "required":true,
+        "type":"string",
+        "classes":"",
+        "value":"JNF Toolbox: Tables Need to Be anchored to the Page Border",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Subject",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Subject",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"07033929441252922",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Status",
+        "name":"Status",
+        "type":"picklist",
+        "value":"Duplicate",
+        "required":true,
+        "use_options_from_database":true,
+        "options":[
+           [
+              "",
+              ""
+           ],
+           [
+              "Submitted",
+              "Submitted"
+           ],
+           [
+              "In Progress",
+              "In Progress"
+           ],
+           [
+              "Further Investigation Required",
+              "Further Investigation Required"
+           ],
+           [
+              "Internal Validation Required",
+              "Internal Validation Required"
+           ],
+           [
+              "Ready for Customer Review",
+              "Ready for Customer Review"
+           ],
+           [
+              "Additional Information Requested",
+              "Additional Information Requested"
+           ],
+           [
+              "Completed",
+              "Completed"
+           ],
+           [
+              "Waiting on Product Team",
+              "Waiting on Product Team"
+           ],
+           [
+              "Transferred to Services",
+              "Transferred to Services"
+           ],
+           [
+              "Canceled",
+              "Canceled"
+           ],
+           [
+              "Duplicate",
+              "Duplicate"
+           ],
+           [
+              "On Hold",
+              "On Hold"
+           ]
+        ],
+        "placeholder":"",
+        "autocomplete":"on",
+        "length":"",
+        "rows":"",
+        "classes":"",
+        "id":"Status",
+        "super_text":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Status",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"075160566892094",
+        "addapptation_navigation":"",
+        "inline":false,
+        "multiple":false,
+        "collapsed":false,
+        "disabled":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"App",
+        "name":"addapptation_Solution__c",
+        "type":"picklist",
+        "classes":"",
+        "value":"a0P1I000006LjQkUAK",
+        "super_text":true,
+        "options":[
+           [
+              "a0P1I000006IQ1dUAG",
+              "Cards"
+           ],
+           [
+              "a0P1I000006IODMUA4",
+              "Chart"
+           ],
+           [
+              "a0P1I000006LqO8UAK",
+              "Comet Competition Cloned"
+           ],
+           [
+              "a0P1I000006IPzcUAG",
+              "Datatable"
+           ],
+           [
+              "a0P1I000006KnjXUAS",
+              "Dispatcher"
+           ],
+           [
+              "a0P1I0000098ajHUAQ",
+              "Emerson"
+           ],
+           [
+              "a0P1I000006IQONUA4",
+              "Form"
+           ],
+           [
+              "a0P1I000006J7VGUA0",
+              "Geovisualization"
+           ],
+           [
+              "a0P1I000008Oy6iUAC",
+              "Granite"
+           ],
+           [
+              "a0P1I000006J0t2UAC",
+              "Heatmap"
+           ],
+           [
+              "a0P1I000006IkLhUAK",
+              "Hero"
+           ],
+           [
+              "a0P1I000006L1XgUAK",
+              "Impersonate"
+           ],
+           [
+              "a0P1I000006IeqaUAC",
+              "Loader"
+           ],
+           [
+              "a0P1I0000098cSNUAY",
+              "Micro Documentation"
+           ],
+           [
+              "a0P1I000006KmlHUAS",
+              "Micro README"
+           ],
+           [
+              "a0P1I000006KwzwUAC",
+              "MPM"
+           ],
+           [
+              "a0P1I000006IO6aUAG",
+              "Navigation"
+           ],
+           [
+              "a0P1I000006Ia43UAC",
+              "Router"
+           ],
+           [
+              "a0P1I000006K8axUAC",
+              "SevenOfNine"
+           ],
+           [
+              "a0P1I000006IOBkUAO",
+              "Side Pane"
+           ],
+           [
+              "a0P1I000006ILWOUA4",
+              "Tabs"
+           ],
+           [
+              "a0P1I000006IgkZUAS",
+              "TestWorkflowBuilder"
+           ],
+           [
+              "a0P1I000006INV8UAO",
+              "Tiles"
+           ],
+           [
+              "a0P1I000006IPPyUAO",
+              "Workflow Builder"
+           ],
+           [
+              "a0P1I000006JLM1UAO",
+              "Workflow Builder Cloned"
+           ]
+        ],
+        "id":"addapptation_Solution__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"addapptation Solution",
+        "addapptation_type":"reference",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"05365685737544359",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Description",
+        "name":"Description",
+        "required":true,
+        "type":"textarea",
+        "classes":"",
+        "value":"Click on \"Total Donors\" tab (Blue)\r\n\r\n9: The horizontal scroll bar should be hovering/living at the bottom of the page all the time, not the bottom of the IFrame window.\r\n\u003eWhen I have a report with 3-4 records this is not an issue. When the report contains 300+ records, this issue is larger and more pronounced because it means I have to scroll down 300 records before I can shift over to view the hidden columns.",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Description",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Description",
+        "addapptation_type":"textarea",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"046165146065892304",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Reason",
+        "name":"Reason",
+        "type":"picklist",
+        "classes":"",
+        "value":"Change Request",
+        "super_text":true,
+        "options":[
+           "New Feature",
+           "Change Request",
+           "Bug",
+           "Training",
+           "Technical Question",
+           "Reporting",
+           "Salesforce Administration",
+           "Billing Question",
+           "Other"
+        ],
+        "id":"Reason",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Case Reason",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"0050306812824970404",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Priority",
+        "name":"Priority",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"High",
+        "super_text":true,
+        "options":[
+           [
+              "",
+              ""
+           ],
+           [
+              "High",
+              "High"
+           ],
+           [
+              "Medium",
+              "Medium"
+           ],
+           [
+              "Low",
+              "Low"
+           ]
+        ],
+        "id":"Priority",
+        "placeholder":"",
+        "length":"",
+        "use_options_from_database":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Priority",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"09929087058422819",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Rank",
+        "name":"Rank__c",
+        "type":"number",
+        "value":"8.0",
+        "use_options_from_database":true,
+        "options":null,
+        "placeholder":"",
+        "autocomplete":"on",
+        "length":"",
+        "rows":"",
+        "classes":"",
+        "id":"Rank__c",
+        "super_text":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Rank",
+        "addapptation_type":"double",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"022671748009777715",
+        "addapptation_navigation":"",
+        "required":false,
+        "inline":false,
+        "multiple":false,
+        "collapsed":false,
+        "disabled":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Additional Customer Notes",
+        "name":"Additional_Customer_Notes__c",
+        "type":"quill",
+        "classes":"",
+        "value":"\u003cp\u003e\u003cimg src=\"https://addapptation--c.na73.content.force.com/servlet/rtaImage?eid=5001I00000YbPX8\u0026amp;feoid=00N1I00000OFh8a\u0026amp;refid=0EM1I0000040jlv\" alt=\"image.png\"\u003e\u003c/img\u003e\u003c/p\u003e",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Additional_Customer_Notes__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Additional Customer Notes",
+        "addapptation_type":"textarea",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"0053338102273265076",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "addapptation_id":"08623023865214314",
+        "addapptation_type":"file",
+        "addapptation_name":"File Upload",
+        "addapptation_component":true,
+        "addapptation_object":"Case",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "title":"File Upload",
+        "name":"file_upload",
+        "id":"a__7390e67f57fa40a71acd",
+        "required":"",
+        "type":"file",
+        "dependency":"",
+        "dependency_desc":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "dependency_not_blank":""
+     },
+     {
+        "type":"hidden",
+        "name":"Type",
+        "value":"External (Displayed In Portal)",
+        "id":"a__3c1cc0fcf2baf041ee9d",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"03906095902401958",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"Origin",
+        "value":"addapptation Portal",
+        "id":"a__71e8bf0bb1d7a9246a2c",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"0397816579189467",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"AccountId",
+        "value":null,
+        "id":"a__42654f255d54268ca01a",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"001804555911093564",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"addapptation_Organization__c",
+        "value":"a0T1I000007neMOUAY",
+        "id":"a__5a48ece5eb1cfa7f5737",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"022030515884602053",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"addapptation_User__c",
+        "value":"a0S1I00000NcnjUUAR",
+        "id":"a__fb39e8415af4047b4f14",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"03123866919855154",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"OwnerId",
+        "value":"00G1I000000YFld",
+        "id":"a__e3d94a2fcde88710f9f5",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"09875373381235402",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"ContactId",
+        "value":null,
+        "id":"a__0c226eb897b3b7d993bc",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDtGmUAL",
+        "addapptation_id":"0012361893928353629",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     }
+  ]
+}
+let formsBlock_platformSetting = {
+  "id":"granite-form",
+  "options":{
+     "title":"Platform Version",
+     "addapptation_action":"/form_submission",
+     "description":"Select the version of addapptation you would like to use for this app.",
+     "title_font_size":"",
+     "description_font_size":"",
+     "db_action":"",
+     "db_object":"a_Solution__c",
+     "db_id":"a0P1I000006IQONUA4",
+     "db_redirect":"/platform_version?id=a0P1I000006IQONUA4&amp;app_tier=0",
+     "flash_message":"Settings updated",
+     "form_id":"",
+     "button_1_label":"",
+     "button_1_href":"",
+     "submit_label":"Submit",
+     "cancel_label":"Cancel",
+     "max_width":"",
+     "enctype":"application/x-www-form-urlencoded",
+     "method":"POST",
+     "visibility_settings":"",
+     "hide_submit":false,
+     "allow_cancel":false,
+     "activate_recaptcha":false,
+     "auto_superscript":false,
+     "autosave":false,
+     "default_picklists": false,
+     "action":"/form_submission"
+  },
+  "records":[
+     {
+        "type":"section",
+        "title":"Platform Version Controls",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"09633082688229266",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Version",
+        "name":"Version__c",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"v1",
+        "super_text":true,
+        "options":[
+           [
+              "",
+              ""
+           ],
+           [
+              "v1",
+              "1 (No Granite)"
+           ],
+           [
+              "2",
+              "2 (Granite w/o forms)"
+           ],
+           [
+              "3",
+              "3 (Granite w/ forms)"
+           ]
+        ],
+        "id":"Version__c",
+        "placeholder":"",
+        "length":"",
+        "use_options_from_database":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Version",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"06359746804610646",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Page Editor Version",
+        "name":"Page_Editor_Version__c",
+        "type":"picklist",
+        "value":"",
+        "required":true,
+        "use_options_from_database":true,
+        "options":[
+           [
+              "",
+              ""
+           ],
+           [
+              "Legacy",
+              "Legacy"
+           ],
+           [
+              "Visual Builder",
+              "Visual Builder"
+           ]
+        ],
+        "placeholder":"",
+        "autocomplete":"on",
+        "length":"255",
+        "rows":"",
+        "classes":"",
+        "id":"Page_Editor_Version__c",
+        "super_text":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Page Editor Version",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"06568918646490656",
+        "addapptation_navigation":"",
+        "inline":false,
+        "multiple":false,
+        "collapsed":false,
+        "disabled":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Preview this app with BETA Granite UI elements from our QA environment",
+        "name":"CDN_QA__c",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"CDN_QA__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"CDN QA",
+        "addapptation_type":"boolean",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"024469714241827178",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Advanced User Analytics Controls",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"09800272303618411",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "addapptation_id":"011020183245097281",
+        "addapptation_type":"boolean",
+        "addapptation_name":"Disable Analytics",
+        "addapptation_component":"",
+        "addapptation_api_label":"Disable_Analytics__c",
+        "addapptation_object":"a_Solution__c",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "title":"Disable Analytics",
+        "name":"Disable_Analytics__c",
+        "required":"",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "collapsed":"",
+        "placeholder":"",
+        "id":"Disable_Analytics__c",
+        "length":"",
+        "disabled":"",
+        "multiple":"",
+        "use_options_from_database":"",
+        "autocomplete":"on",
+        "dependency_field":"",
+        "dependency_values":"",
+        "dependency_not_blank":""
+     },
+     {
+        "addapptation_id":"04441465446878081",
+        "addapptation_type":"boolean",
+        "addapptation_name":"Enable Video Analytics (Crazy Egg)",
+        "addapptation_component":"",
+        "addapptation_api_label":"Enable_Video_Analytics__c",
+        "addapptation_object":"a_Solution__c",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "title":"Enable Video Analytics (Crazy Egg)",
+        "name":"Enable_Video_Analytics__c",
+        "required":"",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "collapsed":"",
+        "placeholder":"",
+        "id":"Enable_Video_Analytics__c",
+        "length":"",
+        "disabled":"",
+        "multiple":"",
+        "use_options_from_database":"",
+        "autocomplete":"on",
+        "dependency_field":"",
+        "dependency_values":"",
+        "dependency_not_blank":""
+     },
+     {
+        "addapptation_id":"02989072800393824",
+        "addapptation_type":"text",
+        "addapptation_name":"Disable User Tracking",
+        "addapptation_component":"",
+        "addapptation_api_label":"Disable_User_Tracking__c",
+        "addapptation_object":"a_Solution__c",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "title":"Disable User Tracking",
+        "name":"Disable_User_Tracking__c",
+        "required":"",
+        "type":"text",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "collapsed":"",
+        "placeholder":"",
+        "id":"Disable_User_Tracking__c",
+        "length":"",
+        "disabled":"",
+        "multiple":"",
+        "use_options_from_database":"",
+        "autocomplete":"on",
+        "dependency_field":"",
+        "dependency_values":"",
+        "dependency_not_blank":""
+     },
+     {
+        "type":"section",
+        "title":"CDN Settings",
+        "dependency_field":"Disable_Analytics__c",
+        "dependency_values":"true",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "addapptation_id":"008198406676208725",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "addapptation_id":"0596417186076899",
+        "addapptation_type":"boolean",
+        "addapptation_name":"Disable addapptation CDN",
+        "addapptation_component":"",
+        "addapptation_api_label":"Disable_addapptation_CDN__c",
+        "addapptation_object":"a_Solution__c",
+        "addapptation_code_id":"a0R1I00000FDuUeUAL",
+        "title":"Disable addapptation CDN",
+        "name":"Disable_addapptation_CDN__c",
+        "required":"",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "collapsed":"",
+        "placeholder":"",
+        "id":"Disable_addapptation_CDN__c",
+        "length":"",
+        "disabled":"",
+        "multiple":"",
+        "use_options_from_database":"",
+        "autocomplete":"on",
+        "dependency_field":"",
+        "dependency_values":"",
+        "dependency_not_blank":""
+     }
+  ]
+}
+let formsBlock = {
+  "id":"granite-form",
+  "options":{
+     "title":"Details",
+     "addapptation_action":"/form_submission",
+     "description":"",
+     "db_action":"",
+     "db_object":"a_Solution__c",
+     "db_id":"a0P1I0000098cSNUAY",
+     "db_redirect":"/details?id=a0P1I0000098cSNUAY&amp;app_tier=2",
+     "flash_message":"",
+     "form_id":"",
+     "button_1_label":"",
+     "button_1_href":"",
+     "submit_label":"Submit",
+     "cancel_label":"Cancel",
+     "max_width":"",
+     "enctype":"application/x-www-form-urlencoded",
+     "method":"POST",
+     "hide_submit":false,
+     "allow_cancel":false,
+     "default_picklists": true,
+     "activate_recaptcha":false,
+     "autosave":false,
+     "action":"/form_submission"
+  },
+  "records":[
+     {
+        "title":"App Name",
+        "name":"Name",
+        "required":true,
+        "type":"string",
+        "classes":"",
+        "value":"Micro Documentation",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Name",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"App Name",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"08364394643175925",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Subdomain",
+        "name":"Subdomain__c",
+        "type":"string",
+        "classes":"",
+        "value":"microdocumentation",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Subdomain__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Subdomain",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000ElTnyUAF",
+        "addapptation_id":"037636877006107006",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Mobile App Code",
+        "collapsed":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"05625348421872347",
+        "addapptation_navigation":"",
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"App Code",
+        "name":"App_Code__c",
+        "type":"text",
+        "value":"19701745",
+        "options":[
+
+        ],
+        "placeholder":"",
+        "autocomplete":"on",
+        "length":"1300",
+        "rows":"",
+        "classes":"",
+        "id":"App_Code__c",
+        "super_text":true,
+        "disabled":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"App Code",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"06123649985406847",
+        "addapptation_navigation":"",
+        "required":false,
+        "inline":false,
+        "use_options_from_database":false,
+        "multiple":false,
+        "collapsed":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"description",
+        "value":"\u003cp\u003eThe above app code is used to add this app to the addapptation mobile app for \u003ca href=\"https://apps.apple.com/us/app/addapptation/id1519427781\" target=\"_blank\"\u003eiOS \u003c/a\u003eand \u003ca href=\"https://play.google.com/store/apps/details?id=com.addapptation.www\" target=\"_blank\"\u003eAndroid\u003c/a\u003e.\u003c/p\u003e",
+        "font_size":"20px",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Description",
+        "addapptation_type":"description",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"05140933925813078",
+        "addapptation_navigation":"",
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Dev Environment Settings",
+        "collapsed":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"019434258158182338",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "title":"Automatically Shutdown Dev Environment Every...",
+        "name":"Test_Environment_Auto_Shutdown__c",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"3 Days",
+        "super_text":true,
+        "options":[
+           [
+              "1 Day",
+              "1 Day - Upgrade App for More Options"
+           ],
+           [
+              "3 Days",
+              "3 Days - Upgrade App for More Options"
+           ]
+        ],
+        "id":"Test_Environment_Auto_Shutdown__c",
+        "placeholder":"",
+        "length":"",
+        "use_options_from_database":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Test Environment Auto Shutdown",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"010213374249387641",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Dev Environment Resources",
+        "name":"Test_Environment_Resources__c",
+        "type":"picklist",
+        "classes":"",
+        "value":"Small",
+        "super_text":true,
+        "options":[
+           [
+              "Small",
+              "Small (750 MB RAM) - Upgrade App For Larger Servers"
+           ],
+           [
+              "Medium",
+              "Medium (1,500 MB RAM) - Upgrade App For Larger Servers"
+           ]
+        ],
+        "id":"Test_Environment_Resources__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Test Environment Resources",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"021426433500470798",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Production Environment Settings",
+        "collapsed":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"08581428195965142",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "title":"Production Environment Resources",
+        "name":"Production_Environment_Resources__c",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"Small",
+        "super_text":true,
+        "options":[
+           [
+              "Small",
+              "Small (750 MB RAM) - Upgrade App For Larger Servers"
+           ],
+           [
+              "Medium",
+              "Medium (1,500 MB RAM) - Upgrade App For Larger Servers"
+           ]
+        ],
+        "id":"Production_Environment_Resources__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Production Environment Resources",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"08230427000691121",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"# of Replicas",
+        "name":"Replicas__c",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"1",
+        "super_text":true,
+        "options":[
+           "1",
+           "2",
+           "3",
+           "4",
+           "5"
+        ],
+        "id":"Replicas__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Replicas",
+        "addapptation_type":"double",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"0056739709049289155",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Additional Settings",
+        "collapsed":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"07915048435672001",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     },
+     {
+        "title":"Debugging Level",
+        "name":"Debugging_Level__c",
+        "required":true,
+        "type":"picklist",
+        "classes":"",
+        "value":"Standard",
+        "super_text":true,
+        "options":[
+           [
+              "Standard",
+              "Standard Logs"
+           ],
+           [
+              "Full Details",
+              "Full Logs"
+           ]
+        ],
+        "id":"Debugging_Level__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Debugging Level",
+        "addapptation_type":"picklist",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"08002172203664963",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Send Production Environment Error Notifications",
+        "name":"Turn_On_Prod_Error_Notifications__c",
+        "type":"checkbox",
+        "classes":"",
+        "value":true,
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Turn_On_Prod_Error_Notifications__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Turn On Prod Error Notifications",
+        "addapptation_type":"boolean",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"003815113205261045",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Send Test Environment Error Notifications",
+        "name":"Turn_On_Dev_Error_Notifications__c",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Turn_On_Dev_Error_Notifications__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Turn On Dev Error Notifications",
+        "addapptation_type":"boolean",
+        "addapptation_code_id":"a0R1I00000ElTnyUAF",
+        "addapptation_id":"07656410602485764",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Archive This App",
+        "name":"Archive__c",
+        "type":"checkbox",
+        "classes":"",
+        "value":false,
+        "super_text":true,
+        "options":[
+
+        ],
+        "placeholder":"",
+        "id":"Archive__c",
+        "length":"",
+        "autocomplete":"on",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Archive",
+        "addapptation_type":"boolean",
+        "addapptation_code_id":"a0R1I00000FgaIpUAJ",
+        "addapptation_id":"06097118548877134",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"flash_message",
+        "value":"Solution Details Updated",
+        "id":"5124ff57503ed3f2b978",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000ElTnyUAF",
+        "addapptation_id":"0011591140900853558",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     }
+  ]
+}
+let formsBlock_SEO = {
+  "id":"granite-form",
+  "options":{
+     "title":"SEO Settings",
+     "addapptation_action":"/details?id=a0P1I0000098cSNUAY&app_tier=0&tab=3",
+     "description":"<div>Use the <b>form below</b> to setup this app to be optimized for search engine web crawlers.</div>",
+     "db_action":"",
+     "db_object":"a_Solution__c",
+     "db_id":"a0P1I0000098cSNUAY",
+     "db_redirect":"/details?id=a0P1I0000098cSNUAY&amp;app_tier=0&amp;tab=3",
+     "flash_message":"SEO settings updated",
+     "form_id":"",
+     "button_1_label":"",
+     "button_1_href":"",
+     "submit_label":"Submit",
+     "cancel_label":"Cancel",
+     "max_width":"",
+     "enctype":"application/x-www-form-urlencoded",
+     "method":"POST",
+     "hide_submit":false,
+     "allow_cancel":false,
+     "activate_recaptcha":false,
+     "autosave":false,
+     "action":"/details?id=a0P1I0000098cSNUAY&app_tier=0&tab=3"
+  },
+  "records":[
+     {
+        "type":"section",
+        "title":"Allow SEO",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"05909823343133793",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Check this box to allow bots (like google's SEO services) to access this app.",
+        "name":"Allow_Robots__c",
+        "type":"checkbox",
+        "classes":"",
+        "value":true,
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Allow_Robots__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Allow Robots",
+        "addapptation_type":"boolean",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"08470286547954637",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Meta Tag Settings",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"008591461105121545",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Meta Tag Title",
+        "name":"Meta_Title__c",
+        "type":"string",
+        "classes":"",
+        "value":"This is a title",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Meta_Title__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Meta Title",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"033623300087570573",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Meta Tag Keywords",
+        "name":"Meta_Keywords__c",
+        "type":"textarea",
+        "classes":"",
+        "value":"Granite, JS, Code, Vanilla",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Meta_Keywords__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Meta Keywords",
+        "addapptation_type":"textarea",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"018134683712274446",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Meta Tag Description",
+        "name":"Meta_Description__c",
+        "type":"textarea",
+        "value":"",
+        "options":[
+
+        ],
+        "placeholder":"",
+        "autocomplete":"on",
+        "length":"255",
+        "rows":"",
+        "id":"Meta_Description__c",
+        "classes":"",
+        "super_text":true,
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Meta Description",
+        "addapptation_type":"string",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"06253360445974492",
+        "addapptation_navigation":"",
+        "required":false,
+        "inline":false,
+        "use_options_from_database":false,
+        "multiple":false,
+        "collapsed":false,
+        "disabled":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"section",
+        "title":"Upload Image or Input URL",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"Section",
+        "addapptation_type":"pane_start",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"05803489830738517",
+        "addapptation_navigation":"",
+        "collapsed":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Meta Tag Image URL",
+        "name":"Meta_Image__c",
+        "type":"url",
+        "classes":"",
+        "value":"",
+        "super_text":true,
+        "options":[
+
+        ],
+        "id":"Meta_Image__c",
+        "placeholder":"",
+        "length":"",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":"",
+        "addapptation_name":"Meta Image",
+        "addapptation_type":"url",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"09221078379659986",
+        "addapptation_navigation":"",
+        "required":false,
+        "collapsed":false,
+        "disabled":false,
+        "multiple":false,
+        "use_options_from_database":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "title":"Meta Tag Image File",
+        "name":"file_upload",
+        "id":"a__940d547dd2144fb94273",
+        "type":"file",
+        "dependency_field":"",
+        "dependency_values":"",
+        "addapptation_component":true,
+        "addapptation_name":"File Upload",
+        "addapptation_type":"file",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"03834048796113454",
+        "addapptation_navigation":"",
+        "required":false,
+        "dependency_not_blank":false,
+        "action":"hash_builder"
+     },
+     {
+        "type":"hidden",
+        "name":"container_name",
+        "value":"addapptation-micros",
+        "id":"a__6477dd95d2e009c6b058",
+        "addapptation_component":true,
+        "addapptation_name":"Hidden Field",
+        "addapptation_type":"hidden",
+        "addapptation_code_id":"a0R1I00000FDx0TUAT",
+        "addapptation_id":"04908994432919058",
+        "addapptation_navigation":"",
+        "action":"hash_builder"
+     }
+  ]
+}
+let formsBlock_auth = {"id":  "granite-form", "options": {submit_label: 'Sign In', "title_font_size": "30px", "description_font_size": "20px", autosave: false, title: 'addapptation Workspace', description: '<div class="a__error_message">Login attempt not successful.  Please retry your username or password.</div>', form_id: 'a__9abdeac52f3571868d09', action: '/sign_in', auto_superscript: 'true', method: 'POST', enctype: 'application/x-www-form-urlencoded'},
+"records": [
+  {"type": "email", "id": "a__8062b46b6d79ce5f1648", "value": "jason.bean@addapptation.com", "name": "username", "title": "Email", "required": true},
+  {"type": "password", "id": "a__f747fd3982ffc724ead8", "value": "", "autocomplete": "off", "title": "Password", "name": "password", "required": true},
+  {"type": "hidden", "id": "a__5c831ed83e3da34a9e53", "value": "", "name": "mode"},
+  {"type": "hidden", "id": "a__9346e8735623be0424b3", "value": "", "name": "dest"}
+]}
 /*---------------------------------------------
 Text Block
 ---------------------------------------------*/

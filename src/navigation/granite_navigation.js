@@ -9,7 +9,6 @@ function granite_navigation(jsonNav, jsonTheme){
     var records = json.records;
     var css = "#" + json.id;
     var t = jsonTheme;
-    var content = (document.getElementById(targetID).innerHTML).trim();
     var nav_root = document.documentElement;
     const font_include = document.getElementById('g__font_stylesheet');
     /*---------------------------------------------

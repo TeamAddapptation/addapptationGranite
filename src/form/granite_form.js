@@ -1,5 +1,6 @@
 function granite_form(formsBlock, jsonTheme) {
   const id = formsBlock.id;
+  console.log(id);
   const o = formsBlock.options;
   const r = formsBlock.records;
   const t = jsonTheme;
@@ -130,21 +131,6 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
         font-size: ${o.description_font_size || "16px"}
     }
-    ${cssId} .g__form_action_btn{
-      display: inline-flex;
-      font-family: var(--font-regular);
-      font-weight: 300;
-      background: var(--inner-background);
-      padding: 5px 20px;
-      color: var(--font-color);
-      border: var(--border);
-      margin-left: auto;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border-radius: var(--border-radius);
-      text-decoration: none;
-      transition: all .5s ease;
-    }
     ${cssId} .g__form_action_btn:hover{
       filter: brightness(85%);
      }
@@ -256,7 +242,7 @@ function granite_form(formsBlock, jsonTheme) {
         transition: all .5s ease;
     }
     ${cssId} #g__submit_btn:hover{
-     filter: brightness(85%);
+     filter: brightness(75%);
     }
     ${cssId} #g__cancel_btn{
         display: inline-flex;
@@ -271,7 +257,24 @@ function granite_form(formsBlock, jsonTheme) {
         transition: all .5s ease;
     }
     ${cssId} #g__cancel_btn:hover{
-      filter: brightness(85%);
+      filter: brightness(75%);
+     }
+    ${cssId} .g__form_action_btn{
+      display: inline-flex;
+      justify-content: center;
+      font-family: var(--font-regular);
+      font-weight: 300;
+      background: var(--inner-background);
+      padding: 10px 40px;
+      margin: 15px;
+      color: var(--font-color);
+      border: var(--border);
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      transition: all .5s ease;
+    }
+    ${cssId} .g__form_action_btn:hover{
+      filter: brightness(75%);
      }
     ${cssId} input:-webkit-autofill,
     ${cssId} input:-webkit-autofill:hover,
@@ -309,14 +312,14 @@ function granite_form(formsBlock, jsonTheme) {
     }
     ${cssId} .g__form_section{
         display: none;
-        max-height: 0;
-        overflow: hidden;
+        // max-height: 0;
+        // overflow: hidden;
         margin: 0 15px;
         transition: max-height 0.5s ease-out;
     }
     ${cssId} .g__form_section.g__section_active{
         display: block;
-        margin: 0 15px;
+        margin: 0 35px;
     }
     ${cssId} .g__section_header{
         display: flex;
@@ -347,11 +350,11 @@ function granite_form(formsBlock, jsonTheme) {
         color: var(--font-color);
     }
     ${cssId} .g__section_header.g__section_active .g__section_icon{
-        -webkit-transform: rotate(90deg);
-        -moz-transform: rotate(90deg);
-        -o-transform: rotate(90deg);
-        -ms-transform: rotate(90deg);
-        transform: rotate(90deg);
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
     }
     /* ------------------------ Section Progess ------------------------------*/
     ${cssId} .g__form_progress_section{
@@ -408,7 +411,7 @@ function granite_form(formsBlock, jsonTheme) {
         display: none;
     }
     ${cssId} .dep_show{
-        display: flex;
+        display: block;
     }
     /* ------------------------ Password ------------------------------*/
     ${cssId} .g__password_container{
@@ -953,21 +956,21 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .g__disabled .g__check_container{
       pointer-events: none;
     }
-    ${cssId} .g__check_container [type="checkbox"]:not(:checked),
-	  ${cssId} [type="checkbox"]:checked {
+    ${cssId} .g__check_container [type="checkbox"].g__unchecked,
+	  ${cssId} [type="checkbox"].g__checked {
       position: absolute;
       left: 0;
       opacity: 0.01;
     }
-    ${cssId} .g__check_container [type="checkbox"]:not(:checked) + label,
-	  ${cssId} .g__check_container [type="checkbox"]:checked + label {
+    ${cssId} .g__check_container [type="checkbox"].g__unchecked + label,
+	  ${cssId} .g__check_container [type="checkbox"].g__checked + label {
       position: relative;
       padding-left: 2.3em;
       color: var(--font-color);
       line-height: 1.7;
       cursor: pointer;
     }
-    ${cssId} [type="checkbox"]:not(:checked) + label:before{
+    ${cssId} [type="checkbox"].g__unchecked + label:before{
       content: '';
       position: absolute;
       left: 0;
@@ -981,7 +984,7 @@ function granite_form(formsBlock, jsonTheme) {
       -webkit-transition: all .275s;
 				transition: all .275s;
     }
-	${cssId} [type="checkbox"]:checked + label:before {
+	${cssId} [type="checkbox"].g__checked + label:before {
       content: '';
       position: absolute;
       left: 0;
@@ -995,11 +998,11 @@ function granite_form(formsBlock, jsonTheme) {
       -webkit-transition: all .275s;
 			transition: all .275s;
   }
-  ${cssId} [type="checkbox"]:not(:checked):hover + label:before {
+  ${cssId} [type="checkbox"].g__unchecked:hover + label:before {
     background: var(--inner-background);
 }
-  ${cssId} [type="checkbox"]:not(:checked) + label:after,
-	${cssId} [type="checkbox"]:checked + label:after {
+  ${cssId} [type="checkbox"].g__unchecked + label:after,
+	${cssId} [type="checkbox"].g__checked + label:after {
       content: '';
       position: absolute;
       top: 4px;
@@ -1019,20 +1022,20 @@ function granite_form(formsBlock, jsonTheme) {
       -webkit-transition: all .2s;
       transition: all .2s;
     }
-  ${cssId} [type="checkbox"]:not(:checked) + label:after {
+  ${cssId} [type="checkbox"].g__unchecked + label:after {
 		opacity: 0;
 	}
 
-	${cssId} [type="checkbox"]:checked + label:after {
+	${cssId} [type="checkbox"].g__checked + label:after {
 		opacity: 1;
     }
-  ${cssId} [type="checkbox"]:disabled:not(:checked) + label:before,
-	${cssId} [type="checkbox"]:disabled:checked + label:before {
+  ${cssId} [type="checkbox"].g__unchecked:disabled + label:before,
+	${cssId} [type="checkbox"].g__checked:disabled + label:before {
 		box-shadow: none;
 		border: var(--border-disabled);
 	}
 
-	${cssId} [type="checkbox"]:disabled:checked + label:after {
+	${cssId} [type="checkbox"].g__checked:disabled + label:after {
 		color: #777;
 	}
 
@@ -1077,10 +1080,16 @@ function granite_form(formsBlock, jsonTheme) {
       flex-direction: row;
       padding: 0px 10px;
       border-radius: var(--border-radius);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     ${cssId} .g__selected_file{
       font-size: .8rem;
       color: var(--font-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     ${cssId} .g__file_delete{
         padding-left: 10px;
@@ -1322,9 +1331,6 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .g__disabled .g__select_selected{
       pointer-events: none;
     }
-    ${cssId} .g__default_picklist .g__select_default.invalid {
-        border: 2px solid var(--error-color);
-    }
     ${cssId} .g__picklist.g__default_picklist:after {
         position: absolute;
         content: "";
@@ -1347,6 +1353,9 @@ function granite_form(formsBlock, jsonTheme) {
         border: var(--border);
         border-radius: var(--border-radius);
         height: var(--field-height);
+    }
+    ${cssId} .g__picklist.g__custom_picklist.invalid{
+      border: 2px solid var(--error-color);
     }
     /* Style the arrow inside the select element: */
     ${cssId} .g__select_selected:after {
@@ -1376,6 +1385,11 @@ function granite_form(formsBlock, jsonTheme) {
         cursor: pointer;
         height: var(--field-height);
     }
+    ${cssId} .g__select_selected {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
     /* Style items (options): */
     ${cssId} .select-items {
         position: absolute;
@@ -1384,7 +1398,6 @@ function granite_form(formsBlock, jsonTheme) {
         background: var(--background);
         border: var(--border);
         border-top: 1px solid var(--body);
-        border-bottom: 1px solid var(--background-darker);
         top: 100%;
         left: 0;
         right: 0;
@@ -1410,11 +1423,11 @@ function granite_form(formsBlock, jsonTheme) {
     ${cssId} .select-items div:hover, .same-as-selected {
         background-color: rgba(0, 0, 0, 0.2);
     }
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 576px) {
         ${cssId} .g__inline_row{
           align-items: initial;
         }
-        ${cssId} .g__picklist select {
+        ${cssId} .g__picklist.g__custom_picklist select {
             display: flex;
         }
         ${cssId} .g__select_default {
@@ -1484,14 +1497,6 @@ function granite_form(formsBlock, jsonTheme) {
       form_action_row.appendChild(form_description);
     }
 
-    if (!!o.button_1_label) {
-      const form_custom_btn = document.createElement("a");
-      form_custom_btn.href = o.form_1_href;
-      form_custom_btn.setAttribute("class", "g__form_action_btn");
-      form_custom_btn.innerHTML = o.button_1_label;
-      form_action_row.appendChild(form_custom_btn);
-    }
-
     document.getElementById(id).appendChild(form_action_row);
   }
 
@@ -1554,8 +1559,8 @@ function granite_form(formsBlock, jsonTheme) {
   /* -------------------- Hidden Fields ----------------------*/
   function hiddenFields(hidden, name, value) {
     hidden.setAttribute("type", "hidden");
-    hidden.setAttribute("form_id", attr__form_id);
     hidden.setAttribute("name", name);
+    hidden.setAttribute("form_id", attr__form_id);
     hidden.setAttribute("value", value);
     return hidden;
   }
@@ -1565,10 +1570,11 @@ function granite_form(formsBlock, jsonTheme) {
   let section = false;
   let section_count = 0;
   let section_title = "";
-  let section_id = "";
+  let section_id = [];
   let section_group = [];
   let arr_section_titles = [];
   let section_num = 0;
+  let section_collapsed = false;
   let total_sections = 0;
   r.forEach((r) => {
     r.type === "section" ? total_sections++ : "";
@@ -1625,8 +1631,16 @@ function granite_form(formsBlock, jsonTheme) {
           check_container.setAttribute("class", "g__check_container");
           input = document.createElement("input");
           r.type === "boolean" ? (r.type = "checkbox") : "";
+          input.setAttribute("class", class_name);
           input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
+          input.setAttribute("type", r.type);
+          input.setAttribute("form_id", attr__form_id);
+          input.setAttribute("name", r.name);
+          input.setAttribute("value", r.value);
+          input.setAttribute("title", r.title);
+          input.checked = r.value;
+          r.value ? input.classList.add('g__checked'): input.classList.add('g__unchecked');
+          console.log(input.checked);
           let label = document.createElement("label");
           label.setAttribute("for", r.id);
           label.innerHTML = r.title;
@@ -1666,11 +1680,12 @@ function granite_form(formsBlock, jsonTheme) {
             : curr_container.classList.add("g__hide_counter");
           let curr_format = document.createElement("div");
           curr_format.setAttribute("class", "g__currency_format");
-          curr_format.innerHTML = r.curr_format;
+          curr_format.innerHTML = r.curr_format || "$";
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           r.type = "number";
           basicAttributes(r, input, class_name);
+          input.inputmode="decimal";
           !!r.max_number ? (input.max = r.max_number) : "";
           !!r.min_number ? (input.min = r.min_number) : "";
           !!r.step ? (input.step = r.step) : "";
@@ -1881,6 +1896,9 @@ function granite_form(formsBlock, jsonTheme) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i][0]);
+              if(r.value === picklist_options[i][0]){
+                option.selected = true;
+              }
               option.innerHTML = picklist_options[i][1];
               select.appendChild(option);
             }
@@ -1888,6 +1906,9 @@ function granite_form(formsBlock, jsonTheme) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i]);
+              if(r.value === picklist_options[i]){
+                option.selected = true;
+              }
               option.innerHTML = picklist_options[i];
               select.appendChild(option);
             }
@@ -1968,8 +1989,9 @@ function granite_form(formsBlock, jsonTheme) {
           break;
         case "section":
           section_title = r.title;
-          section_id = r.section_id;
+          section_id.push(r.id);
           arr_section_titles.push(r.title);
+          section_collapsed = r.collapsed;
           section = true;
           section_count = parseInt(r.number_fields);
           section_obj.start
@@ -2059,7 +2081,8 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("textarea");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
-          input.setAttribute("rows", "4");
+          input.innerHTML = r.value || "";
+          input.rows = r.rows || "4";
           input.setAttribute("cols", "50");
           input.setAttribute("form", attr__form_id);
           form_field.appendChild(input);
@@ -2077,7 +2100,6 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(quil);
           form_field.appendChild(input);
           form_field.appendChild(error_field);
-
           break;
         default:
           addLabels(field_info_container, r);
@@ -2116,7 +2138,6 @@ function granite_form(formsBlock, jsonTheme) {
         section_count || section_obj.start
           ? (section = true)
           : (section = false);
-
         if (!section || section_obj.end || section_obj.is_last_record) {
           let form_section_container = document.createElement("div");
           if (o.section_slider) {
@@ -2150,11 +2171,12 @@ function granite_form(formsBlock, jsonTheme) {
               "class",
               "g__form_section_container"
             );
+            form_section_container.id = section_id[section_num];
           }
           //Form text
           let section_header = document.createElement("div");
           section_header.setAttribute("class", "g__section_header");
-          !!section_id ? section_header.setAttribute("id", section_id) : "";
+
           form_section_container.appendChild(section_header);
           let title = document.createElement("h3");
           title.setAttribute("class", "g__section_title");
@@ -2163,7 +2185,7 @@ function granite_form(formsBlock, jsonTheme) {
           line.setAttribute("class", "g__section_line");
           let icon = document.createElement("div");
           icon.setAttribute("class", "g__section_icon");
-          icon.innerHTML = '<i class="far fa-chevron-right"></i>';
+          icon.innerHTML = '<i class="far fa-chevron-up"></i>';
           section_header.appendChild(title);
           section_header.appendChild(line);
           section_header.appendChild(icon);
@@ -2172,17 +2194,23 @@ function granite_form(formsBlock, jsonTheme) {
           let form_section = document.createElement("div");
           form_section.setAttribute("class", "g__form_section");
           form_section_container.appendChild(form_section);
-
           section_group.forEach((field) => {
             form_section.appendChild(field);
           });
 
+          if(!section_collapsed){
+            section_header.classList.add('g__section_active');
+            form_section.classList.add('g__section_active');
+          }
+
           section_group = [];
           section_title = "";
+          section_collapsed = false
           section_obj.end = false;
           section_num += 1;
           form_container.appendChild(form_section_container);
         }
+
       } else if ((push_inline || inline_arr.length) && !section) {
         if (r.inline_field) {
           inline_arr.push(form_field);
@@ -2215,25 +2243,31 @@ function granite_form(formsBlock, jsonTheme) {
       hidden_container.classList.add("g__hidden_field");
       if (!!o.db_id) {
         hidden = document.createElement("input");
-        hiddenFields(hidden, "db_id", o.db_id);
+        hiddenFields(hidden, "Id", o.db_id);
         hidden_container.appendChild(hidden);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_object) {
         hidden = document.createElement("input");
-        hiddenFields(hidden, "db_object", o.db_object);
+        hiddenFields(hidden, "object", o.db_object);
         hidden_container.appendChild(hidden);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_action) {
         hidden = document.createElement("input");
-        hiddenFields(hidden, "db_action", o.db_action);
+        hiddenFields(hidden, "submit_form", o.db_action);
         hidden_container.appendChild(hidden);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_redirect) {
         hidden = document.createElement("input");
         hiddenFields(hidden, "redirect_to", o.db_redirect);
+        hidden_container.appendChild(hidden);
+        form_container.appendChild(hidden_container);
+      }
+      if (!!o.flash_message) {
+        hidden = document.createElement("input");
+        hiddenFields(hidden, "flash_message", o.flash_message);
         hidden_container.appendChild(hidden);
         form_container.appendChild(hidden_container);
       }
@@ -2248,6 +2282,7 @@ function granite_form(formsBlock, jsonTheme) {
         let submit = document.createElement("button");
         submit.setAttribute("id", "g__submit_btn");
         submit.setAttribute("type", "submit");
+        submit.classList.add('show_loader');
         submit.innerHTML = o.submit_label || "Submit";
         button_container.appendChild(submit);
       }
@@ -2258,12 +2293,18 @@ function granite_form(formsBlock, jsonTheme) {
         cancel.innerHTML = o.cancel_label;
         button_container.appendChild(cancel);
       }
+      if (!!o.button_1_label) {
+        const form_custom_btn = document.createElement("a");
+        form_custom_btn.href = o.button_1_href;
+        form_custom_btn.setAttribute("class", "g__form_action_btn");
+        form_custom_btn.innerHTML = o.button_1_label;
+        button_container.appendChild(form_custom_btn);
+      }
       form_container.appendChild(button_container);
     }
 
     // append the form to the page
     document.getElementById(id).appendChild(form_container);
-
     /* -------------------- Submit ----------------------*/
     let form = document.getElementById(attr__form_id);
     form.addEventListener("submit", (e) => {
@@ -2336,7 +2377,7 @@ function granite_form(formsBlock, jsonTheme) {
               "g__custom_picklist"
             );
             if (select_type) {
-              select.nextSibling.classList.add("invalid");
+              select.parentElement.classList.add("invalid");
             } else {
               select.classList.add("invalid");
             }
@@ -2345,7 +2386,7 @@ function granite_form(formsBlock, jsonTheme) {
             error_msg.innerHTML = select.validationMessage;
           } else {
             if (select_type) {
-              select.nextSibling.classList.remove("invalid");
+              select.parentElement.classList.remove("invalid");
             } else {
               select.classList.remove("invalid");
             }
@@ -2363,7 +2404,8 @@ function granite_form(formsBlock, jsonTheme) {
             if (content) {
               header.classList.add("g__section_active");
               section_content.classList.add("g__section_active");
-              // section_content.style.maxHeight = section_content.scrollHeight + "px";
+              section_content.style.maxHeight =
+                section_content.scrollHeight + "px";
             }
           });
         });
@@ -2376,7 +2418,7 @@ function granite_form(formsBlock, jsonTheme) {
     if (o.allow_cancel) {
       let canel = document.getElementById("g__cancel_btn");
       canel.addEventListener("click", () => {
-        form.reset();
+        window.history.back();
       });
     }
 
@@ -2496,8 +2538,8 @@ function granite_form(formsBlock, jsonTheme) {
       const all_sections = granite_div.querySelectorAll(".g__section_header");
       if (all_sections) {
         all_sections.forEach((form_section) => {
+          const section_header = form_section.nextSibling;
           form_section.addEventListener("click", () => {
-            const section_header = form_section.nextSibling;
             form_section.classList.toggle("g__section_active");
             section_header.classList.toggle("g__section_active");
             if (section_header.style.maxHeight) {
@@ -2649,6 +2691,7 @@ function granite_form(formsBlock, jsonTheme) {
         let quill_elm = document.getElementById(quil_fields[i].id);
         let quil_hidden_field = quill_elm.nextSibling;
         let disabled = quil_hidden_field.disabled;
+        let value = quil_hidden_field.value;
         var quill = new Quill(quil_id, {
           debug: "false",
           modules: {
@@ -2659,6 +2702,7 @@ function granite_form(formsBlock, jsonTheme) {
           placeholder: quil_hidden_field.placeholder,
         });
         let quil_text_field = quill_elm.querySelector(".ql-editor");
+        quil_text_field.innerHTML = value;
         quil_text_field.addEventListener("input", (field) => {
           quil_hidden_field.value = quil_text_field.innerHTML;
         });
@@ -2694,7 +2738,6 @@ function granite_form(formsBlock, jsonTheme) {
         let char_limit = quill_hidden.getAttribute("maxlength");
         if (char_limit > 0) {
           quill.addEventListener("input", () => {
-            console.log("working");
             let counter_div = field.querySelector(".g__char_remain");
             let text = quill_hidden.value;
             let strippedString = text.replace(/(<([^>]+)>)/gi, "");
@@ -2964,7 +3007,7 @@ function granite_form(formsBlock, jsonTheme) {
 
     /* -------------------- Custom Select Field ----------------------*/
     if (!o.default_picklists) {
-      var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
+      var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search, select_val;
       /* Look for any elements with the class "g__picklist": */
       f = document.getElementById(id);
       x = f.getElementsByClassName("g__picklist");
@@ -2976,6 +3019,7 @@ function granite_form(formsBlock, jsonTheme) {
           /* For each element, create a new DIV that will act as the selected item: */
           a = document.createElement("div");
           a.setAttribute("class", "g__select_selected");
+          console.log(selElmnt.options[selElmnt.selectedIndex]);
           a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
           x[i].appendChild(a);
           /* For each element, create a new DIV that will contain the option list: */
@@ -2989,7 +3033,7 @@ function granite_form(formsBlock, jsonTheme) {
             e.stopPropagation();
           });
           b.appendChild(search);
-          for (j = 1; j < ll; j++) {
+          for (j = 0; j < ll; j++) {
             /* For each option in the original select element,
                     create a new DIV that will act as an option item: */
             c = document.createElement("div");
@@ -3006,8 +3050,9 @@ function granite_form(formsBlock, jsonTheme) {
                 if (s.options[i].innerHTML == this.innerHTML) {
                   s.selectedIndex = i;
                   h.innerHTML = this.innerHTML;
-                  // s.options[i].setAttribute('selected', 'selected');
                   s.value = this.innerHTML;
+                  s.value = s.options[i].value || s.options[i].innerHTML;
+                  console.log(s.value);
                   y = this.parentNode.getElementsByClassName(
                     "same-as-selected"
                   );
@@ -3092,13 +3137,23 @@ function granite_form(formsBlock, jsonTheme) {
       });
     }
     /* -------------------- checkbox ----------------------*/
-    const all_checkboxes = document.querySelectorAll(".g__field_checkbox");
+    const all_checkboxes = form.querySelectorAll(".g__field_checkbox");
     all_checkboxes.forEach((field) => {
-      let is_checked = field.checked;
-      is_checked ? (field.value = "true") : (field.value = "false");
-      field.addEventListener("change", () => {
+      field.addEventListener("change", (e) => {
+        console.log(e.target);
         let is_checked = field.checked;
-        is_checked ? (field.value = "true") : (field.value = "false");
+        console.log(is_checked);
+        if(is_checked){
+          e.target.checked = "true";
+          e.target.value = "true";
+          e.target.classList.toggle('g__checked');
+          e.target.classList.toggle('g__unchecked');
+        }else{
+          e.target.checked = "false";
+          e.target.value = "false";
+          e.target.classList.toggle('g__checked');
+          e.target.classList.toggle('g__unchecked');
+        }
       });
     });
     /* -------------------- Auto Save ----------------------*/
@@ -3272,11 +3327,12 @@ function granite_form(formsBlock, jsonTheme) {
         let dep_type = dep_name[0].type;
         let dep_parent = document.getElementById(dep_name[0].id);
         let dep_child = document.getElementById(r.id);
+        let is_child_sec = dep_child.classList.contains('g__form_section_container');
         let dep_blank = r.dependency_not_blank;
         switch (dep_type) {
           case "select-one":
             dep_select(
-              dep_type,
+              is_child_sec,
               dep_parent,
               dep_child,
               r.dependency_values,
@@ -3345,12 +3401,13 @@ function granite_form(formsBlock, jsonTheme) {
           }
         });
       }
-      function checkbox(type, parent, child, values) {
+      function checkbox(is_section, parent, child, values) {
         const dep_values = values;
         const child_value = values === "true" ? true : false;
         const dep_checked = parent.checked;
         const dep_child = child;
-        let container = dep_child.closest(".g__form_field");
+        let container;
+            container = is_section ? child : dep_child.closest(".g__form_field");
         if (dep_checked === child_value) {
           container.classList.remove("dep_hide");
           container.classList.add("dep_show");
@@ -3364,7 +3421,7 @@ function granite_form(formsBlock, jsonTheme) {
           checkbox(type, parent, child, values);
         });
       }
-      function dep_select(type, parent, child, values, blank) {
+      function dep_select(is_section, parent, child, values, blank) {
         let dep_desktop_select = parent.nextSibling;
         dep_desktop_select.addEventListener("click", () => {
           const dep_values = values;
@@ -3373,9 +3430,10 @@ function granite_form(formsBlock, jsonTheme) {
           const dep_child = child;
           const dep_blank = blank;
           arr_values.forEach((val) => {
-            let child = val.toUpperCase().trim();
-            let container = dep_child.closest(".g__form_field");
-            if (dep_selected === child) {
+            let child_val = val.toUpperCase().trim();
+            let container;
+            container = is_section ? child : dep_child.closest(".g__form_field");
+            if (dep_selected === child_val) {
               container.classList.remove("dep_hide");
               container.classList.add("dep_show");
             } else if (dep_selected != "" && dep_blank) {
