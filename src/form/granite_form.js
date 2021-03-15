@@ -67,9 +67,11 @@ function granite_form(formsBlock, jsonTheme) {
         --inner-background: #ffffff;
         --body: #ffffff;
         --font-color-reverse: #f5f5f5;
+        --font-color-placeholder: #a1a1a1;
         --border: 1px solid #a1a1a1;
         --border-disabled: 1px solid #eaeaea;
         --font-color: #5d5d5d;
+        --font-color-btns: #ffffff;
 
         /* css */
         padding: 15px;
@@ -87,6 +89,7 @@ function granite_form(formsBlock, jsonTheme) {
         --border: 1px solid #a1a1a1;
         --border-disabled: 1px solid #5d5d5d;
         --font-color: #ffffff;
+        --font-color-btns: #ffffff;
         --font-color-disabled: #5d5d5d;
         --font-color-placeholder: #a1a1a1;
         --btn-fill-disabled: #404040
@@ -144,6 +147,15 @@ function granite_form(formsBlock, jsonTheme) {
         flex-wrap: wrap;
         align-items: center;
     }
+    ${cssId} .g__inline_row .g__form_field{
+      position: relative;
+      font-family: var(--font-regular);
+      font-weight: 300;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      flex: 1 1 0;
+  }
     ${cssId} .g__form_field{
         position: relative;
         font-family: var(--font-regular);
@@ -151,7 +163,7 @@ function granite_form(formsBlock, jsonTheme) {
         display: flex;
         flex-direction: column;
         padding: 10px;
-        flex-grow: 1;
+        flex: 1 1 0;
     }
     ${cssId} .g__form_copy{
         position: relative;
@@ -235,7 +247,7 @@ function granite_form(formsBlock, jsonTheme) {
         font-weight: 300;
         background: var(--primary);
         padding: 10px 40px;
-        color: var(--font-color);
+        color: var(--font-color-btns);
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
@@ -250,7 +262,7 @@ function granite_form(formsBlock, jsonTheme) {
         font-weight: 300;
         background: #5d5d5d;
         padding: 10px 40px;
-        color: var(--font-color);
+        color: var(--font-color-btns);
         border: 0;
         border-radius: var(--border-radius);
         margin: 15px;
@@ -289,6 +301,7 @@ function granite_form(formsBlock, jsonTheme) {
             display: flex;
             flex-direction: column;
             flex-wrap: no-wrap;
+            align-items: initial;
         }
     }
     /* ------------------------ Content ------------------------------*/
@@ -690,7 +703,7 @@ function granite_form(formsBlock, jsonTheme) {
         appearance: none;
         width: 20px;
         height: 20px;
-        background: #fff;
+        background: var(--font-color-placeholder);
         border-radius: 15px;
         cursor: pointer;
     }
@@ -1613,6 +1626,7 @@ function granite_form(formsBlock, jsonTheme) {
       ) {
         form_field = document.createElement("div");
         form_field.setAttribute("class", "g__form_field");
+        !!r.classes ? form_field.classList.add(r.classes) : "";
         r.disabled ? form_field.classList.add("g__disabled") : "";
 
         field_info_container = document.createElement("div");
@@ -1639,8 +1653,9 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("value", r.value);
           input.setAttribute("title", r.title);
           input.checked = r.value;
+          input.required = r.required;
+          r.required ? input.classList.add('g__required') : "";
           r.value ? input.classList.add('g__checked'): input.classList.add('g__unchecked');
-          console.log(input.checked);
           let label = document.createElement("label");
           label.setAttribute("for", r.id);
           label.innerHTML = r.title;
@@ -1657,6 +1672,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("pattern", "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
           var hex_display = document.createElement("input");
           hex_display.setAttribute("class", "g__hex_value");
@@ -1685,6 +1701,7 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("id", r.id);
           r.type = "number";
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.inputmode="decimal";
           !!r.max_number ? (input.max = r.max_number) : "";
           !!r.min_number ? (input.min = r.min_number) : "";
@@ -1724,6 +1741,7 @@ function granite_form(formsBlock, jsonTheme) {
             ? input.setAttribute("placeholder", r.placeholder)
             : "";
           input.required = r.required;
+          r.required ? input.classList.add('g__required') : "";
           input.disabled = r.disabled;
           input.autocomplete = "false";
           let date_icon = document.createElement("div");
@@ -1747,6 +1765,7 @@ function granite_form(formsBlock, jsonTheme) {
           input.setAttribute("id", r.id);
           !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
@@ -1762,6 +1781,7 @@ function granite_form(formsBlock, jsonTheme) {
           r.multiple ? input.setAttribute("multiple", "true") : "";
           input.setAttribute("hidden", "hidden");
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           file_btn = document.createElement("button");
           file_btn.setAttribute("type", "button");
           file_btn.setAttribute("class", "g__file_btn");
@@ -1794,6 +1814,7 @@ function granite_form(formsBlock, jsonTheme) {
             Array.isArray(multi_options) && Array.isArray(multi_options[0]);
           let multi_select = document.createElement("select");
           multi_select.multiple = true;
+          r.required ? multi_select.classList.add('g__required') : "";
           if (multi_double_arr) {
             for (let i = 0; i < multi_options.length; i++) {
               let option = document.createElement("option");
@@ -1823,6 +1844,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           !!r.max_number ? (input.max = r.max_number) : "";
           !!r.min_number ? (input.min = r.min_number) : "";
           !!r.step ? (input.step = r.step) : "";
@@ -1851,6 +1873,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           let pass_show = document.createElement("div");
           pass_show.setAttribute("class", "g__password_show");
@@ -1871,18 +1894,19 @@ function granite_form(formsBlock, jsonTheme) {
             Array.isArray(picklist_options[0]);
           input = document.createElement("div");
           r.multiple
-            ? input.setAttribute("class", "g__picklist_multiple")
-            : input.setAttribute("class", "g__picklist");
+            ? input.classList.add("g__picklist_multiple")
+            : input.classList.add("g__picklist");
           o.default_picklists
             ? input.classList.add("g__default_picklist")
             : input.classList.add("g__custom_picklist");
           r.picklist_search ? input.classList.add("g__search") : "";
           let select = document.createElement("select");
           basicAttributes(r, select, class_name);
+          r.required ? select.classList.add('g__required') : "";
           select.setAttribute("id", r.id);
           r.multiple
-            ? select.setAttribute("class", "g__select_multiple")
-            : select.setAttribute("class", "g__select_default");
+            ? select.classList.add("g__select_multiple")
+            : select.classList.add("g__select_default");
           r.multiple ? select.setAttribute("multiple", "true") : "";
           if (o.default_picklists && r.placeholder) {
             let option_placeholder = document.createElement("option");
@@ -1932,6 +1956,7 @@ function granite_form(formsBlock, jsonTheme) {
             input.type = "radio";
             input.name = r.title;
             input.required = r.required;
+            r.required ? input.classList.add('g__required') : "";
             input.disabled = r.disabled;
             input.id = radio_options[i];
             input.value = radio_options[i];
@@ -1958,6 +1983,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("min", min);
           input.setAttribute("max", max);
           let output = document.createElement("input");
@@ -2072,6 +2098,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("form", attr__form_id);
           form_field.appendChild(input);
           form_field.appendChild(error_field);
@@ -2081,6 +2108,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("textarea");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.innerHTML = r.value || "";
           input.rows = r.rows || "4";
           input.setAttribute("cols", "50");
@@ -2096,6 +2124,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("type", "hidden");
           form_field.appendChild(quil);
           form_field.appendChild(input);
@@ -2106,6 +2135,7 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           form_field.appendChild(input);
           form_field.appendChild(error_field);
       }
@@ -2282,7 +2312,7 @@ function granite_form(formsBlock, jsonTheme) {
         let submit = document.createElement("button");
         submit.setAttribute("id", "g__submit_btn");
         submit.setAttribute("type", "submit");
-        submit.classList.add('show_loader');
+        o.show_loader ? submit.classList.add('show_loader') : "";
         submit.innerHTML = o.submit_label || "Submit";
         button_container.appendChild(submit);
       }
@@ -3019,7 +3049,6 @@ function granite_form(formsBlock, jsonTheme) {
           /* For each element, create a new DIV that will act as the selected item: */
           a = document.createElement("div");
           a.setAttribute("class", "g__select_selected");
-          console.log(selElmnt.options[selElmnt.selectedIndex]);
           a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
           x[i].appendChild(a);
           /* For each element, create a new DIV that will contain the option list: */
@@ -3140,9 +3169,7 @@ function granite_form(formsBlock, jsonTheme) {
     const all_checkboxes = form.querySelectorAll(".g__field_checkbox");
     all_checkboxes.forEach((field) => {
       field.addEventListener("change", (e) => {
-        console.log(e.target);
         let is_checked = field.checked;
-        console.log(is_checked);
         if(is_checked){
           e.target.checked = "true";
           e.target.value = "true";
@@ -3327,7 +3354,8 @@ function granite_form(formsBlock, jsonTheme) {
         let dep_type = dep_name[0].type;
         let dep_parent = document.getElementById(dep_name[0].id);
         let dep_child = document.getElementById(r.id);
-        let is_child_sec = dep_child.classList.contains('g__form_section_container');
+        const dep_child_required = !!dep_child ? dep_child.required : false;
+        let is_child_sec = !!dep_child ? dep_child.classList.contains('g__form_section_container') : "";
         let dep_blank = r.dependency_not_blank;
         switch (dep_type) {
           case "select-one":
@@ -3341,27 +3369,36 @@ function granite_form(formsBlock, jsonTheme) {
             break;
           case "checkbox":
             checkbox_event(
-              dep_type,
+              is_child_sec,
               dep_parent,
               dep_child,
-              r.dependency_values
-            );
-            checkbox(dep_type, dep_parent, dep_child, r.dependency_values);
+              r.dependency_values,
+              dep_child_required
+              );
+            checkbox(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_child_required
+              );
             break;
           case "text":
             text_event(
-              dep_type,
+              is_child_sec,
               dep_parent,
               dep_child,
               r.dependency_values,
-              dep_blank
+              dep_blank,
+              dep_child_required
             );
             text(
-              dep_type,
+              is_child_sec,
               dep_parent,
               dep_child,
               r.dependency_values,
-              dep_blank
+              dep_blank,
+              dep_child_required
             );
             break;
         }
@@ -3376,12 +3413,13 @@ function granite_form(formsBlock, jsonTheme) {
         return arr;
       }
 
-      function text_event(type, parent, child, values, blank) {
+      function text_event(type, parent, child, values, blank, required) {
         parent.addEventListener("keyup", () => {
-          text(type, parent, child, values, blank);
+          text(type, parent, child, values, blank, required);
         });
       }
-      function text(type, parent, child, values, blank) {
+      function text(is_section, parent, child, values, blank, required) {
+        console.log(parent);
         const arr_values = values_arr(values);
         const dep_text = parent.value.toUpperCase();
         const dep_child = child;
@@ -3389,66 +3427,144 @@ function granite_form(formsBlock, jsonTheme) {
         let is_match;
         arr_values.forEach((val) => {
           let child_text = val.toUpperCase().trim();
-          let container = dep_child.closest(".g__form_field");
+          let container;
+          if(is_section){
+            container = child;
+          } else if(!!dep_child) {
+            container = dep_child.closest(".g__form_field");
+          }
           if (dep_text === child_text) {
             is_match = true;
             container.classList.remove("dep_hide");
+            if(is_section){
+              sectionRequired(child, true)
+            }else{
+              dep_child.required = true
+            }
           } else if (dep_text != "" && dep_blank) {
             is_match = true;
             container.classList.remove("dep_hide");
+            if(is_section){
+              sectionRequired(child, true)
+            }else{
+              dep_child.required = true
+            }
           } else if (!is_match) {
             container.classList.add("dep_hide");
+            if(is_section){
+              sectionRequired(child, false)
+            }else{
+              dep_child.required = false
+            }
           }
         });
       }
-      function checkbox(is_section, parent, child, values) {
+      function checkbox(is_section, parent, child, values, required) {
         const dep_values = values;
         const child_value = values === "true" ? true : false;
-        const dep_checked = parent.checked;
+        const dep_checked = parent.classList.contains('g__checked');
         const dep_child = child;
         let container;
-            container = is_section ? child : dep_child.closest(".g__form_field");
+        if(is_section){
+          container = child;
+        } else if(!!dep_child) {
+          container = dep_child.closest(".g__form_field");
+        }
         if (dep_checked === child_value) {
           container.classList.remove("dep_hide");
           container.classList.add("dep_show");
+          required ? dep_child.required = true : "";
+          is_section ? sectionRequired(child, true) : "";
+          if(is_section){
+            sectionRequired(child, true)
+          }else{
+            dep_child.required = true
+          }
         } else {
           container.classList.add("dep_hide");
           container.classList.remove("dep_show");
+          required ? dep_child.required = false : "";
+          is_section ? sectionRequired(child, false) : "";
+          if(is_section){
+            sectionRequired(child, false)
+          }else{
+            dep_child.required = false
+          }
         }
       }
-      function checkbox_event(type, parent, child, values) {
-        parent.addEventListener("click", () => {
-          checkbox(type, parent, child, values);
+      function checkbox_event(is_section, parent, child, values, required) {
+        parent.addEventListener("change", (e) => {
+          // let parent = e.target.classList.contains('g__checked');
+          checkbox(is_section, parent, child, values, required);
         });
       }
       function dep_select(is_section, parent, child, values, blank) {
         let dep_desktop_select = parent.nextSibling;
-        dep_desktop_select.addEventListener("click", () => {
-          const dep_values = values;
-          const arr_values = values_arr(values);
-          const dep_selected = parent.nextSibling.innerText.toUpperCase();
-          const dep_child = child;
-          const dep_blank = blank;
-          arr_values.forEach((val) => {
-            let child_val = val.toUpperCase().trim();
-            let container;
-            container = is_section ? child : dep_child.closest(".g__form_field");
-            if (dep_selected === child_val) {
-              container.classList.remove("dep_hide");
-              container.classList.add("dep_show");
-            } else if (dep_selected != "" && dep_blank) {
-              container.classList.remove("dep_hide");
-              container.classList.add("dep_show");
-            } else {
-              container.classList.add("dep_hide");
-              container.classList.remove("dep_show");
-            }
+        if(dep_desktop_select){
+          dep_desktop_select.addEventListener("click", () => {
+            const dep_values = values;
+            const arr_values = values_arr(values);
+            const dep_selected = parent.nextSibling.innerText.toUpperCase();
+            const dep_child = child;
+            const dep_blank = blank;
+            arr_values.forEach((val) => {
+              let child_val = val.toUpperCase().trim();
+              // check for the child form container
+              let container;
+              if(is_section){
+                container = child;
+              } else if(!!dep_child) {
+                container = dep_child.closest(".g__form_field");
+              }
+              // compare the values and take action
+              if(container){
+                if (dep_selected === child_val) {
+                  container.classList.remove("dep_hide");
+                  container.classList.add("dep_show");
+                  if(is_section){
+                    sectionRequired(child, true)
+                  }else{
+                    dep_child.required = true
+                  }
+                } else if (dep_selected != "" && dep_blank) {
+                  container.classList.remove("dep_hide");
+                  container.classList.add("dep_show");
+                  if(is_section){
+                    sectionRequired(child, true)
+                  }else{
+                    dep_child.required = true
+                  }
+                } else {
+                  container.classList.add("dep_hide");
+                  container.classList.remove("dep_show");
+                  if(is_section){
+                    sectionRequired(child, false)
+                  }else{
+                    dep_child.required = false
+                  }
+                }
+              }
+
+            });
           });
-        });
-        dep_desktop_select.click();
-        dep_desktop_select.click();
+          dep_desktop_select.click();
+          dep_desktop_select.click();
+        }
+
       }
     });
+    /* -------------------- Remove required on hidden section fields ----------------------*/
+    function sectionRequired(child, val){
+      arr_fields = child.querySelectorAll('input, textarea, select')
+      arr_fields.forEach(field => {
+        let field_required = field.classList.contains('g__required');
+        if(val && field_required){
+          field.required = true;
+        } else {
+          field.required = false;
+        }
+      })
+    }
   } else {
     let no_records = document.createElement("div");
     no_records.setAttribute("class", "g__no_records");

@@ -1,4 +1,4 @@
-function granite_tiles_2(jsonTiles, jsonTheme) {
+function granite_tiles_v4(jsonTiles, jsonTheme) {
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -66,6 +66,7 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
       break;
     }
     let fontColorMode = mode === "midnight" ? "#ffffff" : "#5d5d5d";
+    let fontColorModeReverse = mode === "midnight" ? "#5d5d5d" : "#ffffff";
     let overlayColorMode = mode === "midnight" ? "#101010" : "#ffffff";
     let titleColor = o.header_color || fontColorMode;
     let descColor = o.description_color || fontColorMode;
@@ -186,7 +187,7 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
         width: 100%;
         transition: all .5s ease;
     }
-    ${cssId} a.g__tile_body:after{
+    ${cssId} .g__desc_no_hover a.g__tile_body:after{
         content: '';
         position: absolute;
         top: 0;
@@ -198,7 +199,7 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
         opacity: 0;
         transition: opacity .5s ease;
     }
-    ${cssId} a.g__tile_body:hover:after{
+    ${cssId} .g__desc_no_hover a.g__tile_body:hover:after{
         content: '';
         position: absolute;
         top: 0;
@@ -255,11 +256,34 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
         top: 0;
         left: 0;
         height: 100%;
-        background: rgba(0, 0, 0, .5);
+        // background: rgba(0, 0, 0, .5);
         padding: 15px;
         color: ${descColor};
         opacity: 0;
         transition: opacity .5s ease;
+    }
+    ${cssId} .g__desc_on_hover .g__tile_body:hover:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: ${hoverColor};
+        opacity: 0;
+        transition: opacity .5s ease;
+    }
+    ${cssId} .g__desc_on_hover .g__tile_body:hover:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: ${hoverColor};
+        opacity: .6;
     }
     /* --- Hide Header and Icon on Hover ----*/
     ${cssId} .g__desc_on_hover.g__desc_true .g__tile_body:hover .g__desc_cont {
@@ -341,6 +365,70 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
     ${cssId} .g__search_icon.search_active{
         transform: scaleX(0) rotate(45deg);
     }
+    /*---------------------------------------------
+      Pagination
+    ---------------------------------------------*/
+    ${cssId} .g__pagination_wrapper{
+        display: flex;
+        flex-direction: row;
+        justify-content: ${o.pagination_info_text ? 'space-between' : 'flex-end'};
+        align-items: center;
+        margin: 30px 15px;
+    }
+    ${cssId} .g__pagination_wrapper #g__info_text p{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        margin: 0;
+        color: ${fontColorMode};
+    }
+    ${cssId} ul.g__pagination_container{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        list-style-type: none;
+        display: flex;
+        overflow: auto;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 0;
+    }
+    ${cssId} ul.g__pagination_container li{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: ${fontColorMode};
+        font-size: 1rem;
+        border-top: var(--border);
+        border-bottom: var(--border);
+        border-right: var(--border);
+        height: 30px;
+        min-width: 30px;
+        transition: background .3s ease;
+    }
+    ${cssId} ul.g__pagination_container li:first-child{
+        border: var(--border);
+        border-radius: 4px 0 0 4px;
+    }
+    ${cssId} ul.g__pagination_container li:last-child{
+        border-radius: 0 4px 4px 0;
+    }
+    ${cssId} ul.g__pagination_container li:hover{
+        cursor: pointer;
+        background: var(--background);
+    }
+    ${cssId} ul.g__pagination_container li.active{
+        background: #eaeaea;
+        color: ${fontColorModeReverse};
+    }
+    ${cssId} .g__pagination_hidden{
+        display: none;
+    }
+    ${cssId} .g__pagination_show{
+        display: flex;
+    }
+    /*---------------------------------------------
+      Mobile
+    ---------------------------------------------*/
     @media (max-width: 991.98px) {
         ${cssId} .g__tile_container{
             flex: ${fillRow} 0 50%;
@@ -434,7 +522,7 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
         !!r.id ? tileContainer.setAttribute('id', r.id) : '';
         tileContainer.classList.add('g__tile_container');
         !!r.classes ? tileContainer.classList.add(r.classes) : '';
-        o.description_hover ? tileContainer.classList.add('g__desc_on_hover') : '' ;
+        o.description_hover ? tileContainer.classList.add('g__desc_on_hover') : tileContainer.classList.add('g__desc_no_hover') ;
         !!r.description ? tileContainer.classList.add('g__desc_true') : '' ;
 
         let tileLink = !!r.href ? document.createElement('a') : document.createElement('div');
@@ -442,7 +530,7 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
         o.loader ? tileLink.classList.add('show_loader') : "";
         !!r.href ? tileLink.href = r.href : '';
         !!r.target ? tileLink.target = r.target : '';
-        !!r.sidepane ? tileLink.classList.add('a__sidepane') : "";
+        !!r.sidepane ? tileLink.classList.add('A__side_pane_link') : "";
         !!r.background_color ? tileLink.style.backgroundColor = r.background_color : '';
         !!r.background_image ? tileLink.style.backgroundImage = `url(${r.background_image})` : '';
         !!r.background_image ? tileLink.style.backgroundSize = 'cover' : '';
@@ -560,11 +648,106 @@ function granite_tiles_2(jsonTiles, jsonTheme) {
             }
             if (content.toUpperCase().indexOf(filter) > -1) {
                 t[i].style.display = "";
-                // t[i].classList.remove('g__pagination_hidden');
+                t[i].classList.remove('g__pagination_hidden');
                 } else {
                 t[i].style.display = "none";
             }
             content = '';
         }
+    }
+    /*---------------------------------------------
+    Pagination
+    ---------------------------------------------*/
+    if(o.pagination){
+        const tiles_per_page = parseInt(o.tiles_per_page) || 25;
+        let current_page = 1;
+        const arr_tiles = document.querySelectorAll('.g__tile_container');
+        let page_count = Math.ceil(arr_tiles.length / tiles_per_page);
+
+        let pagination_wrapper = document.createElement('div');
+        pagination_wrapper.classList.add('g__pagination_wrapper');
+        granite_div.appendChild(pagination_wrapper);
+
+        if(o.pagination_info_text){
+          let info_text = document.createElement('div');
+          info_text.id = 'g__info_text';
+          pagination_wrapper.appendChild(info_text);
+        }
+
+        let pagination_container = document.createElement('ul')
+        pagination_container.classList.add('g__pagination_container');
+
+        let paginated_back = document.createElement('li');
+        paginated_back.id = 'g__pagination_back';
+        paginated_back.innerHTML = '<i class="fal fa-angle-double-left"></i>';
+        pagination_container.appendChild(paginated_back);
+        for (let i = 1; i < page_count + 1; i++) {
+          let paginated_button = document.createElement('li');
+          paginated_button.classList.add('g__pagination_page')
+          paginated_button.innerText = i;
+          current_page == i ? paginated_button.classList.add('active'): '';
+          pagination_container.appendChild(paginated_button);
+          pagination_wrapper.appendChild(pagination_container);
+
+          paginated_button.addEventListener('click', function () {
+            let page_num = paginated_button.innerText;
+            current_page = parseInt(page_num);
+            displayTiles(current_page, arr_tiles, tiles_per_page);
+            let current_btn = document.querySelector('.g__pagination_container li.active');
+            current_btn.classList.remove('active');
+            paginated_button.classList.add('active');
+          });
+        }
+        let paginated_forward = document.createElement('li');
+          paginated_forward.id = 'g__pagination_next';
+          paginated_forward.innerHTML = '<i class="fal fa-angle-double-right"></i>';
+          pagination_container.appendChild(paginated_forward);
+
+        function displayTiles(current_page, arr_tiles, tiles_per_page){
+          let tiles_max = current_page * tiles_per_page;
+          let tiles_min = tiles_max - tiles_per_page;
+          if(o.pagination_info_text){
+            let info = document.getElementById('g__info_text');
+            info.innerHTML = `<p>Showing ${tiles_min + 1} to ${tiles_max} of ${arr_tiles.length}</p>`
+          }
+          arr_tiles.forEach((tile, num) => {
+            tile.classList.add('g__pagination_hidden');
+            tile.classList.remove('g__pagination_show');
+            if(num < tiles_max && num >= tiles_min){
+              tile.classList.add('g__pagination_show');
+            }
+          })
+        }
+        function backNextBtn(btn, direction){
+            btn.addEventListener('click', () => {
+              let parent = btn.parentElement;
+              let pages = parent.children;
+              let page_count = pages.length - 2;
+              let active_page;
+              let next_page;
+              for (let i = 1; i < pages.length; i++) {
+                let is_active = pages[i].classList.contains('active');
+                if(is_active){
+                  active_page = pages[i].innerText;
+                  next_page = direction ? pages[i+1] : pages[i-1];
+                }
+              }
+              if((direction && active_page < page_count) || (!direction && active_page != 1)){
+                current_page = direction ? parseInt(active_page) + 1 : parseInt(active_page) - 1;
+                displayTiles(current_page, arr_tiles, tiles_per_page)
+                let current_btn = document.querySelector('.g__pagination_container li.active');
+                current_btn.classList.remove('active');
+                next_page.classList.add('active');
+              }
+            })
+          };
+
+          let next_btn = document.getElementById('g__pagination_next');
+          let back_btn = document.getElementById('g__pagination_back');
+          backNextBtn(next_btn, true);
+          backNextBtn(back_btn, false);
+
+
+          displayTiles(current_page, arr_tiles, tiles_per_page)
     }
 }
