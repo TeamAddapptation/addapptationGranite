@@ -1,4 +1,4 @@
-function granite_tiles_v4(jsonTiles, jsonTheme) {
+function granite_tiles(jsonTiles, jsonTheme) {
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -148,7 +148,6 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
     ${cssId} .g__tiles_filters{
         display: flex;
         margin-top: 25px;
-        justify-content: space-between;
     }
     /* ------
     General Styles
@@ -252,11 +251,9 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
         position: absolute;
         display: flex;
         justify-content: center;
-        align-items: center;
         top: 0;
         left: 0;
         height: 100%;
-        // background: rgba(0, 0, 0, .5);
         padding: 15px;
         color: ${descColor};
         opacity: 0;
@@ -336,6 +333,7 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
     ${cssId} .g__tile_search_wrap{
         display: block;
         position: relative;
+        margin-left: auto;
     }
     ${cssId} .g__tile_search{
         display: block;
@@ -444,71 +442,78 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
     /*---------------------------------------------
     Tiles action row
     ---------------------------------------------*/
-    let tileActionRow = document.createElement('div');
-    tileActionRow.classList.add('g__tiles_action_row');
-
-    if(o.title){
-        let title = document.createElement('h2');
-        title.classList.add('g__title');
-        title.innerHTML = o.title;
-        tileActionRow.appendChild(title);
-    }
-    if(o.description){
-        let description = document.createElement('p');
-        description.classList.add('g__description');
-        description.innerHTML = o.description;
-        tileActionRow.appendChild(description);
-    }
-    let tileFilters= document.createElement('div');
-    tileFilters.classList.add('g__tiles_filters');
-
-    /* Order By */
-    let orderWrap = document.createElement('div');
-    orderWrap.classList.add('g__tile_filter_wrap');
-    let orderSelect = document.createElement('select');
-    orderSelect.classList.add('g__tile_order_filter');
-    const filterOptions = ["Order By", "Asc", "Desc"];
-    filterOptions.forEach((val, count) => {
-        let option = document.createElement("option");
-        option.innerHTML = val;
-        option.value = val;
-        if(count === 0){
-            option.hidden = true;
-            option.disabled = true;
-            option.selected = true;
+    let tileActionRow;
+    if(o.title || o.description){
+        tileActionRow = document.createElement('div');
+        tileActionRow.classList.add('g__tiles_action_row');
+        if(o.title){
+            let title = document.createElement('h2');
+            title.classList.add('g__title');
+            title.innerHTML = o.title;
+            tileActionRow.appendChild(title);
         }
-        orderSelect.appendChild(option);
-    })
-    orderSelect.addEventListener('change', (e) => {
-        orderFilter(e.target.value)
-    })
-    orderWrap.appendChild(orderSelect);
-    tileFilters.appendChild(orderWrap);
-    tileActionRow.appendChild(tileFilters);
-
-    /* Search */
-    if(o.search){
-        let searchWrap = document.createElement('div');
-        searchWrap.classList.add('g__tile_search_wrap');
-        let searchIcon = document.createElement('div');
-        searchIcon.classList.add('g__search_icon');
-        searchIcon.innerHTML = '<i class="far fa-search"></i>';
-        searchWrap.appendChild(searchIcon);
-        let searchBar = document.createElement("input");
-        searchBar.type = 'text';
-        searchBar.classList.add('g__tile_search');
-        searchBar.addEventListener('focus', (e) => {
-            tileIconFocus(e)
-        });
-        searchBar.addEventListener('focusout', (e) => {
-            tileIconFocusOut(e)
-        });
-        searchBar.addEventListener('input', (e) => {
-            tileSearch(e)
-        });
-        searchWrap.appendChild(searchBar);
-        tileFilters.appendChild(searchWrap);
+        if(o.description){
+            let description = document.createElement('p');
+            description.classList.add('g__description');
+            description.innerHTML = o.description;
+            tileActionRow.appendChild(description);
+        }
+        granite_div.appendChild(tileActionRow);
     }
+
+    if(o.orderFilter || o.search){
+        let tileFilters= document.createElement('div');
+        tileFilters.classList.add('g__tiles_filters');
+        /* Order By */
+        if(o.orderFilter){
+            let orderWrap = document.createElement('div');
+            orderWrap.classList.add('g__tile_filter_wrap');
+            let orderSelect = document.createElement('select');
+            orderSelect.classList.add('g__tile_order_filter');
+            const filterOptions = ["Order By", "Asc", "Desc"];
+            filterOptions.forEach((val, count) => {
+                let option = document.createElement("option");
+                option.innerHTML = val;
+                option.value = val;
+                if(count === 0){
+                    option.hidden = true;
+                    option.disabled = true;
+                    option.selected = true;
+                }
+                orderSelect.appendChild(option);
+            })
+            orderSelect.addEventListener('change', (e) => {
+                orderFilter(e.target.value)
+            })
+            orderWrap.appendChild(orderSelect);
+            tileFilters.appendChild(orderWrap);
+        }
+        /* Search */
+        if(o.search){
+            let searchWrap = document.createElement('div');
+            searchWrap.classList.add('g__tile_search_wrap');
+            let searchIcon = document.createElement('div');
+            searchIcon.classList.add('g__search_icon');
+            searchIcon.innerHTML = '<i class="far fa-search"></i>';
+            searchWrap.appendChild(searchIcon);
+            let searchBar = document.createElement("input");
+            searchBar.type = 'text';
+            searchBar.classList.add('g__tile_search');
+            searchBar.addEventListener('focus', (e) => {
+                tileIconFocus(e)
+            });
+            searchBar.addEventListener('focusout', (e) => {
+                tileIconFocusOut(e)
+            });
+            searchBar.addEventListener('input', (e) => {
+                tileSearch(e)
+            });
+            searchWrap.appendChild(searchBar);
+            tileFilters.appendChild(searchWrap);
+        }
+        tileActionRow.appendChild(tileFilters);
+    }
+
 
     /*---------------------------------------------
     Tiles body
@@ -530,7 +535,7 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
         o.loader ? tileLink.classList.add('show_loader') : "";
         !!r.href ? tileLink.href = r.href : '';
         !!r.target ? tileLink.target = r.target : '';
-        !!r.sidepane ? tileLink.classList.add('A__side_pane_link') : "";
+        r.side_pane ? tileLink.classList.add('a__side_pane_link') : "";
         !!r.background_color ? tileLink.style.backgroundColor = r.background_color : '';
         !!r.background_image ? tileLink.style.backgroundImage = `url(${r.background_image})` : '';
         !!r.background_image ? tileLink.style.backgroundSize = 'cover' : '';
@@ -548,7 +553,7 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
 
         if (!!r.icon){
             var tileIcon = document.createElement('div');
-            tileIcon.classList.add('class','g__tile_icon');
+            tileIcon.classList.add('g__tile_icon');
             var icon = document.createElement('i');
             icon.setAttribute('class',r.icon);
             tileIcon.append(icon);
@@ -577,7 +582,6 @@ function granite_tiles_v4(jsonTiles, jsonTheme) {
     /*---------------------------------------------
     Append Tile Body to Granite Div
     ---------------------------------------------*/
-    granite_div.appendChild(tileActionRow);
     granite_div.appendChild(tile_wrapper);
 
     /*---------------------------------------------

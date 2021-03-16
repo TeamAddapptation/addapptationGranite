@@ -1,10 +1,11 @@
 let tabsBlock = {
   id: "granite-tabs",
   options: {
-    style: "stepper",
+    style: "tabs",
     font_size: "medium",
-    highlight_color: "#bf458a",
+    highlight_color: "red",
     align: "left",
+    direction: "row",
     padding: "medium",
     full_width: true,
     action_header: "",
@@ -25,21 +26,49 @@ let tabsBlock = {
   records: [
     {
       name: "Builder",
+      desc: "Suspendisse eget felis nec enim",
+      icon: "fab fa-angellist",
       href:
-        "/block_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR&code_id=a0R1I00000J7xvNUAR&page_id=a0Q1I00000XfIB5UAN&solution_id=a0P1I000008Oy6iUAC",
+        "/?username=jason&tab=1",
     },
     {
       name: "Settings",
+      desc: "Nulla maximus",
       href:
-        "/attribute_settings?in_sidepane=true&id=a0R1I00000J7xvNUAR&code_id=a0R1I00000J7xvNUAR&page_id=a0Q1I00000XfIB5UAN&solution_id=a0P1I000008Oy6iUAC&addapptation_navigation=",
+        "?tab=2",
     },
     {
       name: "Account",
-      href: "/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR",
+      desc: "",
+      href: "?tab=3",
     },
     {
       name: "This is a long name",
-      href: "/code_builder?in_sidepane=true&id=a0R1I00000J7xvNUAR",
+      desc: "Lorem ipsum dolor sit amet",
+      href: "?tab=4",
+    },
+    {
+      name: "Builder",
+      desc: "Suspendisse eget felis nec enim",
+      icon: "fab fa-angellist",
+      href:
+        "/?username=jason&tab=5",
+    },
+    {
+      name: "Settings",
+      desc: "Nulla maximus",
+      href:
+        "?tab=6",
+    },
+    {
+      name: "Account",
+      desc: "",
+      href: "?tab=7",
+    },
+    {
+      name: "This is a long name",
+      desc: "Lorem ipsum dolor sit amet",
+      href: "?tab=8",
     }
   ],
 };
