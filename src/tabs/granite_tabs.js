@@ -1113,7 +1113,7 @@ function granite_tabs(jsonTabs, jsonTheme) {
     var SETTINGS = {
       navBarTravelling: false,
       navBarTravelDirection: "",
-    navBarTravelDistance: 150
+      navBarTravelDistance: 150
     }
     // Out advancer buttons
     var pnAdvancerLeft = document.getElementById("pnAdvancerLeft");
@@ -1150,7 +1150,6 @@ function granite_tabs(jsonTabs, jsonTheme) {
       ticking = true;
     });
 
-    if(!!pnAdvancerLeft){
       pnAdvancerLeft.addEventListener("click", function() {
         if (SETTINGS.navBarTravelling === true) {
             return;
@@ -1168,11 +1167,10 @@ function granite_tabs(jsonTabs, jsonTheme) {
         }
         gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
       });
-    }
 
 
-    if(!!pnAdvancerRight){
       pnAdvancerRight.addEventListener("click", function() {
+        console.log("right");
         if (SETTINGS.navBarTravelling === true) {
             return;
         }
@@ -1192,7 +1190,6 @@ function granite_tabs(jsonTabs, jsonTheme) {
         // Now update the attribute in the DOM
         gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
       });
-    }
 
 
 
@@ -1213,13 +1210,6 @@ function granite_tabs(jsonTabs, jsonTheme) {
       },
       false
     );
-    var item = document.querySelector('[aria-selected="true"]');
-    if (item){
-      var textPosition = item.getBoundingClientRect();
-      gTabsContainer.scrollLeft = textPosition.x;
-    }
-
-
 
     function determineOverflow(content, container) {
       var containerMetrics = container.getBoundingClientRect();

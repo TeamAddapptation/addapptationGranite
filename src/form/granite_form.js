@@ -6,7 +6,6 @@ function granite_form(formsBlock, jsonTheme) {
   const platform = true;
   const mode = !!t.mode ? t.mode : "midnight";
   const cssId = "#" + id;
-  let form_field;
   // micro settings attributes
   const attr__action = o.addapptation_action || "";
   const attr__form_id =

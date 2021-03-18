@@ -1,12 +1,23 @@
 let tabsBlock = {
   id: "granite-tabs",
   options: {
-    style: "tabs",
-    font_size: "medium",
-    highlight_color: "red",
+    style: "chevron", //step, line, block
+    font_size: "",
+    font_color: 'purple',
+    font_hover_color: "yellow",
+    icon_size: "",
+    //step
+    title_size: "",
+    description_size: "",
+    highlight_color: "",
+    background_color: "green",
+    background_active_color: "darkGreen",
+    background_hover_color: "darkOrange",
     align: "left",
     direction: "row",
-    padding: "medium",
+    padding: "10px 40px",
+    border_width: "",
+    border_color: "red",
     full_width: true,
     action_header: "",
     action_header_size: "28px",
@@ -34,6 +45,7 @@ let tabsBlock = {
     {
       name: "Settings",
       desc: "Nulla maximus",
+      disabled: false,
       href:
         "?tab=2",
     },

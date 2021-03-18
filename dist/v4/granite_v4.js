@@ -163,7 +163,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
     ${cssId} .g__tiles_filters{
         display: flex;
         margin-top: 25px;
-        justify-content: space-between;
     }
     /* ------
     General Styles
@@ -267,6 +266,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         position: absolute;
         display: flex;
         justify-content: center;
+        align-items: center;
         top: 0;
         left: 0;
         height: 100%;
@@ -349,6 +349,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     ${cssId} .g__tile_search_wrap{
         display: block;
         position: relative;
+        margin-left: auto;
     }
     ${cssId} .g__tile_search{
         display: block;
@@ -577,7 +578,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
 
     if (!!r.icon) {
       var tileIcon = document.createElement('div');
-      tileIcon.classList.add('class', 'g__tile_icon');
+      tileIcon.classList.add('g__tile_icon');
       var icon = document.createElement('i');
       icon.setAttribute('class', r.icon);
       tileIcon.append(icon);
@@ -585,7 +586,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     }
 
     if (!!r.title) {
-      let tile_title = document.createElement('h3');
+      let tile_title = document.createElement('div');
       tile_title.classList.add('g__tile_title');
       tile_title.innerHTML = r.title;
       tileContent.appendChild(tile_title);
@@ -594,7 +595,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     if (!!r.description) {
       let descCont = document.createElement('div');
       descCont.classList.add('g__desc_cont');
-      let desc = document.createElement('p');
+      let desc = document.createElement('div');
       desc.classList.add('g__tile_desc');
       desc.innerHTML = r.description;
       descCont.appendChild(desc);
