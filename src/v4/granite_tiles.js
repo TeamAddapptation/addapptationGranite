@@ -65,6 +65,18 @@ function granite_tiles(jsonTiles, jsonTheme) {
         columns = "25%";
       break;
     }
+    let flexLayout;
+    switch (o.layout){
+      case "left":
+        flexLayout = "flex-start";
+      break;
+      case "right":
+        flexLayout = "flex-end";
+      break;
+      default:
+        flexLayout = "center";
+      break;
+    }
     let fontColorMode = mode === "midnight" ? "#ffffff" : "#5d5d5d";
     let fontColorModeReverse = mode === "midnight" ? "#5d5d5d" : "#ffffff";
     let overlayColorMode = mode === "midnight" ? "#101010" : "#ffffff";
@@ -178,9 +190,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: ${flexLayout || "center"};
         margin: ${o.padding || '5px'};
-        padding: 15px;
         height: var(--height);
         background: var(--background);
         width: 100%;
@@ -213,9 +224,11 @@ function granite_tiles(jsonTiles, jsonTheme) {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: ${flexLayout || "center"};
+        text-align: ${o.layout || "center"};
         font-style: var(--font-regular);
         font-weight: 300;
+        padding: 15px;
         z-index: 5;
     }
     ${cssId} .g__tile_body .g__tile_icon{
@@ -228,8 +241,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
         font-weight: 300;
         color: ${titleColor};
         font-size: ${o.header_size || '28px'};
-        text-align: ${o.layout || "center"};
         hyphens: auto;
+        text-align: ${o.layout || "center"};
         text-decoration: none;
         opacity: 1;
         transition: opacity .5s ease;
@@ -237,6 +250,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     ${cssId} .g__desc_cont{
         font-family: var(--font-regular);
         font-weight: 300;
+        text-align: ${o.layout || "center"};
         height: calc(var(--height) - 50%);
         overflow: auto;
         font-size: ${o.description_size};
@@ -293,7 +307,6 @@ function granite_tiles(jsonTiles, jsonTheme) {
     }
     ${cssId} .g__tile_body p{
         color: ${descColor};
-        text-align: center;
     }
     /* ------
     Order Filter
