@@ -1,4 +1,7 @@
-function granite_tabs_v4(jsonBlock, jsonTheme) {
+/*---------------------------------------------
+Block Name: Granite.js Tabs Block
+---------------------------------------------*/
+function granite_tabs(jsonBlock, jsonTheme) {
   /*---------------------------------------------
   Global Variables
   ---------------------------------------------*/
@@ -7,7 +10,7 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
   const r = jsonBlock.records;
   const t = jsonTheme;
   const rCount = r.length;
-  const style = o.style || 'tabs';
+  const style = o.g_style || 'tabs';
   const mode = !!t.mode ? t.mode : "midnight";
   const cssId = "#" + id;
   const granite_div = document.getElementById(id);
@@ -48,34 +51,34 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
   let fontHoverMode = mode === "midnight" ? "#ffffff" : "#101010";
   let fontActiveMode = mode === "midnight" ? "#ffffff" : "#101010";
   // Design
-  let fontSize = o.font_size || "16px";
-  let titleSize = o.title_size || "18px";
-  let descSize = o.description_size || "12px";
-  let iconSize = o.icon_size || fontSize;
-  let fontActiveColor = o.highlight_color || fontActiveMode;
-  let fontColor = o.font_color || fontColorMode;
-  let titleColor = o.title_color || fontColorMode;
-  let stepNumberColor = o.step_number_color || fontColorMode;
-  let descriptionColor = o.description_color || fontColorMode;
-  let fontHoverColor = o.font_hover_color || fontHoverMode;
-  let linkBkgColor = o.Link_background_color || '#fddbee';
-  let tabBkg = o.background_color || tabBkgMode;
-  let hoverColor = o.background_hover_color || hoverMode;
-  let activeColor = o.background_active_color || activeMode;
-  let borderWidth = o.border_width || "0";
-  let borderColor = o.border_color || "transparent";
-  let borderRadius = o.border_radius || "0";
+  let fontSize = o.g_font_size || "16px";
+  let titleSize = o.g_title_size || "18px";
+  let descSize = o.g_description_size || "12px";
+  let iconSize = o.g_icon_size || fontSize;
+  let fontActiveColor = o.g_highlight_color || fontActiveMode;
+  let fontColor = o.g_font_color || fontColorMode;
+  let titleColor = o.g_title_color || fontColorMode;
+  let stepNumberColor = o.g_step_number_color || fontColorMode;
+  let descriptionColor = o.g_description_color || fontColorMode;
+  let fontHoverColor = o.g_font_hover_color || fontHoverMode;
+  let linkBkgColor = o.g_Link_background_color || '#fddbee';
+  let tabBkg = o.g_background_color || tabBkgMode;
+  let hoverColor = o.g_background_hover_color || hoverMode;
+  let activeColor = o.g_background_active_color || activeMode;
+  let borderWidth = o.g_border_width || "0";
+  let borderColor = o.g_border_color || "transparent";
+  let borderRadius = o.g_border_radius || "0";
   // Stepper
-  let stepSize = o.stepSize || "40px";
+  let stepSize = o.g_stepSize || "40px";
   let stepConnPos = connPos(stepSize) || "20px";
   // Layout
-  let alignTabs = o.align_tabs || "center";
-  let width = o.style === "tabs" ? "inline-flex" : "flex";
-  let direction = o.direction || "row";
-  let padding = o.padding || "10px 20px";
-  let margin = o.margin || "0px 5px";
-  let alignIcon = o.align_icon || false;
-  // Layout
+  let alignTabs = o.g_align_tabs || "center";
+  let width = o.g_style === "tabs" ? "inline-flex" : "flex";
+  let direction = o.g_direction || "row";
+  let padding = o.g_padding || "10px 20px";
+  let margin = o.g_margin || "0px 5px";
+  let alignIcon = o.g_align_icon || false;
+  // Font
   let font = "hero-new, sans-serif;";
   let fontWeight = 300;
   /*---------------------------------------------
@@ -92,6 +95,23 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
       position:relative;
       display: flex;
       justify-content: ${alignTabs};
+    }
+    ${cssId}.g__no_records{
+      display: flex;
+      justify-content: center;
+      background: transparent;
+      align-items: center;
+      color: ${fontColorMode};
+      height: 225px;
+      margin: 25px;
+      border: 2px dashed #5d5d5d;
+    }
+    ${cssId}.g__no_records h2{
+        font-family: var(--font-regular);
+        font-weight: 300;
+        font-size: 2rem;
+        color: var(--font-color);
+
     }
     /* ------------------------------------------------------------
     Tabs Container
@@ -366,7 +386,7 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
       left: calc(50% + ${stepConnPos});
       background: ${tabBkg};
     }
-    ${cssId} g__step_horizontal .g__step_container.g__complete.:not(:last-child):after{
+    ${cssId} .g__step_horizontal .g__complete:not(:last-child):after{
       background: ${activeColor};
     }
     ${cssId} .g__step_horizontal .g__step_container{
@@ -456,20 +476,28 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
     }
     `
     document.head.appendChild(tabStyles);
-
+    /*---------------------------------------------
+    Check for records
+    ---------------------------------------------*/
+    console.log(!rCount);
+    if(!rCount){
+      granite_div.classList.add('g__no_records');
+      granite_div.innerHTML = "<h2>Tabs</h2>";
+      return;
+    }
     /*---------------------------------------------
     Tabs action row
     ---------------------------------------------*/
     let tabsActionRow = document.createElement('div');
     tabsActionRow.classList.add('g__tabs_action_row');
 
-    if(o.title){
+    if(o.g_action_header){
         let title = document.createElement('h2');
         title.classList.add('g__title');
         title.innerHTML = o.title;
         tabsActionRow.appendChild(title);
     }
-    if(o.description){
+    if(o.g_action_description){
         let description = document.createElement('p');
         description.classList.add('g__description');
         description.innerHTML = o.description;
@@ -499,110 +527,117 @@ function granite_tabs_v4(jsonBlock, jsonTheme) {
     tabsWrapper.appendChild(tabsContainer);
 
     //Loop through each record
-    if(!!r.length){
-      r.forEach( (r, count) => {
-        switch(style) {
-          case "step":
-              let isComplete = complete(count);
-              let stepContainer = document.createElement('a');
-              stepContainer.classList.add('g__step_container')
-              activeTab(r, count) ? stepContainer.classList.add('g__active') : "";
-              r.disabled ? stepContainer.classList.add('g__disabled') : "";
-              isComplete ? stepContainer.classList.add('g__complete') : "";
-              stepContainer.href = tabHref(r.href, count);
-              let stepLink = document.createElement('div');
-              stepLink.classList.add('g__step');
-              stepLink.innerHTML = isComplete ? "<i class='far fa-check'></i>" : count + 1;
-              stepContainer.appendChild(stepLink);
-              if(r.name || r.desc){
-                let stepContent = document.createElement('div');
-                stepContent.classList.add('g__step_content');
-                if(r.name){
-                  let stepTitle = document.createElement('h3');
-                  stepTitle.classList.add('g__step_title');
-                  stepTitle.innerHTML = r.name;
-                  stepContent.appendChild(stepTitle);
-                }
-                if(r.desc){
-                  let stepDesc = document.createElement('p');
-                  stepDesc.classList.add('g__step_desc');
-                  stepDesc.innerHTML = r.desc;
-                  stepContent.appendChild(stepDesc);
-                }
-                stepContainer.appendChild(stepContent);
+    r.forEach( (r, count) => {
+      switch(style) {
+        case "step":
+            let isComplete = complete(count);
+            let stepContainer = document.createElement('a');
+            stepContainer.classList.add('g__step_container')
+            activeTab(r, count) ? stepContainer.classList.add('g__active') : "";
+            r.disabled ? stepContainer.classList.add('g__disabled') : "";
+            isComplete ? stepContainer.classList.add('g__complete') : "";
+            stepContainer.href = tabHref(r.href, count);
+            let stepLink = document.createElement('div');
+            stepLink.classList.add('g__step');
+            stepLink.innerHTML = isComplete ? "<i class='far fa-check'></i>" : count + 1;
+            stepContainer.appendChild(stepLink);
+            if(r.name || r.desc){
+              let stepContent = document.createElement('div');
+              stepContent.classList.add('g__step_content');
+              if(r.name){
+                let stepTitle = document.createElement('h3');
+                stepTitle.classList.add('g__step_title');
+                stepTitle.innerHTML = r.name;
+                stepContent.appendChild(stepTitle);
               }
-              tabsContainer.appendChild(stepContainer);
-            break;
-            case "line":
-              let tabLineWrap = document.createElement('div');
-              tabLineWrap.classList.add('g__tab_line_wrap');
-              o.align === "left" ? tabLineWrap.style.paddingLeft = "10px" : "";
-              o.align === "right" ? tabLineWrap.style.paddingRight = "10px" : "";
-              activeTab(r, count) ? tabLineWrap.classList.add('g__active') : "";
-
-              if(!!r.icon){
-                let tabLineIcon = document.createElement('i');
-                tabLineIcon.setAttribute('class',r.icon);
-                tabLineWrap.appendChild(tabLineIcon);
+              if(r.desc){
+                let stepDesc = document.createElement('p');
+                stepDesc.classList.add('g__step_desc');
+                stepDesc.innerHTML = r.desc;
+                stepContent.appendChild(stepDesc);
               }
+              stepContainer.appendChild(stepContent);
+            }
+            tabsContainer.appendChild(stepContainer);
+          break;
+          case "line":
+            let tabLineWrap = document.createElement('div');
+            tabLineWrap.classList.add('g__tab_line_wrap');
+            o.align === "left" ? tabLineWrap.style.paddingLeft = "10px" : "";
+            o.align === "right" ? tabLineWrap.style.paddingRight = "10px" : "";
+            activeTab(r, count) ? tabLineWrap.classList.add('g__active') : "";
 
-              let tabLineLink = document.createElement('a') ;
-              tabLineLink.classList.add('g__tab_line_link');
-              tabLineLink.href = tabHref(r.href, count);
-              tabLineLink.innerHTML = r.name || count;
-              tabLineWrap.appendChild(tabLineLink)
+            if(!!r.icon){
+              let tabLineIcon = document.createElement('i');
+              tabLineIcon.setAttribute('class',r.icon);
+              tabLineWrap.appendChild(tabLineIcon);
+            }
 
-              tabsContainer.appendChild(tabLineWrap)
-            break;
-            case "block":
-              let tabWrap = document.createElement('a');
-              tabWrap.classList.add('g__tab_block_wrap');
-              tabWrap.href = tabHref(r.href, count);
-              o.align === "left" ? tabWrap.style.paddingLeft = "10px" : "";
-              o.align === "right" ? tabWrap.style.paddingRight = "10px" : "";
-              r.disabled ? tabWrap.classList.add('g__disabled') : "";
-              activeTab(r, count) ? tabWrap.classList.add('g__active') : "";
+            let tabLineLink = document.createElement('a') ;
+            tabLineLink.classList.add('g__tab_line_link');
+            tabLineLink.href = tabHref(r.href, count);
+            tabLineLink.innerHTML = r.name || count;
+            tabLineWrap.appendChild(tabLineLink)
 
-              if(!!r.icon){
-                let tabIcon = document.createElement('i');
-                tabIcon.setAttribute('class',r.icon);
-                tabWrap.appendChild(tabIcon);
-              }
-              let tabLink = document.createElement('p') ;
-              tabLink.classList.add('g__tab_block_text');
-              tabLink.innerHTML = r.name || count;
-              tabWrap.appendChild(tabLink)
+            tabsContainer.appendChild(tabLineWrap)
+          break;
+          case "block":
+            let tabWrap = document.createElement('a');
+            tabWrap.classList.add('g__tab_block_wrap');
+            tabWrap.href = tabHref(r.href, count);
+            o.align === "left" ? tabWrap.style.paddingLeft = "10px" : "";
+            o.align === "right" ? tabWrap.style.paddingRight = "10px" : "";
+            r.disabled ? tabWrap.classList.add('g__disabled') : "";
+            activeTab(r, count) ? tabWrap.classList.add('g__active') : "";
 
-              tabsContainer.appendChild(tabWrap)
-            break;
-            case "chevron":
-              let chevWrap = document.createElement('a');
-              chevWrap.classList.add('g__tab_chevron_wrap');
-              chevWrap.href = tabHref(r.href, count);
-              chevWrap.style.zIndex = ((rCount - (count + 1)) * 10);
-              r.disabled ? chevWrap.classList.add('g__disabled') : "";
-              activeTab(r, count) ? chevWrap.classList.add('g__active') : "";
+            if(!!r.icon){
+              let tabIcon = document.createElement('i');
+              tabIcon.setAttribute('class',r.icon);
+              tabWrap.appendChild(tabIcon);
+            }
+            let tabLink = document.createElement('p') ;
+            tabLink.classList.add('g__tab_block_text');
+            tabLink.innerHTML = r.name || count;
+            tabWrap.appendChild(tabLink)
 
-              if(!!r.icon){
-                let chevIcon = document.createElement('i');
-                chevIcon.setAttribute('class',r.icon);
-                chevWrap.appendChild(chevIcon);
-              }
-              let chevLink = document.createElement('p') ;
-              chevLink.classList.add('g__tab_chevron_text');
-              chevLink.innerHTML = r.name || count;
-              chevWrap.appendChild(chevLink)
+            tabsContainer.appendChild(tabWrap)
+          break;
+          case "chevron":
+            let chevWrap = document.createElement('a');
+            chevWrap.classList.add('g__tab_chevron_wrap');
+            chevWrap.href = tabHref(r.href, count);
+            chevWrap.style.zIndex = ((rCount - (count + 1)) * 10);
+            r.disabled ? chevWrap.classList.add('g__disabled') : "";
+            activeTab(r, count) ? chevWrap.classList.add('g__active') : "";
 
-              tabsContainer.appendChild(chevWrap)
-            break;
-          default:
-            console.error('no style')
-        }
-      })
-    }
+            if(!!r.icon){
+              let chevIcon = document.createElement('i');
+              chevIcon.setAttribute('class',r.icon);
+              chevWrap.appendChild(chevIcon);
+            }
+            let chevLink = document.createElement('p') ;
+            chevLink.classList.add('g__tab_chevron_text');
+            chevLink.innerHTML = r.name || count;
+            chevWrap.appendChild(chevLink)
 
+            tabsContainer.appendChild(chevWrap)
+          break;
+        default:
+          console.error('no style')
+      }
+    })
+    /*---------------------------------------------
+    Run extensions
+    ---------------------------------------------*/
+    // extensions.forEach(ext => {
+    //   ext(tabsWrapper);
+    // });
 
+    /*---------------------------------------------
+    Append DIV to DOM
+    ---------------------------------------------*/
     granite_div.appendChild(tabsWrapper);
+
     /*---------------------------------------------
     Advancer Arrows
     ---------------------------------------------*/

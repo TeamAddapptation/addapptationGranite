@@ -1,0 +1,73 @@
+let cardsBlock = {
+  id: "granite-block",
+  options: {
+    "g_style": "basic",
+    "g_display_list": false,
+    "g_description_preview": false,
+    "g_columns": "3",
+    "g_fill_row": false,
+    "g_container_top_padding": "",
+    "g_container_bottom_padding": "",
+    "g_card_padding": "",
+    "g_margin": "",
+    "g_content_padding": "",
+    "g_img_padding": "",
+    "g_img_border_radius": "",
+    "g_card_background": "",
+    "g_card_border_width": "",
+    "g_card_border_color": "",
+    "g_title_color": "",
+    "g_title_size": "28px",
+    "g_description_color": "",
+    "g_description_size": "16px",
+    "g_card_border_radius": "5px",
+    "g_btn_bkg_color": "",
+    "g_btn_bkg_color_hover": "",
+    "g_btn_font_color": "",
+    "g_btn_font_color_hover": "",
+    "g_btn_border_radius": "",
+    "g_btn_border_width": "",
+    "g_btn_border_color": "",
+    "g_btn_border_hover_width": "",
+    "g_btn_border_hover_color": "",
+    "g_bottom_align_btn": true,
+    "g_btn_center": false,
+    "g_header": "",
+    "g_header_font_size": "",
+    "g_header_font_color": "",
+    "g_description": "",
+    "g_description_font_size": "",
+    "g_description_font_color": "",
+  },
+  records: [
+    {
+      "g_image": "",
+      "g_title": "Headline",
+      "g_description": "Description",
+      "g_btn_text": "Button",
+      "g_href": "#",
+      "g_new_window": false,
+    },
+    {
+      "g_title": "Vermont",
+      "g_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      //Btn
+      "g_btn_text": "Read More",
+      "g_href": "https://addapptation.com/",
+      "g_new_window": true,
+    },
+    {
+      "g_image": "https://addapptation.blob.core.windows.net/pictures/nature/adventure.png",
+      "g_title": "Texas",
+      "g_description": "Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem, et porta tellus maximus eu. Sed sollicitudin mi eu purus ornare imperdiet."
+    },
+    {
+      "g_title": "Ohio",
+      "g_description": ""
+    },
+    {
+      "g_title": "California",
+      "g_description": "Maecenas pellentesque sagittis tincidunt. Maecenas pellentesque sagittis tincidunt. Maecenas pellentesque sagittis tincidunt."
+    },
+  ],
+};

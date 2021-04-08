@@ -715,129 +715,6 @@ Tiles
 //     ]
 // };
 /*---------------------------------------------
-Cards
----------------------------------------------*/
-let cardsBlock = {
-  id: "granite-cards",
-  feature: "cards",
-  class: "a_custom",
-  options: {
-    columns: "3",
-    style: "basic",
-    padding: "medium",
-    micro_top_padding: "50px",
-    micro_bottom_padding: "50px",
-    layout: "",
-    top_height: "250px",
-    inside_top_bottom_padding: "15px",
-    inside_left_right_padding: "15px",
-    bottom_background_color: "transparent",
-    border_color: "",
-    header_color: "",
-    header_size: "26px",
-    header_bottom_margin: "20px",
-    description_size: "18px",
-    description_color: "",
-    description_bottom_margin: "20px",
-    button_style: "color",
-    button_text_size: "14px",
-    button_top_margin: "15px",
-    align_buttons_bottom: true,
-    align_header_text: "left",
-    bottom_button_text: "",
-    bottom_button_link: "",
-    bottom_button_style: "color",
-    bottom_button_align: "",
-    bottom_button_top_margin: "25px",
-    bottom_button_text_size: "14px",
-    buttom_button_left_right_padding: "48px",
-    action_header: "",
-    action_header_size: "",
-    action_header_color: "",
-    action_description: "",
-    action_description_color: "",
-    action_description_size: "",
-    action_description_bottom_margin: "",
-    action_header_bottom_margin: "",
-    action_border: true,
-    classes: "",
-    visibility_settings: "",
-    fill_row: false,
-    match_height: true,
-    bottom_button_target: false,
-    search: false,
-    action: "hash_builder",
-  },
-  records: [
-    {
-      header: "New England",
-      description:
-        "Description will go here that can be long. Description will go here that can be long Description will go here that can be long",
-      background_color: "#101010",
-      background_image:
-        "https://cdn.addapptation.com/addapptation-asset-library/bg_business_meeting_2.jpg",
-      align_background_image: "center center",
-      overlay_color: "#101010",
-      overlay_opacity: ".4",
-      thumb_image: "",
-      button_text: "Learn More",
-      button_link: "#",
-      addapptation_component: true,
-      addapptation_name: "Card",
-      addapptation_type: "card",
-      addapptation_code_id: "a0R1I00000J61K4UAJ",
-      addapptation_id: "03052686784498282",
-      addapptation_navigation: "",
-      target: false,
-      action: "hash_builder",
-    },
-    {
-      header: "New England",
-      description:
-        "Description will go here that can be long. Description wil Description will go here that can be long. Description will go here that can be long Description will go here that can be longl go here that can be long Description will go here that can be long",
-      background_color: "#101010",
-      background_image:
-        "https://cdn.addapptation.com/addapptation-asset-library/bg_business_meeting_2.jpg",
-      align_background_image: "center center",
-      overlay_color: "#101010",
-      overlay_opacity: ".4",
-      thumb_image: "",
-      button_text: "Learn More",
-      button_link: "#",
-      addapptation_component: true,
-      addapptation_name: "Card",
-      addapptation_type: "card",
-      addapptation_code_id: "a0R1I00000J61K4UAJ",
-      addapptation_id: "03052686784498282",
-      addapptation_navigation: "",
-      target: false,
-      action: "hash_builder",
-    },
-    {
-      header: "New England",
-      description:
-        "Description will go here that can be long. Description will go here that can be long Description will go here that can be long Description will go here that can be long. Description will go here that can be long Description will go here that can be long Description will go here that can be long. Description will go here that can be long Description will go here that can be long",
-      background_color: "#101010",
-      background_image:
-        "https://cdn.addapptation.com/addapptation-asset-library/bg_business_meeting_2.jpg",
-      align_background_image: "center center",
-      overlay_color: "#101010",
-      overlay_opacity: ".4",
-      thumb_image: "",
-      button_text: "Learn More",
-      button_link: "#",
-      addapptation_component: true,
-      addapptation_name: "Card",
-      addapptation_type: "card",
-      addapptation_code_id: "a0R1I00000J61K4UAJ",
-      addapptation_id: "03052686784498282",
-      addapptation_navigation: "",
-      target: false,
-      action: "hash_builder",
-    },
-  ],
-};
-/*---------------------------------------------
 Content
 ---------------------------------------------*/
 let contentBlock = {
@@ -1006,7 +883,7 @@ let heatmapBlock = {
 /*---------------------------------------------
 Forms
 ---------------------------------------------*/
-let formsBlock_all = {
+let formsBlock_alla = {
   id: "granite-form",
   options: {
     title: "",
@@ -4461,7 +4338,7 @@ let formsBlock_app = {
      }
   ]
 }
-let formsBlock_SEO = {
+let formsBlockDisable = {
   "id":"granite-form",
   "options":{
      "title":"SEO Settings",
@@ -4483,233 +4360,293 @@ let formsBlock_SEO = {
      "hide_submit":false,
      "allow_cancel":false,
      "activate_recaptcha":false,
-     "autosave":false,
+     "autosave":true,
      "action":"/details?id=a0P1I0000098cSNUAY&app_tier=0&tab=3"
   },
   "records":[
-     {
-        "type":"section",
-        "title":"Allow SEO",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":true,
-        "addapptation_name":"Section",
-        "addapptation_type":"pane_start",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"05909823343133793",
-        "addapptation_navigation":"",
-        "collapsed":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Check this box to allow bots (like google's SEO services) to access this app.",
-        "name":"Allow_Robots__c",
-        "type":"checkbox",
-        "classes":"",
-        "value":true,
-        "super_text":true,
-        "options":[
-
-        ],
-        "id":"Allow_Robots__c",
-        "placeholder":"",
-        "length":"",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":"",
-        "addapptation_name":"Allow Robots",
-        "addapptation_type":"boolean",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"08470286547954637",
-        "addapptation_navigation":"",
-        "required":false,
-        "collapsed":false,
-        "disabled":false,
-        "multiple":false,
-        "use_options_from_database":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "type":"section",
-        "title":"Meta Tag Settings",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":true,
-        "addapptation_name":"Section",
-        "addapptation_type":"pane_start",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"008591461105121545",
-        "addapptation_navigation":"",
-        "collapsed":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Meta Tag Title",
-        "name":"Meta_Title__c",
-        "type":"string",
-        "classes":"",
-        "value":"This is a title",
-        "super_text":true,
-        "options":[
-
-        ],
-        "id":"Meta_Title__c",
-        "placeholder":"",
-        "length":"",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":"",
-        "addapptation_name":"Meta Title",
-        "addapptation_type":"string",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"033623300087570573",
-        "addapptation_navigation":"",
-        "required":false,
-        "collapsed":false,
-        "disabled":false,
-        "multiple":false,
-        "use_options_from_database":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Meta Tag Keywords",
-        "name":"Meta_Keywords__c",
-        "type":"textarea",
-        "classes":"",
-        "value":"Granite, JS, Code, Vanilla",
-        "super_text":true,
-        "options":[
-
-        ],
-        "id":"Meta_Keywords__c",
-        "placeholder":"",
-        "length":"",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":"",
-        "addapptation_name":"Meta Keywords",
-        "addapptation_type":"textarea",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"018134683712274446",
-        "addapptation_navigation":"",
-        "required":false,
-        "collapsed":false,
-        "disabled":false,
-        "multiple":false,
-        "use_options_from_database":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Meta Tag Description",
-        "name":"Meta_Description__c",
-        "type":"textarea",
-        "value":"",
-        "options":[
-
-        ],
-        "placeholder":"",
-        "autocomplete":"on",
-        "length":"255",
-        "rows":"",
-        "id":"Meta_Description__c",
-        "classes":"",
-        "super_text":true,
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":"",
-        "addapptation_name":"Meta Description",
-        "addapptation_type":"string",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"06253360445974492",
-        "addapptation_navigation":"",
-        "required":false,
-        "inline":false,
-        "use_options_from_database":false,
-        "multiple":false,
-        "collapsed":false,
-        "disabled":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "type":"section",
-        "title":"Upload Image or Input URL",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":true,
-        "addapptation_name":"Section",
-        "addapptation_type":"pane_start",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"05803489830738517",
-        "addapptation_navigation":"",
-        "collapsed":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Meta Tag Image URL",
-        "name":"Meta_Image__c",
-        "type":"url",
-        "classes":"",
-        "value":"",
-        "super_text":true,
-        "options":[
-
-        ],
-        "id":"Meta_Image__c",
-        "placeholder":"",
-        "length":"",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":"",
-        "addapptation_name":"Meta Image",
-        "addapptation_type":"url",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"09221078379659986",
-        "addapptation_navigation":"",
-        "required":false,
-        "collapsed":false,
-        "disabled":false,
-        "multiple":false,
-        "use_options_from_database":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "title":"Meta Tag Image File",
-        "name":"file_upload",
-        "id":"a__940d547dd2144fb94273",
-        "type":"file",
-        "dependency_field":"",
-        "dependency_values":"",
-        "addapptation_component":true,
-        "addapptation_name":"File Upload",
-        "addapptation_type":"file",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"03834048796113454",
-        "addapptation_navigation":"",
-        "required":false,
-        "dependency_not_blank":false,
-        "action":"hash_builder"
-     },
-     {
-        "type":"hidden",
-        "name":"container_name",
-        "value":"addapptation-micros",
-        "id":"a__6477dd95d2e009c6b058",
-        "addapptation_component":true,
-        "addapptation_name":"Hidden Field",
-        "addapptation_type":"hidden",
-        "addapptation_code_id":"a0R1I00000FDx0TUAT",
-        "addapptation_id":"04908994432919058",
-        "addapptation_navigation":"",
-        "action":"hash_builder"
-     }
-  ]
+   {
+       "id": "card_section",
+       "title": "Card Settings",
+       "type": "section",
+       "collapsed": false,
+       "dependency_not_blank": false,
+       "dependency_values": null,
+       "dependency_field": null
+   },
+   {
+       "id": "header",
+       "name": "header",
+       "title": "Header",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "description",
+       "name": "description",
+       "title": "Description",
+       "type": "textarea",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "background_section",
+       "title": "Background Options",
+       "type": "section",
+       "collapsed": true,
+       "dependency_not_blank": false,
+       "dependency_values": null,
+       "dependency_field": null
+   },
+   {
+       "id": "background_color",
+       "name": "background_color",
+       "title": "Background Color",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "background_image",
+       "name": "background_image",
+       "title": "Background Image",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "align_background_image",
+       "name": "align_background_image",
+       "title": "Align Background Image",
+       "type": "picklist",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ],
+           [
+               "left top",
+               "Left Top"
+           ],
+           [
+               "left center",
+               "Left Center"
+           ],
+           [
+               "left bottom",
+               "Left Bottom"
+           ],
+           [
+               "right top",
+               "Right Top"
+           ],
+           [
+               "right center",
+               "Right Center"
+           ],
+           [
+               "right bottom",
+               "Right Bottom"
+           ],
+           [
+               "center top",
+               "Center Top"
+           ],
+           [
+               "left bottom",
+               "Left Bottom"
+           ],
+           [
+               "center center",
+               "Center Center"
+           ],
+           [
+               "center bottom",
+               "Center Bottom"
+           ]
+       ],
+       "value": "center center",
+       "length": null
+   },
+   {
+       "id": "overlay_color",
+       "name": "overlay_color",
+       "title": "Background Overlay Color",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "overlay_opacity",
+       "name": "overlay_opacity",
+       "title": "Background Overlay Opacity (0.01 - 1, 1 = Totally Opaque)",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "button_section",
+       "title": "Button Options",
+       "type": "section",
+       "collapsed": true,
+       "dependency_not_blank": false,
+       "dependency_values": null,
+       "dependency_field": null
+   },
+   {
+       "id": "thumb_image",
+       "name": "thumb_image",
+       "title": "Thumbnail Image (Basic Style)",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "button_text",
+       "name": "button_text",
+       "title": "Button Text",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "button_link",
+       "name": "button_link",
+       "title": "Button URL",
+       "type": "text",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "id": "target",
+       "name": "target",
+       "title": "Open in New Window",
+       "type": "checkbox",
+       "required": false,
+       "options": [
+           [
+               "",
+               ""
+           ]
+       ],
+       "value": null,
+       "length": null
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_component",
+       "value": "true",
+       "id": "a__p6ikv8nvbsa"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_name",
+       "value": "Card",
+       "id": "a__d1kbdeapm78"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_type",
+       "value": "card",
+       "id": "a__ck4ktvfv0l"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_solution_id",
+       "value": null,
+       "id": "a__lrn7stdev2q"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_page_id",
+       "value": "a0Q1I00000XfOuVUAV",
+       "id": "a__fn1hqy86ts5"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_code_id",
+       "value": "a20739360-b302-4fb4-a51f-dcc7a04b234d",
+       "id": "a__0w9ey4j89y1b"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_id",
+       "value": "ae12d9b10-dd29-44c3-8956-bc9b95cbfa71",
+       "id": "a__jcgrf3fazdi"
+   },
+   {
+       "type": "hidden",
+       "name": "addapptation_navigation",
+       "value": "false",
+       "id": "a__oxpjnmw25rd"
+   }
+]
 }
-let formsBlock = {
+let formsBlock_all_fields = {
   "id":"granite-form",
   "options":{
      "title":"Granite Forms",

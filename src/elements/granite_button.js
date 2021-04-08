@@ -75,6 +75,7 @@ function granite_button(jsonButton, jsonTheme){
     ${cssId} .g__elm_btn{
         font-style: ${font_style};
         font-weight: ${font_weight};
+        font-size: ${font_size};
         color: ${text_color};
         width: ${btn_width};
         padding: ${btn_padding};

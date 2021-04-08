@@ -1,10 +1,20 @@
 let navigationBlock = {
-  id: "granite-navigation",
+  id: "granite-block",
   feature: "navigation",
   options: {
-    type: "sidebar",
+    "style": "top_bar",
     background: "",
     background_opacity: "",
+    //Logo
+    header_label: "<span id='addapptation'>addapptation</span>",
+    header_label_color: "white",
+    header_label_font_size: "24px",
+    header_image: "https://addapptation.blob.core.windows.net/logo/logo.png",
+    header_link: "#test",
+    //Links
+    "font_color_hover": "darkOrange",
+    "background_hover": "orange",
+
     mobile_menu: "sidebar",
     font_color: "#ffffff",
     mobile_breakpoint: "550px",
@@ -21,9 +31,7 @@ let navigationBlock = {
     cta_button_padding: "",
     single_submenu: true,
     hide_mobile_nav: false,
-    header_label: "<span id='addapptation'>addapptation</span>",
-    header_image: "https://addapptation.blob.core.windows.net/logo/logo.png",
-    header_link: "#test",
+
     wrap_logo: false,
     footer: "<a href='sign-out'>Sign Out</a>",
     gradient: "",
@@ -42,5 +50,30 @@ let navigationBlock = {
     use_recent_items: true,
     search_url: "search",
   },
-  records: [{"label": "Home","icon": "","submenu_header": true,},],
+  records: [
+    {
+      "link_type": "main_nav",
+      "label": "About"
+    },
+    {
+      "link_type": "main_nav",
+      "label": "Products"
+    },
+    {
+      "link_type": "main_nav",
+      "label": "Meet The Team"
+    },
+    {
+      "link_type": "main_nav",
+      "label": "Contact"
+    },
+    {
+      "link_type": "utility",
+      "label": "Sign Up"
+    },
+    {
+      "link_type": "utility",
+      "label": "Login"
+    },
+  ],
 };

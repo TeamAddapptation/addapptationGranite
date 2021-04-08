@@ -3,6 +3,7 @@ import $ from "jquery";
 
 export default function granite_form(formsBlock, jsonTheme, extensions) {
   const id = formsBlock.id;
+  const granite_id = formsBlock.id;
   const o = formsBlock.options;
   const r = formsBlock.records;
   const t = jsonTheme;
@@ -1510,12 +1511,11 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       form_description.innerHTML = o.description;
       form_action_row.appendChild(form_description);
     }
-
-    document.getElementById(id).appendChild(form_action_row);
+    document.getElementById(granite_id).appendChild(form_action_row);
   }
 
   /* -------------------- Form Container ----------------------*/
-  const form_container = document.createElement("form");
+  let form_container = document.createElement("form");
   // conditional attributes
   !!attr__action ? form_container.setAttribute("action", attr__action) : "";
   !!attr__form_id ? form_container.setAttribute("id", attr__form_id) : "";
@@ -1584,11 +1584,15 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
   let section = false;
   let section_count = 0;
   let section_title = "";
-  let section_id = "";
+  let section_id = [];
   let section_group = [];
   let arr_section_titles = [];
   let section_num = 0;
-  let section_all = false;
+  let section_collapsed = false;
+  let total_sections = 0;
+  r.forEach((r) => {
+    r.type === "section" ? total_sections++ : "";
+  });
   let section_obj = {
     record_count: r.length - 1,
     start: false,
@@ -1600,6 +1604,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
   let is_inline = false;
   let inline_arr = [];
   let inline_count = 0;
+
   if (r.length > 0) {
     r.forEach(function (r, num) {
       /* -------------------- Last record boolean ----------------------*/
@@ -1616,12 +1621,13 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       let class_name = "g__field_" + r.type;
 
       let field_info_container;
+      let form_field;
       if (
         r.type != "subheader" &&
         r.type != "description" &&
         r.type != "hidden"
       ) {
-        var form_field = document.createElement("div");
+        form_field = document.createElement("div");
         form_field.setAttribute("class", "g__form_field");
         !!r.classes ? form_field.classList.add(r.classes) : "";
         r.disabled ? form_field.classList.add("g__disabled") : "";
@@ -1629,7 +1635,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         field_info_container = document.createElement("div");
         field_info_container.setAttribute("class", "g__field_info");
       } else if (r.type === "hidden") {
-        var form_field = document.createElement("div");
+        form_field = document.createElement("div");
         form_field.setAttribute("class", "g__hidden_field");
       }
 
@@ -1642,117 +1648,156 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           check_container.setAttribute("class", "g__check_container");
           input = document.createElement("input");
           r.type === "boolean" ? (r.type = "checkbox") : "";
+          input.setAttribute("class", class_name);
           input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
+          input.setAttribute("type", r.type);
+          input.setAttribute("form_id", attr__form_id);
+          input.setAttribute("name", r.name);
+          input.setAttribute("value", r.value);
+          input.setAttribute("title", r.title);
+          input.checked = r.value;
+          input.required = r.required;
+          r.required ? input.classList.add('g__required') : "";
+          r.value ? input.classList.add('g__checked'): input.classList.add('g__unchecked');
           let label = document.createElement("label");
-          !!r.required ? label.classList.add("required") : "";
           label.setAttribute("for", r.id);
           label.innerHTML = r.title;
+          !!r.required ? (label.innerHTML += "*") : "";
           check_container.appendChild(input);
           check_container.appendChild(label);
           form_field.appendChild(check_container);
           form_field.appendChild(error_field);
           break;
         case "color":
-          form_field.appendChild(addLabels(field_info_container, r));
-          let color_container = document.createElement("div");
-          color_container.setAttribute("class", "g__color_container");
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          input.setAttribute("pattern", "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
-          var hex_display = document.createElement("input");
-          hex_display.setAttribute("class", "g__hex_value");
-          hex_display.setAttribute("value", "#101010");
-          hex_display.setAttribute(
-            "pattern",
-            "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$"
-          );
-          color_container.appendChild(input);
-          color_container.appendChild(hex_display);
-          form_field.appendChild(color_container);
-          form_field.appendChild(error_field);
-          break;
-        case "currency":
-          form_field.appendChild(addLabels(field_info_container, r));
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          input.setAttribute("type", "text");
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
-          break;
-        case "date":
-          form_field.appendChild(addLabels(field_info_container, r));
-          let date_container = document.createElement("div");
-          date_container.setAttribute("class", "g__date_container");
-          input = document.createElement("input");
-          input.setAttribute("type", "text");
-          input.setAttribute("class", "g__date_field");
-          input.setAttribute("id", r.id);
-          let calendar_icon = document.createElement("i");
-          calendar_icon.setAttribute(
-            "class",
-            "fal fa-calendar-alt g__calendar_icon"
-          );
-          !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
-          !!r.name ? input.setAttribute("name", r.name) : "";
-          !!r.value ? input.setAttribute("value", r.value) : "";
-          !!r.placeholder
-            ? input.setAttribute("placeholder", r.placeholder)
-            : "";
-          input.required = r.required;
-          input.disabled = r.disabled;
-          input.autocomplete = "false";
-          date_container.appendChild(input);
-          date_container.appendChild(calendar_icon);
-          form_field.appendChild(date_container);
-          form_field.appendChild(error_field);
-          break;
+            form_field.appendChild(addLabels(field_info_container, r));
+            let color_container = document.createElement("div");
+            color_container.setAttribute("class", "g__color_container");
+            input = document.createElement("input");
+            input.setAttribute("id", r.id);
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            input.setAttribute("pattern", "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
+            var hex_display = document.createElement("input");
+            hex_display.setAttribute("class", "g__hex_value");
+            hex_display.setAttribute("value", "#101010");
+            r.disabled ? (hex_display.disabled = true) : "";
+            hex_display.setAttribute(
+              "pattern",
+              "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$"
+            );
+            color_container.appendChild(input);
+            color_container.appendChild(hex_display);
+            form_field.appendChild(color_container);
+            form_field.appendChild(error_field);
+            break;
+            case "currency":
+              form_field.appendChild(addLabels(field_info_container, r));
+              let curr_container = document.createElement("div");
+              curr_container.setAttribute("class", "g__currency_container");
+              r.show_stepper_arrow
+                ? curr_container.classList.add("g__show_counter")
+                : curr_container.classList.add("g__hide_counter");
+              let curr_format = document.createElement("div");
+              curr_format.setAttribute("class", "g__currency_format");
+              curr_format.innerHTML = r.curr_format || "$";
+              input = document.createElement("input");
+              input.setAttribute("id", r.id);
+              r.type = "number";
+              basicAttributes(r, input, class_name);
+              r.required ? input.classList.add('g__required') : "";
+              input.inputmode="decimal";
+              !!r.max_number ? (input.max = r.max_number) : "";
+              !!r.min_number ? (input.min = r.min_number) : "";
+              !!r.step ? (input.step = r.step) : "";
+              !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
+              //Increase decrease container
+              let curr_counter = document.createElement("div");
+              curr_counter.setAttribute("class", "g__number_plus_minus");
+              // Increase container
+              let curr_increase = document.createElement("div");
+              curr_increase.setAttribute("class", "g__number_increase");
+              curr_counter.appendChild(curr_increase);
+              // Decrease container
+              let curr_decrease = document.createElement("div");
+              curr_decrease.setAttribute("class", "g__number_decrease");
+              curr_counter.appendChild(curr_decrease);
+              //Append the parent elements
+              curr_container.appendChild(curr_format);
+              curr_container.appendChild(input);
+              curr_container.appendChild(curr_counter);
+              form_field.appendChild(curr_container);
+              form_field.appendChild(error_field);
+              break;
+              case "date":
+                form_field.appendChild(addLabels(field_info_container, r));
+                let date_container = document.createElement("div");
+                date_container.setAttribute("class", "g__date_container");
+                input = document.createElement("input");
+                input.setAttribute("type", "date");
+                input.setAttribute("class", "g__date_field");
+                input.setAttribute("id", r.id);
+                !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
+                !!r.name ? input.setAttribute("name", r.name) : "";
+                !!r.value ? input.setAttribute("value", r.value) : "";
+                dateRange(r, input);
+                !!r.placeholder
+                  ? input.setAttribute("placeholder", r.placeholder)
+                  : "";
+                input.required = r.required;
+                r.required ? input.classList.add('g__required') : "";
+                input.disabled = r.disabled;
+                input.autocomplete = "false";
+                let date_icon = document.createElement("div");
+                date_icon.setAttribute("class", "g__calendar_icon");
+                date_icon.innerHTML = "<i class='fal fa-calendar-alt'></i>";
+                date_icon.style.display = "none";
+                date_container.appendChild(input);
+                date_container.appendChild(date_icon);
+                form_field.appendChild(date_container);
+                form_field.appendChild(error_field);
+                break;
         case "description":
           form_field = document.createElement("p");
           form_field.setAttribute("class", "g__form_description");
           form_field.setAttribute("style", `font-size:${r.font_size};`);
-          form_field.innerHTML = r.value;
+          form_field.innerHTML = r.value || "Description";
           break;
-        case "email":
-          form_field.appendChild(addLabels(field_info_container, r));
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
-          basicAttributes(r, input, class_name);
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
-          break;
-        case "file":
-          form_field.appendChild(addLabels(field_info_container, r));
-          let file_container = document.createElement("div");
-          file_container.setAttribute("class", "g__file_container");
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          !!r.accepted_file_types
-            ? input.setAttribute("accept", r.accepted_file_types)
-            : "";
-          r.multiple ? input.setAttribute("multiple", "true") : "";
-          input.setAttribute("hidden", "hidden");
-          basicAttributes(r, input, class_name);
-          file_btn = document.createElement("button");
-          file_btn.setAttribute("type", "button");
-          file_btn.setAttribute("class", "g__file_btn");
-          file_btn.innerText = "Choose File";
-          file_text = document.createElement("div");
-          file_text.setAttribute("class", "g__file_text");
-          file_text.innerText = "No file chosen, yet.";
-          let file_delete = document.createElement("div");
-          file_delete.setAttribute("class", "g__file_delete");
-          file_delete.innerText = "X";
-          file_container.appendChild(input);
-          file_container.appendChild(file_btn);
-          file_container.appendChild(file_text);
-          file_container.appendChild(file_delete);
-          form_field.appendChild(file_container);
-          form_field.appendChild(error_field);
-          break;
+          case "email":
+            form_field.appendChild(addLabels(field_info_container, r));
+            input = document.createElement("input");
+            input.setAttribute("id", r.id);
+            !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            form_field.appendChild(input);
+            form_field.appendChild(error_field);
+            break;
+          case "file":
+            form_field.appendChild(addLabels(field_info_container, r));
+            let file_container = document.createElement("div");
+            file_container.setAttribute("class", "g__file_container");
+            input = document.createElement("input");
+            input.setAttribute("id", r.id);
+            !!r.accepted_file_types
+              ? input.setAttribute("accept", r.accepted_file_types)
+              : "";
+            r.multiple ? input.setAttribute("multiple", "true") : "";
+            input.setAttribute("hidden", "hidden");
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            file_btn = document.createElement("button");
+            file_btn.setAttribute("type", "button");
+            file_btn.setAttribute("class", "g__file_btn");
+            file_btn.innerText = "Choose File";
+            file_text = document.createElement("div");
+            file_text.setAttribute("class", "g__file_text");
+            file_text.innerText = r.placeholder || "No file chosen, yet.";
+            file_container.appendChild(input);
+            file_container.appendChild(file_btn);
+            file_container.appendChild(file_text);
+            form_field.appendChild(file_container);
+            form_field.appendChild(error_field);
+            break;
         case "hidden":
           input = document.createElement("input");
           input.setAttribute("id", r.id);
@@ -1768,6 +1813,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             Array.isArray(multi_options) && Array.isArray(multi_options[0]);
           let multi_select = document.createElement("select");
           multi_select.multiple = true;
+          r.required ? multi_select.classList.add('g__required') : "";
           if (multi_double_arr) {
             for (let i = 0; i < multi_options.length; i++) {
               let option = document.createElement("option");
@@ -1792,17 +1838,16 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           let num_container = document.createElement("div");
           num_container.setAttribute("class", "g__number_container");
           r.show_stepper_arrow
-            ? ""
+            ? num_container.classList.add("g__show_counter")
             : num_container.classList.add("g__hide_counter");
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           !!r.max_number ? (input.max = r.max_number) : "";
           !!r.min_number ? (input.min = r.min_number) : "";
           !!r.step ? (input.step = r.step) : "";
-          !!r.pattern
-            ? input.setAttribute("pattern", r.pattern)
-            : input.setAttribute("pattern", patterns.number);
+          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           // Increase decrease container
           let num_counter = document.createElement("div");
           num_counter.setAttribute("class", "g__number_plus_minus");
@@ -1827,6 +1872,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           let pass_show = document.createElement("div");
           pass_show.setAttribute("class", "g__password_show");
@@ -1847,23 +1893,35 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             Array.isArray(picklist_options[0]);
           input = document.createElement("div");
           r.multiple
-            ? input.setAttribute("class", "g__picklist_multiple")
-            : input.setAttribute("class", "g__picklist");
+            ? input.classList.add("g__picklist_multiple")
+            : input.classList.add("g__picklist");
           o.default_picklists
             ? input.classList.add("g__default_picklist")
             : input.classList.add("g__custom_picklist");
           r.picklist_search ? input.classList.add("g__search") : "";
           let select = document.createElement("select");
           basicAttributes(r, select, class_name);
+          r.required ? select.classList.add('g__required') : "";
           select.setAttribute("id", r.id);
           r.multiple
-            ? select.setAttribute("class", "g__select_multiple")
-            : select.setAttribute("class", "g__select_default");
+            ? select.classList.add("g__select_multiple")
+            : select.classList.add("g__select_default");
           r.multiple ? select.setAttribute("multiple", "true") : "";
+          if (o.default_picklists && r.placeholder) {
+            let option_placeholder = document.createElement("option");
+            option_placeholder.disabled = true;
+            option_placeholder.selected = true;
+            option_placeholder.hidden = true;
+            option_placeholder.innerHTML = r.placeholder;
+            select.appendChild(option_placeholder);
+          }
           if (picklist_double_arr) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i][0]);
+              if(r.value === picklist_options[i][0]){
+                option.selected = true;
+              }
               option.innerHTML = picklist_options[i][1];
               select.appendChild(option);
             }
@@ -1871,6 +1929,9 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i]);
+              if(r.value === picklist_options[i]){
+                option.selected = true;
+              }
               option.innerHTML = picklist_options[i];
               select.appendChild(option);
             }
@@ -1893,6 +1954,9 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
             input.type = "radio";
             input.name = r.title;
+            input.required = r.required;
+            r.required ? input.classList.add('g__required') : "";
+            input.disabled = r.disabled;
             input.id = radio_options[i];
             input.value = radio_options[i];
             let radio_label = document.createElement("label");
@@ -1911,22 +1975,24 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           break;
         case "range":
           form_field.appendChild(addLabels(field_info_container, r));
-          let min = r.min || 0;
-          let max = r.max || 100;
+          let min = r.min_number || 0;
+          let max = r.max_number || 100;
           let range_container = document.createElement("div");
           range_container.setAttribute("class", "g__range_container");
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("min", min);
           input.setAttribute("max", max);
           let output = document.createElement("input");
+          output.disabled = r.disabled;
           output.setAttribute("class", "g__range_output");
           output.setAttribute("type", "number");
           // Unit indicator
           let unit = document.createElement("div");
           unit.setAttribute("class", "g__range_unit");
-          unit.innerHTML = r.range_unit || "";
+          unit.innerHTML = r.range_unit || "px";
           // Increase decrease container
           let plusMinus = document.createElement("div");
           plusMinus.setAttribute("class", "g__range_plus_minus");
@@ -1948,8 +2014,9 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           break;
         case "section":
           section_title = r.title;
-          section_id = r.section_id;
+          section_id.push(r.id);
           arr_section_titles.push(r.title);
+          section_collapsed = r.collapsed;
           section = true;
           section_count = parseInt(r.number_fields);
           section_obj.start
@@ -2020,63 +2087,68 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             }
           });
           break;
+        case "header":
         case "subheader":
           form_field = document.createElement("h2");
           form_field.setAttribute("class", "g__form_header");
-          form_field.innerHTML = r.value;
+          form_field.innerHTML = r.value || "Header";
           break;
         case "tel":
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
+          r.required ? input.classList.add('g__required') : "";
           input.setAttribute("form", attr__form_id);
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-        case "textarea":
-          form_field.appendChild(addLabels(field_info_container, r));
-          input = document.createElement("textarea");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          input.setAttribute("rows", "4");
-          input.setAttribute("cols", "50");
-          input.setAttribute("form", attr__form_id);
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
-          break;
-        case "quill":
-          form_field.appendChild(addLabels(field_info_container, r));
-          let quil = document.createElement("div");
-          quil.setAttribute("class", "g__quil_editor");
-          quil.setAttribute("id", r.id);
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          input.setAttribute("type", "hidden");
-          form_field.appendChild(quil);
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
-
-          break;
-        default:
-          form_field.appendChild(addLabels(field_info_container, r));
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
+          case "textarea":
+            form_field.appendChild(addLabels(field_info_container, r));
+            input = document.createElement("textarea");
+            input.setAttribute("id", r.id);
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            input.innerHTML = r.value || "";
+            input.rows = r.rows || "4";
+            input.setAttribute("cols", "50");
+            input.setAttribute("form", attr__form_id);
+            form_field.appendChild(input);
+            form_field.appendChild(error_field);
+            break;
+          case "quill":
+            form_field.appendChild(addLabels(field_info_container, r));
+            let quil = document.createElement("div");
+            quil.setAttribute("class", "g__quil_editor");
+            let quill_id = r.id + "_quill_" + num;
+            quil.setAttribute("id", quill_id);
+            input = document.createElement("input");
+            input.setAttribute("id", quill_id);
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            input.setAttribute("type", "hidden");
+            form_field.appendChild(quil);
+            form_field.appendChild(input);
+            form_field.appendChild(error_field);
+            break;
+          default:
+            form_field.appendChild(addLabels(field_info_container, r));
+            input = document.createElement("input");
+            input.setAttribute("id", r.id);
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            form_field.appendChild(input);
+            form_field.appendChild(error_field);
       }
 
       let push_inline =
         !!r.inline_field && r.inline_field.toString() == "true" ? true : false;
-
       if (section) {
         if (r.type != "section") {
           if (r.inline_field || inline_arr.length) {
             if (r.inline_field) {
               inline_arr.push(form_field);
-              section_count--;
+              section_count === "" ? "" : section_count--;
             } else if (inline_arr.length > 0) {
               inline_arr.push(form_field);
               let inline_row = document.createElement("div");
@@ -2086,28 +2158,52 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
               });
               inline_arr = [];
               section_group.push(inline_row);
-              section_count--;
+              section_count === "" ? "" : section_count--;
             }
           } else {
             section_group.push(form_field);
-            section_count--;
+            section_count === "" ? "" : section_count--;
           }
         }
-        section_count || section_obj.start
-          ? (section = true)
-          : (section = false);
-
+        section_count || section_obj.start ? (section = true) : (section = false);
         if (!section || section_obj.end || section_obj.is_last_record) {
           let form_section_container = document.createElement("div");
+          if (o.section_slider) {
           form_section_container.setAttribute(
             "class",
-            "g__form_section_container"
+            "g__form_progress_section g__progress_hidden"
+            );
+            //Back and next button container
+            let btn_container = document.createElement("div");
+            btn_container.setAttribute("class", "g__btn_step_container");
+            //Back button
+            if (section_num) {
+              let back_btn = document.createElement("button");
+              back_btn.setAttribute("class", "g__back_btn");
+              back_btn.type = "button";
+              back_btn.innerHTML = "Back";
+              btn_container.appendChild(back_btn);
+            }
+            //Next button
+            if (section_num + 1 != total_sections) {
+              let next_btn = document.createElement("button");
+              next_btn.setAttribute("class", "g__next_btn");
+              next_btn.type = "button";
+              next_btn.innerHTML = "Next";
+              btn_container.appendChild(next_btn);
+            }
+            //push button container to array
+            section_group.push(btn_container);
+          } else {
+            form_section_container.setAttribute(
+              "class",
+              "g__form_section_container"
           );
-
+          form_section_container.id = section_id[section_num];
+        }
           //Form text
           let section_header = document.createElement("div");
           section_header.setAttribute("class", "g__section_header");
-          !!section_id ? section_header.setAttribute("id", section_id) : "";
           form_section_container.appendChild(section_header);
           let title = document.createElement("h3");
           title.setAttribute("class", "g__section_title");
@@ -2116,7 +2212,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           line.setAttribute("class", "g__section_line");
           let icon = document.createElement("div");
           icon.setAttribute("class", "g__section_icon");
-          icon.innerHTML = '<i class="far fa-chevron-right"></i>';
+          icon.innerHTML = '<i class="far fa-chevron-up"></i>';
           section_header.appendChild(title);
           section_header.appendChild(line);
           section_header.appendChild(icon);
@@ -2125,12 +2221,16 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           let form_section = document.createElement("div");
           form_section.setAttribute("class", "g__form_section");
           form_section_container.appendChild(form_section);
-
           section_group.forEach((field) => {
             form_section.appendChild(field);
           });
+          if(!section_collapsed){
+            section_header.classList.add('g__section_active');
+            form_section.classList.add('g__section_active');
+          }
           section_group = [];
           section_title = "";
+          section_collapsed = false
           section_obj.end = false;
           section_num += 1;
           form_container.appendChild(form_section_container);
@@ -2138,7 +2238,9 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       } else if ((push_inline || inline_arr.length) && !section) {
         if (r.inline_field) {
           inline_arr.push(form_field);
-          section ? section_count-- : "";
+          if (section){
+            section_count === "" ? "" : section_count--;
+          }
         } else if (inline_arr.length > 0) {
           inline_arr.push(form_field);
           let inline_row = document.createElement("div");
@@ -2165,47 +2267,67 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
     if (!!o.db_id || !!o.db_object || !!o.db_action || !!o.db_redirect) {
       let hidden_container = document.createElement("div");
       hidden_container.classList.add("g__hidden_field");
-      let hidden = '';
       if (!!o.db_id) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "db_id", o.db_id);
-        hidden_container.appendChild(hidden);
+        let hidden_db = document.createElement("input");
+        hiddenFields(hidden_db, "Id", o.db_id);
+        hidden_container.appendChild(hidden_db);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_object) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "db_object", o.db_object);
-        hidden_container.appendChild(hidden);
+        let hidden_object = document.createElement("input");
+        hiddenFields(hidden_object, "object", o.db_object);
+        hidden_container.appendChild(hidden_object);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_action) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "db_action", o.db_action);
-        hidden_container.appendChild(hidden);
+        let hidden_action = document.createElement("input");
+        hiddenFields(hidden_action, "submit_form", o.db_action);
+        hidden_container.appendChild(hidden_action);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_redirect) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "redirect_to", o.db_redirect);
-        hidden_container.appendChild(hidden);
+        let hidden_redirect = document.createElement("input");
+        hiddenFields(hidden_redirect, "redirect_to", o.db_redirect);
+        hidden_container.appendChild(hidden_redirect);
+        form_container.appendChild(hidden_container);
+      }
+      if (!!o.flash_message) {
+        let hidden_flash = document.createElement("input");
+        hiddenFields(hidden_flash, "flash_message", o.flash_message);
+        hidden_container.appendChild(hidden_flash);
         form_container.appendChild(hidden_container);
       }
     }
 
-    // Submit & Cancel Button
-    if (!o.hide_submit) {
-      let submit = document.createElement("button");
-      submit.setAttribute("id", "g__submit_btn");
-      submit.setAttribute("type", "submit");
-      submit.innerHTML = o.submit_label || "Submit";
-      form_container.appendChild(submit);
-    }
-    if (o.allow_cancel) {
-      let cancel = document.createElement("button");
-      cancel.setAttribute("id", "g__cancel_btn");
-      cancel.setAttribute("type", "reset");
-      cancel.innerHTML = o.cancel_label;
-      form_container.appendChild(cancel);
+    // Submit & Cancal Container
+    if (!o.hide_submit || o.allow_cancel) {
+      let button_container = document.createElement("div");
+      button_container.id = "g__submit_cancel";
+      button_container.setAttribute("class", "g__button_container");
+      // Submit & Cancel Button
+      if (!o.hide_submit) {
+        let submit = document.createElement("button");
+        submit.setAttribute("id", "g__submit_btn");
+        submit.setAttribute("type", "submit");
+        o.show_loader ? submit.classList.add('show_loader') : "";
+        submit.innerHTML = o.submit_label || "Submit";
+        button_container.appendChild(submit);
+      }
+      if (o.allow_cancel) {
+        let cancel = document.createElement("button");
+        cancel.setAttribute("id", "g__cancel_btn");
+        cancel.setAttribute("type", "reset");
+        cancel.innerHTML = o.cancel_label;
+        button_container.appendChild(cancel);
+      }
+      if (!!o.button_1_label) {
+        let form_custom_btn = document.createElement("a");
+        form_custom_btn.href = o.button_1_href;
+        form_custom_btn.setAttribute("class", "g__form_action_btn");
+        form_custom_btn.innerHTML = o.button_1_label;
+        button_container.appendChild(form_custom_btn);
+      }
+      form_container.appendChild(button_container);
     }
 
     /*---------------------------------------------
@@ -2214,10 +2336,8 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
     extensions.forEach(ext => {
       ext(form_container);
     });
-
     // append the form to the page
-    document.getElementById(id).appendChild(form_container);
-
+    document.getElementById(granite_id).appendChild(form_container);
     /* -------------------- Submit ----------------------*/
     let form = document.getElementById(attr__form_id);
     form.addEventListener("submit", (e) => {
@@ -2234,25 +2354,51 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         );
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         let error_msg = field.querySelector(".g__error_msg");
+        let is_quill, is_required;
+        if (!!input) {
+          is_quill = input.classList.contains("g__field_quill");
+          is_required = input.required;
+        }
+        if (is_quill && is_required) {
+          let quill_toolbar = field.querySelector(".ql-toolbar");
+          let quill_editor = field.querySelector(".ql-editor");
+          let quill_content = quill_editor.innerHTML;
+          if (quill_content === "<p><br></p>") {
+            errors_arr.push(input);
+            error_msg.classList.add("active");
+            quill_toolbar.classList.add("invalid");
+            quill_editor.classList.add("invalid");
+            error_msg.innerHTML = "Enter a valid value.";
+          } else {
+            error_msg.classList.remove("active");
+            quill_toolbar.classList.remove("invalid");
+            quill_editor.classList.remove("invalid");
+            quill_editor.classList.add("valid");
+          }
+        }
         if (!!input && input.type != "hidden") {
           if (!input.checkValidity()) {
+            input.classList.remove("valid");
             input.classList.add("invalid");
             errors_arr.push(input);
             error_msg.classList.add("active");
             error_msg.innerHTML = input.validationMessage;
           } else {
             input.classList.add("valid");
+            input.classList.remove("invalid");
             error_msg.classList.remove("active");
           }
         }
         if (!!textarea) {
           if (!textarea.checkValidity()) {
             textarea.classList.add("invalid");
+            textarea.classList.remove("valid");
             errors_arr.push(textarea);
             error_msg.classList.add("active");
             error_msg.innerHTML = textarea.validationMessage;
           } else {
             textarea.classList.add("valid");
+            textarea.classList.remove("invalid");
             error_msg.classList.remove("active");
           }
         }
@@ -2263,7 +2409,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
               "g__custom_picklist"
             );
             if (select_type) {
-              select.nextSibling.classList.add("invalid");
+              select.parentElement.classList.add("invalid");
             } else {
               select.classList.add("invalid");
             }
@@ -2272,7 +2418,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             error_msg.innerHTML = select.validationMessage;
           } else {
             if (select_type) {
-              select.nextSibling.classList.remove("invalid");
+              select.parentElement.classList.remove("invalid");
             } else {
               select.classList.remove("invalid");
             }
@@ -2290,7 +2436,8 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             if (content) {
               header.classList.add("g__section_active");
               section_content.classList.add("g__section_active");
-              // section_content.style.maxHeight = section_content.scrollHeight + "px";
+              section_content.style.maxHeight =
+              section_content.scrollHeight + "px";
             }
           });
         });
@@ -2303,20 +2450,38 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
     if (o.allow_cancel) {
       let canel = document.getElementById("g__cancel_btn");
       canel.addEventListener("click", () => {
-        form.reset();
+        window.history.back();
       });
     }
 
     /* -------------------- Currency Field ----------------------*/
-    let all_currency = document.querySelectorAll(".g__field_currency");
-
-    all_currency.forEach((curr) => {
-      curr.addEventListener("input", () => {
-        const formatter = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2,
-        });
+    let all_curr = granite_div.querySelectorAll(".g__currency_container");
+    all_curr.forEach((wrap) => {
+      const output = wrap.querySelector(".g__field_currency");
+      const step = output.step;
+      const increase = wrap.querySelector(".g__number_increase");
+      const decrease = wrap.querySelector(".g__number_decrease");
+      increase.addEventListener("click", () => {
+        let curr_num = output.value;
+        const val = parseFloat(output.value);
+        if (curr_num === "") {
+          output.value = !!step ? parseFloat(step) : 1;
+        } else if (!!step) {
+          output.value = val + parseFloat(step);
+        } else {
+          output.value = val + 1;
+        }
+      });
+      decrease.addEventListener("click", () => {
+        let curr_num = output.value;
+        const val = parseFloat(output.value);
+        if (curr_num === "") {
+          output.value = !!step ? parseFloat(step) : -1;
+        } else if (!!step) {
+          output.value = val - parseFloat(step);
+        } else {
+          output.value = val - 1;
+        }
       });
     });
     /* -------------------- File Enctype Change ----------------------*/
@@ -2333,7 +2498,6 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       let real_file_field = file.querySelector(".g__field_file");
       let file_btn = file.querySelector(".g__file_btn");
       let file_text = file.querySelector(".g__file_text");
-      let file_delete = file.querySelector(".g__file_delete");
 
       // Activate the real file field on click
       file_btn.addEventListener("click", () => {
@@ -2344,39 +2508,81 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         if (real_file_field.value) {
           file_text.innerHTML = "";
           let file_container = document.createElement("div");
-          file_container.classList.add("g__selected_file");
-          file_container.innerHTML = real_file_field.value.match(
+          file_container.classList.add("g__selected_container");
+          let file_selected = document.createElement("div");
+          file_selected.classList.add("g__selected_file");
+          let file_delete = document.createElement("div");
+          file_delete.innerHTML = "<i class='fal fa-times'></i>";
+          file_delete.setAttribute("class", "g__file_delete");
+          file_delete.addEventListener("click", () => {
+            if (real_file_field.value) {
+              file_selected.innerHTML = "";
+              file_text.innerText = "No file chosen, yet.";
+              real_file_field.value = "";
+            }
+          });
+          file_selected.innerHTML = real_file_field.value.match(
             /[\/\\]([\w\d\s\.\-\(\)]+)$/
           )[1];
+          file_container.appendChild(file_selected);
+          file_container.appendChild(file_delete);
           file_text.appendChild(file_container);
         } else {
-          file_text.innerText = "No file chosen, yet.";
-        }
-      });
-
-      file_delete.addEventListener("click", () => {
-        if (real_file_field.value) {
-          file_text.innerHTML = "";
           file_text.innerText = "No file chosen, yet.";
         }
       });
     });
 
     /* -------------------- Section ----------------------*/
-    const all_sections = granite_div.querySelectorAll(".g__section_header");
-
-    all_sections.forEach((form_section) => {
-      form_section.addEventListener("click", () => {
-        const section_header = form_section.nextSibling;
-        form_section.classList.toggle("g__section_active");
-        section_header.classList.toggle("g__section_active");
-        // if (section_header.style.maxHeight) {
-        //     section_header.style.maxHeight = null;
-        //   } else {
-        //     section_header.style.maxHeight = section_header.scrollHeight + "px";
-        // }
-      });
-    });
+    if (o.section_slider) {
+      const progress_section = granite_div.querySelectorAll(
+        ".g__form_progress_section"
+      );
+      const submit = granite_div.querySelector("#g__submit_cancel");
+      submit.remove();
+      if (progress_section) {
+        progress_section.forEach((section, count) => {
+          count ? "" : section.classList.toggle("g__progress_hidden");
+          let btn_container = section.querySelector(".g__btn_step_container");
+          let next_btn = section.querySelector(".g__next_btn");
+          let back_btn = section.querySelector(".g__back_btn");
+          let next_section = section.nextSibling;
+          let prev_section = section.previousSibling;
+          if (next_btn) {
+            next_btn.addEventListener("click", () => {
+              section.classList.toggle("g__progress_hidden");
+              next_section.classList.toggle("g__progress_hidden");
+            });
+          }
+          if (back_btn) {
+            back_btn.addEventListener("click", () => {
+              section.classList.toggle("g__progress_hidden");
+              prev_section.classList.toggle("g__progress_hidden");
+            });
+          }
+          if (section_num - 1 === count) {
+            btn_container.before(submit);
+          }
+        });
+      }
+    } else {
+      const all_sections = granite_div.querySelectorAll(".g__section_header");
+      if (all_sections) {
+        all_sections.forEach((form_section) => {
+          const section_header = form_section.nextSibling;
+          form_section.addEventListener("click", () => {
+            form_section.classList.toggle("g__section_active");
+            section_header.classList.toggle("g__section_active");
+            if (section_header.style.maxHeight) {
+              section_header.style.maxHeight = null;
+            } else {
+              section_header.style.maxHeight =
+                section_header.scrollHeight + "px";
+            }
+          });
+        });
+      }
+    }
     /* -------------------- Number ----------------------*/
     let all_numbers = granite_div.querySelectorAll(".g__number_container");
     all_numbers.forEach((wrap) => {
@@ -2384,26 +2590,34 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
       const decrease = wrap.querySelector(".g__number_decrease");
+      const max = output.max;
+      const min = output.min;
       increase.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-        if (curr_num === "") {
-          output.value = !!step ? parseInt(step) : 1;
-        } else if (!!step) {
-          output.value = val + parseInt(step);
-        } else {
-          output.value = val + 1;
+        if (output.value < max || !max) {
+          if (curr_num === "" && curr_num < min) {
+            output.value = min;
+          } else if (curr_num === "") {
+            output.value = !!step ? parseInt(step) : 1;
+          } else if (!!step) {
+            output.value = val + parseInt(step);
+          } else {
+            output.value = val + 1;
+          }
         }
       });
       decrease.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-        if (curr_num === "") {
-          output.value = !!step ? parseInt(step) : -1;
-        } else if (!!step) {
-          output.value = val - parseInt(step);
-        } else {
-          output.value = val - 1;
+        if (output.value > min) {
+          if (curr_num === "") {
+            output.value = !!step ? parseInt(step) : -1;
+          } else if (!!step) {
+            output.value = val - parseInt(step);
+          } else {
+            output.value = val - 1;
+          }
         }
       });
     });
@@ -2461,16 +2675,22 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       const output = wrap.querySelector(".g__range_output");
       const increase = wrap.querySelector(".g__range_increase");
       const decrease = wrap.querySelector(".g__range_decrease");
+      const range_min = range.min;
+      const range_max = range.max;
 
       increase.addEventListener("click", () => {
         const val = parseInt(output.value);
+        if (val < range_max) {
         output.value = val + 1;
         setRange(range, output.value);
+        }
       });
       decrease.addEventListener("click", () => {
         const val = parseInt(output.value);
+        if (val > range_min) {
         output.value = val - 1;
         setRange(range, output.value);
+        }
       });
 
       output.addEventListener("change", () => {
@@ -2500,8 +2720,6 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         let quil_id = "#" + quil_fields[i].id;
         let quill_elm = document.getElementById(quil_fields[i].id);
         let quil_hidden_field = quill_elm.nextSibling;
-        let disabled = quil_hidden_field.disabled;
-        let value = quil_hidden_field.value;
         var quill = new Quill(quil_id, {
           debug: "false",
           modules: {
@@ -2511,7 +2729,9 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           readOnly: quil_hidden_field.disabled,
           placeholder: quil_hidden_field.placeholder,
         });
+        //populate quill with the value
         let quil_text_field = quill_elm.querySelector(".ql-editor");
+        let value = quil_hidden_field.value;
         quil_text_field.innerHTML = value;
         quil_text_field.addEventListener("input", (field) => {
           quil_hidden_field.value = quil_text_field.innerHTML;
@@ -2519,11 +2739,13 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       }
     }
     /* -------------------- Character Limit ----------------------*/
-    let char_count_field_arr = document.querySelectorAll(".g__form_field");
+    let char_count_field_arr = granite_div.querySelectorAll(".g__form_field");
     char_count_field_arr.forEach((field) => {
-      let input = field.querySelector("input");
+      let input = field.querySelector("input, textarea");
+      let quill = field.querySelector(".ql-editor");
       if (!!input) {
-        let char_limit = input.getAttribute("maxlength");
+        let has_limit = input.hasAttribute("maxlength");
+        let char_limit = has_limit ? input.getAttribute("maxlength") : "";
         if (char_limit > 0) {
           input.addEventListener("keyup", () => {
             let counter_div = field.querySelector(".g__char_remain");
@@ -2541,12 +2763,37 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           });
         }
       }
+      //Quill Counter
+      if (!!quill) {
+        let quill_hidden = field.querySelector(".g__field_quill");
+        let has_limit = input.hasAttribute("maxlength");
+        let char_limit = has_limit ? quill_hidden.getAttribute("maxlength") : "";
+        if (char_limit > 0) {
+          quill.addEventListener("input", () => {
+            let counter_div = field.querySelector(".g__char_remain");
+            let text = quill_hidden.value;
+            let strippedString = text.replace(/(<([^>]+)>)/gi, "");
+            let count = strippedString.length;
+            let limit = parseInt(char_limit);
+            if (!!counter_div) {
+              counter_div.innerText = count + "/" + char_limit;
+              if (count >= limit) {
+                counter_div.classList.add("g__limit");
+              } else {
+                counter_div.classList.remove("g__limit");
+              }
+            }
+          });
+        }
+      }
     });
 
     /* -------------------- Color field values ----------------------*/
     let color_fields = granite_div.getElementsByClassName("g__hex_value");
     for (let i = 0; i < color_fields.length; i++) {
-      color_fields[i].addEventListener("keydown", function () {
+      color_fields[i].addEventListener("keyup", function () {
+        let first_char = this.value.substr(0, 1);
+        first_char != "#" ? (this.value = "#" + this.value) : "";
         let color = this.value;
         this.previousSibling.value = color;
       });
@@ -2560,175 +2807,239 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
     }
 
     /* -------------------- Datepicker **jQuery** ----------------------*/
-    let date_fields = document.getElementsByClassName("g__date_field");
+    function dateRange(r, input) {
+      if (r.date_future || r.date_past || r.date_range) {
+        let date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth() + 1; //January is 0!
+        let year = date.getFullYear();
+        if (month < 10) {
+          month = "0" + month.toString();
+        }
+        if (day < 10) {
+          day = "0" + day.toString();
+        }
+        let today = year + "-" + month + "-" + day;
+        let range,
+          date_min_max,
+          range_day,
+          range_month,
+          range_year,
+          range_full_date,
+          is_range_pos;
+        if (!!r.date_range) {
+          var d = new Date();
+          let range_num = parseInt(r.date_range);
+          is_range_pos = range_num > 0;
+          r.date_future ? d.setDate(d.getDate() - range_num) : "";
+          r.date_past ? d.setDate(d.getDate() + range_num) : "";
+          if (!r.date_future && !r.date_past && !!range_num) {
+            d.setDate(d.getDate() + range_num);
+          }
+          range_day = d.getDate();
+          range_month = d.getMonth() + 1;
+          range_year = d.getFullYear();
+          if (range_month < 10) {
+            range_month = "0" + range_month.toString();
+          }
+          if (range_day < 10) {
+            range_day = "0" + range_day.toString();
+          }
+          range_full_date = range_year + "-" + range_month + "-" + range_day;
+        }
+
+        if (!!r.date_range && r.date_future) {
+          input.setAttribute("min", range_full_date);
+          input.setAttribute("max", today);
+        } else if (!!r.date_range && r.date_past) {
+          input.setAttribute("max", range_full_date);
+          input.setAttribute("min", today);
+        } else if (r.date_future || r.date_past) {
+          r.date_future ? input.setAttribute("max", today) : "";
+          r.date_past ? input.setAttribute("min", today) : "";
+        } else if (!!r.date_range && is_range_pos) {
+          input.setAttribute("max", range_full_date);
+        } else if (!!r.date_range && !is_range_pos) {
+          input.setAttribute("min", range_full_date);
+        }
+        return input;
+      }
+    }
+    let date_fields = granite_div.getElementsByClassName("g__date_field");
     for (let i = 0; i < date_fields.length; i++) {
-      let date_id = "#" + date_fields[i].id;
-      $(date_id).datepicker({
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        startDate: "+1d",
-        showAnim: "slideDown",
-        changeMonth: true,
-        changeYear: true,
-        prevText: '<i class="far fa-fw fa-chevron-left"></i>',
-        nextText: '<i class="far fa-fw fa-chevron-right"></i>',
+      let type = date_fields[i].type;
+      let icon = date_fields[i].nextSibling;
+      if (type === "text") {
+        icon.style.display = "block";
+        let date_id = "#" + date_fields[i].id;
+        $(date_id).datepicker({
+          format: "yyyy-mm-dd",
+          autoclose: true,
+          startDate: "+1d",
+          showAnim: "slideDown",
+          changeMonth: true,
+          changeYear: true,
+          prevText: '<i class="far fa-fw fa-chevron-left"></i>',
+          nextText: '<i class="far fa-fw fa-chevron-right"></i>',
+        });
+      }
+      $(".g__calendar_icon").on("click", function (field) {
+        let date = $(this).prev();
+        date.datepicker("show");
       });
+      $("#ui-datepicker-div").attr("mode", mode);
     }
-    $(".g__calendar_icon").on("click", function (field) {
-      let date = $(this).prev();
-      date.datepicker("show");
-    });
-    $("#ui-datepicker-div").attr("mode", mode);
+
     /* -------------------- Custom Multi Drag & Drop ----------------------*/
-    let arr_multi = form.getElementsByClassName("g__multi_container");
-    let length = arr_multi.length;
-    if (length) {
-      for (i = 0; i < length; i++) {
-        let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
-        let options_length = multi_elm.length;
-        let main_container = document.createElement("div");
-        main_container.setAttribute("class", "g__select_main");
+    // let arr_multi = form.getElementsByClassName("g__multi_container");
+    // let length = arr_multi.length;
+    // if (length) {
+    //   for (i = 0; i < length; i++) {
+    //     let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
+    //     let options_length = multi_elm.length;
+    //     let main_container = document.createElement("div");
+    //     main_container.setAttribute("class", "g__select_main");
 
-        let left_container = document.createElement("div");
-        left_container.id = "g__select_home";
-        left_container.setAttribute("class", "g__drag_parent");
+    //     let left_container = document.createElement("div");
+    //     left_container.id = "g__select_home";
+    //     left_container.setAttribute("class", "g__drag_parent");
 
-        let add_btn = document.createElement("button");
-        add_btn.type = "button";
-        add_btn.setAttribute("class", "g__add_options");
-        add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
+    //     let add_btn = document.createElement("button");
+    //     add_btn.type = "button";
+    //     add_btn.setAttribute("class", "g__add_options");
+    //     add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
 
-        left_container.appendChild(add_btn);
+    //     left_container.appendChild(add_btn);
 
-        left_container.addEventListener("dragover", (event) => {
-          event.preventDefault();
-        });
-        left_container.addEventListener("drop", (event) => {
-          const id = event.dataTransfer.getData("text");
-          const draggableElement = document.getElementById(id);
-          const dropzone = left_container;
-          dropzone.appendChild(draggableElement);
-          event.dataTransfer.clearData();
-          let options_left = left_container.children;
-          options_left.length
-            ? optionAddDrop(options_left, multi_elm, "unselected")
-            : "";
-        });
+    //     left_container.addEventListener("dragover", (event) => {
+    //       event.preventDefault();
+    //     });
+    //     left_container.addEventListener("drop", (event) => {
+    //       const id = event.dataTransfer.getData("text");
+    //       const draggableElement = document.getElementById(id);
+    //       const dropzone = left_container;
+    //       dropzone.appendChild(draggableElement);
+    //       event.dataTransfer.clearData();
+    //       let options_left = left_container.children;
+    //       options_left.length
+    //         ? optionAddDrop(options_left, multi_elm, "unselected")
+    //         : "";
+    //     });
 
-        let right_container = document.createElement("div");
-        right_container.id = "g__select_drop";
-        right_container.setAttribute("class", "g__drag_parent");
+    //     let right_container = document.createElement("div");
+    //     right_container.id = "g__select_drop";
+    //     right_container.setAttribute("class", "g__drag_parent");
 
-        let remove_btn = document.createElement("button");
-        remove_btn.type = "button";
-        remove_btn.setAttribute("class", "g__remove_options");
-        remove_btn.innerHTML =
-          "<i class='far fa-chevron-double-left'></i> Remove";
-        right_container.appendChild(remove_btn);
+    //     let remove_btn = document.createElement("button");
+    //     remove_btn.type = "button";
+    //     remove_btn.setAttribute("class", "g__remove_options");
+    //     remove_btn.innerHTML =
+    //       "<i class='far fa-chevron-double-left'></i> Remove";
+    //     right_container.appendChild(remove_btn);
 
-        right_container.addEventListener("dragover", (event) => {
-          event.preventDefault();
-        });
+    //     right_container.addEventListener("dragover", (event) => {
+    //       event.preventDefault();
+    //     });
 
-        right_container.addEventListener("drop", (event) => {
-          const id = event.dataTransfer.getData("text");
-          const draggableElement = document.getElementById(id);
-          const dropzone = right_container;
-          dropzone.appendChild(draggableElement);
-          event.dataTransfer.clearData();
+    //     right_container.addEventListener("drop", (event) => {
+    //       const id = event.dataTransfer.getData("text");
+    //       const draggableElement = document.getElementById(id);
+    //       const dropzone = right_container;
+    //       dropzone.appendChild(draggableElement);
+    //       event.dataTransfer.clearData();
 
-          let options_right = right_container.children;
-          options_right.length
-            ? optionAddDrop(options_right, multi_elm, "selected")
-            : "";
-        });
+    //       let options_right = right_container.children;
+    //       options_right.length
+    //         ? optionAddDrop(options_right, multi_elm, "selected")
+    //         : "";
+    //     });
 
-        main_container.appendChild(left_container);
-        main_container.appendChild(right_container);
+    //     main_container.appendChild(left_container);
+    //     main_container.appendChild(right_container);
 
-        add_btn.addEventListener("click", (event) => {
-          let home = event.target.parentElement;
-          let drop = home.nextSibling;
-          let arr_selected = [];
-          let selected_fields = home.querySelectorAll(".g__selected");
-          selected_fields.forEach((field) => {
-            arr_selected.push(field);
-            field.remove();
-          });
-          arr_selected.forEach((val) => {
-            drop.appendChild(val);
-            val.classList.remove("g__selected");
-          });
-          optionAddDrop(arr_selected, multi_elm, "selected");
-        });
+    //     add_btn.addEventListener("click", (event) => {
+    //       let home = event.target.parentElement;
+    //       let drop = home.nextSibling;
+    //       let arr_selected = [];
+    //       let selected_fields = home.querySelectorAll(".g__selected");
+    //       selected_fields.forEach((field) => {
+    //         arr_selected.push(field);
+    //         field.remove();
+    //       });
+    //       arr_selected.forEach((val) => {
+    //         drop.appendChild(val);
+    //         val.classList.remove("g__selected");
+    //       });
+    //       optionAddDrop(arr_selected, multi_elm, "selected");
+    //     });
 
-        remove_btn.addEventListener("click", (event) => {
-          let drop = event.target.parentElement;
-          let home = drop.previousSibling;
-          let arr_selected = [];
-          let selected_fields = drop.querySelectorAll(".g__selected");
-          selected_fields.forEach((field) => {
-            arr_selected.push(field);
-            field.remove();
-          });
-          arr_selected.forEach((val) => {
-            home.appendChild(val);
-            val.classList.remove("g__selected");
-          });
-          optionAddDrop(arr_selected, multi_elm, "unselected");
-        });
+    //     remove_btn.addEventListener("click", (event) => {
+    //       let drop = event.target.parentElement;
+    //       let home = drop.previousSibling;
+    //       let arr_selected = [];
+    //       let selected_fields = drop.querySelectorAll(".g__selected");
+    //       selected_fields.forEach((field) => {
+    //         arr_selected.push(field);
+    //         field.remove();
+    //       });
+    //       arr_selected.forEach((val) => {
+    //         home.appendChild(val);
+    //         val.classList.remove("g__selected");
+    //       });
+    //       optionAddDrop(arr_selected, multi_elm, "unselected");
+    //     });
 
-        let option_block;
-        for (j = 0; j < options_length; j++) {
-          option_block = document.createElement("div");
-          option_block.id = "draggable-" + j;
-          option_block.setAttribute("class", "g__multi_option");
-          option_block.setAttribute("draggable", true);
-          option_block.innerText = multi_elm.options[j].innerHTML;
-          left_container.appendChild(option_block);
+    //     let option_block;
+    //     for (j = 0; j < options_length; j++) {
+    //       option_block = document.createElement("div");
+    //       option_block.id = "draggable-" + j;
+    //       option_block.setAttribute("class", "g__multi_option");
+    //       option_block.setAttribute("draggable", true);
+    //       option_block.innerText = multi_elm.options[j].innerHTML;
+    //       left_container.appendChild(option_block);
 
-          option_block.addEventListener("click", (event) => {
-            event.target.classList.toggle("g__selected");
-          });
+    //       option_block.addEventListener("click", (event) => {
+    //         event.target.classList.toggle("g__selected");
+    //       });
 
-          option_block.addEventListener("dragstart", (event) => {
-            event.dataTransfer.setData("text/plain", event.target.id);
-            event.currentTarget.classList.add("drag");
-          });
+    //       option_block.addEventListener("dragstart", (event) => {
+    //         event.dataTransfer.setData("text/plain", event.target.id);
+    //         event.currentTarget.classList.add("drag");
+    //       });
 
-          option_block.addEventListener("dragend", (event) => {
-            // event.currentTarget.classList.add("drag");
-          });
-        }
-        arr_multi[i].appendChild(main_container);
-      }
+    //       option_block.addEventListener("dragend", (event) => {
+    //         // event.currentTarget.classList.add("drag");
+    //       });
+    //     }
+    //     arr_multi[i].appendChild(main_container);
+    //   }
 
-      function optionAddDrop(options, original_list, side) {
-        for (let option of options) {
-          //loop through original select options
-          for (let item of original_list) {
-            if (option.innerHTML === item.innerHTML && side === "selected") {
-              item.selected = true;
-            } else if (
-              option.innerHTML === item.innerHTML &&
-              side === "unselected"
-            ) {
-              item.selected = false;
-            }
-          }
-        }
-        //print out selected values
-        for (i = 0; i < original_list.length; i++) {
-          if (original_list.options[i].selected === true) {
-            console.log(original_list.options[i]);
-          }
-        }
-      }
-    }
+    //   function optionAddDrop(options, original_list, side) {
+    //     for (let option of options) {
+    //       //loop through original select options
+    //       for (let item of original_list) {
+    //         if (option.innerHTML === item.innerHTML && side === "selected") {
+    //           item.selected = true;
+    //         } else if (
+    //           option.innerHTML === item.innerHTML &&
+    //           side === "unselected"
+    //         ) {
+    //           item.selected = false;
+    //         }
+    //       }
+    //     }
+    //     //print out selected values
+    //     for (i = 0; i < original_list.length; i++) {
+    //       if (original_list.options[i].selected === true) {
+    //         console.log(original_list.options[i]);
+    //       }
+    //     }
+    //   }
+    // }
 
     /* -------------------- Custom Select Field ----------------------*/
     if (!o.default_picklists) {
-      var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search;
+      var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search, select_val;
       /* Look for any elements with the class "g__picklist": */
       f = document.getElementById(id);
       x = f.getElementsByClassName("g__picklist");
@@ -2753,7 +3064,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             e.stopPropagation();
           });
           b.appendChild(search);
-          for (j = 1; j < ll; j++) {
+          for (j = 0; j < ll; j++) {
             /* For each option in the original select element,
                     create a new DIV that will act as an option item: */
             c = document.createElement("div");
@@ -2770,8 +3081,8 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
                 if (s.options[i].innerHTML == this.innerHTML) {
                   s.selectedIndex = i;
                   h.innerHTML = this.innerHTML;
-                  // s.options[i].setAttribute('selected', 'selected');
                   s.value = this.innerHTML;
+                  s.value = s.options[i].value || s.options[i].innerHTML;
                   y = this.parentNode.getElementsByClassName(
                     "same-as-selected"
                   );
@@ -2856,13 +3167,21 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
       });
     }
     /* -------------------- checkbox ----------------------*/
-    const all_checkboxes = document.querySelectorAll(".g__field_checkbox");
+    const all_checkboxes = form.querySelectorAll(".g__field_checkbox");
     all_checkboxes.forEach((field) => {
-      let is_checked = field.checked;
-      is_checked ? (field.value = "true") : (field.value = "false");
-      field.addEventListener("change", () => {
+      field.addEventListener("change", (e) => {
         let is_checked = field.checked;
-        is_checked ? (field.value = "true") : (field.value = "false");
+        if(is_checked){
+          e.target.checked = "true";
+          e.target.value = "true";
+          e.target.classList.toggle('g__checked');
+          e.target.classList.toggle('g__unchecked');
+        }else{
+          e.target.checked = "false";
+          e.target.value = "false";
+          e.target.classList.toggle('g__checked');
+          e.target.classList.toggle('g__unchecked');
+        }
       });
     });
     /* -------------------- Auto Save ----------------------*/
@@ -2881,20 +3200,18 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         input_arr.push(input);
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         select_arr.push(select);
-        let textarea = field.querySelector(
-          `textarea[form_id="${attr__form_id}"]`
-        );
+        let textarea = field.querySelector(`textarea[form_id="${attr__form_id}"]`);
         textarea_arr.push(textarea);
-        if (input.classList.contains('g__field_quill')){
-          let quill = field.querySelector('.ql-editor');
-          quill.addEventListener('input', () => {
-            start_auto_save(attr__form_id);
-          })
-        }
         if (!!input) {
           input.addEventListener("input", () => {
             start_auto_save(attr__form_id);
           });
+          if (input.classList.contains('g__field_quill')){
+            let quill = field.querySelector('.ql-editor');
+            quill.addEventListener('input', () => {
+              start_auto_save(attr__form_id);
+            })
+          }
         }
         if (!!select) {
           select.addEventListener("input", () => {
@@ -2944,7 +3261,6 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
           var response = save_data;
           granite_data[form_id] = { response };
         }
-
         $.ajax({
           type: o.method,
           url: o.action,
@@ -2960,7 +3276,6 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         input_arr = [];
         select_arr = [];
         textarea_arr = [];
-        count = 0;
         return false;
       }
     }
@@ -3114,6 +3429,7 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
         let is_match;
         arr_values.forEach((val) => {
           let child_text = val.toUpperCase().trim();
+          let container;
           if(is_section){
             container = child;
           } else if(!!dep_child) {
@@ -3195,12 +3511,14 @@ ${cssId} .g__check_container [type="checkbox"]:disabled + label {
             const dep_blank = blank;
             arr_values.forEach((val) => {
               let child_val = val.toUpperCase().trim();
+              // check for the child form container
               let container;
               if(is_section){
                 container = child;
               } else if(!!dep_child) {
                 container = dep_child.closest(".g__form_field");
               }
+              // compare the values and take action
               if(container){
                 if (dep_selected === child_val) {
                   container.classList.remove("dep_hide");

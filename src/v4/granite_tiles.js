@@ -1,4 +1,7 @@
-function granite_tiles(jsonTiles, jsonTheme) {
+/*---------------------------------------------
+Block Name: Granite.js Tile Block
+---------------------------------------------*/
+function granite_tiles(jsonTiles, jsonTheme ) {
     /*---------------------------------------------
     Global Variables
     ---------------------------------------------*/
@@ -457,7 +460,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
     Tiles action row
     ---------------------------------------------*/
     let tileActionRow;
-    if(o.title || o.description){
+    if(o.title || o.description || o.order_filter || o.search){
         tileActionRow = document.createElement('div');
         tileActionRow.classList.add('g__tiles_action_row');
         if(o.title){
@@ -475,11 +478,11 @@ function granite_tiles(jsonTiles, jsonTheme) {
         granite_div.appendChild(tileActionRow);
     }
 
-    if(o.orderFilter || o.search){
+    if(o.order_filter || o.search){
         let tileFilters= document.createElement('div');
         tileFilters.classList.add('g__tiles_filters');
         /* Order By */
-        if(o.orderFilter){
+        if(o.order_filter){
             let orderWrap = document.createElement('div');
             orderWrap.classList.add('g__tile_filter_wrap');
             let orderSelect = document.createElement('select');
@@ -541,6 +544,7 @@ function granite_tiles(jsonTiles, jsonTheme) {
         !!r.id ? tileContainer.setAttribute('id', r.id) : '';
         tileContainer.classList.add('g__tile_container');
         !!r.classes ? tileContainer.classList.add(r.classes) : '';
+        tileContainer.setAttribute('data-editable', 'options');
         o.description_hover ? tileContainer.classList.add('g__desc_on_hover') : tileContainer.classList.add('g__desc_no_hover') ;
         !!r.description ? tileContainer.classList.add('g__desc_true') : '' ;
 
@@ -568,6 +572,8 @@ function granite_tiles(jsonTiles, jsonTheme) {
         if (!!r.icon){
             var tileIcon = document.createElement('div');
             tileIcon.classList.add('g__tile_icon');
+            tileIcon.setAttribute('data-record-id', 'icon');
+            tileIcon.setAttribute('data-editable', 'record');
             var icon = document.createElement('i');
             icon.setAttribute('class',r.icon);
             tileIcon.append(icon);
@@ -576,13 +582,17 @@ function granite_tiles(jsonTiles, jsonTheme) {
         if (!!r.title){
             let tile_title = document.createElement('div');
             tile_title.classList.add('g__tile_title')
+            tile_title.setAttribute('data-record-id', 'title');
+            tile_title.setAttribute('data-editable', 'record');
             tile_title.innerHTML = r.title;
             tileContent.appendChild(tile_title)
         }
-
-        if (!!r.description){
+        let descNoHTML = removeHTML(r.description);
+        if (!!descNoHTML){
             let descCont = document.createElement('div');
             descCont.classList.add('g__desc_cont')
+            descCont.setAttribute('data-record-id', 'description');
+            descCont.setAttribute('data-editable', 'record');
             let desc = document.createElement('div');
             desc.classList.add('g__tile_desc')
             desc.innerHTML = r.description;
@@ -592,6 +602,13 @@ function granite_tiles(jsonTiles, jsonTheme) {
 
         tile_wrapper.appendChild(tileContainer);
     })
+
+    /*---------------------------------------------
+    Run extensions
+    ---------------------------------------------*/
+    // extensions.forEach(ext => {
+    //     ext(tileContainer);
+    // });
 
     /*---------------------------------------------
     Append Tile Body to Granite Div
@@ -672,6 +689,14 @@ function granite_tiles(jsonTiles, jsonTheme) {
             }
             content = '';
         }
+    }
+    /*---------------------------------------------
+    Remove HTML from description
+    ---------------------------------------------*/
+    function removeHTML(str){
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = str;
+        return tmp.textContent || tmp.innerText || "";
     }
     /*---------------------------------------------
     Pagination
@@ -768,4 +793,5 @@ function granite_tiles(jsonTiles, jsonTheme) {
 
           displayTiles(current_page, arr_tiles, tiles_per_page)
     }
+//end tile function
 }

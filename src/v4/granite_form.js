@@ -1,684 +1,4 @@
-/*---------------------------------------------
-Block Name: Granite.js Cards Block
----------------------------------------------*/
-function granite_cards(jsonBlock, jsonTheme) {
-  /*---------------------------------------------
-  Global Variables
-  ---------------------------------------------*/
-  const id = jsonBlock.id;
-  const o = jsonBlock.options;
-  const r = jsonBlock.records;
-  const t = jsonTheme;
-  const rCount = r.length;
-  const style = o.g_style || 'basic';
-  const mode = !!t.mode ? t.mode : "midnight";
-  const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
-  !!o.g_classes ? granite_div.setAttribute('class', o.g_classes) : '';
-  /*---------------------------------------------
-  Verify Div ID and Div Alignment - Set Mode
-  ---------------------------------------------*/
-
-  if (granite_div === null) {
-    console.error('Object ID and Granite Div ID Do Not Match');
-  } else {
-    granite_div.setAttribute('mode', mode);
-  }
-  /*---------------------------------------------
-  Add Font Family To Header
-  ---------------------------------------------*/
-
-
-  const font_include = document.getElementById('g__font_stylesheet');
-
-  if (!font_include) {
-    var head = document.head;
-    var fontLink = document.createElement("link");
-    fontLink.type = "text/css";
-    fontLink.rel = "stylesheet";
-    fontLink.id = "g__font_stylesheet";
-    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-    head.appendChild(fontLink);
-  }
-  /*---------------------------------------------
-  Attributes
-  ---------------------------------------------*/
-  // Mode Defaults
-
-
-  let bodyBkg = mode === "midnight" ? "#101010" : "#ffffff";
-  let cardBkgMode = mode === "midnight" ? "#303030" : "#ffffff";
-  let hoverMode = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let medGray = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let lightGray = "#eaeaea";
-  let fontColorMode = mode === "midnight" ? "#ffffff" : "#101010";
-  let fontHoverMode = mode === "midnight" ? "#ffffff" : "#101010";
-  let fontActiveMode = mode === "midnight" ? "#ffffff" : "#101010"; // Action Row
-
-  let headerFontColor = o.g_header_font_color || fontColorMode;
-  let headerFontSize = o.g_header_font_size || "28px";
-  let descriptionFontColor = o.g_description_font_color || fontColorMode;
-  let descriptionFontSize = o.g_description_font_size || "16px"; // Design
-
-  let cardBkg = o.g_card_background || cardBkgMode;
-  let cardBorderWidth = o.g_card_border_width || "0";
-  let cardBorderColor = o.g_card_border_color || "#a1a1a1";
-  let titleColor = o.g_title_color || fontColorMode;
-  let descriptionColor = o.g_description_color || fontColorMode;
-  let titleSize = o.g_title_size || "28px";
-  let descriptionSize = o.g_description_size || "16px";
-  let cardBorderRadius = o.g_card_border_radius || "0";
-  let imgBorderRadius = o.g_img_border_radius || "0"; // Btn
-
-  let btnFontColor = o.g_btn_font_color || "#ffffff";
-  let btnFontHoverColor = o.g_btn_font_color_hover || "#ffffff";
-  let btnBkgColor = o.g_btn_bkg_color || medGray;
-  let btnBkgHoverColor = o.g_btn_bkg_color_hover || "#4b4b4b";
-  let btnBorderRadius = o.g_btn_border_radius || "4px";
-  let btnBorderWidth = o.g_btn_border_width || "0px";
-  let btnBorderColor = o.g_btn_border_color || lightGray;
-  let btnBorderHoverWidth = o.g_btn_border_hover_width || "0px";
-  let btnBorderHoverColor = o.g_btn_border_hover_color || lightGray;
-  let alignBtn = o.g_bottom_align_btn ? "auto" : "initial";
-  let btnCenter = o.g_btn_center ? "0 auto" : "inherit"; // Layout
-
-  let columns = 100 / parseInt(o.g_columns) + "%";
-  let fillRow = o.g_fill_row ? "1" : "0";
-  let cardMargin = o.g_margin || "5px";
-  let columnGap = parseInt(cardMargin, 10) * 2 + "px";
-  let cardPadding = o.g_card_padding || "0";
-  let displayList = o.g_display_list || false;
-  let imgPadding = o.g_img_padding || '0';
-  let contentPadding = o.g_content_padding || "15px"; // Font
-
-  let font = "hero-new, sans-serif;";
-  let fontWeight = 300;
-  /*---------------------------------------------
-  CSS
-  ---------------------------------------------*/
-
-  let cardStyles = document.createElement('style');
-  cardStyles.innerHTML = `
-    /* ------------------------------
-    Granite Div
-    -------------------------------*/
-    ${cssId}{
-      margin-top: ${o.g_container_top_padding || '25px'};
-      margin-bottom: ${o.g_container_bottom_padding || '25px'};
-    }
-    ${cssId}.g__no_records{
-      display: flex;
-      justify-content: center;
-      background: transparent;
-      align-items: center;
-      color: ${fontColorMode};
-      height: 225px;
-      margin: 25px;
-      border: 2px dashed #5d5d5d;
-    }
-    ${cssId}.g__no_records h2{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        font-size: 2rem;
-        color: var(--font-color);
-
-    }
-    /* ------------------------------------------------------------
-    Action Row
-    -------------------------------------------------------------*/
-    ${cssId} .g__action_row{
-      margin-bottom: 25px;
-      margin-left: 15px;
-      margin-right: 15px;
-      padding-bottom: 25px;
-      border-bottom: 1px solid ${lightGray};
-    }
-    ${cssId} .g__action_row .g__header{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${headerFontColor};
-      font-size: ${headerFontSize};
-    }
-    ${cssId} .g__action_row .g__description{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${descriptionFontColor};
-      font-size: ${descriptionFontSize};
-      margin-bottom: 0;
-    }
-    /* ------------------------------------------------------------
-    Tabs Container
-    -------------------------------------------------------------*/
-    ${cssId} .g__card_container{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-    /* ------------------------------------------------------------
-    Tabs Basic
-    -------------------------------------------------------------*/
-    ${cssId} .g__card{
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      background: ${cardBkg};
-      padding: ${cardPadding};
-      margin: ${cardMargin};
-      border-radius: ${cardBorderRadius};
-      border: ${cardBorderWidth} solid ${cardBorderColor};
-      flex: ${fillRow} 1 calc(${columns} - ${columnGap});
-    }
-    ${cssId} .g__card_img_cont{
-      overflow: hidden;
-      min-height: 300px;
-      max-height: 300px;
-      background: #a1a1a1;
-      margin: ${imgPadding};
-      border-radius: ${imgBorderRadius};
-      flex: 1;
-    }
-    ${cssId} .g__card_img{
-      display: block;
-      object-fit: cover;
-      object-position: 50% 50%;
-      width: 100%;
-      height: 100%;
-    }
-    ${cssId} .g__card_content{
-      padding: ${contentPadding};
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      flex: 1;
-    }
-    ${cssId} .g__card_title{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${titleColor};
-      font-size: ${titleSize}
-    }
-    ${cssId} .g__card_description{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${descriptionColor};
-      font-size: ${descriptionSize}
-    }
-    ${cssId} .g__card_description.g__preview{
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2; /* number of lines to show */
-      -webkit-box-orient: vertical;
-      text-overflow: ellipsis;
-    }
-    /* ------------------------------------------------------------
-    List Style - Basic
-    -------------------------------------------------------------*/
-    ${cssId} .g__card.g__card_list{
-      flex-direction: row;
-    }
-    ${cssId} .g__card.g__card_list .g__card_img_cont{
-      max-height: none;
-      min-height: auto;
-      flex: 1;
-      background: #a1a1a1;
-    }
-    ${cssId} .g__card.g__card_list .g__card_img{
-      width: 100%;
-      height: 100%;
-      max-height: none;
-      min-height: initial;
-    }
-    ${cssId} .g__card .g__full_description{
-      opacity:0;
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      top: 0;
-      background: ${cardBkg};
-      padding: 15px;
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${descriptionColor};
-      font-size: ${descriptionSize};
-      border-radius: ${cardBorderRadius};
-      border: ${cardBorderWidth} solid ${cardBorderColor};
-      transition: all 1s ease;
-    }
-    ${cssId} .g__card .g__full_description i{
-      margin-left: auto;
-      color: ${fontColorMode};
-      paddding:5px;
-      font-size: 24px;
-    }
-    ${cssId} .g__card .g__full_description p{
-      overflow: auto;
-    }
-    ${cssId} .g__card .g__full_description.g__full_show{
-      opacity: 1;
-      top: 0;
-      transition: all 1s ease;
-    }
-    /* ------------------------------------------------------------
-    Tabs Slider
-    -------------------------------------------------------------*/
-    ${cssId} .g__card_slide{
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      background: ${cardBkg};
-      padding: ${cardPadding};
-      margin: ${cardMargin};
-      border-radius: ${cardBorderRadius};
-      border: ${cardBorderWidth} solid ${cardBorderColor};
-      flex: ${fillRow} 1 calc(${columns} - ${columnGap});
-    }
-    ${cssId} .g__card_img_cont_slide{
-      overflow: hidden;
-      min-height: 300px;
-      max-height: 300px;
-      background: #a1a1a1;
-      padding: ${imgPadding};
-      border-radius: ${imgBorderRadius};
-      flex: 1;
-    }
-    ${cssId} .g__card_img_slide{
-      display: block;
-      object-fit: cover;
-      object-position: 50% 50%;
-      width: 100%;
-      height: 100%;
-    }
-    ${cssId} .g__card_content_container{
-      height: 200px;
-      border-radius: ${cardBorderRadius};
-    }
-    ${cssId} .g__card_content_slider{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      background: ${cardBkg};
-      padding: ${contentPadding};
-      position: absolute;
-      transition: all 1s ease;
-      top: 300px;
-      border-radius: ${cardBorderRadius};
-      left: ${cardPadding};
-      right: ${cardPadding};
-    }
-    ${cssId} .g__card_content_slider.g__open{
-      top: 0;
-      height: 100%;
-    }
-    ${cssId} .g__card_title_slide{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${titleColor};
-      font-size: ${titleSize}
-    }
-    ${cssId} .g__card_description_slide{
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${descriptionColor};
-      font-size: ${descriptionSize};
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2; /* number of lines to show */
-      -webkit-box-orient: vertical;
-      text-overflow: ellipsis;
-      transition-delay: 1s;
-      transition: all 1s ease;
-    }
-    ${cssId} .g__open .g__card_description_slide{
-      height: auto;
-      display: -webkit-box;
-      -webkit-line-clamp: initial;
-      transition-delay: 1s;
-      overflow: auto;
-      transition: all 1s ease;
-    }
-    ${cssId} .g__close{
-      color: ${fontColorMode};
-      margin-left: auto;
-      font-size: 0;
-      visibility: hidden;
-      opacity: 0;
-      transition: all .5s ease;
-    }
-    ${cssId} .g__close:hover{
-      cursor: pointer;
-    }
-    ${cssId} .g__open .g__close{
-      opacity: 1;
-      font-size: 24px;
-      visibility: visible;
-      padding: 5px;
-    }
-    ${cssId} .g__show_more{
-      color: ${fontColorMode};
-      margin-left: auto;
-      font-size: 11px;
-      padding-bottom: 10px;
-      display: none;
-    }
-    ${cssId} .g__show_more.g__show{
-      display: block;
-    }
-    ${cssId} .g__show_more:hover{
-      cursor: pointer;
-    }
-    ${cssId} .g__open .g__show_more{
-      display: none;
-    }
-    /* ------------------------------------------------------------
-    Button
-    -------------------------------------------------------------*/
-    ${cssId} .g__card_btn{
-      display: inline-block;
-      padding: 10px 30px;
-      background: ${btnBkgColor};
-      color: ${btnFontColor};
-      border-radius: ${btnBorderRadius};
-      border: ${btnBorderWidth} solid ${btnBorderColor};
-      text-decoration: none;
-      margin: ${btnCenter};
-      margin-top: ${alignBtn};
-      transition: all .5s ease;
-    }
-    ${cssId} .g__card_btn:hover{
-      background: ${btnBkgHoverColor};
-      color: ${btnFontHoverColor};
-      text-decoration: none;
-      border: ${btnBorderHoverWidth} solid ${btnBorderHoverColor};
-    }
-    /* ------------------------------------------------------------
-    Tablet -- 767.98px
-    -------------------------------------------------------------*/
-    @media screen and (max-width: 767.98px) {
-      ${cssId} .g__card{
-        flex: ${fillRow} 1 calc(50% - ${columnGap});
-      }
-      ${cssId} .g__card_slide{
-        flex: ${fillRow} 1 calc(50% - ${columnGap});
-      }
-    }
-    /* ------------------------------------------------------------
-    Mobile -- 576.98px
-    -------------------------------------------------------------*/
-    @media screen and (max-width: 576.98px) {
-      ${cssId} .g__card{
-        flex: ${fillRow} 1 100%;
-      }
-      ${cssId} .g__card_slide{
-        flex: ${fillRow} 1 100%;
-      }
-    }
-    `;
-  document.head.appendChild(cardStyles);
-  /*---------------------------------------------
-  Tiles action row
-  ---------------------------------------------*/
-
-  let actionRow;
-
-  if (o.g_header || o.g_description) {
-    actionRow = document.createElement('div');
-    actionRow.classList.add('g__action_row');
-
-    if (o.g_header) {
-      let g_header = document.createElement('h2');
-      g_header.classList.add('g__header');
-      g_header.innerHTML = o.g_header;
-      actionRow.appendChild(g_header);
-    }
-
-    if (o.g_description) {
-      let g_description = document.createElement('p');
-      g_description.classList.add('g__description');
-      g_description.innerHTML = o.g_description;
-      actionRow.appendChild(g_description);
-    }
-
-    granite_div.appendChild(actionRow);
-  }
-  /*---------------------------------------------
-  Card Build
-  ---------------------------------------------*/
-
-
-  let cardContainer = document.createElement('div');
-  cardContainer.classList.add('g__card_container');
-  r.forEach((r, count) => {
-    let cardWrap, cardImgCont, cardImg, cardContent, cardTitle, cardDescription, btn, showMore;
-
-    switch (style) {
-      case "slide":
-        cardWrap = document.createElement('div');
-        cardWrap.classList.add('g__card_slide');
-        displayList ? cardWrap.classList.add('g__card_list') : "";
-        cardImgCont = document.createElement('div');
-        cardImgCont.classList.add('g__card_img_cont_slide');
-        cardWrap.appendChild(cardImgCont);
-
-        if (!!r.g_image) {
-          cardImg = document.createElement('img');
-          cardImg.classList.add('g__card_img_slide');
-          cardImg.src = r.g_image || "#";
-          cardImgCont.appendChild(cardImg);
-        }
-
-        cardContent = document.createElement('div');
-        cardContent.classList.add('g__card_content_container');
-        cardWrap.appendChild(cardContent);
-        cardSlider = document.createElement('div');
-        cardSlider.classList.add('g__card_content_slider');
-        cardContent.appendChild(cardSlider);
-        let close = document.createElement('i');
-        close.setAttribute("class", "far fa-times g__close");
-        close.addEventListener('click', e => {
-          showMoreBtn(e);
-        });
-        cardSlider.appendChild(close);
-
-        if (!!r.g_title) {
-          cardTitle = document.createElement('h3');
-          cardTitle.classList.add('g__card_title_slide');
-          cardTitle.innerHTML = r.g_title;
-          cardSlider.appendChild(cardTitle);
-        }
-
-        if (!!r.g_description) {
-          cardDescription = document.createElement('p');
-          cardDescription.classList.add('g__card_description_slide');
-          cardDescription.innerHTML = r.g_description;
-          cardSlider.appendChild(cardDescription);
-          showMore = document.createElement('div');
-          showMore.classList.add('g__show_more');
-          showMore.innerHTML = "Show More <i class='far fa-chevron-down'></i>";
-          showMore.addEventListener('click', e => {
-            showMoreBtn(e);
-          });
-          cardSlider.appendChild(showMore);
-        }
-
-        if (!!r.g_btn_text) {
-          btn = document.createElement('a');
-          btn.classList.add('g__card_btn');
-          btn.href = r.g_href || "#";
-          btn.new_window ? "_blank" : "_self";
-          btn.innerHTML = r.g_btn_text;
-          cardSlider.appendChild(btn);
-        }
-
-        break;
-
-      default:
-        cardWrap = document.createElement('div');
-        cardWrap.classList.add('g__card');
-        displayList ? cardWrap.classList.add('g__card_list') : "";
-        cardImgCont = document.createElement('div');
-        cardImgCont.classList.add('g__card_img_cont');
-        cardWrap.appendChild(cardImgCont);
-
-        if (!!r.g_image) {
-          cardImg = document.createElement('img');
-          cardImg.classList.add('g__card_img');
-          cardImg.src = r.g_image || "#";
-          cardImgCont.appendChild(cardImg);
-        }
-
-        cardContent = document.createElement('div');
-        cardContent.classList.add('g__card_content');
-        cardWrap.appendChild(cardContent);
-
-        if (!!r.g_title) {
-          cardTitle = document.createElement('h3');
-          cardTitle.classList.add('g__card_title');
-          cardTitle.innerHTML = r.g_title;
-          cardContent.appendChild(cardTitle);
-        }
-
-        if (!!r.g_description) {
-          cardDescription = document.createElement('p');
-          cardDescription.classList.add('g__card_description');
-          o.g_description_preview ? cardDescription.classList.add('g__preview') : "";
-          cardDescription.innerHTML = r.g_description;
-          cardContent.appendChild(cardDescription);
-
-          if (o.g_description_preview && o.g_display_list) {
-            showMore = document.createElement('div');
-            showMore.classList.add('g__show_more');
-            showMore.innerHTML = "Show More <i class='far fa-chevron-down'></i>";
-            cardContent.appendChild(showMore);
-          }
-        }
-
-        if (!!r.g_btn_text) {
-          btn = document.createElement('a');
-          btn.classList.add('g__card_btn');
-          btn.href = r.g_href || "#";
-          btn.new_window ? "_blank" : "_self";
-          btn.innerHTML = r.g_btn_text;
-          cardContent.appendChild(btn);
-        }
-
-        if (!!r.g_description && o.g_description_preview && o.g_display_list) {
-          fullDesc = document.createElement('div');
-          fullDesc.classList.add('g__full_description');
-          let closeIcon = document.createElement('i');
-          closeIcon.setAttribute('class', 'far fa-times g__desc_close');
-          fullDesc.appendChild(closeIcon);
-          let desc = document.createElement('p');
-          desc.innerHTML = r.g_description;
-          fullDesc.appendChild(desc);
-          cardWrap.appendChild(fullDesc);
-        }
-
-    }
-
-    cardContainer.appendChild(cardWrap); // End record loop
-  });
-  /*---------------------------------------------
-  Run extensions
-  ---------------------------------------------*/
-  // extensions.forEach(ext => {
-  //   ext(wrapper);
-  // });
-
-  /*---------------------------------------------
-  Append DIV to DOM
-  ---------------------------------------------*/
-
-  granite_div.appendChild(cardContainer);
-  /*---------------------------------------------
-    Check for records
-  ---------------------------------------------*/
-
-  if (!rCount) {
-    granite_div.classList.add('g__no_records');
-    granite_div.innerHTML = "<h2>Tabs</h2>";
-    return;
-  }
-  /*---------------------------------------------
-    Functions
-  ---------------------------------------------*/
-
-  /* Show More Open */
-
-
-  function showMoreBtn(e) {
-    let contentCont = e.target.parentNode;
-    contentCont.classList.toggle('g__open');
-    contentCont.removeAttribute('style');
-  }
-  /* Show More List */
-
-
-  setTimeout(function () {
-    if (o.g_description_preview && o.g_display_list) {
-      let fullDesc = granite_div.querySelectorAll('.g__full_description');
-
-      if (fullDesc.length) {
-        fullDesc.forEach(content => {
-          content.setAttribute('data-height', content.parentElement.offsetHeight);
-          content.style.top = content.parentElement.offsetHeight + "px";
-          let showMore = content.previousSibling.querySelector('.g__show_more');
-          let close = content.querySelector('.g__desc_close');
-
-          if (!!showMore) {
-            showMore.addEventListener('click', e => {
-              content.classList.add('g__full_show');
-              content.removeAttribute("style");
-            });
-          }
-
-          if (!!close) {
-            close.addEventListener('click', e => {
-              content.classList.remove('g__full_show');
-              content.style.top = content.parentElement.offsetHeight + "px";
-            });
-          }
-        });
-      }
-    }
-  }, 1000);
-  /* Show More */
-
-  if (o.g_description_preview) {
-    let showMore = granite_div.querySelectorAll('.g__show_more');
-
-    if (!!showMore) {
-      showMore.forEach(showBtn => {
-        let desc = showBtn.previousElementSibling;
-        let scroll = desc.scrollHeight;
-        let height = desc.clientHeight;
-
-        if (scroll > height) {
-          showBtn.classList.add('g__show');
-        }
-      });
-    }
-  }
-  /* Slide Height */
-
-
-  if (style === 'slide') {
-    let cards = granite_div.querySelectorAll('.g__card_slide');
-
-    if (cards.length) {
-      cards.forEach(card => {
-        let container = card.querySelector(".g__card_content_container");
-        let content = card.querySelector(".g__card_content_slider");
-        container.style.height = content.clientHeight + "px";
-        content.style.height = content.clientHeight + "px";
-        console.log(content.clientHeight);
-      });
-    }
-  } // End main function
-
-}
+"use strict";
 function granite_form(formsBlock, jsonTheme) {
   const id = formsBlock.id;
   const o = formsBlock.options;
@@ -686,26 +6,22 @@ function granite_form(formsBlock, jsonTheme) {
   const t = jsonTheme;
   const platform = true;
   const mode = !!t.mode ? t.mode : "midnight";
-  const cssId = "#" + id; // micro settings attributes
-
+  const cssId = "#" + id;
+  // micro settings attributes
   const attr__action = o.addapptation_action || "";
-  const attr__form_id = o.form_id || "g__" + Math.random().toString(36).substring(2, 15);
+  const attr__form_id =
+    o.form_id || "g__" + Math.random().toString(36).substring(2, 15);
   const attr__method = o.method || "POST";
   const attr__enctype = o.enctype || "application/x-www-form-urlencoded";
   /* -------------------- Check Alignment & Set Mode ----------------------*/
-
   let granite_div = document.getElementById(id);
-
   if (granite_div === null) {
     console.error("Object ID and Granite Div ID Do Not Match");
   } else {
     granite_div.setAttribute("mode", mode);
   }
   /* -------------------- Fonts ----------------------*/
-
-
   const font_include = document.getElementById("g__font_stylesheet");
-
   if (!font_include) {
     var head = document.head;
     var fontLink = document.createElement("link");
@@ -716,15 +32,17 @@ function granite_form(formsBlock, jsonTheme) {
     head.appendChild(fontLink);
   }
   /* -------------------- Safari Check ----------------------*/
-
-
-  var is_safari = /constructor/i.test(window.HTMLElement) || function (p) {
-    return p.toString() === "[object SafariRemoteNotification]";
-  }(!window["safari"] || typeof safari !== "undefined" && safari.pushNotification);
+  var is_safari =
+    /constructor/i.test(window.HTMLElement) ||
+    (function (p) {
+      return p.toString() === "[object SafariRemoteNotification]";
+    })(
+      !window["safari"] ||
+        (typeof safari !== "undefined" && safari.pushNotification)
+    );
   /* -------------------- CSS ----------------------*/
-
-
   let primary = t.primary || "#D44697";
+
   let formStyles = document.createElement("style");
   formStyles.id = "g__css_" + id;
   formStyles.innerHTML = `
@@ -2160,22 +1478,20 @@ function granite_form(formsBlock, jsonTheme) {
       }
     `;
   let granite_css = document.getElementById("g__css_" + id);
-
   if (granite_css) {
     granite_css.remove();
   }
-
   document.head.appendChild(formStyles);
-  /* -------------------- Regex Expressions ----------------------*/
 
+  /* -------------------- Regex Expressions ----------------------*/
   const patterns = {
     tel: "[0-9]{2}/[0-9]{2}/[0-9]{4}",
     number: "[0-9]*",
-    email: "[-a-zA-Z0-9.-_]{1,}@[-a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}[a-zA-Z0-9.]{0,}" //             yourname @ domain   .  com          ( .uk )
-
+    email:
+      "[-a-zA-Z0-9.-_]{1,}@[-a-zA-Z0-9.-]{2,}[.]{1}[a-zA-Z0-9]{2,}[a-zA-Z0-9.]{0,}",
+    //             yourname @ domain   .  com          ( .uk )
   };
   /* -------------------- Form Header ----------------------*/
-
   if (!!o.title || o.description || o.button_1_label) {
     const form_action_row = document.createElement("div");
     form_action_row.setAttribute("class", "g__form_action_row");
@@ -2196,18 +1512,17 @@ function granite_form(formsBlock, jsonTheme) {
 
     document.getElementById(id).appendChild(form_action_row);
   }
+
   /* -------------------- Form Container ----------------------*/
-
-
-  const form_container = document.createElement("form"); // conditional attributes
-
+  const form_container = document.createElement("form");
+  // conditional attributes
   !!attr__action ? form_container.setAttribute("action", attr__action) : "";
-  !!attr__form_id ? form_container.setAttribute("id", attr__form_id) : ""; // static attributes
-
+  !!attr__form_id ? form_container.setAttribute("id", attr__form_id) : "";
+  // static attributes
   form_container.setAttribute("method", attr__method);
   form_container.setAttribute("enctype", attr__enctype);
-  form_container.setAttribute("novalidate", "false"); // /* -------------------- Labels and Info ----------------------*/
-
+  form_container.setAttribute("novalidate", "false");
+  // /* -------------------- Labels and Info ----------------------*/
   function addLabels(field_info_container, r) {
     //Global labels and character counter
     if (!!r.title) {
@@ -2217,43 +1532,44 @@ function granite_form(formsBlock, jsonTheme) {
       label.innerText = r.title;
       field_info_container.appendChild(label);
     }
-
     if (r.length > 0 && r.show_count) {
       let count_container = document.createElement("div");
       count_container.setAttribute("class", "g__char_remain");
       count_container.innerText = "0/" + r.length;
       field_info_container.appendChild(count_container);
     }
-
     if (r.type === "spacing") {
       let field_options = document.createElement("div");
       field_options.setAttribute("class", "g__field_options");
-      field_options.innerHTML = '<div class="g__device_icon active"></i><i class="far fa-desktop-alt"></i></div><div class="g__device_icon"><i class="fas fa-mobile-android-alt"></div>';
+      field_options.innerHTML =
+        '<div class="g__device_icon active"></i><i class="far fa-desktop-alt"></i></div><div class="g__device_icon"><i class="fas fa-mobile-android-alt"></div>';
       field_info_container.appendChild(field_options);
     }
-
     return field_info_container;
   }
   /* -------------------- Standard Field Attributes ----------------------*/
-
-
   function basicAttributes(r, input, class_name) {
     input.setAttribute("class", class_name);
     !!r.type ? input.setAttribute("type", r.type) : "";
     !!attr__form_id ? input.setAttribute("form_id", attr__form_id) : "";
     !!r.name ? input.setAttribute("name", r.name) : "";
-    !!r.value ? input.setAttribute("value", r.value) : input.setAttribute("value", "");
+    !!r.value
+      ? input.setAttribute("value", r.value)
+      : input.setAttribute("value", "");
     !!r.title ? input.setAttribute("title", r.title) : "";
     !!r.placeholder ? input.setAttribute("placeholder", r.placeholder) : "";
     parseInt(r.length) > 0 ? input.setAttribute("maxlength", r.length) : "";
-    !!r.invalid_message ? input.setAttribute("oninvalid", `this.setCustomValidity("${r.invalid_message}")`) : "";
+    !!r.invalid_message
+      ? input.setAttribute(
+          "oninvalid",
+          `this.setCustomValidity("${r.invalid_message}")`
+        )
+      : "";
     input.required = r.required;
     input.disabled = r.disabled;
     return input;
   }
   /* -------------------- Hidden Fields ----------------------*/
-
-
   function hiddenFields(hidden, name, value) {
     hidden.setAttribute("type", "hidden");
     hidden.setAttribute("name", name);
@@ -2261,10 +1577,9 @@ function granite_form(formsBlock, jsonTheme) {
     hidden.setAttribute("value", value);
     return hidden;
   }
+
   /* -------------------- Form Fields (Record Loop) ----------------------*/
   // Section attributes
-
-
   let section = false;
   let section_count;
   let section_title = "";
@@ -2272,56 +1587,65 @@ function granite_form(formsBlock, jsonTheme) {
   let section_group = [];
   let arr_section_titles = [];
   let section_num = 0;
-  let section_collapsed = false;
+  let section_collapsed = [];
   let total_sections = 0;
-  r.forEach(r => {
+  r.forEach((r) => {
     r.type === "section" ? total_sections++ : "";
   });
   let section_obj = {
     record_count: r.length - 1,
     start: false,
     end: false,
-    is_last_record: false
-  }; // Inline attributes
+    is_last_record: false,
+  };
 
+  // Inline attributes
   let is_inline = false;
   let inline_arr = [];
   let inline_count = 0;
-
   if (r.length > 0) {
     r.forEach(function (r, num) {
       /* -------------------- Last record boolean ----------------------*/
-      section_obj.record_count === num ? section_obj.is_last_record = true : "";
+      section_obj.record_count === num
+        ? (section_obj.is_last_record = true)
+        : "";
       /* -------------------- Error Field ----------------------*/
-
       let error_field = document.createElement("div");
       error_field.setAttribute("class", "g__error_msg");
-      r.id = !!r.id ? r.id : "a__" + Math.random().toString(36).substring(2, 15);
-      let class_name = "g__field_" + r.type;
-      let field_info_container;
 
-      if (r.type != "subheader" && r.type != "description" && r.type != "hidden") {
+      r.id = !!r.id
+        ? r.id
+        : "a__" + Math.random().toString(36).substring(2, 15);
+      let class_name = "g__field_" + r.type;
+
+      let field_info_container;
+      let form_field;
+      if (
+        r.type != "subheader" &&
+        r.type != "description" &&
+        r.type != "hidden"
+      ) {
         form_field = document.createElement("div");
         form_field.setAttribute("class", "g__form_field");
         !!r.classes ? form_field.classList.add(r.classes) : "";
         r.disabled ? form_field.classList.add("g__disabled") : "";
+
         field_info_container = document.createElement("div");
         field_info_container.setAttribute("class", "g__field_info");
       } else if (r.type === "hidden") {
         form_field = document.createElement("div");
         form_field.setAttribute("class", "g__hidden_field");
-      } //build each field depending on the type
+      }
 
-
+      //build each field depending on the type
       let input;
-
       switch (r.type) {
         case "boolean":
         case "checkbox":
-          check_container = document.createElement("div");
+          let check_container = document.createElement("div");
           check_container.setAttribute("class", "g__check_container");
           input = document.createElement("input");
-          r.type === "boolean" ? r.type = "checkbox" : "";
+          r.type === "boolean" ? (r.type = "checkbox") : "";
           input.setAttribute("class", class_name);
           input.setAttribute("id", r.id);
           input.setAttribute("type", r.type);
@@ -2332,17 +1656,16 @@ function granite_form(formsBlock, jsonTheme) {
           input.checked = r.value;
           input.required = r.required;
           r.required ? input.classList.add('g__required') : "";
-          r.value ? input.classList.add('g__checked') : input.classList.add('g__unchecked');
+          r.value ? input.classList.add('g__checked'): input.classList.add('g__unchecked');
           let label = document.createElement("label");
           label.setAttribute("for", r.id);
           label.innerHTML = r.title;
-          !!r.required ? label.innerHTML += "*" : "";
+          !!r.required ? (label.innerHTML += "*") : "";
           check_container.appendChild(input);
           check_container.appendChild(label);
           form_field.appendChild(check_container);
           form_field.appendChild(error_field);
           break;
-
         case "color":
           form_field.appendChild(addLabels(field_info_container, r));
           let color_container = document.createElement("div");
@@ -2355,19 +1678,23 @@ function granite_form(formsBlock, jsonTheme) {
           var hex_display = document.createElement("input");
           hex_display.setAttribute("class", "g__hex_value");
           hex_display.setAttribute("value", "#101010");
-          r.disabled ? hex_display.disabled = true : "";
-          hex_display.setAttribute("pattern", "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$");
+          r.disabled ? (hex_display.disabled = true) : "";
+          hex_display.setAttribute(
+            "pattern",
+            "^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$"
+          );
           color_container.appendChild(input);
           color_container.appendChild(hex_display);
           form_field.appendChild(color_container);
           form_field.appendChild(error_field);
           break;
-
         case "currency":
           form_field.appendChild(addLabels(field_info_container, r));
           let curr_container = document.createElement("div");
           curr_container.setAttribute("class", "g__currency_container");
-          r.show_stepper_arrow ? curr_container.classList.add("g__show_counter") : curr_container.classList.add("g__hide_counter");
+          r.show_stepper_arrow
+            ? curr_container.classList.add("g__show_counter")
+            : curr_container.classList.add("g__hide_counter");
           let curr_format = document.createElement("div");
           curr_format.setAttribute("class", "g__currency_format");
           curr_format.innerHTML = r.curr_format || "$";
@@ -2376,30 +1703,29 @@ function granite_form(formsBlock, jsonTheme) {
           r.type = "number";
           basicAttributes(r, input, class_name);
           r.required ? input.classList.add('g__required') : "";
-          input.inputmode = "decimal";
-          !!r.max_number ? input.max = r.max_number : "";
-          !!r.min_number ? input.min = r.min_number : "";
-          !!r.step ? input.step = r.step : "";
-          !!r.pattern ? input.setAttribute("pattern", r.pattern) : ""; //Increase decrease container
-
+          input.inputmode="decimal";
+          !!r.max_number ? (input.max = r.max_number) : "";
+          !!r.min_number ? (input.min = r.min_number) : "";
+          !!r.step ? (input.step = r.step) : "";
+          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
+          //Increase decrease container
           let curr_counter = document.createElement("div");
-          curr_counter.setAttribute("class", "g__number_plus_minus"); // Increase container
-
+          curr_counter.setAttribute("class", "g__number_plus_minus");
+          // Increase container
           let curr_increase = document.createElement("div");
           curr_increase.setAttribute("class", "g__number_increase");
-          curr_counter.appendChild(curr_increase); // Decrease container
-
+          curr_counter.appendChild(curr_increase);
+          // Decrease container
           let curr_decrease = document.createElement("div");
           curr_decrease.setAttribute("class", "g__number_decrease");
-          curr_counter.appendChild(curr_decrease); //Append the parent elements
-
+          curr_counter.appendChild(curr_decrease);
+          //Append the parent elements
           curr_container.appendChild(curr_format);
           curr_container.appendChild(input);
           curr_container.appendChild(curr_counter);
           form_field.appendChild(curr_container);
           form_field.appendChild(error_field);
           break;
-
         case "date":
           form_field.appendChild(addLabels(field_info_container, r));
           let date_container = document.createElement("div");
@@ -2412,7 +1738,9 @@ function granite_form(formsBlock, jsonTheme) {
           !!r.name ? input.setAttribute("name", r.name) : "";
           !!r.value ? input.setAttribute("value", r.value) : "";
           dateRange(r, input);
-          !!r.placeholder ? input.setAttribute("placeholder", r.placeholder) : "";
+          !!r.placeholder
+            ? input.setAttribute("placeholder", r.placeholder)
+            : "";
           input.required = r.required;
           r.required ? input.classList.add('g__required') : "";
           input.disabled = r.disabled;
@@ -2426,14 +1754,12 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(date_container);
           form_field.appendChild(error_field);
           break;
-
         case "description":
           form_field = document.createElement("p");
           form_field.setAttribute("class", "g__form_description");
           form_field.setAttribute("style", `font-size:${r.font_size};`);
           form_field.innerHTML = r.value || "Description";
           break;
-
         case "email":
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("input");
@@ -2444,23 +1770,24 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-
         case "file":
           form_field.appendChild(addLabels(field_info_container, r));
           let file_container = document.createElement("div");
           file_container.setAttribute("class", "g__file_container");
           input = document.createElement("input");
           input.setAttribute("id", r.id);
-          !!r.accepted_file_types ? input.setAttribute("accept", r.accepted_file_types) : "";
+          !!r.accepted_file_types
+            ? input.setAttribute("accept", r.accepted_file_types)
+            : "";
           r.multiple ? input.setAttribute("multiple", "true") : "";
           input.setAttribute("hidden", "hidden");
           basicAttributes(r, input, class_name);
           r.required ? input.classList.add('g__required') : "";
-          file_btn = document.createElement("button");
+          let file_btn = document.createElement("button");
           file_btn.setAttribute("type", "button");
           file_btn.setAttribute("class", "g__file_btn");
           file_btn.innerText = "Choose File";
-          file_text = document.createElement("div");
+          let file_text = document.createElement("div");
           file_text.setAttribute("class", "g__file_text");
           file_text.innerText = r.placeholder || "No file chosen, yet.";
           file_container.appendChild(input);
@@ -2469,24 +1796,22 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(file_container);
           form_field.appendChild(error_field);
           break;
-
         case "hidden":
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
           form_field.appendChild(input);
           break;
-
         case "multi":
           form_field.appendChild(addLabels(field_info_container, r));
           let multi_container = document.createElement("div");
           multi_container.setAttribute("class", "g__multi_container");
           let multi_options = r.options;
-          let multi_double_arr = Array.isArray(multi_options) && Array.isArray(multi_options[0]);
+          let multi_double_arr =
+            Array.isArray(multi_options) && Array.isArray(multi_options[0]);
           let multi_select = document.createElement("select");
           multi_select.multiple = true;
           r.required ? multi_select.classList.add('g__required') : "";
-
           if (multi_double_arr) {
             for (let i = 0; i < multi_options.length; i++) {
               let option = document.createElement("option");
@@ -2502,42 +1827,42 @@ function granite_form(formsBlock, jsonTheme) {
               multi_select.appendChild(option);
             }
           }
-
           multi_container.appendChild(multi_select);
           form_field.appendChild(multi_container);
-          break;
 
+          break;
         case "number":
           form_field.appendChild(addLabels(field_info_container, r));
           let num_container = document.createElement("div");
           num_container.setAttribute("class", "g__number_container");
-          r.show_stepper_arrow ? num_container.classList.add("g__show_counter") : num_container.classList.add("g__hide_counter");
+          r.show_stepper_arrow
+            ? num_container.classList.add("g__show_counter")
+            : num_container.classList.add("g__hide_counter");
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
           r.required ? input.classList.add('g__required') : "";
-          !!r.max_number ? input.max = r.max_number : "";
-          !!r.min_number ? input.min = r.min_number : "";
-          !!r.step ? input.step = r.step : "";
-          !!r.pattern ? input.setAttribute("pattern", r.pattern) : ""; // Increase decrease container
-
+          !!r.max_number ? (input.max = r.max_number) : "";
+          !!r.min_number ? (input.min = r.min_number) : "";
+          !!r.step ? (input.step = r.step) : "";
+          !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
+          // Increase decrease container
           let num_counter = document.createElement("div");
-          num_counter.setAttribute("class", "g__number_plus_minus"); // Increase container
-
+          num_counter.setAttribute("class", "g__number_plus_minus");
+          // Increase container
           let num_increase = document.createElement("div");
           num_increase.setAttribute("class", "g__number_increase");
-          num_counter.appendChild(num_increase); // Decrease container
-
+          num_counter.appendChild(num_increase);
+          // Decrease container
           let num_decrease = document.createElement("div");
           num_decrease.setAttribute("class", "g__number_decrease");
-          num_counter.appendChild(num_decrease); //Append the parent elements
-
+          num_counter.appendChild(num_decrease);
+          //Append the parent elements
           num_container.appendChild(input);
           num_container.appendChild(num_counter);
           form_field.appendChild(num_container);
           form_field.appendChild(error_field);
           break;
-
         case "password":
           form_field.appendChild(addLabels(field_info_container, r));
           let pass_container = document.createElement("div");
@@ -2549,29 +1874,37 @@ function granite_form(formsBlock, jsonTheme) {
           !!r.pattern ? input.setAttribute("pattern", r.pattern) : "";
           let pass_show = document.createElement("div");
           pass_show.setAttribute("class", "g__password_show");
-          r.show_password_option ? "" : pass_show.classList.add("g__hide_password_btn");
+          r.show_password_option
+            ? ""
+            : pass_show.classList.add("g__hide_password_btn");
           pass_show.innerHTML = '<i class="far fa-eye"></i>';
           pass_container.appendChild(input);
           pass_container.appendChild(pass_show);
           form_field.appendChild(pass_container);
           form_field.appendChild(error_field);
           break;
-
         case "picklist":
           form_field.appendChild(addLabels(field_info_container, r));
           const picklist_options = r.options;
-          const picklist_double_arr = Array.isArray(picklist_options) && Array.isArray(picklist_options[0]);
+          const picklist_double_arr =
+            Array.isArray(picklist_options) &&
+            Array.isArray(picklist_options[0]);
           input = document.createElement("div");
-          r.multiple ? input.classList.add("g__picklist_multiple") : input.classList.add("g__picklist");
-          o.default_picklists ? input.classList.add("g__default_picklist") : input.classList.add("g__custom_picklist");
+          r.multiple
+            ? input.classList.add("g__picklist_multiple")
+            : input.classList.add("g__picklist");
+          o.default_picklists
+            ? input.classList.add("g__default_picklist")
+            : input.classList.add("g__custom_picklist");
           r.picklist_search ? input.classList.add("g__search") : "";
           let select = document.createElement("select");
           basicAttributes(r, select, class_name);
           r.required ? select.classList.add('g__required') : "";
           select.setAttribute("id", r.id);
-          r.multiple ? select.classList.add("g__select_multiple") : select.classList.add("g__select_default");
+          r.multiple
+            ? select.classList.add("g__select_multiple")
+            : select.classList.add("g__select_default");
           r.multiple ? select.setAttribute("multiple", "true") : "";
-
           if (o.default_picklists && r.placeholder) {
             let option_placeholder = document.createElement("option");
             option_placeholder.disabled = true;
@@ -2580,16 +1913,13 @@ function granite_form(formsBlock, jsonTheme) {
             option_placeholder.innerHTML = r.placeholder;
             select.appendChild(option_placeholder);
           }
-
           if (picklist_double_arr) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i][0]);
-
-              if (r.value === picklist_options[i][0]) {
+              if(r.value === picklist_options[i][0]){
                 option.selected = true;
               }
-
               option.innerHTML = picklist_options[i][1];
               select.appendChild(option);
             }
@@ -2597,11 +1927,9 @@ function granite_form(formsBlock, jsonTheme) {
             for (let i = 0; i < picklist_options.length; i++) {
               let option = document.createElement("option");
               option.setAttribute("value", picklist_options[i]);
-
-              if (r.value === picklist_options[i]) {
+              if(r.value === picklist_options[i]){
                 option.selected = true;
               }
-
               option.innerHTML = picklist_options[i];
               select.appendChild(option);
             }
@@ -2611,13 +1939,11 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-
         case "radio":
           form_field.appendChild(addLabels(field_info_container, r));
           const radio_options = r.options;
           radio_container = document.createElement("div");
           radio_container.setAttribute("class", "g__radio_container");
-
           for (let i = 0; i < radio_options.length; i++) {
             input_container = document.createElement("div");
             input_container.setAttribute("class", "g__radio_option");
@@ -2642,11 +1968,9 @@ function granite_form(formsBlock, jsonTheme) {
             input_container.appendChild(radio_label);
             radio_container.appendChild(input_container);
           }
-
           form_field.appendChild(radio_container);
           form_field.appendChild(error_field);
           break;
-
         case "range":
           form_field.appendChild(addLabels(field_info_container, r));
           let min = r.min_number || 0;
@@ -2662,23 +1986,23 @@ function granite_form(formsBlock, jsonTheme) {
           let output = document.createElement("input");
           output.disabled = r.disabled;
           output.setAttribute("class", "g__range_output");
-          output.setAttribute("type", "number"); // Unit indicator
-
+          output.setAttribute("type", "number");
+          // Unit indicator
           let unit = document.createElement("div");
           unit.setAttribute("class", "g__range_unit");
-          unit.innerHTML = r.range_unit || "px"; // Increase decrease container
-
+          unit.innerHTML = r.range_unit || "px";
+          // Increase decrease container
           let plusMinus = document.createElement("div");
-          plusMinus.setAttribute("class", "g__range_plus_minus"); // Increase container
-
+          plusMinus.setAttribute("class", "g__range_plus_minus");
+          // Increase container
           let increase = document.createElement("div");
           increase.setAttribute("class", "g__range_increase");
-          plusMinus.appendChild(increase); // Decrease container
-
+          plusMinus.appendChild(increase);
+          // Decrease container
           let decrease = document.createElement("div");
           decrease.setAttribute("class", "g__range_decrease");
-          plusMinus.appendChild(decrease); //Append the parent elements
-
+          plusMinus.appendChild(decrease);
+          //Append the parent elements
           range_container.appendChild(input);
           range_container.appendChild(output);
           range_container.appendChild(unit);
@@ -2686,43 +2010,59 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(error_field);
           form_field.appendChild(range_container);
           break;
-
         case "section":
           section_title = r.title;
           section_id.push(r.id);
           arr_section_titles.push(r.title);
-          section_collapsed = r.collapsed;
+          section_collapsed.push(r.collapsed);
+          console.log("Loop: ", section_collapsed);
           section = true;
           section_count = parseInt(r.number_fields);
-          section_obj.start ? section_obj.end = true : section_obj.end = false;
-          !!r.number_fields ? section_obj.start = false : section_obj.start = true;
+          section_obj.start
+            ? (section_obj.end = true)
+            : (section_obj.end = false);
+          !!r.number_fields
+            ? (section_obj.start = false)
+            : (section_obj.start = true);
           break;
-
         case "spacing":
           form_field.appendChild(addLabels(field_info_container, r));
-          const spacing_arr = ["top", "link", "bottom", "left", "link", "right"];
+          const spacing_arr = [
+            "top",
+            "link",
+            "bottom",
+            "left",
+            "link",
+            "right",
+          ];
           const spacing_container = document.createElement("div");
-          spacing_container.setAttribute("class", "g__spacing_container"); //Desktop hidden field
-
+          spacing_container.setAttribute("class", "g__spacing_container");
+          //Desktop hidden field
           const hidden_desktop = document.createElement("input");
           hidden_desktop.setAttribute("class", "g__space_desktop_hidden");
           hidden_desktop.type = "hidden";
-          !!attr__form_id ? hidden_desktop.setAttribute("form_id", attr__form_id) : "";
-          !!r.name ? hidden_desktop.name = r.name : "";
-          !!r.title ? hidden_desktop.title = r.title : "";
-          spacing_container.appendChild(hidden_desktop); //mobile hidden field
-
+          !!attr__form_id
+            ? hidden_desktop.setAttribute("form_id", attr__form_id)
+            : "";
+          !!r.name ? (hidden_desktop.name = r.name) : "";
+          !!r.title ? (hidden_desktop.title = r.title) : "";
+          spacing_container.appendChild(hidden_desktop);
+          //mobile hidden field
           const hidden_mobile = document.createElement("input");
           hidden_mobile.setAttribute("class", "g__space_desktop_hidden");
           hidden_mobile.type = "hidden";
-          !!attr__form_id ? hidden_mobile.setAttribute("form_id", attr__form_id) : "";
-          !!r.name ? hidden_mobile.name = r.name : "";
-          !!r.title ? hidden_mobile.title = r.title : "";
+          !!attr__form_id
+            ? hidden_mobile.setAttribute("form_id", attr__form_id)
+            : "";
+          !!r.name ? (hidden_mobile.name = r.name) : "";
+          !!r.title ? (hidden_mobile.title = r.title) : "";
           spacing_container.appendChild(hidden_mobile);
           spacing_arr.forEach((val, num) => {
             if (val === "link") {
               let field_container = document.createElement("div");
-              num === 1 ? field_container.setAttribute("class", `g__link g__link_tb`) : field_container.setAttribute("class", `g__link g__link_lr`);
+              num === 1
+                ? field_container.setAttribute("class", `g__link g__link_tb`)
+                : field_container.setAttribute("class", `g__link g__link_lr`);
               spacing_container.appendChild(field_container);
               let link = document.createElement("div");
               link.setAttribute("class", "g__space_link");
@@ -2746,13 +2086,11 @@ function granite_form(formsBlock, jsonTheme) {
             }
           });
           break;
-
         case "subheader":
           form_field = document.createElement("h2");
           form_field.setAttribute("class", "g__form_header");
           form_field.innerHTML = r.value || "Header";
           break;
-
         case "tel":
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("input");
@@ -2763,7 +2101,6 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-
         case "textarea":
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("textarea");
@@ -2777,7 +2114,6 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-
         case "quill":
           form_field.appendChild(addLabels(field_info_container, r));
           let quil = document.createElement("div");
@@ -2792,7 +2128,6 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-
         default:
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("input");
@@ -2804,7 +2139,6 @@ function granite_form(formsBlock, jsonTheme) {
       }
 
       let push_inline = !!r.inline_field && r.inline_field.toString() == "true" ? true : false;
-
       if (section) {
         if (r.type != "section") {
           if (r.inline_field || inline_arr.length) {
@@ -2815,7 +2149,7 @@ function granite_form(formsBlock, jsonTheme) {
               inline_arr.push(form_field);
               let inline_row = document.createElement("div");
               inline_row.setAttribute("class", "g__inline_row");
-              inline_arr.forEach(field => {
+              inline_arr.forEach((field) => {
                 inline_row.appendChild(field);
               });
               inline_arr = [];
@@ -2827,45 +2161,48 @@ function granite_form(formsBlock, jsonTheme) {
             section_count === "" ? "" : section_count--;
           }
         }
-
-        section_count || section_obj.start ? section = true : section = false;
-
+        section_count || section_obj.start
+          ? (section = true)
+          : (section = false);
         if (!section || section_obj.end || section_obj.is_last_record) {
           let form_section_container = document.createElement("div");
-
           if (o.section_slider) {
-            form_section_container.setAttribute("class", "g__form_progress_section g__progress_hidden"); //Back and next button container
-
+            form_section_container.setAttribute(
+              "class",
+              "g__form_progress_section g__progress_hidden"
+            );
+            //Back and next button container
             let btn_container = document.createElement("div");
-            btn_container.setAttribute("class", "g__btn_step_container"); //Back button
-
+            btn_container.setAttribute("class", "g__btn_step_container");
+            //Back button
             if (section_num) {
               let back_btn = document.createElement("button");
               back_btn.setAttribute("class", "g__back_btn");
               back_btn.type = "button";
               back_btn.innerHTML = "Back";
               btn_container.appendChild(back_btn);
-            } //Next button
-
-
+            }
+            //Next button
             if (section_num + 1 != total_sections) {
               let next_btn = document.createElement("button");
               next_btn.setAttribute("class", "g__next_btn");
               next_btn.type = "button";
               next_btn.innerHTML = "Next";
               btn_container.appendChild(next_btn);
-            } //push button container to array
-
-
+            }
+            //push button container to array
             section_group.push(btn_container);
           } else {
-            form_section_container.setAttribute("class", "g__form_section_container");
+            form_section_container.setAttribute(
+              "class",
+              "g__form_section_container"
+            );
             form_section_container.id = section_id[section_num];
-          } //Form text
-
-
+          }
+          //Form text
           let section_header = document.createElement("div");
           section_header.setAttribute("class", "g__section_header");
+
           form_section_container.appendChild(section_header);
           let title = document.createElement("h3");
           title.setAttribute("class", "g__section_title");
@@ -2877,43 +2214,42 @@ function granite_form(formsBlock, jsonTheme) {
           icon.innerHTML = '<i class="far fa-chevron-up"></i>';
           section_header.appendChild(title);
           section_header.appendChild(line);
-          section_header.appendChild(icon); //Form Section
+          section_header.appendChild(icon);
 
+          //Form Section
           let form_section = document.createElement("div");
           form_section.setAttribute("class", "g__form_section");
           form_section_container.appendChild(form_section);
-          section_group.forEach(field => {
+          section_group.forEach((field) => {
             form_section.appendChild(field);
           });
-
-          if (!section_collapsed) {
+          console.log("Build: ", section_collapsed);
+          if(!section_collapsed[section_num]){
             section_header.classList.add('g__section_active');
             form_section.classList.add('g__section_active');
           }
 
           section_group = [];
           section_title = "";
-          section_collapsed = false;
           section_obj.end = false;
           section_num += 1;
           form_container.appendChild(form_section_container);
         }
+
       } else if ((push_inline || inline_arr.length) && !section) {
         if (r.inline_field) {
           inline_arr.push(form_field);
-
-          if (section) {
+          if (section){
             section_count === "" ? "" : section_count--;
           }
         } else if (inline_arr.length > 0) {
           inline_arr.push(form_field);
           let inline_row = document.createElement("div");
           inline_row.setAttribute("class", "g__inline_row");
-          inline_arr.forEach(field => {
+          inline_arr.forEach((field) => {
             inline_row.appendChild(field);
           });
           inline_arr = [];
-
           if (section) {
             section_group.push(inline_row);
           } else {
@@ -2927,54 +2263,48 @@ function granite_form(formsBlock, jsonTheme) {
         }
       }
     });
-    /* -------------------- Hidden Option Fields ----------------------*/
 
+    /* -------------------- Hidden Option Fields ----------------------*/
     if (!!o.db_id || !!o.db_object || !!o.db_action || !!o.db_redirect) {
       let hidden_container = document.createElement("div");
       hidden_container.classList.add("g__hidden_field");
-
       if (!!o.db_id) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "Id", o.db_id);
-        hidden_container.appendChild(hidden);
+        let hidden_db = document.createElement("input");
+        hiddenFields(hidden_db, "Id", o.db_id);
+        hidden_container.appendChild(hidden_db);
         form_container.appendChild(hidden_container);
       }
-
       if (!!o.db_object) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "object", o.db_object);
-        hidden_container.appendChild(hidden);
+        let hidden_object = document.createElement("input");
+        hiddenFields(hidden_object, "object", o.db_object);
+        hidden_container.appendChild(hidden_object);
         form_container.appendChild(hidden_container);
       }
-
       if (!!o.db_action) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "submit_form", o.db_action);
-        hidden_container.appendChild(hidden);
+        let hidden_action = document.createElement("input");
+        hiddenFields(hidden_action, "submit_form", o.db_action);
+        hidden_container.appendChild(hidden_action);
         form_container.appendChild(hidden_container);
       }
-
       if (!!o.db_redirect) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "redirect_to", o.db_redirect);
-        hidden_container.appendChild(hidden);
+        let hidden_redirect = document.createElement("input");
+        hiddenFields(hidden_redirect, "redirect_to", o.db_redirect);
+        hidden_container.appendChild(hidden_redirect);
         form_container.appendChild(hidden_container);
       }
-
       if (!!o.flash_message) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "flash_message", o.flash_message);
-        hidden_container.appendChild(hidden);
+        let hidden_flash = document.createElement("input");
+        hiddenFields(hidden_flash, "flash_message", o.flash_message);
+        hidden_container.appendChild(hidden_flash);
         form_container.appendChild(hidden_container);
       }
-    } // Submit & Cancal Container
-
-
+    }
+    // Submit & Cancal Container
     if (!o.hide_submit || o.allow_cancel) {
       let button_container = document.createElement("div");
       button_container.id = "g__submit_cancel";
-      button_container.setAttribute("class", "g__button_container"); // Submit & Cancel Button
-
+      button_container.setAttribute("class", "g__button_container");
+      // Submit & Cancel Button
       if (!o.hide_submit) {
         let submit = document.createElement("button");
         submit.setAttribute("id", "g__submit_btn");
@@ -2983,7 +2313,6 @@ function granite_form(formsBlock, jsonTheme) {
         submit.innerHTML = o.submit_label || "Submit";
         button_container.appendChild(submit);
       }
-
       if (o.allow_cancel) {
         let cancel = document.createElement("button");
         cancel.setAttribute("id", "g__cancel_btn");
@@ -2991,7 +2320,6 @@ function granite_form(formsBlock, jsonTheme) {
         cancel.innerHTML = o.cancel_label;
         button_container.appendChild(cancel);
       }
-
       if (!!o.button_1_label) {
         const form_custom_btn = document.createElement("a");
         form_custom_btn.href = o.button_1_href;
@@ -2999,37 +2327,37 @@ function granite_form(formsBlock, jsonTheme) {
         form_custom_btn.innerHTML = o.button_1_label;
         button_container.appendChild(form_custom_btn);
       }
-
       form_container.appendChild(button_container);
-    } // append the form to the page
+    }
 
-
+    // append the form to the page
     document.getElementById(id).appendChild(form_container);
     /* -------------------- Submit ----------------------*/
-
     let form = document.getElementById(attr__form_id);
-    form.addEventListener("submit", e => {
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
       let all_field_containers = document.querySelectorAll(".g__form_field");
-      let all_sections = document.querySelectorAll(".g__form_section_container");
+      let all_sections = document.querySelectorAll(
+        ".g__form_section_container"
+      );
       let errors_arr = [];
-      all_field_containers.forEach(field => {
+
+      all_field_containers.forEach((field) => {
         let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
-        let textarea = field.querySelector(`textarea[form_id="${attr__form_id}"]`);
+        let textarea = field.querySelector(
+          `textarea[form_id="${attr__form_id}"]`
+        );
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         let error_msg = field.querySelector(".g__error_msg");
         let is_quill, is_required;
-
         if (!!input) {
           is_quill = input.classList.contains("g__field_quill");
           is_required = input.required;
         }
-
         if (is_quill && is_required) {
           let quill_toolbar = field.querySelector(".ql-toolbar");
           let quill_editor = field.querySelector(".ql-editor");
           let quill_content = quill_editor.innerHTML;
-
           if (quill_content === "<p><br></p>") {
             errors_arr.push(input);
             error_msg.classList.add("active");
@@ -3043,7 +2371,6 @@ function granite_form(formsBlock, jsonTheme) {
             quill_editor.classList.add("valid");
           }
         }
-
         if (!!input && input.type != "hidden") {
           if (!input.checkValidity()) {
             input.classList.remove("valid");
@@ -3057,7 +2384,6 @@ function granite_form(formsBlock, jsonTheme) {
             error_msg.classList.remove("active");
           }
         }
-
         if (!!textarea) {
           if (!textarea.checkValidity()) {
             textarea.classList.add("invalid");
@@ -3071,19 +2397,17 @@ function granite_form(formsBlock, jsonTheme) {
             error_msg.classList.remove("active");
           }
         }
-
         if (!!select) {
           let select_type;
-
           if (!select.checkValidity()) {
-            select_type = select.parentElement.classList.contains("g__custom_picklist");
-
+            select_type = select.parentElement.classList.contains(
+              "g__custom_picklist"
+            );
             if (select_type) {
               select.parentElement.classList.add("invalid");
             } else {
               select.classList.add("invalid");
             }
-
             errors_arr.push(select);
             error_msg.classList.add("active");
             error_msg.innerHTML = select.validationMessage;
@@ -3093,46 +2417,41 @@ function granite_form(formsBlock, jsonTheme) {
             } else {
               select.classList.remove("invalid");
             }
-
             error_msg.classList.remove("active");
           }
         }
       });
-
       if (all_sections.length) {
-        all_sections.forEach(form_section => {
+        all_sections.forEach((form_section) => {
           let errors = form_section.querySelectorAll(".g__error_msg");
           let header = form_section.querySelector(".g__section_header");
           let section_content = form_section.querySelector(".g__form_section");
-          errors.forEach(msg => {
+          errors.forEach((msg) => {
             let content = msg.innerHTML;
-
             if (content) {
               header.classList.add("g__section_active");
               section_content.classList.add("g__section_active");
-              section_content.style.maxHeight = section_content.scrollHeight + "px";
+              section_content.style.maxHeight =
+                section_content.scrollHeight + "px";
             }
           });
         });
       }
-
       if (!errors_arr.length) {
         form.submit();
       }
     });
     /* -------------------- Reset ----------------------*/
-
     if (o.allow_cancel) {
       let canel = document.getElementById("g__cancel_btn");
       canel.addEventListener("click", () => {
         window.history.back();
       });
     }
+
     /* -------------------- Currency Field ----------------------*/
-
-
     let all_curr = granite_div.querySelectorAll(".g__currency_container");
-    all_curr.forEach(wrap => {
+    all_curr.forEach((wrap) => {
       const output = wrap.querySelector(".g__field_currency");
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
@@ -3140,7 +2459,6 @@ function granite_form(formsBlock, jsonTheme) {
       increase.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseFloat(output.value);
-
         if (curr_num === "") {
           output.value = !!step ? parseFloat(step) : 1;
         } else if (!!step) {
@@ -3152,7 +2470,6 @@ function granite_form(formsBlock, jsonTheme) {
       decrease.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseFloat(output.value);
-
         if (curr_num === "") {
           output.value = !!step ? parseFloat(step) : -1;
         } else if (!!step) {
@@ -3163,27 +2480,26 @@ function granite_form(formsBlock, jsonTheme) {
       });
     });
     /* -------------------- File Enctype Change ----------------------*/
-
     let all_input = form.querySelectorAll("input");
-    all_input.forEach(field => {
+    all_input.forEach((field) => {
       let type = field.type;
-
       if (type === "file") {
         form.enctype = "multipart/form-data";
       }
     });
     /* -------------------- File Upload ----------------------*/
-
     let all_files = granite_div.querySelectorAll(".g__file_container");
-    all_files.forEach(file => {
+    all_files.forEach((file) => {
       let real_file_field = file.querySelector(".g__field_file");
       let file_btn = file.querySelector(".g__file_btn");
-      let file_text = file.querySelector(".g__file_text"); // let file_delete = file.querySelector(".g__file_delete");
-      // Activate the real file field on click
+      let file_text = file.querySelector(".g__file_text");
+      // let file_delete = file.querySelector(".g__file_delete");
 
+      // Activate the real file field on click
       file_btn.addEventListener("click", () => {
         real_file_field.click();
       });
+
       real_file_field.addEventListener("change", () => {
         if (real_file_field.value) {
           file_text.innerHTML = "";
@@ -3201,7 +2517,9 @@ function granite_form(formsBlock, jsonTheme) {
               real_file_field.value = "";
             }
           });
-          file_selected.innerHTML = real_file_field.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+          file_selected.innerHTML = real_file_field.value.match(
+            /[\/\\]([\w\d\s\.\-\(\)]+)$/
+          )[1];
           file_container.appendChild(file_selected);
           file_container.appendChild(file_delete);
           file_text.appendChild(file_container);
@@ -3210,13 +2528,14 @@ function granite_form(formsBlock, jsonTheme) {
         }
       });
     });
-    /* -------------------- Section ----------------------*/
 
+    /* -------------------- Section ----------------------*/
     if (o.section_slider) {
-      const progress_section = granite_div.querySelectorAll(".g__form_progress_section");
+      const progress_section = granite_div.querySelectorAll(
+        ".g__form_progress_section"
+      );
       const submit = granite_div.querySelector("#g__submit_cancel");
       submit.remove();
-
       if (progress_section) {
         progress_section.forEach((section, count) => {
           count ? "" : section.classList.toggle("g__progress_hidden");
@@ -3225,21 +2544,18 @@ function granite_form(formsBlock, jsonTheme) {
           let back_btn = section.querySelector(".g__back_btn");
           let next_section = section.nextSibling;
           let prev_section = section.previousSibling;
-
           if (next_btn) {
             next_btn.addEventListener("click", () => {
               section.classList.toggle("g__progress_hidden");
               next_section.classList.toggle("g__progress_hidden");
             });
           }
-
           if (back_btn) {
             back_btn.addEventListener("click", () => {
               section.classList.toggle("g__progress_hidden");
               prev_section.classList.toggle("g__progress_hidden");
             });
           }
-
           if (section_num - 1 === count) {
             btn_container.before(submit);
           }
@@ -3247,28 +2563,26 @@ function granite_form(formsBlock, jsonTheme) {
       }
     } else {
       const all_sections = granite_div.querySelectorAll(".g__section_header");
-
       if (all_sections) {
-        all_sections.forEach(form_section => {
+        all_sections.forEach((form_section) => {
           const section_header = form_section.nextSibling;
           form_section.addEventListener("click", () => {
             form_section.classList.toggle("g__section_active");
             section_header.classList.toggle("g__section_active");
-
             if (section_header.style.maxHeight) {
               section_header.style.maxHeight = null;
             } else {
-              section_header.style.maxHeight = section_header.scrollHeight + "px";
+              section_header.style.maxHeight =
+                section_header.scrollHeight + "px";
             }
           });
         });
       }
     }
+
     /* -------------------- Number ----------------------*/
-
-
     let all_numbers = granite_div.querySelectorAll(".g__number_container");
-    all_numbers.forEach(wrap => {
+    all_numbers.forEach((wrap) => {
       const output = wrap.querySelector(".g__field_number");
       const step = output.step;
       const increase = wrap.querySelector(".g__number_increase");
@@ -3278,7 +2592,6 @@ function granite_form(formsBlock, jsonTheme) {
       increase.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-
         if (output.value < max || !max) {
           if (curr_num === "" && curr_num < min) {
             output.value = min;
@@ -3294,7 +2607,6 @@ function granite_form(formsBlock, jsonTheme) {
       decrease.addEventListener("click", () => {
         let curr_num = output.value;
         const val = parseInt(output.value);
-
         if (output.value > min) {
           if (curr_num === "") {
             output.value = !!step ? parseInt(step) : -1;
@@ -3307,69 +2619,64 @@ function granite_form(formsBlock, jsonTheme) {
       });
     });
     /* -------------------- Spacing Values ----------------------*/
-
     let spacing_field_arr = document.querySelectorAll(".g__spacing_container");
-
     if (spacing_field_arr.length) {
-      spacing_field_arr.forEach(space => {
+      spacing_field_arr.forEach((space) => {
         let parent = space.parentNode;
         let fields_arr = parent.querySelectorAll(".g__space_field");
-        let spacing_values = {
-          top: "",
-          right: "",
-          bottom: "",
-          left: ""
-        };
-        fields_arr.forEach(field => {
+        let spacing_values = { top: "", right: "", bottom: "", left: "" };
+        fields_arr.forEach((field) => {
           // Field input change
-          field.addEventListener("input", val => {
-            let desktop_hidden = parent.querySelector(".g__space_desktop_hidden");
+          field.addEventListener("input", (val) => {
+            let desktop_hidden = parent.querySelector(
+              ".g__space_desktop_hidden"
+            );
             let focus_field = val.target;
             let side = focus_field.getAttribute("data-side");
             spacing_values[side] = focus_field.value;
-            let is_linked = focus_field.parentElement.classList.contains("g__linked");
+            let is_linked = focus_field.parentElement.classList.contains(
+              "g__linked"
+            );
+
             desktop_hidden.value = `${!!spacing_values.top} ${!!spacing_values.right} ${!!spacing_values.bottom} ${!!spacing_values.left}`;
           });
-        }); // Link fields
-
+        });
+        // Link fields
         let link_arr = parent.querySelectorAll(".g__link");
-        link_arr.forEach(link_field => {
+        link_arr.forEach((link_field) => {
           link_field.addEventListener("click", () => {
             link_field.classList.toggle("active");
             link_field.previousSibling.classList.toggle("g__linked");
             link_field.nextSibling.classList.toggle("g__linked");
           });
-        }); // Device selector
-
+        });
+        // Device selector
         let device_icons = parent.querySelectorAll(".g__device_icon");
-        device_icons.forEach(selected => {
+        device_icons.forEach((selected) => {
           selected.addEventListener("click", () => {
             let device_arr = selected.parentNode.children;
-
             for (let i = 0; i < device_arr.length; i++) {
               device_arr[i].classList.remove("active");
             }
-
             selected.classList.add("active");
           });
         });
       });
     }
     /* -------------------- Range Output ----------------------*/
-
-
     let all_ranges = granite_div.querySelectorAll(".g__range_container");
     let all_range_increase = document.querySelectorAll(".g__range_increase");
-    all_ranges.forEach(wrap => {
+
+    all_ranges.forEach((wrap) => {
       const range = wrap.querySelector(".g__field_range");
       const output = wrap.querySelector(".g__range_output");
       const increase = wrap.querySelector(".g__range_increase");
       const decrease = wrap.querySelector(".g__range_decrease");
       const range_min = range.min;
       const range_max = range.max;
+
       increase.addEventListener("click", () => {
         const val = parseInt(output.value);
-
         if (val < range_max) {
           output.value = val + 1;
           setRange(range, output.value);
@@ -3377,12 +2684,12 @@ function granite_form(formsBlock, jsonTheme) {
       });
       decrease.addEventListener("click", () => {
         const val = parseInt(output.value);
-
         if (val > range_min) {
           output.value = val - 1;
           setRange(range, output.value);
         }
       });
+
       output.addEventListener("change", () => {
         const val = output.value;
         range.value = val;
@@ -3390,24 +2697,21 @@ function granite_form(formsBlock, jsonTheme) {
       range.addEventListener("input", () => {
         setOutput(range, output);
       });
+
       setOutput(range, output);
     });
-
     function setRange(range, val) {
       range.value = val;
     }
-
     function setOutput(range, output) {
       const val = range.value;
       const min = range.min ? range.min : 0;
       const max = range.max ? range.max : 100;
       output.value = val;
     }
+
     /* -------------------- Quil Editors ----------------------*/
-
-
     let quil_fields = granite_div.getElementsByClassName("g__quil_editor");
-
     if (quil_fields.length) {
       for (let i = 0; i < quil_fields.length; i++) {
         let quil_id = "#" + quil_fields[i].id;
@@ -3418,43 +2722,34 @@ function granite_form(formsBlock, jsonTheme) {
         var quill = new Quill(quil_id, {
           debug: "false",
           modules: {
-            history: {
-              userOnly: true,
-              delay: 1000
-            }
+            history: { userOnly: true, delay: 1000 },
           },
           theme: "snow",
           readOnly: quil_hidden_field.disabled,
-          placeholder: quil_hidden_field.placeholder
+          placeholder: quil_hidden_field.placeholder,
         });
         let quil_text_field = quill_elm.querySelector(".ql-editor");
         quil_text_field.innerHTML = value;
-        quil_text_field.addEventListener("input", field => {
+        quil_text_field.addEventListener("input", (field) => {
           quil_hidden_field.value = quil_text_field.innerHTML;
         });
       }
     }
     /* -------------------- Character Limit ----------------------*/
-
-
     let char_count_field_arr = document.querySelectorAll(".g__form_field");
-    char_count_field_arr.forEach(field => {
+    char_count_field_arr.forEach((field) => {
       let input = field.querySelector("input, textarea");
       let quill = field.querySelector(".ql-editor");
-
       if (!!input) {
         let char_limit = input.getAttribute("maxlength");
-
         if (char_limit > 0) {
           input.addEventListener("keyup", () => {
             let counter_div = field.querySelector(".g__char_remain");
             let text = input.value;
             let count = text.length;
             let limit = parseInt(char_limit);
-
             if (!!counter_div) {
               counter_div.innerText = count + "/" + char_limit;
-
               if (count >= limit) {
                 counter_div.classList.add("g__limit");
               } else {
@@ -3463,13 +2758,11 @@ function granite_form(formsBlock, jsonTheme) {
             }
           });
         }
-      } //Quill Counter
-
-
+      }
+      //Quill Counter
       if (!!quill) {
         let quill_hidden = field.querySelector(".g__field_quill");
         let char_limit = quill_hidden.getAttribute("maxlength");
-
         if (char_limit > 0) {
           quill.addEventListener("input", () => {
             let counter_div = field.querySelector(".g__char_remain");
@@ -3477,10 +2770,8 @@ function granite_form(formsBlock, jsonTheme) {
             let strippedString = text.replace(/(<([^>]+)>)/gi, "");
             let count = strippedString.length;
             let limit = parseInt(char_limit);
-
             if (!!counter_div) {
               counter_div.innerText = count + "/" + char_limit;
-
               if (count >= limit) {
                 counter_div.classList.add("g__limit");
               } else {
@@ -3491,72 +2782,64 @@ function granite_form(formsBlock, jsonTheme) {
         }
       }
     });
+
     /* -------------------- Color field values ----------------------*/
-
     let color_fields = granite_div.getElementsByClassName("g__hex_value");
-
     for (let i = 0; i < color_fields.length; i++) {
       color_fields[i].addEventListener("keyup", function () {
         let first_char = this.value.substr(0, 1);
-        first_char != "#" ? this.value = "#" + this.value : "";
+        first_char != "#" ? (this.value = "#" + this.value) : "";
         let color = this.value;
         this.previousSibling.value = color;
       });
     }
-
     let color_pickers = granite_div.getElementsByClassName("g__field_color");
-
     for (let i = 0; i < color_pickers.length; i++) {
       color_pickers[i].addEventListener("change", function () {
         let color = this.value;
         this.nextSibling.value = color;
       });
     }
+
     /* -------------------- Datepicker **jQuery** ----------------------*/
-
-
     function dateRange(r, input) {
       if (r.date_future || r.date_past || r.date_range) {
         let date = new Date();
         let day = date.getDate();
         let month = date.getMonth() + 1; //January is 0!
-
         let year = date.getFullYear();
-
         if (month < 10) {
           month = "0" + month.toString();
         }
-
         if (day < 10) {
           day = "0" + day.toString();
         }
-
         let today = year + "-" + month + "-" + day;
-        let range, date_min_max, range_day, range_month, range_year, range_full_date, is_range_pos;
-
+        let range,
+          date_min_max,
+          range_day,
+          range_month,
+          range_year,
+          range_full_date,
+          is_range_pos;
         if (!!r.date_range) {
           var d = new Date();
           let range_num = parseInt(r.date_range);
           is_range_pos = range_num > 0;
           r.date_future ? d.setDate(d.getDate() - range_num) : "";
           r.date_past ? d.setDate(d.getDate() + range_num) : "";
-
           if (!r.date_future && !r.date_past && !!range_num) {
             d.setDate(d.getDate() + range_num);
           }
-
           range_day = d.getDate();
           range_month = d.getMonth() + 1;
           range_year = d.getFullYear();
-
           if (range_month < 10) {
             range_month = "0" + range_month.toString();
           }
-
           if (range_day < 10) {
             range_day = "0" + range_day.toString();
           }
-
           range_full_date = range_year + "-" + range_month + "-" + range_day;
         }
 
@@ -3574,17 +2857,13 @@ function granite_form(formsBlock, jsonTheme) {
         } else if (!!r.date_range && !is_range_pos) {
           input.setAttribute("min", range_full_date);
         }
-
         return input;
       }
     }
-
     let date_fields = granite_div.getElementsByClassName("g__date_field");
-
     for (let i = 0; i < date_fields.length; i++) {
       let type = date_fields[i].type;
       let icon = date_fields[i].nextSibling;
-
       if (type === "text") {
         icon.style.display = "block";
         let date_id = "#" + date_fields[i].id;
@@ -3596,102 +2875,116 @@ function granite_form(formsBlock, jsonTheme) {
           changeMonth: true,
           changeYear: true,
           prevText: '<i class="far fa-fw fa-chevron-left"></i>',
-          nextText: '<i class="far fa-fw fa-chevron-right"></i>'
+          nextText: '<i class="far fa-fw fa-chevron-right"></i>',
         });
       }
-
       $(".g__calendar_icon").on("click", function (field) {
         let date = $(this).prev();
         date.datepicker("show");
       });
       $("#ui-datepicker-div").attr("mode", mode);
     }
+
     /* -------------------- Custom Multi Drag & Drop ----------------------*/
-
-
     let arr_multi = form.getElementsByClassName("g__multi_container");
     let length = arr_multi.length;
-
     if (length) {
       for (i = 0; i < length; i++) {
         let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
         let options_length = multi_elm.length;
         let main_container = document.createElement("div");
         main_container.setAttribute("class", "g__select_main");
+
         let left_container = document.createElement("div");
         left_container.id = "g__select_home";
         left_container.setAttribute("class", "g__drag_parent");
+
         let add_btn = document.createElement("button");
         add_btn.type = "button";
         add_btn.setAttribute("class", "g__add_options");
         add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
+
         left_container.appendChild(add_btn);
-        left_container.addEventListener("dragover", event => {
+
+        left_container.addEventListener("dragover", (event) => {
           event.preventDefault();
         });
-        left_container.addEventListener("drop", event => {
+        left_container.addEventListener("drop", (event) => {
           const id = event.dataTransfer.getData("text");
           const draggableElement = document.getElementById(id);
           const dropzone = left_container;
           dropzone.appendChild(draggableElement);
           event.dataTransfer.clearData();
           let options_left = left_container.children;
-          options_left.length ? optionAddDrop(options_left, multi_elm, "unselected") : "";
+          options_left.length
+            ? optionAddDrop(options_left, multi_elm, "unselected")
+            : "";
         });
+
         let right_container = document.createElement("div");
         right_container.id = "g__select_drop";
         right_container.setAttribute("class", "g__drag_parent");
+
         let remove_btn = document.createElement("button");
         remove_btn.type = "button";
         remove_btn.setAttribute("class", "g__remove_options");
-        remove_btn.innerHTML = "<i class='far fa-chevron-double-left'></i> Remove";
+        remove_btn.innerHTML =
+          "<i class='far fa-chevron-double-left'></i> Remove";
         right_container.appendChild(remove_btn);
-        right_container.addEventListener("dragover", event => {
+
+        right_container.addEventListener("dragover", (event) => {
           event.preventDefault();
         });
-        right_container.addEventListener("drop", event => {
+
+        right_container.addEventListener("drop", (event) => {
           const id = event.dataTransfer.getData("text");
           const draggableElement = document.getElementById(id);
           const dropzone = right_container;
           dropzone.appendChild(draggableElement);
           event.dataTransfer.clearData();
+
           let options_right = right_container.children;
-          options_right.length ? optionAddDrop(options_right, multi_elm, "selected") : "";
+          options_right.length
+            ? optionAddDrop(options_right, multi_elm, "selected")
+            : "";
         });
+
         main_container.appendChild(left_container);
         main_container.appendChild(right_container);
-        add_btn.addEventListener("click", event => {
+
+        add_btn.addEventListener("click", (event) => {
           let home = event.target.parentElement;
           let drop = home.nextSibling;
           let arr_selected = [];
           let selected_fields = home.querySelectorAll(".g__selected");
-          selected_fields.forEach(field => {
+          selected_fields.forEach((field) => {
             arr_selected.push(field);
             field.remove();
           });
-          arr_selected.forEach(val => {
+          arr_selected.forEach((val) => {
             drop.appendChild(val);
             val.classList.remove("g__selected");
           });
           optionAddDrop(arr_selected, multi_elm, "selected");
         });
-        remove_btn.addEventListener("click", event => {
+
+        remove_btn.addEventListener("click", (event) => {
           let drop = event.target.parentElement;
           let home = drop.previousSibling;
           let arr_selected = [];
           let selected_fields = drop.querySelectorAll(".g__selected");
-          selected_fields.forEach(field => {
+          selected_fields.forEach((field) => {
             arr_selected.push(field);
             field.remove();
           });
-          arr_selected.forEach(val => {
+          arr_selected.forEach((val) => {
             home.appendChild(val);
             val.classList.remove("g__selected");
           });
           optionAddDrop(arr_selected, multi_elm, "unselected");
         });
-        let option_block;
 
+        let option_block;
         for (j = 0; j < options_length; j++) {
           option_block = document.createElement("div");
           option_block.id = "draggable-" + j;
@@ -3699,17 +2992,20 @@ function granite_form(formsBlock, jsonTheme) {
           option_block.setAttribute("draggable", true);
           option_block.innerText = multi_elm.options[j].innerHTML;
           left_container.appendChild(option_block);
-          option_block.addEventListener("click", event => {
+
+          option_block.addEventListener("click", (event) => {
             event.target.classList.toggle("g__selected");
           });
-          option_block.addEventListener("dragstart", event => {
+
+          option_block.addEventListener("dragstart", (event) => {
             event.dataTransfer.setData("text/plain", event.target.id);
             event.currentTarget.classList.add("drag");
           });
-          option_block.addEventListener("dragend", event => {// event.currentTarget.classList.add("drag");
+
+          option_block.addEventListener("dragend", (event) => {
+            // event.currentTarget.classList.add("drag");
           });
         }
-
         arr_multi[i].appendChild(main_container);
       }
 
@@ -3719,13 +3015,15 @@ function granite_form(formsBlock, jsonTheme) {
           for (let item of original_list) {
             if (option.innerHTML === item.innerHTML && side === "selected") {
               item.selected = true;
-            } else if (option.innerHTML === item.innerHTML && side === "unselected") {
+            } else if (
+              option.innerHTML === item.innerHTML &&
+              side === "unselected"
+            ) {
               item.selected = false;
             }
           }
-        } //print out selected values
-
-
+        }
+        //print out selected values
         for (i = 0; i < original_list.length; i++) {
           if (original_list.options[i].selected === true) {
             console.log(original_list.options[i]);
@@ -3733,30 +3031,24 @@ function granite_form(formsBlock, jsonTheme) {
         }
       }
     }
+
     /* -------------------- Custom Select Field ----------------------*/
-
-
     if (!o.default_picklists) {
       var f, x, i, j, l, ll, selElmnt, a, b, c, search_container, search, select_val;
       /* Look for any elements with the class "g__picklist": */
-
       f = document.getElementById(id);
       x = f.getElementsByClassName("g__picklist");
-
       if (x.length > 0) {
         l = x.length;
-
         for (i = 0; i < l; i++) {
           selElmnt = x[i].getElementsByTagName("select")[0];
           ll = selElmnt.length;
           /* For each element, create a new DIV that will act as the selected item: */
-
           a = document.createElement("div");
           a.setAttribute("class", "g__select_selected");
           a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
           x[i].appendChild(a);
           /* For each element, create a new DIV that will contain the option list: */
-
           b = document.createElement("div");
           b.setAttribute("class", "select-items select-hide");
           search = document.createElement("input");
@@ -3767,7 +3059,6 @@ function granite_form(formsBlock, jsonTheme) {
             e.stopPropagation();
           });
           b.appendChild(search);
-
           for (j = 0; j < ll; j++) {
             /* For each option in the original select element,
                     create a new DIV that will act as an option item: */
@@ -3781,31 +3072,27 @@ function granite_form(formsBlock, jsonTheme) {
               s = this.parentNode.parentNode.getElementsByTagName("select")[0];
               sl = s.length;
               h = this.parentNode.previousSibling;
-
               for (i = 0; i < sl; i++) {
                 if (s.options[i].innerHTML == this.innerHTML) {
                   s.selectedIndex = i;
                   h.innerHTML = this.innerHTML;
                   s.value = this.innerHTML;
                   s.value = s.options[i].value || s.options[i].innerHTML;
-                  console.log(s.value);
-                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  y = this.parentNode.getElementsByClassName(
+                    "same-as-selected"
+                  );
                   yl = y.length;
-
                   for (k = 0; k < yl; k++) {
                     y[k].removeAttribute("class");
                   }
-
                   this.setAttribute("class", "same-as-selected");
                   break;
                 }
               }
-
               h.click();
             });
             b.appendChild(c);
           }
-
           x[i].appendChild(b);
           a.addEventListener("click", function (e) {
             /* When the select box is clicked, close any other select boxes,
@@ -3820,11 +3107,12 @@ function granite_form(formsBlock, jsonTheme) {
         search.addEventListener("keyup", function (value) {
           let input = this.value.toUpperCase();
           let options_container = this.parentElement;
-          let options_arr = options_container.querySelectorAll(".g__select_option");
-
+          let options_arr = options_container.querySelectorAll(
+            ".g__select_option"
+          );
           for (i = 0; i < options_arr.length; i++) {
-            let txtValue = options_arr[i].textContent || options_arr[i].innerText;
-
+            let txtValue =
+              options_arr[i].textContent || options_arr[i].innerText;
             if (txtValue.toUpperCase().indexOf(input) > -1) {
               options_arr[i].style.display = "";
             } else {
@@ -3837,16 +3125,15 @@ function granite_form(formsBlock, jsonTheme) {
           /* A function that will close all select boxes in the document,
             except the current select box: */
           var x,
-              y,
-              i,
-              xl,
-              yl,
-              arrNo = [];
+            y,
+            i,
+            xl,
+            yl,
+            arrNo = [];
           x = document.getElementsByClassName("select-items");
           y = document.getElementsByClassName("g__select_selected");
           xl = x.length;
           yl = y.length;
-
           for (i = 0; i < yl; i++) {
             if (elmnt == y[i]) {
               arrNo.push(i);
@@ -3854,44 +3141,37 @@ function granite_form(formsBlock, jsonTheme) {
               y[i].classList.remove("select-arrow-active");
             }
           }
-
           for (i = 0; i < xl; i++) {
             if (arrNo.indexOf(i)) {
               x[i].classList.add("select-hide");
             }
           }
         }
+
         /* If the user clicks anywhere outside the select box,
             then close all select boxes: */
-
-
         document.addEventListener("click", closeAllSelect);
       }
     }
+
     /* -------------------- Picklist Multi ----------------------*/
-
-
     let multiple_field = document.getElementsByClassName("g__select_multiple");
-
     if (multiple_field.length > 0) {
       $(".g__select_multiple").chosen({
-        width: "auto"
+        width: "auto",
       });
     }
     /* -------------------- checkbox ----------------------*/
-
-
     const all_checkboxes = form.querySelectorAll(".g__field_checkbox");
-    all_checkboxes.forEach(field => {
-      field.addEventListener("change", e => {
+    all_checkboxes.forEach((field) => {
+      field.addEventListener("change", (e) => {
         let is_checked = field.checked;
-
-        if (is_checked) {
+        if(is_checked){
           e.target.checked = "true";
           e.target.value = "true";
           e.target.classList.toggle('g__checked');
           e.target.classList.toggle('g__unchecked');
-        } else {
+        }else{
           e.target.checked = "false";
           e.target.value = "false";
           e.target.classList.toggle('g__checked');
@@ -3900,7 +3180,6 @@ function granite_form(formsBlock, jsonTheme) {
       });
     });
     /* -------------------- Auto Save ----------------------*/
-
     if (o.autosave) {
       let auto_save_count = 0;
       let auto_save_wait;
@@ -3908,94 +3187,88 @@ function granite_form(formsBlock, jsonTheme) {
       let select_arr = [];
       let textarea_arr = [];
       let save_data = {};
-      let arr_form_fields = document.querySelectorAll(`${cssId} .g__form_field, ${cssId} .g__hidden_field`);
-      arr_form_fields.forEach(field => {
+      let arr_form_fields = document.querySelectorAll(
+        `${cssId} .g__form_field, ${cssId} .g__hidden_field`
+      );
+      arr_form_fields.forEach((field) => {
         let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
         input_arr.push(input);
-        console.log(input);
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         select_arr.push(select);
         let textarea = field.querySelector(`textarea[form_id="${attr__form_id}"]`);
         textarea_arr.push(textarea);
-
         if (!!input) {
           input.addEventListener("input", () => {
             start_auto_save(attr__form_id);
           });
-
-          if (input.classList.contains('g__field_quill')) {
+          if (input.classList.contains('g__field_quill')){
             let quill = field.querySelector('.ql-editor');
             quill.addEventListener('input', () => {
               start_auto_save(attr__form_id);
-            });
+            })
           }
         }
-
         if (!!select) {
           select.addEventListener("input", () => {
             start_auto_save(attr__form_id);
           });
         }
-
         if (!!textarea) {
           textarea.addEventListener("input", () => {
             start_auto_save(attr__form_id);
           });
         }
       });
-
       function start_auto_save(form_id) {
         if (auto_save_count > 0) {
           clearTimeout(auto_save_wait);
           auto_save_count = 0;
         }
-
         if (auto_save_count == 0) {
           auto_save_wait = setTimeout(save, 3500, form_id);
           auto_save_count = 1;
         }
       }
-
       function save(form_id) {
-        input_arr.forEach(field => {
+        input_arr.forEach((field) => {
           if (!!field && field.type != "file") {
             let property = field.name;
             let value = field.value;
             save_data[property] = value;
           }
         });
-        select_arr.forEach(field => {
+        select_arr.forEach((field) => {
           if (!!field) {
             let property = field.name;
             let value = field.value;
             save_data[property] = value;
           }
         });
-        textarea_arr.forEach(field => {
+        textarea_arr.forEach((field) => {
           if (!!field) {
             let property = field.name;
             let value = field.value;
             save_data[property] = value;
           }
         });
-
         if (typeof granite_data === "undefined" || granite_data === null) {
           var granite_data = {};
           var response = save_data;
-          granite_data[form_id] = {
-            response
-          };
+          granite_data[form_id] = { response };
         }
 
         $.ajax({
           type: o.method,
           url: o.action,
-          data: save_data
-        }).done(function (data) {
-          console.log("autosave successful");
-        }).fail(function (data) {
-          console.log("autosave failed");
-        });
+          data: save_data,
+        })
+          .done(function (data) {
+            console.log("autosave successful");
+          })
+          .fail(function (data) {
+            console.log("autosave failed");
+          });
+
         input_arr = [];
         select_arr = [];
         textarea_arr = [];
@@ -4004,16 +3277,12 @@ function granite_form(formsBlock, jsonTheme) {
       }
     }
     /* -------------------- Show Password ----------------------*/
-
-
     let show_password = document.querySelectorAll(".g__password_show");
-
     if (show_password) {
-      show_password.forEach(field => {
+      show_password.forEach((field) => {
         field.addEventListener("click", () => {
           let password = field.previousSibling;
           let type = password.type;
-
           if (type === "password") {
             password.type = "text";
             field.innerHTML = '<i class="far fa-eye-slash"></i>';
@@ -4025,40 +3294,33 @@ function granite_form(formsBlock, jsonTheme) {
       });
     }
     /* -------------------- Platform Sections ----------------------*/
-
-
     if (platform) {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const form_section = urlParams.get("form_section");
-
       if (form_section) {
         let selected_section = document.getElementById(form_section);
         let selected_content = selected_section.nextSibling;
         selected_section.classList.add("active");
-
         if (selected_content.style.maxHeight) {
           selected_content.style.maxHeight = null;
         } else {
-          selected_content.style.maxHeight = selected_content.scrollHeight + "px";
+          selected_content.style.maxHeight =
+            selected_content.scrollHeight + "px";
         }
       }
     }
     /* -------------------- Pattern Check ----------------------*/
-
-
     if (o.inline_validation) {
       let all_field_containers = document.querySelectorAll(".g__form_field");
-      all_field_containers.forEach(field => {
+      all_field_containers.forEach((field) => {
         let input = field.querySelector("input");
         let select = field.querySelector("select");
         let select_desktop = field.querySelector(".g__select_selected");
         let error_msg = field.querySelector(".g__error_msg");
-
         if (!!input) {
-          input.addEventListener("change", e => {
+          input.addEventListener("change", (e) => {
             let valid_input = input.checkValidity();
-
             if (valid_input) {
               input.classList.add("valid");
               input.classList.remove("invalid");
@@ -4068,11 +3330,9 @@ function granite_form(formsBlock, jsonTheme) {
             }
           });
         }
-
         if (!!select_desktop) {
           select_desktop.addEventListener("click", () => {
             let valid_input = select_desktop.previousSibling.checkValidity();
-
             if (valid_input) {
               select_desktop.classList.add("valid");
               select_desktop.classList.remove("invalid");
@@ -4085,11 +3345,10 @@ function granite_form(formsBlock, jsonTheme) {
       });
     }
     /* -------------------- Dependency Field ----------------------*/
-
-
     r.forEach(function (r, num) {
-      const is_dep = !!r.dependency_field && (!!r.dependency_values || !!r.dependency_not_blank);
-
+      const is_dep =
+        !!r.dependency_field &&
+        (!!r.dependency_values || !!r.dependency_not_blank);
       if (is_dep) {
         let dep_name = document.getElementsByName(r.dependency_field);
         let dep_type = dep_name[0].type;
@@ -4098,33 +3357,59 @@ function granite_form(formsBlock, jsonTheme) {
         const dep_child_required = !!dep_child ? dep_child.required : false;
         let is_child_sec = !!dep_child ? dep_child.classList.contains('g__form_section_container') : "";
         let dep_blank = r.dependency_not_blank;
-
         switch (dep_type) {
           case "select-one":
-            dep_select(is_child_sec, dep_parent, dep_child, r.dependency_values, dep_blank);
+            dep_select(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_blank
+            );
             break;
-
           case "checkbox":
-            checkbox_event(is_child_sec, dep_parent, dep_child, r.dependency_values, dep_child_required);
-            checkbox(is_child_sec, dep_parent, dep_child, r.dependency_values, dep_child_required);
+            checkbox_event(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_child_required
+              );
+            checkbox(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_child_required
+              );
             break;
-
           case "text":
-            text_event(is_child_sec, dep_parent, dep_child, r.dependency_values, dep_blank, dep_child_required);
-            text(is_child_sec, dep_parent, dep_child, r.dependency_values, dep_blank, dep_child_required);
+            text_event(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_blank,
+              dep_child_required
+            );
+            text(
+              is_child_sec,
+              dep_parent,
+              dep_child,
+              r.dependency_values,
+              dep_blank,
+              dep_child_required
+            );
             break;
         }
       }
-
       function values_arr(values) {
         let arr = [];
-
         if (values.includes(",")) {
           arr = values.split(",");
         } else {
           arr.push(values);
         }
-
         return arr;
       }
 
@@ -4133,171 +3418,151 @@ function granite_form(formsBlock, jsonTheme) {
           text(type, parent, child, values, blank, required);
         });
       }
-
       function text(is_section, parent, child, values, blank, required) {
-        console.log(parent);
         const arr_values = values_arr(values);
         const dep_text = parent.value.toUpperCase();
         const dep_child = child;
         const dep_blank = blank;
         let is_match;
-        arr_values.forEach(val => {
+        arr_values.forEach((val) => {
           let child_text = val.toUpperCase().trim();
           let container;
-
-          if (is_section) {
+          if(is_section){
             container = child;
-          } else if (!!dep_child) {
+          } else if(!!dep_child) {
             container = dep_child.closest(".g__form_field");
           }
-
           if (dep_text === child_text) {
             is_match = true;
             container.classList.remove("dep_hide");
-
-            if (is_section) {
-              sectionRequired(child, true);
-            } else {
-              dep_child.required = true;
+            if(is_section){
+              sectionRequired(child, true)
+            }else{
+              dep_child.required = true
             }
           } else if (dep_text != "" && dep_blank) {
             is_match = true;
             container.classList.remove("dep_hide");
-
-            if (is_section) {
-              sectionRequired(child, true);
-            } else {
-              dep_child.required = true;
+            if(is_section){
+              sectionRequired(child, true)
+            }else{
+              dep_child.required = true
             }
           } else if (!is_match) {
             container.classList.add("dep_hide");
-
-            if (is_section) {
-              sectionRequired(child, false);
-            } else {
-              dep_child.required = false;
+            if(is_section){
+              sectionRequired(child, false)
+            }else{
+              dep_child.required = false
             }
           }
         });
       }
-
       function checkbox(is_section, parent, child, values, required) {
         const dep_values = values;
         const child_value = values === "true" ? true : false;
         const dep_checked = parent.classList.contains('g__checked');
         const dep_child = child;
         let container;
-
-        if (is_section) {
+        if(is_section){
           container = child;
-        } else if (!!dep_child) {
+        } else if(!!dep_child) {
           container = dep_child.closest(".g__form_field");
         }
-
         if (dep_checked === child_value) {
           container.classList.remove("dep_hide");
           container.classList.add("dep_show");
           required ? dep_child.required = true : "";
           is_section ? sectionRequired(child, true) : "";
-
-          if (is_section) {
-            sectionRequired(child, true);
-          } else {
-            dep_child.required = true;
+          if(is_section){
+            sectionRequired(child, true)
+          }else{
+            dep_child.required = true
           }
         } else {
           container.classList.add("dep_hide");
           container.classList.remove("dep_show");
           required ? dep_child.required = false : "";
           is_section ? sectionRequired(child, false) : "";
-
-          if (is_section) {
-            sectionRequired(child, false);
-          } else {
-            dep_child.required = false;
+          if(is_section){
+            sectionRequired(child, false)
+          }else{
+            dep_child.required = false
           }
         }
       }
-
       function checkbox_event(is_section, parent, child, values, required) {
-        parent.addEventListener("change", e => {
+        parent.addEventListener("change", (e) => {
           // let parent = e.target.classList.contains('g__checked');
           checkbox(is_section, parent, child, values, required);
         });
       }
-
       function dep_select(is_section, parent, child, values, blank) {
         let dep_desktop_select = parent.nextSibling;
-
-        if (dep_desktop_select) {
+        if(dep_desktop_select){
           dep_desktop_select.addEventListener("click", () => {
             const dep_values = values;
             const arr_values = values_arr(values);
             const dep_selected = parent.nextSibling.innerText.toUpperCase();
             const dep_child = child;
             const dep_blank = blank;
-            arr_values.forEach(val => {
-              let child_val = val.toUpperCase().trim(); // check for the child form container
-
+            arr_values.forEach((val) => {
+              let child_val = val.toUpperCase().trim();
+              // check for the child form container
               let container;
-
-              if (is_section) {
+              if(is_section){
                 container = child;
-              } else if (!!dep_child) {
+              } else if(!!dep_child) {
                 container = dep_child.closest(".g__form_field");
-              } // compare the values and take action
-
-
-              if (container) {
+              }
+              // compare the values and take action
+              if(container){
                 if (dep_selected === child_val) {
                   container.classList.remove("dep_hide");
                   container.classList.add("dep_show");
-
-                  if (is_section) {
-                    sectionRequired(child, true);
-                  } else {
-                    dep_child.required = true;
+                  if(is_section){
+                    sectionRequired(child, true)
+                  }else{
+                    dep_child.required = true
                   }
                 } else if (dep_selected != "" && dep_blank) {
                   container.classList.remove("dep_hide");
                   container.classList.add("dep_show");
-
-                  if (is_section) {
-                    sectionRequired(child, true);
-                  } else {
-                    dep_child.required = true;
+                  if(is_section){
+                    sectionRequired(child, true)
+                  }else{
+                    dep_child.required = true
                   }
                 } else {
                   container.classList.add("dep_hide");
                   container.classList.remove("dep_show");
-
-                  if (is_section) {
-                    sectionRequired(child, false);
-                  } else {
-                    dep_child.required = false;
+                  if(is_section){
+                    sectionRequired(child, false)
+                  }else{
+                    dep_child.required = false
                   }
                 }
               }
+
             });
           });
           dep_desktop_select.click();
           dep_desktop_select.click();
         }
+
       }
     });
     /* -------------------- Remove required on hidden section fields ----------------------*/
-
-    function sectionRequired(child, val) {
-      arr_fields = child.querySelectorAll('input, textarea, select');
+    function sectionRequired(child, val){
+      arr_fields = child.querySelectorAll('input, textarea, select')
       arr_fields.forEach(field => {
         let field_required = field.classList.contains('g__required');
-
-        if (val && field_required) {
+        if(val && field_required){
           field.required = true;
         } else {
           field.required = false;
         }
-      });
+      })
     }
   } else {
     let no_records = document.createElement("div");
@@ -4306,2088 +3571,4 @@ function granite_form(formsBlock, jsonTheme) {
     form_container.appendChild(no_records);
     document.getElementById(id).appendChild(no_records);
   }
-}
-function granite_image(jsonBlock, jsonTheme) {
-  console.log("image");
-  /*---------------------------------------------
-    Global Variables
-  ---------------------------------------------*/
-
-  const id = jsonBlock.id;
-  const o = jsonBlock.options;
-  const r = jsonBlock.records;
-  const t = jsonTheme;
-  const mode = t.mode || "midnight";
-  const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
-  /*---------------------------------------------
-    Add Font Family To Header
-  ---------------------------------------------*/
-
-  const font_include = document.getElementById("g__font_stylesheet");
-
-  if (!font_include) {
-    var head = document.head;
-    var fontLink = document.createElement("link");
-    fontLink.type = "text/css";
-    fontLink.rel = "stylesheet";
-    fontLink.id = "g__font_stylesheet";
-    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-    head.appendChild(fontLink);
-  }
-  /*---------------------------------------------
-    Set The mode
-  ---------------------------------------------*/
-
-
-  granite_div.setAttribute("mode", mode);
-  /*---------------------------------------------
-    Attributes
-  ---------------------------------------------*/
-
-  const img_url = o.img_url || ""; //Image
-
-  let img_max_width = o.img_max_width || "100%";
-  let img_height = o.img_height || "auto"; //layout
-
-  let height = o.height || "auto";
-  let vertical_align = o.vertical_align || "center";
-  let horizontal_align = o.horizontal_align || "center";
-  /*---------------------------------------------
-    CSS Block
-  ---------------------------------------------*/
-
-  var imgCss = document.createElement("style");
-  imgCss.innerHTML = `
-    ${cssId}{
-        display: flex;
-        height: ${height};
-        justify-content: ${vertical_align};
-        align-items: ${horizontal_align};
-    }
-    ${cssId} .g__elm_img{
-        max-width: ${img_max_width};
-        height: ${img_height};
-    }
-    `;
-  document.head.appendChild(imgCss);
-  /*---------------------------------------------
-    Wrapper
-  ---------------------------------------------*/
-
-  const img = document.createElement("img");
-  img.classList.add("g__elm_img");
-  img.src = img_url;
-  let img_link;
-
-  if (o.img_link) {
-    img_link = document.createElement("a");
-    img_link.classList.add("g__img_link");
-    img_link.href = o.img_link;
-    img_link.target = o.img_link_target ? "_blank" : "_self";
-    img_link.appendChild(img);
-  }
-  /*---------------------------------------------
-    Append micro to the DOM
-  ---------------------------------------------*/
-
-
-  !!o.img_link ? granite_div.appendChild(img_link) : granite_div.appendChild(img);
-}
-function granite_navigation(jsonBlock, jsonTheme) {
-  /*---------------------------------------------
-  Global Variables
-  ---------------------------------------------*/
-  const id = jsonBlock.id;
-  const o = jsonBlock.options;
-  const r = jsonBlock.records;
-  const t = jsonTheme;
-  const rCount = r.length;
-  const style = o.style || 'top_bar';
-  const mode = !!t.mode ? t.mode : "midnight";
-  const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
-  !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
-  /*---------------------------------------------
-  Verify Div ID and Div Alignment - Set Mode
-  ---------------------------------------------*/
-
-  if (granite_div === null) {
-    console.error('Object ID and Granite Div ID Do Not Match');
-  } else {
-    granite_div.setAttribute('mode', mode);
-  }
-  /*---------------------------------------------
-  Add Font Family To Header
-  ---------------------------------------------*/
-
-
-  const font_include = document.getElementById('g__font_stylesheet');
-
-  if (!font_include) {
-    var head = document.head;
-    var fontLink = document.createElement("link");
-    fontLink.type = "text/css";
-    fontLink.rel = "stylesheet";
-    fontLink.id = "g__font_stylesheet";
-    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-    head.appendChild(fontLink);
-  }
-  /*---------------------------------------------
-  Attributes
-  ---------------------------------------------*/
-  // Mode Defaults
-
-
-  let bodyBkg = mode === "midnight" ? "#101010" : "#ffffff";
-  let navBkgMode = mode === "midnight" ? "#353535" : "#eaeaea";
-  let hoverMode = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let activeMode = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let fontColorMode = mode === "midnight" ? "#bfbfbf" : "#a1a1a1";
-  let fontHoverMode = mode === "midnight" ? "#ffffff" : "#101010";
-  let fontActiveMode = mode === "midnight" ? "#ffffff" : "#101010"; // Design
-
-  let navBkg = o.background || navBkgMode;
-  let headerLabelColor = o.header_label_color || fontColorMode;
-  let headerLabelFontSize = o.header_label_font_size || "24px";
-  let fontColor = o.font_color || fontColorMode;
-  let fontColorHover = o.font_color_hover || fontHoverMode;
-  let bkgColorHover = o.background_hover || hoverMode; // Font
-
-  let font = "hero-new, sans-serif;";
-  let fontWeight = 300;
-  /*---------------------------------------------
-  CSS
-  ---------------------------------------------*/
-
-  let navStyles = document.createElement('style');
-  navStyles.innerHTML = `
-    /* ------------------------------
-    Granite Div
-    -------------------------------*/
-    ${cssId}{
-      position:relative;
-    }
-    ${cssId}.g__no_records{
-      display: flex;
-      justify-content: center;
-      background: transparent;
-      align-items: center;
-      color: ${fontColorMode};
-      height: 225px;
-      margin: 25px;
-      border: 2px dashed #5d5d5d;
-    }
-    ${cssId}.g__no_records h2{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        font-size: 2rem;
-        color: var(--font-color);
-
-    }
-    /* ------------------------------
-    Top Bar
-    -------------------------------*/
-    ${cssId} .g__top_bar{
-      display: flex;
-      padding: 15px;
-      background: ${navBkg};
-      justify-content: space-between;
-      align-items: center;
-    }
-    ${cssId} .g__top_bar .g__logo_cont{
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left: 15px;
-    }
-    ${cssId} .g__top_bar .g__logo{
-      width: 50px;
-      height: auto;
-    }
-    ${cssId} .g__top_bar .g__logo_label{
-      color: ${headerLabelColor};
-      font-size: ${headerLabelFontSize};
-      margin-left: 15px;
-    }
-    ${cssId} .g__top_bar .g_nav_cont {
-      display: flex;
-      flex-direction: column;
-    }
-    ${cssId} .g__top_bar .g__nav_utility {
-      display: flex;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
-      justify-content: flex-end;
-    }
-    ${cssId} .g__top_bar .g__nav_utility .g__item_utility {
-      display: flex;
-      color: ${fontColor};
-      font-size: .8rem;
-      padding: 5px 30px;
-    }
-    ${cssId} .g__top_bar .g__nav_main {
-      display: flex;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
-    }
-    ${cssId} .g__top_bar .g__nav_main .g__item {
-      display: flex;
-    }
-    ${cssId} .g__top_bar .g__nav_main .g__item:hover {
-      display: flex;
-      background: ${bkgColorHover};
-    }
-    ${cssId} .g__top_bar .g__nav_main .g__item a {
-      color: ${fontColor};
-      padding: 10px 30px;
-    }
-    /* ------------------------------
-    Sidebar
-    -------------------------------*/
-    ${cssId} .g__sidebar{
-      display: flex;
-      flex-direction: column;
-      background: ${navBkg};
-      width: 250px;
-      height: 100vh;
-    }
-    ${cssId} .g__sidebar .g__logo_cont{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 15px;
-    }
-    ${cssId} .g__sidebar .g__logo{
-      width: 50px;
-      height: auto;
-    }
-    ${cssId} .g__sidebar .g__logo_label{
-      color: ${headerLabelColor};
-      font-size: ${headerLabelFontSize};
-      margin-left: 15px;
-    }
-    ${cssId} .g__sidebar .g_nav_cont {
-      display: flex;
-      flex-direction: column-reverse;
-    }
-    ${cssId} .g__sidebar .g__nav_utility {
-      display: flex;
-      flex-direction: column;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
-    }
-    ${cssId} .g__sidebar .g__nav_utility .g__item_utility {
-      display: flex;
-      color: ${fontColor};
-      font-size: .8rem;
-      padding: 5px 10px;
-    }
-    ${cssId} .g__sidebar .g__nav_main {
-      display: flex;
-      flex-direction: column;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
-    }
-    ${cssId} .g__sidebar .g__nav_main .g__item {
-      display: flex;
-      color: ${fontColor};
-      padding: 5px 10px;
-    }
-    `;
-  document.head.appendChild(navStyles);
-  /*---------------------------------------------
-  Check for records
-  ---------------------------------------------*/
-
-  if (!rCount) {
-    granite_div.classList.add('g__no_records');
-    granite_div.innerHTML = "<h2>Navigation</h2>";
-    return;
-  }
-  /*---------------------------------------------
-  Navigation builder
-  ---------------------------------------------*/
-
-
-  let topBarCont = document.createElement('div');
-  topBarCont.classList.add(`g__${style}`);
-  /* ------------ Logo -----------*/
-
-  let logoCont = document.createElement('div');
-  logoCont.classList.add('g__logo_cont');
-
-  if (o.header_image) {
-    let logoLink = document.createElement('a');
-    logoLink.href = o.header_link || '/';
-    logoCont.appendChild(logoLink);
-    let logo = document.createElement('img');
-    logo.classList.add('g__logo');
-    logo.src = o.header_image;
-    logo.alt = o.header_label || "";
-    logoLink.appendChild(logo);
-  }
-
-  if (o.header_label) {
-    let logoLabel = document.createElement('div');
-    logoLabel.classList.add('g__logo_label');
-    logoLabel.innerHTML = o.header_label || "";
-    logoCont.appendChild(logoLabel);
-  }
-
-  topBarCont.appendChild(logoCont);
-  /* ------------ Links -----------*/
-
-  let navCont = document.createElement('div');
-  navCont.classList.add('g_nav_cont');
-  let navMain = document.createElement('ul');
-  navMain.classList.add('g__nav_main');
-  let navUtility = document.createElement('ul');
-  navUtility.classList.add('g__nav_utility');
-  r.forEach(val => {
-    let item, link;
-
-    switch (val.link_type) {
-      case "utility":
-        console.log("utility");
-        item = document.createElement('li');
-        item.classList.add('g__item_utility');
-        link = document.createElement('a');
-        link.classList.add('g__link_utility');
-        link.innerHTML = val.label || "Link";
-        item.appendChild(link);
-        navUtility.appendChild(item);
-        break;
-
-      default:
-        item = document.createElement('li');
-        item.classList.add('g__item');
-        link = document.createElement('a');
-        link.classList.add('g__link');
-        link.innerHTML = val.label || "Link";
-        item.appendChild(link);
-        navMain.appendChild(item);
-    }
-  });
-  navCont.appendChild(navUtility);
-  navCont.appendChild(navMain);
-  topBarCont.appendChild(navCont);
-  granite_div.appendChild(topBarCont); // End main function
-}
-/*---------------------------------------------
-Block Name: Granite.js Tabs Block
----------------------------------------------*/
-function granite_tabs(jsonBlock, jsonTheme) {
-  /*---------------------------------------------
-  Global Variables
-  ---------------------------------------------*/
-  const id = jsonBlock.id;
-  const o = jsonBlock.options;
-  const r = jsonBlock.records;
-  const t = jsonTheme;
-  const rCount = r.length;
-  const style = o.g_style || 'tabs';
-  const mode = !!t.mode ? t.mode : "midnight";
-  const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const tabParam = urlParams.get('tab');
-  !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
-  /*---------------------------------------------
-  Verify Div ID and Div Alignment - Set Mode
-  ---------------------------------------------*/
-
-  if (granite_div === null) {
-    console.error('Object ID and Granite Div ID Do Not Match');
-  } else {
-    granite_div.setAttribute('mode', mode);
-  }
-  /*---------------------------------------------
-  Add Font Family To Header
-  ---------------------------------------------*/
-
-
-  const font_include = document.getElementById('g__font_stylesheet');
-
-  if (!font_include) {
-    var head = document.head;
-    var fontLink = document.createElement("link");
-    fontLink.type = "text/css";
-    fontLink.rel = "stylesheet";
-    fontLink.id = "g__font_stylesheet";
-    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-    head.appendChild(fontLink);
-  }
-  /*---------------------------------------------
-  Attributes
-  ---------------------------------------------*/
-  // Mode Defaults
-
-
-  let bodyBkg = mode === "midnight" ? "#101010" : "#ffffff";
-  let tabBkgMode = mode === "midnight" ? "#353535" : "#eaeaea";
-  let hoverMode = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let activeMode = mode === "midnight" ? "#5d5d5d" : "#bfbfbf";
-  let fontColorMode = mode === "midnight" ? "#bfbfbf" : "#a1a1a1";
-  let fontHoverMode = mode === "midnight" ? "#ffffff" : "#101010";
-  let fontActiveMode = mode === "midnight" ? "#ffffff" : "#101010"; // Design
-
-  let fontSize = o.g_font_size || "16px";
-  let titleSize = o.g_title_size || "18px";
-  let descSize = o.g_description_size || "12px";
-  let iconSize = o.g_icon_size || fontSize;
-  let fontActiveColor = o.g_highlight_color || fontActiveMode;
-  let fontColor = o.g_font_color || fontColorMode;
-  let titleColor = o.g_title_color || fontColorMode;
-  let stepNumberColor = o.g_step_number_color || fontColorMode;
-  let descriptionColor = o.g_description_color || fontColorMode;
-  let fontHoverColor = o.g_font_hover_color || fontHoverMode;
-  let linkBkgColor = o.g_Link_background_color || '#fddbee';
-  let tabBkg = o.g_background_color || tabBkgMode;
-  let hoverColor = o.g_background_hover_color || hoverMode;
-  let activeColor = o.g_background_active_color || activeMode;
-  let borderWidth = o.g_border_width || "0";
-  let borderColor = o.g_border_color || "transparent";
-  let borderRadius = o.g_border_radius || "0"; // Stepper
-
-  let stepSize = o.g_stepSize || "40px";
-  let stepConnPos = connPos(stepSize) || "20px"; // Layout
-
-  let alignTabs = o.g_align_tabs || "center";
-  let width = o.g_style === "tabs" ? "inline-flex" : "flex";
-  let direction = o.g_direction || "row";
-  let padding = o.g_padding || "10px 20px";
-  let margin = o.g_margin || "0px 5px";
-  let alignIcon = o.g_align_icon || false; // Font
-
-  let font = "hero-new, sans-serif;";
-  let fontWeight = 300;
-  /*---------------------------------------------
-  CSS
-  ---------------------------------------------*/
-
-  let tabStyles = document.createElement('style');
-  tabStyles.innerHTML = `
-    /* ------------------------------
-    Granite Div
-    -------------------------------*/
-    ${cssId}{
-      margin-top: ${o.container_top_padding || '25px'};
-      margin-bottom: ${o.container_bottom_padding || '25px'};
-      position:relative;
-      display: flex;
-      justify-content: ${alignTabs};
-    }
-    ${cssId}.g__no_records{
-      display: flex;
-      justify-content: center;
-      background: transparent;
-      align-items: center;
-      color: ${fontColorMode};
-      height: 225px;
-      margin: 25px;
-      border: 2px dashed #5d5d5d;
-    }
-    ${cssId}.g__no_records h2{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        font-size: 2rem;
-        color: var(--font-color);
-
-    }
-    /* ------------------------------------------------------------
-    Tabs Container
-    -------------------------------------------------------------*/
-    ${cssId} .g__tabs_container{
-      display: inline-flex;
-      flex-direction: ${direction};
-      justify-content: space-between;
-    }
-    ${cssId} .g__contents-no-transition {
-      transition: none;
-    }
-    ${cssId} .g__tabs_wrapper{
-      padding: 15px;
-      position: relative;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -ms-overflow-style: -ms-autohiding-scrollbar;
-      -webkit-overflow-scrolling: touch;
-      white-space: nowrap;
-      position: relative;
-    }
-    ${cssId} .g__tabs_wrapper .g__disabled{
-      opacity: .6;
-      pointer-events: none;
-    }
-    ${cssId} .g__tabs_wrapper::-webkit-scrollbar {
-      display: none;
-    }
-    /*--- Line Tabs Container ---*/
-    ${cssId} .g__tabs_container.g__tab_line{
-      float: left;
-      justify-content: start;
-      border-bottom: 2px solid ${fontColor};
-      transition: transform .2s ease-in-out;
-    }
-    ${cssId} .pn-ProductNav_Contents-no-transition {
-      transition: none;
-    }
-    ${cssId} .g__ellipsis{
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    /* ------------------------------------------------------------
-    Tabs Line
-    -------------------------------------------------------------*/
-    /*--- Tabs Line ---*/
-    ${cssId} .g__tab_line .g__tab_line_wrap{
-      display: flex;
-      flex-direction: ${alignIcon ? "column" : "row"};
-      justify-content: ${alignIcon ? "flex-end" : "center"};
-      align-items: center;
-      padding: ${padding};
-    }
-    ${cssId} .g__tab_line a.g__tab_line_link{
-      display: flex;
-      position: relative;
-      color: ${fontColor};
-      font-size: ${fontSize};
-      text-decoration: none;
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_line .g__tab_line_wrap i{
-      margin-right: 10px;
-      font-size: ${iconSize};
-      color: ${fontColor};
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_line .g__tab_line_wrap:hover a.g__tab_line_link,
-    ${cssId} .g__tab_line .g__tab_line_wrap:hover i{
-      color: ${hoverColor};
-    }
-    ${cssId} .g__tab_line .g__tab_line_wrap.g__active a.g__tab_line_link,
-    ${cssId} .g__tab_line .g__tab_line_wrap.g__active i{
-      color: ${fontActiveColor};
-    }
-    ${cssId} .g__tabLine_line .g__tab_line_wrap.g__active i{
-      color: ${fontActiveColor};
-    }
-    ${cssId} .g__tab_line{
-      border-bottom: 4px solid transparent;
-    }
-    ${cssId} .g__tab_line .g__active{
-      color: ${activeColor};
-      border-bottom: 4px solid ${fontActiveColor};
-    }
-
-    /* ------------------------------------------------------------
-    Tabs Block
-    -------------------------------------------------------------*/
-    ${cssId} .g__tab_block a.g__tab_block_wrap{
-      display: flex;
-      flex-direction: ${alignIcon ? "column" : "row"};
-      justify-content: ${alignIcon ? "flex-end" : "center"};
-      align-items: center;
-      position: relative;
-      padding: ${padding};
-      margin: ${margin};
-      color: ${fontColor};
-      border-radius: ${borderRadius};
-      border: ${borderWidth} solid ${borderColor};
-      text-decoration: none;
-      font-size: ${fontSize};
-      background: ${tabBkg};
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_block .g__tab_block_wrap i{
-      font-size: ${iconSize};
-      color: ${fontColor};
-      margin-right: 5px;
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_block a.g__tab_block_wrap:hover{
-      color: ${fontHoverColor};
-      background: ${hoverColor};
-    }
-    ${cssId} .g__tab_block a.g__tab_block_wrap:hover i{
-      color: ${fontHoverColor};
-    }
-    ${cssId} .g__tab_block a.g__tab_block_wrap.g__active{
-      background: ${activeColor};
-      color: ${fontActiveColor};
-    }
-    ${cssId} .g__tab_block a.g__tab_block_wrap.g__active i{
-      color: ${fontActiveColor};
-    }
-    ${cssId} .g__tab_block .g__tab_block_wrap p{
-      margin-bottom: 2px;
-    }
-    ${cssId} .g__tab_block a.g__tab_block_link:hover{
-      background: #054a5c;
-    }
-    /* ------------------------------------------------------------
-    Chevron
-    -------------------------------------------------------------*/
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      color: ${fontColor};
-      background: ${tabBkg};
-      height: 50px;
-      text-align: center;
-      padding: 15px 15px 15px 50px;
-      position: relative;
-      margin-left: 10px;
-      text-decoration: none;
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_chevron a.g__tab_chevron_wrap:hover{
-      background: ${hoverColor};
-    }
-    ${cssId} .g__tab_chevron a.g__tab_chevron_wrap.g__active{
-      background: ${activeColor};
-      color: ${fontActiveColor};
-    }
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap .g__tab_chevron_text{
-      color: ${fontColor};
-      margin-bottom: 0;
-    }
-    ${cssId} .g__tab_chevron a.g__tab_chevron_wrap:hover .g__tab_chevron_text{
-      color: ${fontHoverColor};
-    }
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap i{
-      color: ${fontColor};
-      margin-right: 5px;
-    }
-    ${cssId} .g__tab_chevron a.g__tab_chevron_wrap:hover i{
-      color: ${fontHoverColor};
-    }
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap:not(:last-child):before {
-      content: '';
-      position: absolute;
-      border: 25px solid transparent;
-      border-left-color: ${bodyBkg};
-      top:0px;
-      right: -60px;
-    }
-
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap:not(:last-child):after {
-      content: '';
-      position: absolute;
-      border: 25px solid transparent;
-      border-left-color: ${tabBkg};
-      top:0px;
-      right: -50px;
-      transition: all .5s ease;
-    }
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap:hover:not(:last-child):after {
-      content: '';
-      position: absolute;
-      border: 25px solid transparent;
-      border-left-color: ${hoverColor};
-      top:0px;
-      right: -50px;
-    }
-    ${cssId} .g__tab_chevron .g__tab_chevron_wrap.g__active:not(:last-child):after {
-      content: '';
-      position: absolute;
-      border: 25px solid transparent;
-      border-left-color: ${activeColor};
-      top:0px;
-      right: -50px;
-    }
-
-
-    /* ------------------------------------------------------------
-    Stepper
-    -------------------------------------------------------------*/
-    ${cssId}.g__step_style .g__tabs_wrapper{
-      white-space: initial;
-    }
-    ${cssId} .g__step_container{
-      display: flex;
-      position: relative;
-      text-decoration: none;
-    }
-    ${cssId} .g__step_container:hover{
-      text-decoration: none;
-    }
-    ${cssId} .g__step{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      border-radius: 50%;
-      font-size: 21px;
-      color: ${stepNumberColor};
-      background: ${tabBkg};
-      border: ${borderWidth} solid ${borderColor};
-      z-index: 5;
-      width: ${stepSize};
-      height: ${stepSize};
-      transition: all .5s ease;
-    }
-    ${cssId} .g__active .g__step{
-      background: ${activeColor};
-    }
-    ${cssId} .g__complete .g__step{
-      background: ${activeColor};
-    }
-    ${cssId} .g__step:hover{
-      background: ${hoverColor};
-      transform: scale(1.10);
-      cursor: pointer;
-    }
-    ${cssId} h3.g__step_title{
-      color: ${titleColor};
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      font-size: ${titleSize};
-      margin-top: 10px;
-    }
-    ${cssId} p.g__step_desc{
-      color: ${descriptionColor};
-      font-family: ${font};
-      font-weight: ${fontWeight};
-      font-size: ${descSize};
-    }
-    /*---------- Stepper Horizontal ----------*/
-    ${cssId} .g__step_horizontal .g__step_container:not(:last-child):after{
-      content: "";
-      width: calc(100% - ${stepSize});
-      height: 3px;
-      position: absolute;
-      top: ${stepConnPos};
-      left: calc(50% + ${stepConnPos});
-      background: ${tabBkg};
-    }
-    ${cssId} .g__step_horizontal .g__complete:not(:last-child):after{
-      background: ${activeColor};
-    }
-    ${cssId} .g__step_horizontal .g__step_container{
-      flex-direction: column;
-      align-items: center;
-      padding: 0 30px;
-      flex: 1;
-      min-width: 200px;
-    }
-    ${cssId} .g__step_horizontal h3.g__step_title{
-      text-align: center;
-    }
-    ${cssId} .g__step_horizontal p.g__step_desc{
-      text-align: center;
-    }
-    ${cssId}.g__step_style .pn-advancer {
-      top: 25px;
-      bottom: initial;
-    }
-    /*---------- Stepper Vertical ----------*/
-    ${cssId} .g__step_vertical .g__step_container:not(:last-child):after{
-      content: "";
-      height: 100%;
-      width: 3px;
-      position: absolute;
-      top: ${stepSize};
-      left: ${stepConnPos};
-      background: ${tabBkg};
-    }
-    ${cssId} .g__step_vertical .g__step_container.g__complete:not(:last-child):after{
-      background: ${activeColor};
-    }
-    ${cssId} .g__step_vertical .g__step_container{
-      flex-direction: row;
-      height: 150px;
-    }
-    ${cssId} .g__step_vertical .g__step_content{
-      margin-left: 20px;
-    }
-    ${cssId} .g__step_vertical h3.g__step_title{
-      text-align: left;
-      margin-top: 0;
-    }
-    ${cssId} .g__step_vertical p.g__step_desc{
-      text-align: left;
-    }
-    /* ------------------------------
-    Advancer Arrows
-    -------------------------------*/
-    ${cssId} .pn-advancer {
-      /* Reset the button */
-      appearance: none;
-      background: ${bodyBkg};
-      font-size: 1.4rem;
-      padding: 0 5px;
-      border: 0;
-      opacity: 0;
-      /* Now style it as needed */
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      z-index: 999;
-    }
-    ${cssId} .pn-advancer:focus {
-      outline: 0;
-    }
-    ${cssId} .pn-advancer_left {
-      left: 0;
-      color: ${fontColorMode};
-    }
-    ${cssId} .pn-advancer_right {
-      right: 0;
-      color: ${fontColorMode};
-    }
-    ${cssId} .pn-advancer_icon {
-      width: 20px;
-      height: 44px;
-      fill: #bbb;
-    }
-    ${cssId} [data-overflowing="both"] ~ .pn-advancer_left,
-    ${cssId} [data-overflowing="left"] ~ .pn-advancer_left {
-      opacity: 1;
-    }
-    ${cssId} [data-overflowing="both"] ~ .pn-advancer_right,
-    ${cssId} [data-overflowing="right"] ~ .pn-advancer_right {
-      opacity: 1;
-    }
-    `;
-  document.head.appendChild(tabStyles);
-  /*---------------------------------------------
-  Check for records
-  ---------------------------------------------*/
-
-  console.log(!rCount);
-
-  if (!rCount) {
-    granite_div.classList.add('g__no_records');
-    granite_div.innerHTML = "<h2>Tabs</h2>";
-    return;
-  }
-  /*---------------------------------------------
-  Tabs action row
-  ---------------------------------------------*/
-
-
-  let tabsActionRow = document.createElement('div');
-  tabsActionRow.classList.add('g__tabs_action_row');
-
-  if (o.g_action_header) {
-    let title = document.createElement('h2');
-    title.classList.add('g__title');
-    title.innerHTML = o.title;
-    tabsActionRow.appendChild(title);
-  }
-
-  if (o.g_action_description) {
-    let description = document.createElement('p');
-    description.classList.add('g__description');
-    description.innerHTML = o.description;
-    tabsActionRow.appendChild(description);
-  }
-  /*---------------------------------------------
-  Tabs Build
-  ---------------------------------------------*/
-
-
-  granite_div.classList.add('g__' + style + '_style');
-  let tabsWrapper = document.createElement('div');
-  tabsWrapper.classList.add('g__tabs_wrapper');
-  let tabsContainer = document.createElement('div');
-  !!o.id ? tabsContainer.setAttribute('id', o.id) : '';
-  tabsContainer.classList.add('g__tabs_container');
-  direction === "row" ? tabsContainer.classList.add('g__step_horizontal') : tabsContainer.classList.add('g__step_vertical');
-
-  if (style === "line") {
-    tabsContainer.classList.add('g__tab_line');
-  } else if (style === "block") {
-    tabsContainer.classList.add('g__tab_block');
-  } else if (style === "chevron") {
-    tabsContainer.classList.add('g__tab_chevron');
-  }
-
-  !!o.classes ? tabsContainer.classList.add(o.classes) : "";
-  tabsWrapper.appendChild(tabsContainer); //Loop through each record
-
-  r.forEach((r, count) => {
-    switch (style) {
-      case "step":
-        let isComplete = complete(count);
-        let stepContainer = document.createElement('a');
-        stepContainer.classList.add('g__step_container');
-        activeTab(r, count) ? stepContainer.classList.add('g__active') : "";
-        r.disabled ? stepContainer.classList.add('g__disabled') : "";
-        isComplete ? stepContainer.classList.add('g__complete') : "";
-        stepContainer.href = tabHref(r.href, count);
-        let stepLink = document.createElement('div');
-        stepLink.classList.add('g__step');
-        stepLink.innerHTML = isComplete ? "<i class='far fa-check'></i>" : count + 1;
-        stepContainer.appendChild(stepLink);
-
-        if (r.name || r.desc) {
-          let stepContent = document.createElement('div');
-          stepContent.classList.add('g__step_content');
-
-          if (r.name) {
-            let stepTitle = document.createElement('h3');
-            stepTitle.classList.add('g__step_title');
-            stepTitle.innerHTML = r.name;
-            stepContent.appendChild(stepTitle);
-          }
-
-          if (r.desc) {
-            let stepDesc = document.createElement('p');
-            stepDesc.classList.add('g__step_desc');
-            stepDesc.innerHTML = r.desc;
-            stepContent.appendChild(stepDesc);
-          }
-
-          stepContainer.appendChild(stepContent);
-        }
-
-        tabsContainer.appendChild(stepContainer);
-        break;
-
-      case "line":
-        let tabLineWrap = document.createElement('div');
-        tabLineWrap.classList.add('g__tab_line_wrap');
-        o.align === "left" ? tabLineWrap.style.paddingLeft = "10px" : "";
-        o.align === "right" ? tabLineWrap.style.paddingRight = "10px" : "";
-        activeTab(r, count) ? tabLineWrap.classList.add('g__active') : "";
-
-        if (!!r.icon) {
-          let tabLineIcon = document.createElement('i');
-          tabLineIcon.setAttribute('class', r.icon);
-          tabLineWrap.appendChild(tabLineIcon);
-        }
-
-        let tabLineLink = document.createElement('a');
-        tabLineLink.classList.add('g__tab_line_link');
-        tabLineLink.href = tabHref(r.href, count);
-        tabLineLink.innerHTML = r.name || count;
-        tabLineWrap.appendChild(tabLineLink);
-        tabsContainer.appendChild(tabLineWrap);
-        break;
-
-      case "block":
-        let tabWrap = document.createElement('a');
-        tabWrap.classList.add('g__tab_block_wrap');
-        tabWrap.href = tabHref(r.href, count);
-        o.align === "left" ? tabWrap.style.paddingLeft = "10px" : "";
-        o.align === "right" ? tabWrap.style.paddingRight = "10px" : "";
-        r.disabled ? tabWrap.classList.add('g__disabled') : "";
-        activeTab(r, count) ? tabWrap.classList.add('g__active') : "";
-
-        if (!!r.icon) {
-          let tabIcon = document.createElement('i');
-          tabIcon.setAttribute('class', r.icon);
-          tabWrap.appendChild(tabIcon);
-        }
-
-        let tabLink = document.createElement('p');
-        tabLink.classList.add('g__tab_block_text');
-        tabLink.innerHTML = r.name || count;
-        tabWrap.appendChild(tabLink);
-        tabsContainer.appendChild(tabWrap);
-        break;
-
-      case "chevron":
-        let chevWrap = document.createElement('a');
-        chevWrap.classList.add('g__tab_chevron_wrap');
-        chevWrap.href = tabHref(r.href, count);
-        chevWrap.style.zIndex = (rCount - (count + 1)) * 10;
-        r.disabled ? chevWrap.classList.add('g__disabled') : "";
-        activeTab(r, count) ? chevWrap.classList.add('g__active') : "";
-
-        if (!!r.icon) {
-          let chevIcon = document.createElement('i');
-          chevIcon.setAttribute('class', r.icon);
-          chevWrap.appendChild(chevIcon);
-        }
-
-        let chevLink = document.createElement('p');
-        chevLink.classList.add('g__tab_chevron_text');
-        chevLink.innerHTML = r.name || count;
-        chevWrap.appendChild(chevLink);
-        tabsContainer.appendChild(chevWrap);
-        break;
-
-      default:
-        console.error('no style');
-    }
-  });
-  /*---------------------------------------------
-  Run extensions
-  ---------------------------------------------*/
-  // extensions.forEach(ext => {
-  //   ext(tabsWrapper);
-  // });
-
-  /*---------------------------------------------
-  Append DIV to DOM
-  ---------------------------------------------*/
-
-  granite_div.appendChild(tabsWrapper);
-  /*---------------------------------------------
-  Advancer Arrows
-  ---------------------------------------------*/
-
-  let leftAdvancer = document.createElement('button');
-  leftAdvancer.setAttribute('class', 'pn-advancer pn-advancer_left');
-  leftAdvancer.type = "button";
-  leftAdvancer.innerHTML = "<i class='far fa-chevron-left'></i>";
-  granite_div.appendChild(leftAdvancer);
-  let rightAdvancer = document.createElement('button');
-  rightAdvancer.setAttribute('class', 'pn-advancer pn-advancer_right');
-  rightAdvancer.type = "button";
-  rightAdvancer.innerHTML = "<i class='far fa-chevron-right'></i>";
-  granite_div.appendChild(rightAdvancer);
-  /*---------------------------------------------
-  Build HREF
-  ---------------------------------------------*/
-
-  function tabHref(href, val) {
-    let ival = val + 1;
-    let tval = ival;
-
-    if (!!href && href.includes("tab=")) {
-      href = !!href && href.length ? href.includes("?") ? href.replace(`tab=${tabParam}`, `tab=${tval}`) : href + `?tab=${tval}` : queryString.replace(`tab=${tabParam}`, `tab=${tval}`);
-    } else {
-      if (!!href && href.length) {
-        href = href.includes("?") ? href + `&tab=${tval}` : href + `?tab=${tval}`;
-      } else {
-        if (queryString.includes("tab=")) {
-          var x = queryString.replace(`tab=${tabParam}`, `tab=${tval}`);
-        } else {
-          var x = queryString.includes("?") ? queryString + `&tab=${tval}` : queryString + `?tab=${tval}`;
-        }
-
-        href = x;
-      }
-    }
-
-    return href;
-  }
-  /*---------------------------------------------
-  Connector position for step
-  ---------------------------------------------*/
-
-
-  function connPos(stepSize) {
-    let size = stepSize.slice(0, -2);
-    let fromTop = size / 2 + "px";
-    return fromTop;
-  }
-  /*---------------------------------------------
-  Active
-  ---------------------------------------------*/
-
-
-  function activeTab(r, val) {
-    let ival = val + 1;
-    let href = tabHref(r.href, val);
-    let isActive = ival == tabParam || val == 0 && tabParam == null || !!tabParam && tabParam.includes(ival);
-    return isActive;
-  }
-  /*---------------------------------------------
-  Complete
-  ---------------------------------------------*/
-
-
-  function complete(val) {
-    var ival = val + 1;
-    var is_complete = ival < tabParam ? true : false;
-    return is_complete;
-  }
-  /*---------------------------------------------
-  Overflow Arrows
-  ---------------------------------------------*/
-
-
-  var SETTINGS = {
-    navBarTravelling: false,
-    navBarDirection: "",
-    navBarTravelDistance: 100
-  };
-  let gTabsContainer = granite_div.querySelector('.g__tabs_wrapper');
-  let gContents = granite_div.querySelector(".g__tabs_container");
-  var pnAdvancerLeft = granite_div.querySelector(".pn-advancer_left");
-  var pnAdvancerRight = granite_div.querySelector(".pn-advancer_right");
-  gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer)); // Handle the scroll of the horizontal container
-
-  var last_known_scroll_position = 0;
-  var ticking = false;
-
-  function doSomething(scroll_pos) {
-    gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
-  }
-
-  gTabsContainer.addEventListener("scroll", function () {
-    last_known_scroll_position = window.scrollY;
-
-    if (!ticking) {
-      window.requestAnimationFrame(function () {
-        doSomething(last_known_scroll_position);
-        ticking = false;
-      });
-    }
-
-    ticking = true;
-  });
-
-  if (!!pnAdvancerLeft) {
-    pnAdvancerLeft.addEventListener("click", function () {
-      console.log("Left " + SETTINGS.navBarTravelling);
-
-      if (SETTINGS.navBarTravelling === true) {
-        return;
-      }
-
-      if (determineOverflow(gContents, gTabsContainer) === "left" || determineOverflow(gContents, gTabsContainer) === "both") {
-        var availableScrollLeft = gTabsContainer.scrollLeft;
-
-        if (availableScrollLeft < SETTINGS.navBarTravelDistance * 2) {
-          gContents.style.transform = "translateX(" + availableScrollLeft + "px)";
-        } else {
-          gContents.style.transform = "translateX(" + SETTINGS.navBarTravelDistance + "px)";
-        }
-
-        gContents.classList.remove("g__contents-no-transition");
-        SETTINGS.navBarTravelDirection = "left";
-        SETTINGS.navBarTravelling = true;
-      }
-
-      gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
-      arrowReset();
-    });
-  }
-
-  if (!!pnAdvancerRight) {
-    pnAdvancerRight.addEventListener("click", function () {
-      console.log("Right " + SETTINGS.navBarTravelling);
-
-      if (SETTINGS.navBarTravelling === true) {
-        return;
-      }
-
-      if (determineOverflow(gContents, gTabsContainer) === "right" || determineOverflow(gContents, gTabsContainer) === "both") {
-        var navBarRightEdge = gContents.getBoundingClientRect().right;
-        var navBarScrollerRightEdge = gTabsContainer.getBoundingClientRect().right;
-        var availableScrollRight = Math.floor(navBarRightEdge - navBarScrollerRightEdge);
-
-        if (availableScrollRight < SETTINGS.navBarTravelDistance * 2) {
-          gContents.style.transform = "translateX(-" + availableScrollRight + "px)";
-        } else {
-          gContents.style.transform = "translateX(-" + SETTINGS.navBarTravelDistance + "px)";
-        }
-
-        gContents.classList.remove("g__contents-no-transition");
-        SETTINGS.navBarTravelDirection = "right";
-        SETTINGS.navBarTravelling = true;
-      } // Now update the attribute in the DOM
-
-
-      gTabsContainer.setAttribute("data-overflowing", determineOverflow(gContents, gTabsContainer));
-      arrowReset();
-    });
-  }
-
-  function arrowReset() {
-    console.log('reset');
-    var styleOfTransform = window.getComputedStyle(gContents, null);
-    var tr = styleOfTransform.getPropertyValue("-webkit-transform") || styleOfTransform.getPropertyValue("transform");
-    var amount = Math.abs(parseInt(tr.split(",")[4]) || 0);
-    gContents.style.transform = "none";
-    gContents.classList.add("g__contents-no-transition");
-
-    if (SETTINGS.navBarTravelDirection === "left") {
-      gTabsContainer.scrollLeft = gTabsContainer.scrollLeft - amount;
-    } else {
-      gTabsContainer.scrollLeft = gTabsContainer.scrollLeft + amount;
-    }
-
-    SETTINGS.navBarTravelling = false;
-  }
-
-  function determineOverflow(content, container) {
-    var containerMetrics = container.getBoundingClientRect();
-    var containerMetricsRight = Math.floor(containerMetrics.right);
-    var containerMetricsLeft = Math.floor(containerMetrics.left);
-    var contentMetrics = content.getBoundingClientRect();
-    var contentMetricsRight = Math.floor(contentMetrics.right);
-    var contentMetricsLeft = Math.floor(contentMetrics.left);
-
-    if (containerMetricsLeft > contentMetricsLeft && containerMetricsRight < contentMetricsRight) {
-      return "both";
-    } else if (contentMetricsLeft < containerMetricsLeft) {
-      return "left";
-    } else if (contentMetricsRight > containerMetricsRight) {
-      return "right";
-    } else {
-      return "none";
-    }
-  } // End main function
-
-}
-/*---------------------------------------------
-Block Name: Granite.js Tile Block
----------------------------------------------*/
-function granite_tiles(jsonTiles, jsonTheme) {
-  /*---------------------------------------------
-  Global Variables
-  ---------------------------------------------*/
-  const id = jsonTiles.id;
-  const o = jsonTiles.options;
-  const r = jsonTiles.records;
-  const t = jsonTheme;
-  const mode = !!t.mode ? t.mode : "midnight";
-  const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
-  const fillRow = o.fillRow ? 1 : 0;
-  !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
-  /*---------------------------------------------
-  Verify Div ID and Div Alignment - Set Mode
-  ---------------------------------------------*/
-
-  if (granite_div === null) {
-    console.error('Object ID and Granite Div ID Do Not Match');
-  } else {
-    granite_div.setAttribute('mode', mode);
-  }
-  /*---------------------------------------------
-  Add Font Family To Header
-  ---------------------------------------------*/
-
-
-  const font_include = document.getElementById('g__font_stylesheet');
-
-  if (!font_include) {
-    var head = document.head;
-    var fontLink = document.createElement("link");
-    fontLink.type = "text/css";
-    fontLink.rel = "stylesheet";
-    fontLink.id = "g__font_stylesheet";
-    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-    head.appendChild(fontLink);
-  }
-  /*---------------------------------------------
-  Dynamic Variables
-  ---------------------------------------------*/
-
-
-  let columns;
-
-  switch (o.columns) {
-    case "1":
-      columns = "100%";
-      break;
-
-    case "2":
-      columns = "50%";
-      break;
-
-    case "3":
-      columns = "33.33%";
-      break;
-
-    case "4":
-      columns = "25%";
-      break;
-
-    case "5":
-      columns = "20%";
-      break;
-
-    case "6":
-      columns = "16.66%";
-      break;
-
-    case "7":
-      columns = "14.28%";
-      break;
-
-    case "8":
-      columns = "12.5%";
-      break;
-
-    default:
-      columns = "25%";
-      break;
-  }
-
-  let flexLayout;
-
-  switch (o.layout) {
-    case "left":
-      flexLayout = "flex-start";
-      break;
-
-    case "right":
-      flexLayout = "flex-end";
-      break;
-
-    default:
-      flexLayout = "center";
-      break;
-  }
-
-  let fontColorMode = mode === "midnight" ? "#ffffff" : "#5d5d5d";
-  let fontColorModeReverse = mode === "midnight" ? "#5d5d5d" : "#ffffff";
-  let overlayColorMode = mode === "midnight" ? "#101010" : "#ffffff";
-  let titleColor = o.header_color || fontColorMode;
-  let descColor = o.description_color || fontColorMode;
-  let iconColor = o.icon_color || fontColorMode;
-  let overlay = o.filter_one || overlayColorMode;
-  let hoverColor = o.hover_color || overlayColorMode; //Action Row
-
-  let actionTitleColor = o.action_header_color || fontColorMode;
-  let actionDescColor = o.action_description_color || fontColorMode;
-  let actionBorder = o.action_border ? "1px solid var(--background)" : "0";
-  let tilesStyles = document.createElement('style');
-  tilesStyles.innerHTML = `
-    /* ------------------------ Global Styles ------------------------*/
-    ${cssId}{
-        /* Standard */
-        --primary: #fff;
-        --font-regular: hero-new, sans-serif;
-        --font-bold: hero-new, sans-serif;
-        --height: ${o.height || '300px'};
-        --border-radius: 4px;
-        --field-padding: 6px 12px;
-        --field-height: 37px;
-        --error-color: #ea386e;
-        --green: #00B28B;
-
-        /* Mode Dependent */
-        --background: #eaeaea;
-        --background-darker: #ffffff;
-        --background-reverse: #000000;
-        --background-range: #eaeaea;
-        --background-hover: #eeeeee;
-        --body: #ffffff;
-        --font-color-reverse: #f5f5f5;
-        --border: 1px solid #a1a1a1;
-        --font-color: #5d5d5d;
-
-        /* css */
-        padding: 15px;
-        margin-top: ${o.container_top_padding || '25px'};
-        margin-bottom: ${o.container_bottom_padding || '25px'};
-    }
-        ${cssId}[mode="midnight"]{
-        --background: #303030;
-        --background-darker: #151515;
-        --background-reverse: #ffffff;
-        --background-range: #2a2a2a;
-        --background-hover: #3b3b3b;
-        --body: #101010;
-        --border: 1px solid #a1a1a1;
-        --font-color: #ffffff;
-    }
-    ${cssId} a:hover{
-        text-decoration: none;
-    }
-    /* ------
-    Action Row
-    ------*/
-    ${cssId} .g__tiles_action_row{
-        padding-bottom: ${o.body_content_top_padding || "25px"};
-        margin-bottom: 25px;
-        border-bottom: ${actionBorder}
-    }
-    ${cssId} .g__title{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        color: ${actionTitleColor};
-        font-size: ${o.action_header_size || "28px"};
-        margin-bottom: ${o.action_header_bottom_margin || "25px"}
-    }
-    ${cssId} .g__description{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        color: ${actionDescColor};
-        font-size: ${o.action_description_size || "18px"};
-        margin-bottom: ${o.action_description_bottom_margin || "25px"};
-        line-height: ${o.action_description_line_height || o.action_description_size};
-    }
-    ${cssId} .g__tiles_filters{
-        display: flex;
-        margin-top: 25px;
-    }
-    /* ------
-    General Styles
-    ------*/
-    ${cssId} .g__tiles_grid{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        box-sizing: border-box;
-    }
-    ${cssId} .g__tile_container{
-        display: flex;
-        flex: ${fillRow} 0 ${columns};
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    /* ---------- Overlay ---------- */
-    .g__tile_overlay{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: ${overlay};
-        opacity: ${o.filter_one_opacity || ".5"};
-    }
-    /* ---------- Tiles Body ---------- */
-    ${cssId} .g__tile_body{
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: ${flexLayout || "center"};
-        margin: ${o.padding || '5px'};
-        height: var(--height);
-        background: var(--background);
-        width: 100%;
-        transition: all .5s ease;
-    }
-    ${cssId} .g__desc_no_hover a.g__tile_body:after{
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background: ${hoverColor};
-        opacity: 0;
-        transition: opacity .5s ease;
-    }
-    ${cssId} .g__desc_no_hover a.g__tile_body:hover:after{
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background: ${hoverColor};
-        opacity: .6;
-    }
-    ${cssId} .g__tile_content{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: ${flexLayout || "center"};
-        text-align: ${o.layout || "center"};
-        font-style: var(--font-regular);
-        font-weight: 300;
-        padding: 15px;
-        z-index: 5;
-    }
-    ${cssId} .g__tile_body .g__tile_icon{
-        color: ${iconColor};
-        font-size: ${o.icon_size || '75px'};
-        text-align: ${o.layout || "center"};
-    }
-    ${cssId} .g__tile_body .g__tile_title{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        color: ${titleColor};
-        font-size: ${o.header_size || '28px'};
-        hyphens: auto;
-        text-align: ${o.layout || "center"};
-        text-decoration: none;
-        opacity: 1;
-        transition: opacity .5s ease;
-    }
-    ${cssId} .g__desc_cont{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        text-align: ${o.layout || "center"};
-        height: calc(var(--height) - 50%);
-        overflow: auto;
-        font-size: ${o.description_size};
-        color: ${descColor};
-    }
-    /* ------
-    Show description on hover and hide header/icon
-    ------*/
-    ${cssId} .g__desc_on_hover .g__desc_cont {
-        content: '';
-        width: 100%;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        top: 0;
-        left: 0;
-        height: 100%;
-        padding: 15px;
-        color: ${descColor};
-        opacity: 0;
-        transition: opacity .5s ease;
-    }
-    ${cssId} .g__desc_on_hover .g__tile_body:hover:after{
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background: ${hoverColor};
-        opacity: 0;
-        transition: opacity .5s ease;
-    }
-    ${cssId} .g__desc_on_hover .g__tile_body:hover:after{
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        background: ${hoverColor};
-        opacity: .6;
-    }
-    /* --- Hide Header and Icon on Hover ----*/
-    ${cssId} .g__desc_on_hover.g__desc_true .g__tile_body:hover .g__desc_cont {
-        opacity: 1;
-    }
-    ${cssId} .g__desc_on_hover.g__desc_true .g__tile_body:hover .g__tile_title,
-    ${cssId} .g__desc_on_hover.g__desc_true .g__tile_body:hover .g__tile_icon {
-        opacity: 0;
-    }
-    ${cssId} .g__tile_body p{
-        color: ${descColor};
-    }
-    /* ------
-    Order Filter
-    ------*/
-    ${cssId} .g__tile_filter_wrap {
-        display: flex;
-        position: relative;
-    }
-    ${cssId} .g__tile_order_filter {
-        display: block;
-        position: relative;
-        width: 200px;
-        padding: var(--field-padding);
-        line-height: 1.5;
-        background: var(--background);
-        border: var(--border);
-        border-radius: var(--border-radius);
-        color: var(--font-color);
-        font-family: var(--font-regular);
-        font-weight: 300;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-    ${cssId} .g__tile_filter_wrap::after {
-        position: absolute;
-        content: "";
-        top: 16px;
-        right: 10px;
-        width: 0;
-        height: 0;
-        border: 6px solid transparent;
-        border-color: var(--font-color) transparent transparent transparent;
-    }
-    /* ------
-    Search Bar
-    ------*/
-    ${cssId} .g__tile_search_wrap{
-        display: block;
-        position: relative;
-        margin-left: auto;
-    }
-    ${cssId} .g__tile_search{
-        display: block;
-        position: relative;
-        width: 300px;
-        padding: var(--field-padding);
-        line-height: 1.5;
-        background: var(--background);
-        border: var(--border);
-        border-radius: var(--border-radius);
-        color: var(--font-color);
-        font-family: var(--font-regular);
-        font-weight: 300;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-    ${cssId} .g__search_icon{
-        position: absolute;
-        content: "";
-        top: 7px;
-        left: 10px;
-        color: var(--font-color);
-        z-index: 1;
-        transition: all .4s ease;
-    }
-    ${cssId} .g__search_icon.search_active{
-        transform: scaleX(0) rotate(45deg);
-    }
-    /*---------------------------------------------
-      Pagination
-    ---------------------------------------------*/
-    ${cssId} .g__pagination_wrapper{
-        display: flex;
-        flex-direction: row;
-        justify-content: ${o.pagination_info_text ? 'space-between' : 'flex-end'};
-        align-items: center;
-        margin: 30px 15px;
-    }
-    ${cssId} .g__pagination_wrapper #g__info_text p{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        margin: 0;
-        color: ${fontColorMode};
-    }
-    ${cssId} ul.g__pagination_container{
-        font-family: var(--font-regular);
-        font-weight: 300;
-        list-style-type: none;
-        display: flex;
-        overflow: auto;
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-        margin: 0;
-    }
-    ${cssId} ul.g__pagination_container li{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: ${fontColorMode};
-        font-size: 1rem;
-        border-top: var(--border);
-        border-bottom: var(--border);
-        border-right: var(--border);
-        height: 30px;
-        min-width: 30px;
-        transition: background .3s ease;
-    }
-    ${cssId} ul.g__pagination_container li:first-child{
-        border: var(--border);
-        border-radius: 4px 0 0 4px;
-    }
-    ${cssId} ul.g__pagination_container li:last-child{
-        border-radius: 0 4px 4px 0;
-    }
-    ${cssId} ul.g__pagination_container li:hover{
-        cursor: pointer;
-        background: var(--background);
-    }
-    ${cssId} ul.g__pagination_container li.active{
-        background: #eaeaea;
-        color: ${fontColorModeReverse};
-    }
-    ${cssId} .g__pagination_hidden{
-        display: none;
-    }
-    ${cssId} .g__pagination_show{
-        display: flex;
-    }
-    /*---------------------------------------------
-      Mobile
-    ---------------------------------------------*/
-    @media (max-width: 991.98px) {
-        ${cssId} .g__tile_container{
-            flex: ${fillRow} 0 50%;
-        }
-    }
-    @media only screen and (max-width: 767.98px) {
-        ${cssId} .g__tile_container{
-            flex: 0 0 100%;
-        }
-    }
-    `;
-  document.head.appendChild(tilesStyles);
-  /*---------------------------------------------
-  Tiles action row
-  ---------------------------------------------*/
-
-  let tileActionRow;
-
-  if (o.title || o.description) {
-    tileActionRow = document.createElement('div');
-    tileActionRow.classList.add('g__tiles_action_row');
-
-    if (o.title) {
-      let title = document.createElement('h2');
-      title.classList.add('g__title');
-      title.innerHTML = o.title;
-      tileActionRow.appendChild(title);
-    }
-
-    if (o.description) {
-      let description = document.createElement('p');
-      description.classList.add('g__description');
-      description.innerHTML = o.description;
-      tileActionRow.appendChild(description);
-    }
-
-    granite_div.appendChild(tileActionRow);
-  }
-
-  if (o.orderFilter || o.search) {
-    let tileFilters = document.createElement('div');
-    tileFilters.classList.add('g__tiles_filters');
-    /* Order By */
-
-    if (o.orderFilter) {
-      let orderWrap = document.createElement('div');
-      orderWrap.classList.add('g__tile_filter_wrap');
-      let orderSelect = document.createElement('select');
-      orderSelect.classList.add('g__tile_order_filter');
-      const filterOptions = ["Order By", "Asc", "Desc"];
-      filterOptions.forEach((val, count) => {
-        let option = document.createElement("option");
-        option.innerHTML = val;
-        option.value = val;
-
-        if (count === 0) {
-          option.hidden = true;
-          option.disabled = true;
-          option.selected = true;
-        }
-
-        orderSelect.appendChild(option);
-      });
-      orderSelect.addEventListener('change', e => {
-        orderFilter(e.target.value);
-      });
-      orderWrap.appendChild(orderSelect);
-      tileFilters.appendChild(orderWrap);
-    }
-    /* Search */
-
-
-    if (o.search) {
-      let searchWrap = document.createElement('div');
-      searchWrap.classList.add('g__tile_search_wrap');
-      let searchIcon = document.createElement('div');
-      searchIcon.classList.add('g__search_icon');
-      searchIcon.innerHTML = '<i class="far fa-search"></i>';
-      searchWrap.appendChild(searchIcon);
-      let searchBar = document.createElement("input");
-      searchBar.type = 'text';
-      searchBar.classList.add('g__tile_search');
-      searchBar.addEventListener('focus', e => {
-        tileIconFocus(e);
-      });
-      searchBar.addEventListener('focusout', e => {
-        tileIconFocusOut(e);
-      });
-      searchBar.addEventListener('input', e => {
-        tileSearch(e);
-      });
-      searchWrap.appendChild(searchBar);
-      tileFilters.appendChild(searchWrap);
-    }
-
-    tileActionRow.appendChild(tileFilters);
-  }
-  /*---------------------------------------------
-  Tiles body
-  ---------------------------------------------*/
-
-
-  let tile_wrapper = document.createElement('div');
-  !!o.id ? tile_wrapper.setAttribute('id', o.id) : '';
-  tile_wrapper.classList.add('g__tiles_grid');
-  r.forEach(r => {
-    let tileContainer = document.createElement('div');
-    !!r.id ? tileContainer.setAttribute('id', r.id) : '';
-    tileContainer.classList.add('g__tile_container');
-    !!r.classes ? tileContainer.classList.add(r.classes) : '';
-    tileContainer.setAttribute('data-editable', 'options');
-    o.description_hover ? tileContainer.classList.add('g__desc_on_hover') : tileContainer.classList.add('g__desc_no_hover');
-    !!r.description ? tileContainer.classList.add('g__desc_true') : '';
-    let tileLink = !!r.href ? document.createElement('a') : document.createElement('div');
-    tileLink.classList.add('g__tile_body');
-    o.loader ? tileLink.classList.add('show_loader') : "";
-    !!r.href ? tileLink.href = r.href : '';
-    !!r.target ? tileLink.target = r.target : '';
-    r.side_pane ? tileLink.classList.add('a__side_pane_link') : "";
-    !!r.background_color ? tileLink.style.backgroundColor = r.background_color : '';
-    !!r.background_image ? tileLink.style.backgroundImage = `url(${r.background_image})` : '';
-    !!r.background_image ? tileLink.style.backgroundSize = 'cover' : '';
-    tileContainer.appendChild(tileLink);
-
-    if (!o.no_overlay) {
-      let overlay = document.createElement('div');
-      overlay.classList.add('g__tile_overlay');
-      tileLink.appendChild(overlay);
-    }
-
-    let tileContent = document.createElement('div');
-    tileContent.classList.add('g__tile_content');
-    tileLink.appendChild(tileContent);
-
-    if (!!r.icon) {
-      var tileIcon = document.createElement('div');
-      tileIcon.classList.add('g__tile_icon');
-      tileIcon.setAttribute('data-record-id', 'icon');
-      tileIcon.setAttribute('data-editable', 'record');
-      var icon = document.createElement('i');
-      icon.setAttribute('class', r.icon);
-      tileIcon.append(icon);
-      tileContent.appendChild(tileIcon);
-    }
-
-    if (!!r.title) {
-      let tile_title = document.createElement('div');
-      tile_title.classList.add('g__tile_title');
-      tile_title.setAttribute('data-record-id', 'title');
-      tile_title.setAttribute('data-editable', 'record');
-      tile_title.innerHTML = r.title;
-      tileContent.appendChild(tile_title);
-    }
-
-    let descNoHTML = removeHTML(r.description);
-
-    if (!!descNoHTML) {
-      let descCont = document.createElement('div');
-      descCont.classList.add('g__desc_cont');
-      descCont.setAttribute('data-record-id', 'description');
-      descCont.setAttribute('data-editable', 'record');
-      let desc = document.createElement('div');
-      desc.classList.add('g__tile_desc');
-      desc.innerHTML = r.description;
-      descCont.appendChild(desc);
-      tileContent.appendChild(descCont);
-    }
-
-    tile_wrapper.appendChild(tileContainer);
-  });
-  /*---------------------------------------------
-  Run extensions
-  ---------------------------------------------*/
-  // extensions.forEach(ext => {
-  //     ext(tileContainer);
-  // });
-
-  /*---------------------------------------------
-  Append Tile Body to Granite Div
-  ---------------------------------------------*/
-
-  granite_div.appendChild(tile_wrapper);
-  /*---------------------------------------------
-  Functions
-  ---------------------------------------------*/
-
-  /*----- Order Filter -----*/
-
-  function orderFilter(order) {
-    let tileContainer = granite_div.querySelector('.g__tiles_grid');
-    let allTiles = granite_div.querySelectorAll('.g__tile_container');
-    let tileArr = [];
-    allTiles.forEach(tile => {
-      let tileInfo = [];
-      let title = tile.querySelector(".g__tile_title").innerHTML;
-      tileInfo.push(title);
-      tileInfo.push(tile);
-      tileArr.push(tileInfo);
-    });
-
-    if (order === ("Asc" || "Dsc")) {
-      tileArr.sort(function sortThings(a, b) {
-        a = a[0].toLowerCase();
-        b = b[0].toLowerCase();
-
-        if (a > b) {
-          return 1;
-        } else if (a < b) {
-          return -1;
-        } else if (a === b) {
-          return 0;
-        }
-      });
-    }
-
-    order === "Desc" ? tileArr.reverse() : ""; // Update the DOM
-
-    tileContainer.innerHTML = "";
-    tileArr.forEach(tile => {
-      tileContainer.appendChild(tile[1]);
-    });
-  }
-  /*----- Search Bar Icon -----*/
-
-
-  function tileIconFocus(e) {
-    let icon = e.target.previousElementSibling;
-    icon.classList.add('search_active');
-  }
-
-  function tileIconFocusOut(e) {
-    let icon = e.target.previousElementSibling;
-    let content = e.target.value.length;
-
-    if (!content) {
-      icon.classList.remove('search_active');
-    }
-  }
-  /*----- Search Bar -----*/
-
-
-  function tileSearch(e) {
-    var input, filter, tiles, t, a, i, body, txtValue, bodyValue, parent, content;
-    filter = e.target.value.toUpperCase();
-    parent = document.getElementById(id);
-    t = parent.getElementsByClassName('g__tile_container');
-
-    for (i = 0; i < t.length; i++) {
-      a = t[i].getElementsByClassName("g__tile_title")[0];
-      body = t[i].getElementsByClassName("g__tile_desc")[0];
-      content = '';
-
-      if (a != undefined) {
-        txtValue = a.textContent || a.innerText;
-        content += txtValue;
-      }
-
-      if (body != undefined) {
-        bodyValue = body.textContent || body.innerText;
-        content += ' ' + bodyValue;
-      }
-
-      if (content.toUpperCase().indexOf(filter) > -1) {
-        t[i].style.display = "";
-        t[i].classList.remove('g__pagination_hidden');
-      } else {
-        t[i].style.display = "none";
-      }
-
-      content = '';
-    }
-  }
-  /*---------------------------------------------
-  Remove HTML from description
-  ---------------------------------------------*/
-
-
-  function removeHTML(str) {
-    var tmp = document.createElement("DIV");
-    tmp.innerHTML = str;
-    return tmp.textContent || tmp.innerText || "";
-  }
-  /*---------------------------------------------
-  Pagination
-  ---------------------------------------------*/
-
-
-  if (o.pagination) {
-    const tiles_per_page = parseInt(o.tiles_per_page) || 25;
-    let current_page = 1;
-    const arr_tiles = document.querySelectorAll('.g__tile_container');
-    let page_count = Math.ceil(arr_tiles.length / tiles_per_page);
-    let pagination_wrapper = document.createElement('div');
-    pagination_wrapper.classList.add('g__pagination_wrapper');
-    granite_div.appendChild(pagination_wrapper);
-
-    if (o.pagination_info_text) {
-      let info_text = document.createElement('div');
-      info_text.id = 'g__info_text';
-      pagination_wrapper.appendChild(info_text);
-    }
-
-    let pagination_container = document.createElement('ul');
-    pagination_container.classList.add('g__pagination_container');
-    let paginated_back = document.createElement('li');
-    paginated_back.id = 'g__pagination_back';
-    paginated_back.innerHTML = '<i class="fal fa-angle-double-left"></i>';
-    pagination_container.appendChild(paginated_back);
-
-    for (let i = 1; i < page_count + 1; i++) {
-      let paginated_button = document.createElement('li');
-      paginated_button.classList.add('g__pagination_page');
-      paginated_button.innerText = i;
-      current_page == i ? paginated_button.classList.add('active') : '';
-      pagination_container.appendChild(paginated_button);
-      pagination_wrapper.appendChild(pagination_container);
-      paginated_button.addEventListener('click', function () {
-        let page_num = paginated_button.innerText;
-        current_page = parseInt(page_num);
-        displayTiles(current_page, arr_tiles, tiles_per_page);
-        let current_btn = document.querySelector('.g__pagination_container li.active');
-        current_btn.classList.remove('active');
-        paginated_button.classList.add('active');
-      });
-    }
-
-    let paginated_forward = document.createElement('li');
-    paginated_forward.id = 'g__pagination_next';
-    paginated_forward.innerHTML = '<i class="fal fa-angle-double-right"></i>';
-    pagination_container.appendChild(paginated_forward);
-
-    function displayTiles(current_page, arr_tiles, tiles_per_page) {
-      let tiles_max = current_page * tiles_per_page;
-      let tiles_min = tiles_max - tiles_per_page;
-
-      if (o.pagination_info_text) {
-        let info = document.getElementById('g__info_text');
-        info.innerHTML = `<p>Showing ${tiles_min + 1} to ${tiles_max} of ${arr_tiles.length}</p>`;
-      }
-
-      arr_tiles.forEach((tile, num) => {
-        tile.classList.add('g__pagination_hidden');
-        tile.classList.remove('g__pagination_show');
-
-        if (num < tiles_max && num >= tiles_min) {
-          tile.classList.add('g__pagination_show');
-        }
-      });
-    }
-
-    function backNextBtn(btn, direction) {
-      btn.addEventListener('click', () => {
-        let parent = btn.parentElement;
-        let pages = parent.children;
-        let page_count = pages.length - 2;
-        let active_page;
-        let next_page;
-
-        for (let i = 1; i < pages.length; i++) {
-          let is_active = pages[i].classList.contains('active');
-
-          if (is_active) {
-            active_page = pages[i].innerText;
-            next_page = direction ? pages[i + 1] : pages[i - 1];
-          }
-        }
-
-        if (direction && active_page < page_count || !direction && active_page != 1) {
-          current_page = direction ? parseInt(active_page) + 1 : parseInt(active_page) - 1;
-          displayTiles(current_page, arr_tiles, tiles_per_page);
-          let current_btn = document.querySelector('.g__pagination_container li.active');
-          current_btn.classList.remove('active');
-          next_page.classList.add('active');
-        }
-      });
-    }
-
-    ;
-    let next_btn = document.getElementById('g__pagination_next');
-    let back_btn = document.getElementById('g__pagination_back');
-    backNextBtn(next_btn, true);
-    backNextBtn(back_btn, false);
-    displayTiles(current_page, arr_tiles, tiles_per_page);
-  } //end tile function
-
 }

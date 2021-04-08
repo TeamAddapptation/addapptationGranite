@@ -1,5 +1,6 @@
 function granite_form(formsBlock, jsonTheme) {
   const id = formsBlock.id;
+  const granite_id = formsBlock.id;
   const o = formsBlock.options;
   const r = formsBlock.records;
   const t = jsonTheme;
@@ -1481,7 +1482,6 @@ function granite_form(formsBlock, jsonTheme) {
     granite_css.remove();
   }
   document.head.appendChild(formStyles);
-
   /* -------------------- Regex Expressions ----------------------*/
   const patterns = {
     tel: "[0-9]{2}/[0-9]{2}/[0-9]{4}",
@@ -1508,12 +1508,11 @@ function granite_form(formsBlock, jsonTheme) {
       form_description.innerHTML = o.description;
       form_action_row.appendChild(form_description);
     }
-
-    document.getElementById(id).appendChild(form_action_row);
+    document.getElementById(granite_id).appendChild(form_action_row);
   }
 
   /* -------------------- Form Container ----------------------*/
-  const form_container = document.createElement("form");
+  let form_container = document.createElement("form");
   // conditional attributes
   !!attr__action ? form_container.setAttribute("action", attr__action) : "";
   !!attr__form_id ? form_container.setAttribute("id", attr__form_id) : "";
@@ -1640,7 +1639,7 @@ function granite_form(formsBlock, jsonTheme) {
       switch (r.type) {
         case "boolean":
         case "checkbox":
-          check_container = document.createElement("div");
+          let check_container = document.createElement("div");
           check_container.setAttribute("class", "g__check_container");
           input = document.createElement("input");
           r.type === "boolean" ? (r.type = "checkbox") : "";
@@ -1756,7 +1755,7 @@ function granite_form(formsBlock, jsonTheme) {
           form_field = document.createElement("p");
           form_field.setAttribute("class", "g__form_description");
           form_field.setAttribute("style", `font-size:${r.font_size};`);
-          form_field.innerHTML = r.value;
+          form_field.innerHTML = r.value || "Description";
           break;
         case "email":
           form_field.appendChild(addLabels(field_info_container, r));
@@ -2083,10 +2082,11 @@ function granite_form(formsBlock, jsonTheme) {
             }
           });
           break;
+        case "header":
         case "subheader":
           form_field = document.createElement("h2");
           form_field.setAttribute("class", "g__form_header");
-          form_field.innerHTML = r.value;
+          form_field.innerHTML = r.value || "Header";
           break;
         case "tel":
           form_field.appendChild(addLabels(field_info_container, r));
@@ -2111,20 +2111,21 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(input);
           form_field.appendChild(error_field);
           break;
-        case "quill":
-          form_field.appendChild(addLabels(field_info_container, r));
-          let quil = document.createElement("div");
-          quil.setAttribute("class", "g__quil_editor");
-          quil.setAttribute("id", r.id);
-          input = document.createElement("input");
-          input.setAttribute("id", r.id);
-          basicAttributes(r, input, class_name);
-          r.required ? input.classList.add('g__required') : "";
-          input.setAttribute("type", "hidden");
-          form_field.appendChild(quil);
-          form_field.appendChild(input);
-          form_field.appendChild(error_field);
-          break;
+          case "quill":
+            form_field.appendChild(addLabels(field_info_container, r));
+            let quil = document.createElement("div");
+            quil.setAttribute("class", "g__quil_editor");
+            let quill_id = r.id + "_quill_" + num;
+            quil.setAttribute("id", quill_id);
+            input = document.createElement("input");
+            input.setAttribute("id", quill_id);
+            basicAttributes(r, input, class_name);
+            r.required ? input.classList.add('g__required') : "";
+            input.setAttribute("type", "hidden");
+            form_field.appendChild(quil);
+            form_field.appendChild(input);
+            form_field.appendChild(error_field);
+            break;
         default:
           form_field.appendChild(addLabels(field_info_container, r));
           input = document.createElement("input");
@@ -2137,13 +2138,12 @@ function granite_form(formsBlock, jsonTheme) {
 
       let push_inline =
         !!r.inline_field && r.inline_field.toString() == "true" ? true : false;
-
       if (section) {
         if (r.type != "section") {
           if (r.inline_field || inline_arr.length) {
             if (r.inline_field) {
               inline_arr.push(form_field);
-              section_count--;
+              section_count === "" ? "" : section_count--;
             } else if (inline_arr.length > 0) {
               inline_arr.push(form_field);
               let inline_row = document.createElement("div");
@@ -2153,16 +2153,14 @@ function granite_form(formsBlock, jsonTheme) {
               });
               inline_arr = [];
               section_group.push(inline_row);
-              section_count--;
+              section_count === "" ? "" : section_count--;
             }
           } else {
             section_group.push(form_field);
-            section_count--;
+            section_count === "" ? "" : section_count--;
           }
         }
-        section_count || section_obj.start
-          ? (section = true)
-          : (section = false);
+        section_count || section_obj.start ? (section = true) : (section = false);
         if (!section || section_obj.end || section_obj.is_last_record) {
           let form_section_container = document.createElement("div");
           if (o.section_slider) {
@@ -2201,7 +2199,6 @@ function granite_form(formsBlock, jsonTheme) {
           //Form text
           let section_header = document.createElement("div");
           section_header.setAttribute("class", "g__section_header");
-
           form_section_container.appendChild(section_header);
           let title = document.createElement("h3");
           title.setAttribute("class", "g__section_title");
@@ -2222,12 +2219,10 @@ function granite_form(formsBlock, jsonTheme) {
           section_group.forEach((field) => {
             form_section.appendChild(field);
           });
-
           if(!section_collapsed){
             section_header.classList.add('g__section_active');
             form_section.classList.add('g__section_active');
           }
-
           section_group = [];
           section_title = "";
           section_collapsed = false
@@ -2235,11 +2230,12 @@ function granite_form(formsBlock, jsonTheme) {
           section_num += 1;
           form_container.appendChild(form_section_container);
         }
-
       } else if ((push_inline || inline_arr.length) && !section) {
         if (r.inline_field) {
           inline_arr.push(form_field);
-          section ? section_count-- : "";
+          if (section){
+            section_count === "" ? "" : section_count--;
+          }
         } else if (inline_arr.length > 0) {
           inline_arr.push(form_field);
           let inline_row = document.createElement("div");
@@ -2267,36 +2263,37 @@ function granite_form(formsBlock, jsonTheme) {
       let hidden_container = document.createElement("div");
       hidden_container.classList.add("g__hidden_field");
       if (!!o.db_id) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "Id", o.db_id);
-        hidden_container.appendChild(hidden);
+        let hidden_db = document.createElement("input");
+        hiddenFields(hidden_db, "Id", o.db_id);
+        hidden_container.appendChild(hidden_db);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_object) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "object", o.db_object);
-        hidden_container.appendChild(hidden);
+        let hidden_object = document.createElement("input");
+        hiddenFields(hidden_object, "object", o.db_object);
+        hidden_container.appendChild(hidden_object);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_action) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "submit_form", o.db_action);
-        hidden_container.appendChild(hidden);
+        let hidden_action = document.createElement("input");
+        hiddenFields(hidden_action, "submit_form", o.db_action);
+        hidden_container.appendChild(hidden_action);
         form_container.appendChild(hidden_container);
       }
       if (!!o.db_redirect) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "redirect_to", o.db_redirect);
-        hidden_container.appendChild(hidden);
+        let hidden_redirect = document.createElement("input");
+        hiddenFields(hidden_redirect, "redirect_to", o.db_redirect);
+        hidden_container.appendChild(hidden_redirect);
         form_container.appendChild(hidden_container);
       }
       if (!!o.flash_message) {
-        hidden = document.createElement("input");
-        hiddenFields(hidden, "flash_message", o.flash_message);
-        hidden_container.appendChild(hidden);
+        let hidden_flash = document.createElement("input");
+        hiddenFields(hidden_flash, "flash_message", o.flash_message);
+        hidden_container.appendChild(hidden_flash);
         form_container.appendChild(hidden_container);
       }
     }
+
     // Submit & Cancal Container
     if (!o.hide_submit || o.allow_cancel) {
       let button_container = document.createElement("div");
@@ -2319,7 +2316,7 @@ function granite_form(formsBlock, jsonTheme) {
         button_container.appendChild(cancel);
       }
       if (!!o.button_1_label) {
-        const form_custom_btn = document.createElement("a");
+        let form_custom_btn = document.createElement("a");
         form_custom_btn.href = o.button_1_href;
         form_custom_btn.setAttribute("class", "g__form_action_btn");
         form_custom_btn.innerHTML = o.button_1_label;
@@ -2329,7 +2326,7 @@ function granite_form(formsBlock, jsonTheme) {
     }
 
     // append the form to the page
-    document.getElementById(id).appendChild(form_container);
+    document.getElementById(granite_id).appendChild(form_container);
     /* -------------------- Submit ----------------------*/
     let form = document.getElementById(attr__form_id);
     form.addEventListener("submit", (e) => {
@@ -2339,7 +2336,6 @@ function granite_form(formsBlock, jsonTheme) {
         ".g__form_section_container"
       );
       let errors_arr = [];
-
       all_field_containers.forEach((field) => {
         let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
         let textarea = field.querySelector(
@@ -2491,7 +2487,6 @@ function granite_form(formsBlock, jsonTheme) {
       let real_file_field = file.querySelector(".g__field_file");
       let file_btn = file.querySelector(".g__file_btn");
       let file_text = file.querySelector(".g__file_text");
-      // let file_delete = file.querySelector(".g__file_delete");
 
       // Activate the real file field on click
       file_btn.addEventListener("click", () => {
@@ -2577,7 +2572,6 @@ function granite_form(formsBlock, jsonTheme) {
         });
       }
     }
-
     /* -------------------- Number ----------------------*/
     let all_numbers = granite_div.querySelectorAll(".g__number_container");
     all_numbers.forEach((wrap) => {
@@ -2715,8 +2709,6 @@ function granite_form(formsBlock, jsonTheme) {
         let quil_id = "#" + quil_fields[i].id;
         let quill_elm = document.getElementById(quil_fields[i].id);
         let quil_hidden_field = quill_elm.nextSibling;
-        let disabled = quil_hidden_field.disabled;
-        let value = quil_hidden_field.value;
         var quill = new Quill(quil_id, {
           debug: "false",
           modules: {
@@ -2726,7 +2718,9 @@ function granite_form(formsBlock, jsonTheme) {
           readOnly: quil_hidden_field.disabled,
           placeholder: quil_hidden_field.placeholder,
         });
+        //populate quill with the value
         let quil_text_field = quill_elm.querySelector(".ql-editor");
+        let value = quil_hidden_field.value;
         quil_text_field.innerHTML = value;
         quil_text_field.addEventListener("input", (field) => {
           quil_hidden_field.value = quil_text_field.innerHTML;
@@ -2734,12 +2728,13 @@ function granite_form(formsBlock, jsonTheme) {
       }
     }
     /* -------------------- Character Limit ----------------------*/
-    let char_count_field_arr = document.querySelectorAll(".g__form_field");
+    let char_count_field_arr = granite_div.querySelectorAll(".g__form_field");
     char_count_field_arr.forEach((field) => {
       let input = field.querySelector("input, textarea");
       let quill = field.querySelector(".ql-editor");
       if (!!input) {
-        let char_limit = input.getAttribute("maxlength");
+        let has_limit = input.hasAttribute("maxlength");
+        let char_limit = has_limit ? input.getAttribute("maxlength") : "";
         if (char_limit > 0) {
           input.addEventListener("keyup", () => {
             let counter_div = field.querySelector(".g__char_remain");
@@ -2760,7 +2755,8 @@ function granite_form(formsBlock, jsonTheme) {
       //Quill Counter
       if (!!quill) {
         let quill_hidden = field.querySelector(".g__field_quill");
-        let char_limit = quill_hidden.getAttribute("maxlength");
+        let has_limit = input.hasAttribute("maxlength");
+        let char_limit = has_limit ? quill_hidden.getAttribute("maxlength") : "";
         if (char_limit > 0) {
           quill.addEventListener("input", () => {
             let counter_div = field.querySelector(".g__char_remain");
@@ -2884,151 +2880,151 @@ function granite_form(formsBlock, jsonTheme) {
     }
 
     /* -------------------- Custom Multi Drag & Drop ----------------------*/
-    let arr_multi = form.getElementsByClassName("g__multi_container");
-    let length = arr_multi.length;
-    if (length) {
-      for (i = 0; i < length; i++) {
-        let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
-        let options_length = multi_elm.length;
-        let main_container = document.createElement("div");
-        main_container.setAttribute("class", "g__select_main");
+    // let arr_multi = form.getElementsByClassName("g__multi_container");
+    // let length = arr_multi.length;
+    // if (length) {
+    //   for (i = 0; i < length; i++) {
+    //     let multi_elm = arr_multi[i].getElementsByTagName("select")[0];
+    //     let options_length = multi_elm.length;
+    //     let main_container = document.createElement("div");
+    //     main_container.setAttribute("class", "g__select_main");
 
-        let left_container = document.createElement("div");
-        left_container.id = "g__select_home";
-        left_container.setAttribute("class", "g__drag_parent");
+    //     let left_container = document.createElement("div");
+    //     left_container.id = "g__select_home";
+    //     left_container.setAttribute("class", "g__drag_parent");
 
-        let add_btn = document.createElement("button");
-        add_btn.type = "button";
-        add_btn.setAttribute("class", "g__add_options");
-        add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
+    //     let add_btn = document.createElement("button");
+    //     add_btn.type = "button";
+    //     add_btn.setAttribute("class", "g__add_options");
+    //     add_btn.innerHTML = "Add <i class='far fa-chevron-double-right'></i>";
 
-        left_container.appendChild(add_btn);
+    //     left_container.appendChild(add_btn);
 
-        left_container.addEventListener("dragover", (event) => {
-          event.preventDefault();
-        });
-        left_container.addEventListener("drop", (event) => {
-          const id = event.dataTransfer.getData("text");
-          const draggableElement = document.getElementById(id);
-          const dropzone = left_container;
-          dropzone.appendChild(draggableElement);
-          event.dataTransfer.clearData();
-          let options_left = left_container.children;
-          options_left.length
-            ? optionAddDrop(options_left, multi_elm, "unselected")
-            : "";
-        });
+    //     left_container.addEventListener("dragover", (event) => {
+    //       event.preventDefault();
+    //     });
+    //     left_container.addEventListener("drop", (event) => {
+    //       const id = event.dataTransfer.getData("text");
+    //       const draggableElement = document.getElementById(id);
+    //       const dropzone = left_container;
+    //       dropzone.appendChild(draggableElement);
+    //       event.dataTransfer.clearData();
+    //       let options_left = left_container.children;
+    //       options_left.length
+    //         ? optionAddDrop(options_left, multi_elm, "unselected")
+    //         : "";
+    //     });
 
-        let right_container = document.createElement("div");
-        right_container.id = "g__select_drop";
-        right_container.setAttribute("class", "g__drag_parent");
+    //     let right_container = document.createElement("div");
+    //     right_container.id = "g__select_drop";
+    //     right_container.setAttribute("class", "g__drag_parent");
 
-        let remove_btn = document.createElement("button");
-        remove_btn.type = "button";
-        remove_btn.setAttribute("class", "g__remove_options");
-        remove_btn.innerHTML =
-          "<i class='far fa-chevron-double-left'></i> Remove";
-        right_container.appendChild(remove_btn);
+    //     let remove_btn = document.createElement("button");
+    //     remove_btn.type = "button";
+    //     remove_btn.setAttribute("class", "g__remove_options");
+    //     remove_btn.innerHTML =
+    //       "<i class='far fa-chevron-double-left'></i> Remove";
+    //     right_container.appendChild(remove_btn);
 
-        right_container.addEventListener("dragover", (event) => {
-          event.preventDefault();
-        });
+    //     right_container.addEventListener("dragover", (event) => {
+    //       event.preventDefault();
+    //     });
 
-        right_container.addEventListener("drop", (event) => {
-          const id = event.dataTransfer.getData("text");
-          const draggableElement = document.getElementById(id);
-          const dropzone = right_container;
-          dropzone.appendChild(draggableElement);
-          event.dataTransfer.clearData();
+    //     right_container.addEventListener("drop", (event) => {
+    //       const id = event.dataTransfer.getData("text");
+    //       const draggableElement = document.getElementById(id);
+    //       const dropzone = right_container;
+    //       dropzone.appendChild(draggableElement);
+    //       event.dataTransfer.clearData();
 
-          let options_right = right_container.children;
-          options_right.length
-            ? optionAddDrop(options_right, multi_elm, "selected")
-            : "";
-        });
+    //       let options_right = right_container.children;
+    //       options_right.length
+    //         ? optionAddDrop(options_right, multi_elm, "selected")
+    //         : "";
+    //     });
 
-        main_container.appendChild(left_container);
-        main_container.appendChild(right_container);
+    //     main_container.appendChild(left_container);
+    //     main_container.appendChild(right_container);
 
-        add_btn.addEventListener("click", (event) => {
-          let home = event.target.parentElement;
-          let drop = home.nextSibling;
-          let arr_selected = [];
-          let selected_fields = home.querySelectorAll(".g__selected");
-          selected_fields.forEach((field) => {
-            arr_selected.push(field);
-            field.remove();
-          });
-          arr_selected.forEach((val) => {
-            drop.appendChild(val);
-            val.classList.remove("g__selected");
-          });
-          optionAddDrop(arr_selected, multi_elm, "selected");
-        });
+    //     add_btn.addEventListener("click", (event) => {
+    //       let home = event.target.parentElement;
+    //       let drop = home.nextSibling;
+    //       let arr_selected = [];
+    //       let selected_fields = home.querySelectorAll(".g__selected");
+    //       selected_fields.forEach((field) => {
+    //         arr_selected.push(field);
+    //         field.remove();
+    //       });
+    //       arr_selected.forEach((val) => {
+    //         drop.appendChild(val);
+    //         val.classList.remove("g__selected");
+    //       });
+    //       optionAddDrop(arr_selected, multi_elm, "selected");
+    //     });
 
-        remove_btn.addEventListener("click", (event) => {
-          let drop = event.target.parentElement;
-          let home = drop.previousSibling;
-          let arr_selected = [];
-          let selected_fields = drop.querySelectorAll(".g__selected");
-          selected_fields.forEach((field) => {
-            arr_selected.push(field);
-            field.remove();
-          });
-          arr_selected.forEach((val) => {
-            home.appendChild(val);
-            val.classList.remove("g__selected");
-          });
-          optionAddDrop(arr_selected, multi_elm, "unselected");
-        });
+    //     remove_btn.addEventListener("click", (event) => {
+    //       let drop = event.target.parentElement;
+    //       let home = drop.previousSibling;
+    //       let arr_selected = [];
+    //       let selected_fields = drop.querySelectorAll(".g__selected");
+    //       selected_fields.forEach((field) => {
+    //         arr_selected.push(field);
+    //         field.remove();
+    //       });
+    //       arr_selected.forEach((val) => {
+    //         home.appendChild(val);
+    //         val.classList.remove("g__selected");
+    //       });
+    //       optionAddDrop(arr_selected, multi_elm, "unselected");
+    //     });
 
-        let option_block;
-        for (j = 0; j < options_length; j++) {
-          option_block = document.createElement("div");
-          option_block.id = "draggable-" + j;
-          option_block.setAttribute("class", "g__multi_option");
-          option_block.setAttribute("draggable", true);
-          option_block.innerText = multi_elm.options[j].innerHTML;
-          left_container.appendChild(option_block);
+    //     let option_block;
+    //     for (j = 0; j < options_length; j++) {
+    //       option_block = document.createElement("div");
+    //       option_block.id = "draggable-" + j;
+    //       option_block.setAttribute("class", "g__multi_option");
+    //       option_block.setAttribute("draggable", true);
+    //       option_block.innerText = multi_elm.options[j].innerHTML;
+    //       left_container.appendChild(option_block);
 
-          option_block.addEventListener("click", (event) => {
-            event.target.classList.toggle("g__selected");
-          });
+    //       option_block.addEventListener("click", (event) => {
+    //         event.target.classList.toggle("g__selected");
+    //       });
 
-          option_block.addEventListener("dragstart", (event) => {
-            event.dataTransfer.setData("text/plain", event.target.id);
-            event.currentTarget.classList.add("drag");
-          });
+    //       option_block.addEventListener("dragstart", (event) => {
+    //         event.dataTransfer.setData("text/plain", event.target.id);
+    //         event.currentTarget.classList.add("drag");
+    //       });
 
-          option_block.addEventListener("dragend", (event) => {
-            // event.currentTarget.classList.add("drag");
-          });
-        }
-        arr_multi[i].appendChild(main_container);
-      }
+    //       option_block.addEventListener("dragend", (event) => {
+    //         // event.currentTarget.classList.add("drag");
+    //       });
+    //     }
+    //     arr_multi[i].appendChild(main_container);
+    //   }
 
-      function optionAddDrop(options, original_list, side) {
-        for (let option of options) {
-          //loop through original select options
-          for (let item of original_list) {
-            if (option.innerHTML === item.innerHTML && side === "selected") {
-              item.selected = true;
-            } else if (
-              option.innerHTML === item.innerHTML &&
-              side === "unselected"
-            ) {
-              item.selected = false;
-            }
-          }
-        }
-        //print out selected values
-        for (i = 0; i < original_list.length; i++) {
-          if (original_list.options[i].selected === true) {
-            console.log(original_list.options[i]);
-          }
-        }
-      }
-    }
+    //   function optionAddDrop(options, original_list, side) {
+    //     for (let option of options) {
+    //       //loop through original select options
+    //       for (let item of original_list) {
+    //         if (option.innerHTML === item.innerHTML && side === "selected") {
+    //           item.selected = true;
+    //         } else if (
+    //           option.innerHTML === item.innerHTML &&
+    //           side === "unselected"
+    //         ) {
+    //           item.selected = false;
+    //         }
+    //       }
+    //     }
+    //     //print out selected values
+    //     for (i = 0; i < original_list.length; i++) {
+    //       if (original_list.options[i].selected === true) {
+    //         console.log(original_list.options[i]);
+    //       }
+    //     }
+    //   }
+    // }
 
     /* -------------------- Custom Select Field ----------------------*/
     if (!o.default_picklists) {
@@ -3076,7 +3072,6 @@ function granite_form(formsBlock, jsonTheme) {
                   h.innerHTML = this.innerHTML;
                   s.value = this.innerHTML;
                   s.value = s.options[i].value || s.options[i].innerHTML;
-                  console.log(s.value);
                   y = this.parentNode.getElementsByClassName(
                     "same-as-selected"
                   );
@@ -3192,21 +3187,20 @@ function granite_form(formsBlock, jsonTheme) {
       arr_form_fields.forEach((field) => {
         let input = field.querySelector(`input[form_id="${attr__form_id}"]`);
         input_arr.push(input);
-        console.log(input);
         let select = field.querySelector(`select[form_id="${attr__form_id}"]`);
         select_arr.push(select);
         let textarea = field.querySelector(`textarea[form_id="${attr__form_id}"]`);
         textarea_arr.push(textarea);
-        if (input.classList.contains('g__field_quill')){
-          let quill = field.querySelector('.ql-editor');
-          quill.addEventListener('input', () => {
-            start_auto_save(attr__form_id);
-          })
-        }
         if (!!input) {
           input.addEventListener("input", () => {
             start_auto_save(attr__form_id);
           });
+          if (input.classList.contains('g__field_quill')){
+            let quill = field.querySelector('.ql-editor');
+            quill.addEventListener('input', () => {
+              start_auto_save(attr__form_id);
+            })
+          }
         }
         if (!!select) {
           select.addEventListener("input", () => {
@@ -3225,7 +3219,7 @@ function granite_form(formsBlock, jsonTheme) {
           auto_save_count = 0;
         }
         if (auto_save_count == 0) {
-          auto_save_wait = setTimeout(save, 3500, form_id);
+          auto_save_wait = setTimeout(save, 1500, form_id);
           auto_save_count = 1;
         }
       }
@@ -3256,7 +3250,6 @@ function granite_form(formsBlock, jsonTheme) {
           var response = save_data;
           granite_data[form_id] = { response };
         }
-
         $.ajax({
           type: o.method,
           url: o.action,
@@ -3272,7 +3265,6 @@ function granite_form(formsBlock, jsonTheme) {
         input_arr = [];
         select_arr = [];
         textarea_arr = [];
-        count = 0;
         return false;
       }
     }
@@ -3419,7 +3411,6 @@ function granite_form(formsBlock, jsonTheme) {
         });
       }
       function text(is_section, parent, child, values, blank, required) {
-        console.log(parent);
         const arr_values = values_arr(values);
         const dep_text = parent.value.toUpperCase();
         const dep_child = child;

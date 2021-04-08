@@ -36,7 +36,7 @@ function granite_hero(jsonHero, jsonTheme){
         }
         return `${hex} is not a valid Hex code.`;
     }
-
+    
     /*---------------------------------------------
     Static CSS
     ---------------------------------------------*/
