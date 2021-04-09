@@ -2,7 +2,7 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    "style": "top_bar",
+    "style": "sidebar",
     background: "",
     background_opacity: "",
     //Logo
@@ -53,11 +53,23 @@ let navigationBlock = {
   records: [
     {
       "link_type": "main_nav",
-      "label": "About"
+      "label": "About",
+      "submenu_header": false,
     },
     {
       "link_type": "main_nav",
+      "submenu_header": true,
       "label": "Products"
+    },
+    {
+      "link_type": "main_nav",
+      "submenu": true,
+      "label": "Phones"
+    },
+    {
+      "link_type": "main_nav",
+      "submenu": true,
+      "label": "Computers"
     },
     {
       "link_type": "main_nav",
@@ -75,5 +87,6 @@ let navigationBlock = {
       "link_type": "utility",
       "label": "Login"
     },
+
   ],
 };
