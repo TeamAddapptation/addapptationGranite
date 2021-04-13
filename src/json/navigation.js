@@ -2,13 +2,16 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    "style": "sidebar",
+    style: "sidebar",
+    mobile_menu_style: "bottom",
     background: "",
     background_opacity: "",
     //Logo
     header_label: "<span id='addapptation'>addapptation</span>",
     header_label_color: "white",
-    header_label_font_size: "24px",
+    logo_font_size: "24px",
+    header_label_font_size: "20px",
+    sub_label_font_size: "16px",
     header_image: "https://addapptation.blob.core.windows.net/logo/logo.png",
     header_link: "#test",
     //Links
