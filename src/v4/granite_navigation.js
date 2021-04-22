@@ -1,16 +1,19 @@
+"use strict";
 function granite_navigation(jsonBlock, jsonTheme) {
   /*---------------------------------------------
   Global Variables
   ---------------------------------------------*/
+  let graniteDocument = document;
   const id = jsonBlock.id;
   const o = jsonBlock.options;
   const r = jsonBlock.records;
   const t = jsonTheme;
   const rCount = r.length;
-  const style = o.style || 'top_bar';
+  const style = o.type || 'topbar';
   const mode = !!t.mode ? t.mode : "midnight";
   const cssId = "#" + id;
-  const granite_div = document.getElementById(id);
+  const granite_div = graniteDocument.getElementById(id);
+  let viewportWidth = window.innerWidth || graniteDocument.documentElement.clientWidth
   !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
   /*---------------------------------------------
   Verify Div ID and Div Alignment - Set Mode
@@ -23,16 +26,32 @@ function granite_navigation(jsonBlock, jsonTheme) {
   /*---------------------------------------------
   Add Font Family To Header
   ---------------------------------------------*/
-  const font_include = document.getElementById('g__font_stylesheet');
+  const font_include = graniteDocument.getElementById('g__font_stylesheet');
   if (!font_include){
-      var head = document.head;
-      var fontLink = document.createElement("link");
+      var head = graniteDocument.head;
+      var fontLink = graniteDocument.createElement("link");
       fontLink.type = "text/css";
       fontLink.rel = "stylesheet";
       fontLink.id = "g__font_stylesheet";
       fontLink.href = "https://use.typekit.net/ihq4dbs.css";
       head.appendChild(fontLink);
   }
+  /*---------------------------------------------
+  Convert Hex to RGB
+  ---------------------------------------------*/
+    function hexToRgb(hex){
+      var c;
+      if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+          c= hex.substring(1).split('');
+          if(c.length== 3){
+              c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+          }
+          c= '0x'+c.join('');
+          return [(c>>16)&255, (c>>8)&255, c&255].join(',');
+      }
+      return `${hex} is not a valid Hex code.`;
+  }
+
   /*---------------------------------------------
   Attributes
   ---------------------------------------------*/
@@ -47,15 +66,16 @@ function granite_navigation(jsonBlock, jsonTheme) {
   let lightGray = "#5d5d5d";
   // Layout
   let navHeight = o.nav_height || "75px";
+  let topBarPosition = o.topbar_position || "right";
   let mobilePadding = o.mobile_padding || "10px 15px";
   let desktopPadding = o.desktop_padding || "5px 30px";
 
   // Design
+  let navTopBarBkg = hexToRgb(o.background) || navBkgMode;
   let navBkg = o.background || navBkgMode;
+  let navBkgTopOpacity = o.background_opacity || "1";
   let headerLabelColor = o.header_label_color || fontColorMode;
   let logoFontSize = o.logo_font_size || "24px";
-  let headerLabelFontSize = o.header_label_font_size || "20px";
-  let subLabelFontSize = o.sub_label_font_size || "18px";
   let bkgColorHover = o.background_hover || hoverMode;
   let dividerLineColor = o.divider_line_color || lightGray;
   let utilityBkgColor = o.utility_cta_background || lightGray;
@@ -67,15 +87,25 @@ function granite_navigation(jsonBlock, jsonTheme) {
   // Font
   let font = "hero-new, sans-serif;";
   let fontWeight = 300;
+  let navFontSize = o.topbar_font_size || "20px";
+  let ddFontSize = o.dropdown_font_size || "18px";
+  let mobileTopFontSize = o.mobile_font_size || "16px";
   let fontColor = o.font_color || fontColorMode;
   let fontColorHover = o.font_color_hover || fontHoverMode;
   let utilityFontSize = o.utility_font_size || "12px";
-  let mobileBottomFontSize = o.mobile_bottom_font_size || "10px";
+  let mobileFontSize = o.mobile_bottom_font_size || "10px";
+  /*---------------------------------------------
+  Adjust body margins
+  ---------------------------------------------*/
+  if (style === "topbar"){
+    document.body.style.height = navHeight;
+  }
   /*---------------------------------------------
   CSS
   ---------------------------------------------*/
-  let navStyles = document.createElement('style');
-    navStyles.innerHTML = `
+  let navStyles = graniteDocument.createElement('style');
+  navStyles.id = "g__css_" + id;
+  navStyles.innerHTML = `
     /* ------------------------------
     Granite Div
     -------------------------------*/
@@ -108,132 +138,165 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /* ------------------------------
     Top Bar
     -------------------------------*/
-    ${cssId} .g__top_bar{
+    .g__topbar_shift{
+      margin-top: ${navHeight};
+    }
+    ${cssId} .g__topbar{
       display: flex;
       height: ${navHeight};
       position: relative;
-      background: ${navBkg};
-      justify-content: space-between;
+      background: rgba(${navTopBarBkg}, ${navBkgTopOpacity});
       align-items: center;
       padding: 15px;
     }
-    ${cssId} .g__top_bar .g__logo_cont{
+    ${cssId} .g__topbar .g__logo_cont{
       display: flex;
       flex-direction: row;
       align-items: center;
     }
-    ${cssId} .g__top_bar .g__logo{
+    ${cssId} .g__topbar .g__logo{
       width: 50px;
       height: auto;
     }
-    ${cssId} .g__top_bar .g__logo_label{
+    ${cssId} .g__topbar .g__logo_label{
       color: ${headerLabelColor};
       font-size: ${logoFontSize};
       margin-left: 15px;
     }
-    ${cssId} .g__top_bar .g__nav_cont {
+    ${cssId} .g__topbar .g__nav_cont {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      align-items: center;
     }
-    ${cssId} .g__top_bar .g__nav_utility {
+    ${cssId} .g__topbar .g__icon_container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    ${cssId} .g__topbar .g__nav_utility {
       display: flex;
       padding-left: 0;
       margin-bottom: 0;
       height: 25px;
       list-style: none;
+      align-items: center;
       justify-content: flex-end;
     }
-    ${cssId} .g__top_bar .g__nav_utility .g__item_utility {
+    ${cssId} .g__topbar .g__nav_utility .g__item_utility {
       display: flex;
       color: ${fontColor};
       order: 1;
       font-size: ${utilityFontSize};
-      padding: 5px 30px;
+      padding: 10px 30px;
     }
-    ${cssId} .g__top_bar .g__nav_main {
+    ${cssId} .g__topbar .g__nav_main {
       display: flex;
-      order: 2;
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
     }
-    ${cssId} .g__top_bar .g__nav_main .g__item {
+    ${cssId} .g__topbar .g__nav_main .g__item {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       position: relative;
+      border: 2px solid ${navBkg};
       padding: ${desktopPadding};
     }
-    ${cssId} .g__top_bar .g__nav_main .g__item.g__icon_center{
+    ${cssId} .g__topbar .g__nav_main .g__item.g__icon_center{
       flex-direction: column;
       justify-content: flex-end;
     }
-    ${cssId} .g__top_bar .g__nav_main .g__item.g__icon_center i{
+    ${cssId} .g__topbar .g__nav_main .g__item.g__icon_center i{
       padding-right: 0;
     }
+    ${cssId} .g__topbar .g__nav_main .g__item i {
+      color: ${fontColor};
+      font-size: ${navFontSize};
+      padding-right: 10px;
+    }
+    ${cssId} .g__topbar .g__nav_main .g__item a {
+      color: ${fontColor};
+      font-size: ${navFontSize};
+    }
 
-    ${cssId} .g__top_bar .g__nav_main .g__item:hover {
+
+    /* ----- Top Bar Hover Styles ----- */
+    ${cssId} .g__topbar .g__nav_main .g__item.g__bottom_border:hover {
+      display: flex;
+      cursor: pointer;
+      border-bottom: 2px solid ${bkgColorHover};
+    }
+    ${cssId} .g__topbar .g__nav_main .g__item.g__top_border:hover {
+      display: flex;
+      cursor: pointer;
+      border-top: 2px solid ${bkgColorHover};
+    }
+    ${cssId} .g__topbar .g__nav_main .g__item.g__bkg_fill:hover {
       display: flex;
       cursor: pointer;
       background: ${bkgColorHover};
     }
-    ${cssId} .g__top_bar .g__nav_main .g__item i {
-      color: ${fontColor};
-      font-size: ${headerLabelFontSize};
-      padding-right: 10px;
+    ${cssId} .g__topbar .g__nav_main .g__item.g__font_fill:hover a{
+      cursor: pointer;
+      font-color: ${bkgColorHover};
     }
-    ${cssId} .g__top_bar .g__nav_main .g__item a {
-      color: ${fontColor};
-      font-size: ${headerLabelFontSize};
-    }
-    /* -------------------------Top Bar Dropdown --------------------------*/
-    ${cssId} .g__top_bar .g__cta_btn{
+
+    /* ----- Top Bar CTA ----- */
+    ${cssId} .g__topbar .g__cta_btn{
       background: ${utilityBkgColor};
+      padding: 10px 15px;
       border-radius: 5px;
     }
-    ${cssId} .g__top_bar .g__cta_btn:hover{
+    ${cssId} .g__topbar .g__cta_btn:hover{
       cursor: pointer;
       background: ${utilityBkgColorHover};
       border-radius: 5px;
     }
-    /* -------------------------Top Bar Dropdown --------------------------*/
-    ${cssId} .g__top_bar ul.g__dropdown_menu{
+
+
+    /* ----- Top Bar Dropdown ------ */
+    ${cssId} .g__topbar ul.g__dropdown_menu{
+      opacity: 0;
+      max-height: 0;
       position: absolute;
-      top: 40px;
       left: 0;
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
-      opacity: 1;
       background: ${navBkg};
       transition: all .5s ease;
     }
-    ${cssId} .g__top_bar .g__dd_item_container{
+    ${cssId} .g__topbar .g__dd_active ul.g__dropdown_menu{
+      opacity: 1;
+      max-height: 400px;
+    }
+    ${cssId} .g__topbar .g__dd_item_container{
       display: flex;
       align-items: center;
     }
-    ${cssId} .g__top_bar .g__dd_item_container i{
+    ${cssId} .g__topbar .g__dd_item_container i{
       color: ${fontColor};
       padding: 0 10px;
     }
-    ${cssId} .g__top_bar ul.g__dropdown_menu .g__sub_item {
+    ${cssId} .g__topbar ul.g__dropdown_menu .g__sub_item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: ${desktopPadding};
+      padding: 10px;
       border-top: 1px solid ${dividerLineColor};
     }
-    ${cssId} .g__top_bar ul.g__dropdown_menu .g__sub_item i {
-      font-size: ${subLabelFontSize};
+    ${cssId} .g__topbar ul.g__dropdown_menu .g__sub_item i {
+      order: 1;
+      font-size: ${ddFontSize};
     }
-    ${cssId} .g__top_bar ul.g__dropdown_menu .g__sub_item a.g__sub_link {
-      font-size: ${subLabelFontSize};
+    ${cssId} .g__topbar ul.g__dropdown_menu .g__sub_item a.g__sub_link {
+      order: 0;
+      font-size: ${ddFontSize};
       display: flex;
     }
-    ${cssId} .g__top_bar ul.g__dropdown_menu.g__hidden{
-      opacity: 0;
-    }
+
     ${cssId} .g__nav_hamburger .g__bar_1,
     ${cssId} .g__nav_hamburger .g__bar_2,
     ${cssId} .g__nav_hamburger .g__bar_3{
@@ -281,7 +344,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
     }
     ${cssId} .g__sidebar .g__logo_label{
       color: ${headerLabelColor};
-      font-size: ${headerLabelFontSize};
+      font-size: ${navFontSize};
       margin-left: 0;
       opacity: 1;
     }
@@ -390,7 +453,9 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ${cssId} .g__sidebar.g__collapse_active .g__sidebar_collapse i{
       transform: rotate(180deg);
     }
-    /* ------------------------- Sidebar collapsed --------------------------*/
+
+
+    /* ----- Sidebar collapsed ----- */
     ${cssId} .g__sidebar.g__collapse_active .g__logo_cont{
       align-items: flex-end;
     }
@@ -427,6 +492,12 @@ function granite_navigation(jsonBlock, jsonTheme) {
       text-overflow: ellipsis;
     }
     ${cssId} .g__sidebar.g__collapse_active .g__item .g__icon_container{
+      width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    ${cssId} .g__sidebar.g__collapse_active .g__item .g__dd_item_container i{
       width: 60px;
       display: flex;
       justify-content: center;
@@ -512,6 +583,9 @@ function granite_navigation(jsonBlock, jsonTheme) {
         align-items: center;
         padding: 15px;
       }
+      ${cssId} .g__mobile_top .g__utility_cont{
+        display: none;
+      }
       ${cssId} .g__mobile_top .g__sidebar_collapse{
         display: none;
       }
@@ -520,6 +594,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
         flex-direction: row;
         align-items: center;
         margin: 0;
+        padding: 0;
       }
       ${cssId} .g__mobile_top .g__logo{
         width: 50px;
@@ -533,6 +608,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       ${cssId} .g__mobile_top .g__nav_cont{
         position: absolute;
         flex-direction: column;
+        align-items: stretch;
         top: ${navHeight};
         right: 0;
         left: 0;
@@ -542,6 +618,21 @@ function granite_navigation(jsonBlock, jsonTheme) {
         transform: translateX(-100%);
         transition: all 1s ease;
       }
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main{
+        order: 1;
+        align-items: stretch;
+        flex-direction: column;
+      }
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_utility{
+        order: 2;
+        flex-direction: column;
+        margin-top: auto;
+        align-items: center;
+        margin-bottom: 20px;
+        align-items: stretch;
+        margin-left: 15px;
+        margin-right: 15px;
+      }
       ${cssId} .g__mobile_top.g__mobile_bottom .g__nav_cont{
         height: calc(100vh - (${navHeight} * 2));
       }
@@ -549,11 +640,14 @@ function granite_navigation(jsonBlock, jsonTheme) {
         opacity: 1;
         transform: translateX(0);
       }
-      ${cssId} .g__mobile_top .g__nav_cont .g__nav_utility{
-        order: 2;
-        flex-direction: column;
-        margin-top: auto;
-        align-items: center;
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_utility .g__item_utility{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_utility .g__item_utility.g__cta_btn a{
+        text-align: center;
       }
       ${cssId} .g__mobile_top.g__mobile_bottom .g__utility_cont{
         display: none;
@@ -566,6 +660,9 @@ function granite_navigation(jsonBlock, jsonTheme) {
         margin-top: initial;
         align-items: center;
       }
+      ${cssId} .g__mobile_top.g__mobile_bottom .g__logo_cont{
+        padding: 0;
+      }
       ${cssId} .g__mobile_top.g__mobile_bottom .g__nav_cont .g__nav_utility .g__item_utility:first-of-type{
         border-top: 1px solid ${dividerLineColor};
       }
@@ -576,50 +673,52 @@ function granite_navigation(jsonBlock, jsonTheme) {
         padding: 20px 10px;
         justify-content: center;
       }
-      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main{
-        order: 1;
-        flex-direction: column;
-      }
       ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item{
         border-bottom: 1px solid ${dividerLineColor};
         flex-direction: row;
         justify-content: space-between;
         padding: ${mobilePadding};
       }
-      ${cssId} .g__top_bar.g__mobile_bottom .g__nav_utility .g__item_utility{
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item i,
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item a{
+        font-size: ${mobileTopFontSize};
+      }
+
+
+      ${cssId} .g__topbar.g__mobile_bottom .g__nav_utility .g__item_utility{
         border-bottom: 1px solid ${dividerLineColor};
         flex-direction: row;
         justify-content: space-between;
         padding: ${mobilePadding};
       }
-      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item a{
-        order: 0;
-      }
-      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item i{
+      ${cssId} .g__topbar.g__mobile_top  .g__icon_container{
         order: 1;
       }
-      /* -------------------------Top Bar Dropdown Tablet --------------------------*/
-      ${cssId} .g__mobile_top .g__item_dropdown{
+
+
+      /* ----- Top Bar Dropdown Mobile ------ */
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item.g__item_dropdown{
         display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+      ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item.g__item_dropdown .g__dd_item_container{
+        padding: ${mobilePadding};
+      }
+      ${cssId} .g__mobile_top ul.g__dropdown_menu .g__sub_item{
+        border: 0;
+        padding: ${mobilePadding};
       }
       ${cssId} .g__mobile_top .g__item_dropdown i{
         margin-left: auto;
+        font-size: ${ddFontSize};
       }
-      ${cssId} .g__mobile_top .g__item.g__item_dropdown {
-        padding: 0;
-      }
-      ${cssId} .g__mobile_top .g__item.g__item_dropdown .g__dd_item_container{
-        padding: ${mobilePadding};
+      ${cssId} .g__mobile_top .g__item_dropdown .g__link{
+        font-size: ${ddFontSize};
       }
       ${cssId} .g__mobile_top ul.g__dropdown_menu{
         position: relative;
-        display: flex;
-        top: 0;
-        flex-direction: column;
-      }
-      ${cssId} .g__mobile_top ul.g__dropdown_menu.g__hidden{
-        opacity: 0;
-        max-height: 0;
+        width: 100%;
       }
       /* ------------------------- Hamburger --------------------------*/
       ${cssId} .g__nav_hamburger .g__bar_1,
@@ -723,7 +822,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       order: 0;
     }
     ${cssId} .g__nav__bottom_cont .g__nav_main .g__item a{
-      font-size: ${mobileBottomFontSize};
+      font-size: ${mobileFontSize};
       color: ${fontColor};
       order: 1;
     }
@@ -779,9 +878,14 @@ function granite_navigation(jsonBlock, jsonTheme) {
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
-      opacity: 1;
+      opacity: 0;
+      max-height: 0;
       background: ${navBkg};
       transition: all .5s ease;
+    }
+    ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_active ul.g__dropdown_menu{
+      max-height: 500px;
+      opacity: 1;
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_item_container{
       display: flex;
@@ -800,12 +904,12 @@ function granite_navigation(jsonBlock, jsonTheme) {
       align-items: center;
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu ul.g__dropdown_menu .g__sub_item i {
-      font-size: ${subLabelFontSize};
+      font-size: ${ddFontSize};
       color: ${fontColor};
       order: 1;
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu ul.g__dropdown_menu .g__sub_item a.g__sub_link {
-      font-size: ${subLabelFontSize};
+      font-size: ${ddFontSize};
       color: ${fontColor};
       display: flex;
       order: 0;
@@ -814,7 +918,11 @@ function granite_navigation(jsonBlock, jsonTheme) {
       opacity: 0;
     }
     `
-    document.head.appendChild(navStyles);
+    let granite_css = graniteDocument.getElementById("g__css_" + id);
+    if (granite_css) {
+        granite_css.remove();
+    }
+    graniteDocument.head.appendChild(navStyles);
     /*---------------------------------------------
     Check for records
     ---------------------------------------------*/
@@ -826,31 +934,31 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /*---------------------------------------------
     Navigation builder
     ---------------------------------------------*/
-    let topBarCont = document.createElement('div');
+    let topBarCont = graniteDocument.createElement('div');
     topBarCont.classList.add(`g__${style}`);
     topBarCont.classList.add('g__mobile_top');
     o.mobile_menu_style === "bottom" ? topBarCont.classList.add(`g__mobile_bottom`) : "";
     /* ------------ Top Section Container -----------*/
-    let topSection = document.createElement('div')
+    let topSection = graniteDocument.createElement('div')
     topSection.classList.add('g__top_container');
 
     /* ------------ Logo -----------*/
-    let logoCont = document.createElement('div')
+    let logoCont = graniteDocument.createElement('div')
     logoCont.classList.add('g__logo_cont');
 
     if(o.header_image){
-      let logoLink = document.createElement('a');
+      let logoLink = graniteDocument.createElement('a');
       logoLink.href = o.header_link || '/';
       logoCont.appendChild(logoLink);
 
-      let logo = document.createElement('img');
+      let logo = graniteDocument.createElement('img');
       logo.classList.add('g__logo')
       logo.src = o.header_image;
       logo.alt = o.header_label || "";
       logoLink.appendChild(logo);
     }
     if(o.header_label){
-      let logoLabel = document.createElement('div');
+      let logoLabel = graniteDocument.createElement('div');
       logoLabel.classList.add('g__logo_label')
       logoLabel.innerHTML = o.header_label || "";
       logoCont.appendChild(logoLabel);
@@ -858,8 +966,8 @@ function granite_navigation(jsonBlock, jsonTheme) {
     topSection.appendChild(logoCont)
     topBarCont.appendChild(topSection);
 
-    if(o.style === "sidebar"){
-      var utilityCont = document.createElement('div')
+    if(style === "sidebar"){
+      var utilityCont = graniteDocument.createElement('div')
       utilityCont.classList.add('g__utility_cont');
       utilityCont.innerHTML = '<i class="far fa-ellipsis-h"></i>'
 
@@ -871,7 +979,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
     };
 
     /* ------------ Hamburger Div -----------*/
-    let hamburger = document.createElement('div');
+    let hamburger = graniteDocument.createElement('div');
     hamburger.classList.add('g__nav_hamburger');
     topBarCont.appendChild(hamburger);
 
@@ -881,19 +989,33 @@ function granite_navigation(jsonBlock, jsonTheme) {
     })
 
     for(let i = 1; i < 4; i++){
-      let bar = document.createElement('div');
+      let bar = graniteDocument.createElement('div');
       bar.setAttribute('class', `g__bar_${i}`)
       hamburger.appendChild(bar);
     }
 
     /* ------------ Links -----------*/
-    let navCont = document.createElement('div');
+    let navCont = graniteDocument.createElement('div');
     navCont.classList.add('g__nav_cont')
 
-    let navMain = document.createElement('ul');
+    if(style === "topbar"){
+      switch(topBarPosition){
+        case "left":
+          navCont.style.marginRight = "auto"
+        break;
+        case "center":
+          navCont.style.margin = "0 auto"
+        break;
+        default:
+          navCont.style.marginLeft = "auto"
+      }
+    }
+
+
+    let navMain = graniteDocument.createElement('ul');
     navMain.classList.add('g__nav_main');
 
-    let navUtility = document.createElement('ul');
+    let navUtility = graniteDocument.createElement('ul');
     navUtility.classList.add('g__nav_utility');
 
     /* ------------ Dropdown -----------*/
@@ -904,16 +1026,22 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
     /* ------------ Main Loop -----------*/
     r.forEach( (r, num) => {
+      let current = location.pathname;
+      console.log(current);
       String(r.submenu_header) === 'true' ? r.link_type = "ddHeader" :  "" ;
       String(r.submenu) === 'true' ? r.link_type = "ddItem" :  "" ;
       let item, link, iconCont, iconLink;
       switch(r.link_type) {
         case "utility":
-          item = document.createElement('li');
+          item = graniteDocument.createElement('li');
           item.classList.add('g__item_utility')
+          if(style === "topbar"){
+            !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
+          }
+
           String(r.cta_button) === 'true' ? item.classList.add('g__cta_btn'): "";
 
-          link = document.createElement('a');
+          link = graniteDocument.createElement('a');
           link.classList.add('g__link_utility');
           link.innerHTML = r.label || "Link";
           item.appendChild(link)
@@ -927,16 +1055,16 @@ function granite_navigation(jsonBlock, jsonTheme) {
         break;
         case "ddItem":
           dd = true;
-          let subItem = document.createElement('li');
+          let subItem = graniteDocument.createElement('li');
           subItem.classList.add('g__sub_item')
 
           if (r.icon){
-            iconLink = document.createElement('i');
+            iconLink = graniteDocument.createElement('i');
             iconLink.setAttribute('class', r.icon);
             subItem.appendChild(iconLink);
           }
 
-          subLink = document.createElement('a');
+          let subLink = graniteDocument.createElement('a');
           subLink.classList.add('g__sub_link');
           subLink.innerHTML = r.label || "Link";
           subItem.appendChild(subLink);
@@ -944,6 +1072,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
           arrDdItems.push(subItem);
         break;
         default:
+          // append dd top dom if true
           if(dd){
             let ddMenu = buildDd();
             navMain.appendChild(ddMenu);
@@ -953,24 +1082,28 @@ function granite_navigation(jsonBlock, jsonTheme) {
             ddLabel = "";
             ddIcon = "";
           }
-          item = document.createElement('li');
+          // build level 1 nav item
+          item = graniteDocument.createElement('li');
           item.classList.add('g__item')
           !!r.icon ? "" : item.classList.add('g__no_icon');
-          if((String(o.icon_top) === "true") && (o.style === "top_bar")) {
+          if(style === "topbar"){
+            !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
+          }
+          if((String(o.icon_top) === "true") && (style === "topbar")) {
             item.classList.add('g__icon_center')
           };
 
           if(!!r.icon){
-            iconCont = document.createElement('div');
+            iconCont = graniteDocument.createElement('div');
             iconCont.classList.add('g__icon_container');
 
-            iconLink = document.createElement('i');
+            iconLink = graniteDocument.createElement('i');
             iconLink.setAttribute('class', r.icon);
             iconCont.appendChild(iconLink);
             item.appendChild(iconCont);
           }
 
-          link = document.createElement('a');
+          link = graniteDocument.createElement('a');
           link.classList.add('g__link');
           link.innerHTML = r.label || "Link";
 
@@ -985,30 +1118,30 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ---------------------------------------------*/
     navCont.appendChild(navMain);
     if(o.mobile_menu_style === "bottom"){
-      var bottomNavCont = document.createElement('div');
+      var bottomNavCont = graniteDocument.createElement('div');
       bottomNavCont.classList.add('g__nav__bottom_cont')
     }
 
-    if(o.style === 'sidebar'){
-      let collapseCont = document.createElement('div');
+    if(style === 'sidebar'){
+      let collapseCont = graniteDocument.createElement('div');
       collapseCont.classList.add('g__sidebar_collapse')
 
       collapseCont.addEventListener('click', () => {
       collapseCont.parentElement.parentElement.classList.toggle('g__collapse_active');
       iconCheck();
     })
-      let collpaseIcon = document.createElement('i');
+      let collpaseIcon = graniteDocument.createElement('i');
       collpaseIcon.setAttribute('class', 'far fa-chevron-left');
       collapseCont.appendChild(collpaseIcon);
       navCont.appendChild(collapseCont);
     }
 
     // Append the utility nav based on style
-    switch(o.style) {
+    switch(style) {
       case "sidebar":
         utilityCont.appendChild(navUtility);
         break;
-      case "top_bar":
+      case "topbar":
         navCont.appendChild(navUtility);
         break;
     }
@@ -1017,47 +1150,51 @@ function granite_navigation(jsonBlock, jsonTheme) {
     topBarCont.appendChild(navCont);
 
     granite_div.appendChild(topBarCont);
-    granite_div.appendChild(bottomNavCont);
+    if(o.mobile_menu_style === "bottom"){
+      granite_div.appendChild(bottomNavCont);
+    }
     /*---------------------------------------------
     Functions
     ---------------------------------------------*/
+
     // Build DD function
     function buildDd(){
-      ddItem = document.createElement('li');
+      let ddItem = graniteDocument.createElement('li');
       ddItem.classList.add('g__item');
       ddItem.classList.add('g__item_dropdown');
+      !!o.hover_style ? ddItem.classList.add(`g__${o.hover_style}`) : ddItem.classList.add(`g__bottom_border`);
 
-      let ddItemCont = document.createElement('div');
+      let ddItemCont = graniteDocument.createElement('div');
       ddItemCont.classList.add('g__dd_item_container');
       ddItem.appendChild(ddItemCont);
 
-      let ddlink = document.createElement('a');
+      let ddlink = graniteDocument.createElement('a');
       ddlink.classList.add('g__link');
       ddlink.innerHTML = ddLabel || "Link";
       ddItemCont.appendChild(ddlink);
 
       let ddArrow
       if (!!ddIcon){
-        let ddIconArrow = document.createElement('div');
+        let ddIconArrow = graniteDocument.createElement('div');
         ddIconArrow.classList.add('g__dd_icon_arrow');
 
         let icon = ddIcon;
-        ddIcon = document.createElement('i');
+        ddIcon = graniteDocument.createElement('i');
         ddIcon.setAttribute('class', icon);
         ddIconArrow.appendChild(ddIcon);
 
-        ddArrow = document.createElement('i');
+        ddArrow = graniteDocument.createElement('i');
         ddArrow.setAttribute('class', 'far fa-chevron-right g__dd_arrow');
         ddIconArrow.appendChild(ddArrow);
 
         ddItemCont.appendChild(ddIconArrow);
       } else {
-        ddArrow = document.createElement('i');
+        ddArrow = graniteDocument.createElement('i');
         ddArrow.setAttribute('class', 'far fa-chevron-right');
         ddItemCont.appendChild(ddArrow);
       }
 
-      let dropdownMenu = document.createElement('ul');
+      let dropdownMenu = graniteDocument.createElement('ul');
       dropdownMenu.classList.add('g__dropdown_menu');
 
       // Event Listener for dropdowns
@@ -1068,22 +1205,32 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
       ddItem.addEventListener('click', function() {
         // dropdownMenu.classList.toggle('g__dd_active');
+        let currentWidth = window.innerWidth || graniteDocument.documentElement.clientWidth;
         dropdownMenu.parentElement.classList.toggle('g__dd_active');
+        if(style === "topbar" && currentWidth > 991.98){
+          dropdownMenu.style.minWidth = ddItem.clientWidth + "px";
+          dropdownMenu.style.top = ddItem.clientHeight + "px";
+        } else {
+          dropdownMenu.style.minWidth = "inherit";
+          dropdownMenu.style.top = "inherit";
+        }
       })
 
       return ddItem;
     }
+
+
     // Bottom nav CTA circle button
     if(String(o.mobile_bottom_cta) === "true" && o.mobile_menu_style === "bottom"){
       let navCont = granite_div.querySelector('.g__nav__bottom_cont');
       let nav = granite_div.querySelector('.g__nav_main');
       let navLinks = nav.children;
 
-      let cta = document.createElement('li');
+      let cta = graniteDocument.createElement('li');
       cta.setAttribute('class', 'g__bottom_cta')
 
       let bottomIcon = o.mobile_bottom_icon || "fal fa-plus";
-      let iconCta = document.createElement('i');
+      let iconCta = graniteDocument.createElement('i');
       iconCta.setAttribute('class', bottomIcon);
       cta.appendChild(iconCta);
       if(String(o.mobile_bottom_menu) === "true"){
@@ -1110,8 +1257,6 @@ function granite_navigation(jsonBlock, jsonTheme) {
       bottomNav();
       window.onresize = bottomNav;
       function bottomNav(){
-        console.log('resize');
-        let viewportWidth = window.innerWidth || document.documentElement.clientWidth;
         if (viewportWidth < 991.98) {
             let navCont = granite_div.querySelector('.g__nav_cont');
             let mainNav = granite_div.querySelector('.g__nav_main');
@@ -1121,7 +1266,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
             bottomCont.appendChild(mainNav);
             // If sidebar - move the utility menu back into the nav container
-            if(o.style === 'sidebar'){
+            if(style === 'sidebar'){
               navCont.appendChild(utilityNav);
             }
             // Count the number of items excluding CTA.
@@ -1134,7 +1279,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
               }
             });
             if (linkCount >= 5){
-              let bottomMenu = document.createElement('ul');
+              let bottomMenu = graniteDocument.createElement('ul');
               bottomMenu.classList.add('g__bottom_menu');
 
               Array.from(navChildren).forEach((link, count) => {
@@ -1143,7 +1288,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
                   bottomMenu.appendChild(link)
                 }
                 if(count === 3){
-                  let elipsisLink = document.createElement('li');
+                  let elipsisLink = graniteDocument.createElement('li');
                   elipsisLink.classList.add('g__item');
                   elipsisLink.classList.add('g__bottom_ellipsis');
                   elipsisLink.innerHTML = '<i class="far fa-ellipsis-h"></i>';
@@ -1160,7 +1305,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       }
       // Check for
       function iconCheck(){
-        let arrLink = document.querySelectorAll('.g__item');
+        let arrLink = graniteDocument.querySelectorAll('.g__item');
         arrLink.forEach( link => {
           let icon = link.nextSibling;
           if (!!icon){

@@ -2,11 +2,12 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    style: "sidebar",
+    type: "sidebar",
     background: "#5557b2",
-    background_opacity: "#EA386E",
+    background_opacity: "1",
     //Top Bar
     icon_top: false,
+    topbar_position: "center",
     utility_font_size: "10px",
     utility_cta_background: "#D44697",
     utility_cta_background_hover: "#9a2066",
@@ -14,8 +15,6 @@ let navigationBlock = {
     header_label: "<span id='addapptation'>addapptation</span>",
     header_label_color: "white",
     logo_font_size: "24px",
-    header_label_font_size: "16px",
-    sub_label_font_size: "16px",
     header_image: "https://addapptation.blob.core.windows.net/logo/logo.png",
     header_link: "#test",
     //Links
@@ -23,24 +22,27 @@ let navigationBlock = {
     background_hover: "orange",
     //Mobile
     mobile_menu_style: "bottom",
+    mobile_font_size: "12px",
     mobile_bottom_cta: "true",
     mobile_bottom_icon: "", //home icon
     mobile_bottom_menu: "false",
     //Design
     divider_line_color: "#ffffff",
+    hover_style: "top_border", // bottom_border, top_border, bkg_fill, font_fill
 
-    mobile_menu: "bottom",
+    //Font
+    topbar_font_size: "14px",
+    dropdown_font_size: "10px",
+
+    mobile_menu: "top",
     font_color: "#ffffff",
     mobile_breakpoint: "550px",
     font_size: "12px",
     topbar_padding_right: "",
     topbar_padding_left: "",
-    dropdown_font_size: "12px",
     highlight: "",
     no_break_link_item: true,
-    topbar_position: "right",
     topbar_over_content: false,
-    topbar_font_size: "10px",
     button_style: "transparentWhite",
     cta_button_padding: "",
     single_submenu: true,

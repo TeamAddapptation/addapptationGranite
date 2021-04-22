@@ -38,18 +38,16 @@ let formsBlock = {
             "dependency_field": null
         },
         {
-            "id": "header",
-            "name": "header",
-            "title": "Header Text",
-            "type": "text",
+            "id": "height",
+            "name": "height",
+            "title": "Tile Height",
+            "type": "range",
+            "min_number": "0",
+            "max_number": "999",
+            "range_unit": "px",
+            "field_max_width": "350px",
             "required": false,
-            "options": [
-                [
-                    "",
-                    ""
-                ]
-            ],
-            "value": "Hero Header Text Goes Here",
+            "value": "250",
             "dependency_not_blank": false,
             "dependency_values": null,
             "dependency_field": null,

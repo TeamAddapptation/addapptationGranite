@@ -1972,6 +1972,7 @@ function granite_form(formsBlock, jsonTheme) {
           form_field.appendChild(error_field);
           break;
         case "range":
+          console.log("range");
           form_field.appendChild(addLabels(field_info_container, r));
           let min = r.min_number || 0;
           let max = r.max_number || 100;
@@ -1980,13 +1981,17 @@ function granite_form(formsBlock, jsonTheme) {
           input = document.createElement("input");
           input.setAttribute("id", r.id);
           basicAttributes(r, input, class_name);
-          r.required ? input.classList.add('g__required') : "";
+          !!r.value ? input.setAttribute("value", r.value) : "";
+          !!r.name ? input.setAttribute('data-attr', r.name) : "";
+          String(r.required) === "true" ? input.classList.add('g__required') : "";
           input.setAttribute("min", min);
           input.setAttribute("max", max);
           let output = document.createElement("input");
-          output.disabled = r.disabled;
+          String(r.disabled) === 'true' ? output.disabled = true : "";
           output.setAttribute("class", "g__range_output");
           output.setAttribute("type", "number");
+          !!r.value ? output.setAttribute("value", r.value) : "";
+          !!r.name ? output.setAttribute('data-attr', r.name) : "";
           // Unit indicator
           let unit = document.createElement("div");
           unit.setAttribute("class", "g__range_unit");
@@ -1997,10 +2002,12 @@ function granite_form(formsBlock, jsonTheme) {
           // Increase container
           let increase = document.createElement("div");
           increase.setAttribute("class", "g__range_increase");
+          !!r.name ? increase.setAttribute('data-attr', r.name) : "";
           plusMinus.appendChild(increase);
           // Decrease container
           let decrease = document.createElement("div");
           decrease.setAttribute("class", "g__range_decrease");
+          !!r.name ? decrease.setAttribute('data-attr', r.name) : "";
           plusMinus.appendChild(decrease);
           //Append the parent elements
           range_container.appendChild(input);
@@ -2009,7 +2016,7 @@ function granite_form(formsBlock, jsonTheme) {
           range_container.appendChild(plusMinus);
           form_field.appendChild(error_field);
           form_field.appendChild(range_container);
-          break;
+        break;
         case "section":
           section_title = r.title;
           section_id.push(r.id);
