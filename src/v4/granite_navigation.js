@@ -3,7 +3,6 @@ function granite_navigation(jsonBlock, jsonTheme) {
   /*---------------------------------------------
   Global Variables
   ---------------------------------------------*/
-  let graniteDocument = document;
   const id = jsonBlock.id;
   const o = jsonBlock.options;
   const r = jsonBlock.records;
@@ -12,9 +11,15 @@ function granite_navigation(jsonBlock, jsonTheme) {
   const style = o.type || 'topbar';
   const mode = !!t.mode ? t.mode : "midnight";
   const cssId = "#" + id;
-  const granite_div = graniteDocument.getElementById(id);
-  let viewportWidth = window.innerWidth || graniteDocument.documentElement.clientWidth
+  const granite_div = document.getElementById(id);
+  let viewportWidth = window.innerWidth || document.documentElement.clientWidth
   !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
+  /*---------------------------------------------
+    Check for no navigation option
+  ---------------------------------------------*/
+    if(style === "none"){
+      return;
+    }
   /*---------------------------------------------
   Verify Div ID and Div Alignment - Set Mode
   ---------------------------------------------*/
@@ -26,10 +31,10 @@ function granite_navigation(jsonBlock, jsonTheme) {
   /*---------------------------------------------
   Add Font Family To Header
   ---------------------------------------------*/
-  const font_include = graniteDocument.getElementById('g__font_stylesheet');
+  const font_include = document.getElementById('g__font_stylesheet');
   if (!font_include){
-      var head = graniteDocument.head;
-      var fontLink = graniteDocument.createElement("link");
+      var head = document.head;
+      var fontLink = document.createElement("link");
       fontLink.type = "text/css";
       fontLink.rel = "stylesheet";
       fontLink.id = "g__font_stylesheet";
@@ -51,10 +56,23 @@ function granite_navigation(jsonBlock, jsonTheme) {
       }
       return `${hex} is not a valid Hex code.`;
   }
-
+  /*---------------------------------------------
+  Default Attributes
+  ---------------------------------------------*/
+  switch (t.mode){
+    case "standard":
+      !!o.background ? "" : o.background = " #eaeaea";
+    break;
+    default:
+      !!o.background ? "" : o.background = " #303030";
+    break;
+  }
+  !!o.nav_height ? "" : "75"
+  !!o.background_opacity ? "" : "100";
   /*---------------------------------------------
   Attributes
   ---------------------------------------------*/
+
   // Mode Defaults
   let bodyBkg = mode === "midnight" ? "#101010" : "#ffffff";
   let navBkgMode = mode === "midnight" ? "#353535" : "#eaeaea";
@@ -65,15 +83,17 @@ function granite_navigation(jsonBlock, jsonTheme) {
   let fontActiveMode = mode === "midnight" ? "#ffffff" : "#101010";
   let lightGray = "#5d5d5d";
   // Layout
-  let navHeight = o.nav_height || "75px";
+  let navHeight = o.nav_height + "px";
+  let sidebarWidth = o.sidebar_width || "250px";
   let topBarPosition = o.topbar_position || "right";
   let mobilePadding = o.mobile_padding || "10px 15px";
   let desktopPadding = o.desktop_padding || "5px 30px";
 
   // Design
   let navTopBarBkg = hexToRgb(o.background) || navBkgMode;
-  let navBkg = o.background || navBkgMode;
-  let navBkgTopOpacity = o.background_opacity || "1";
+  let navBkg = o.background;
+  let navBkgTopOpacity = parseInt(o.background_opacity) / 100;
+  console.log("Opacity: ", navBkgTopOpacity);
   let headerLabelColor = o.header_label_color || fontColorMode;
   let logoFontSize = o.logo_font_size || "24px";
   let bkgColorHover = o.background_hover || hoverMode;
@@ -98,12 +118,25 @@ function granite_navigation(jsonBlock, jsonTheme) {
   Adjust body margins
   ---------------------------------------------*/
   if (style === "topbar"){
-    document.body.style.height = navHeight;
+    document.body.style.marginTop = navHeight;
+    document.body.style.marginLeft = "0";
+  }
+  if (style === "sidebar"){
+    sidebarMargin()
+    function sidebarMargin(){
+      let currWidth = window.innerWidth || document.documentElement.clientWidth;
+      if (currWidth > 991.98){
+        document.body.style.marginLeft = sidebarWidth;
+        document.body.style.marginTop = "0";
+      }
+    }
+    window.addEventListener('resize', sidebarMargin());
+
   }
   /*---------------------------------------------
   CSS
   ---------------------------------------------*/
-  let navStyles = graniteDocument.createElement('style');
+  let navStyles = document.createElement('style');
   navStyles.id = "g__css_" + id;
   navStyles.innerHTML = `
     /* ------------------------------
@@ -138,13 +171,11 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /* ------------------------------
     Top Bar
     -------------------------------*/
-    .g__topbar_shift{
-      margin-top: ${navHeight};
-    }
     ${cssId} .g__topbar{
       display: flex;
       height: ${navHeight};
       position: relative;
+      flex-direction: row;
       background: rgba(${navTopBarBkg}, ${navBkgTopOpacity});
       align-items: center;
       padding: 15px;
@@ -161,6 +192,8 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ${cssId} .g__topbar .g__logo_label{
       color: ${headerLabelColor};
       font-size: ${logoFontSize};
+      font-style: ${font};
+      font-weight: ${fontWeight};
       margin-left: 15px;
     }
     ${cssId} .g__topbar .g__nav_cont {
@@ -185,9 +218,11 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ${cssId} .g__topbar .g__nav_utility .g__item_utility {
       display: flex;
       color: ${fontColor};
+      font-style: ${font};
+      font-weight: ${fontWeight};
       order: 1;
       font-size: ${utilityFontSize};
-      padding: 10px 30px;
+      padding: 5px 30px;
     }
     ${cssId} .g__topbar .g__nav_main {
       display: flex;
@@ -201,7 +236,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       justify-content: center;
       align-items: center;
       position: relative;
-      border: 2px solid ${navBkg};
+      border: 2px solid transparent;
       padding: ${desktopPadding};
     }
     ${cssId} .g__topbar .g__nav_main .g__item.g__icon_center{
@@ -217,6 +252,8 @@ function granite_navigation(jsonBlock, jsonTheme) {
       padding-right: 10px;
     }
     ${cssId} .g__topbar .g__nav_main .g__item a {
+      font-style: ${font};
+      font-weight: ${fontWeight};
       color: ${fontColor};
       font-size: ${navFontSize};
     }
@@ -246,7 +283,6 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /* ----- Top Bar CTA ----- */
     ${cssId} .g__topbar .g__cta_btn{
       background: ${utilityBkgColor};
-      padding: 10px 15px;
       border-radius: 5px;
     }
     ${cssId} .g__topbar .g__cta_btn:hover{
@@ -293,6 +329,8 @@ function granite_navigation(jsonBlock, jsonTheme) {
     }
     ${cssId} .g__topbar ul.g__dropdown_menu .g__sub_item a.g__sub_link {
       order: 0;
+      font-style: ${font};
+      font-weight: ${fontWeight};
       font-size: ${ddFontSize};
       display: flex;
     }
@@ -309,7 +347,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       display: flex;
       flex-direction: column;
       background: ${navBkg};
-      width: 250px;
+      width: ${sidebarWidth};
       height: 100vh;
       transform: translateX(0);
       transition: all .5s ease;
@@ -878,14 +916,9 @@ function granite_navigation(jsonBlock, jsonTheme) {
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
-      opacity: 0;
-      max-height: 0;
+      opacity: 1;
       background: ${navBkg};
       transition: all .5s ease;
-    }
-    ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_active ul.g__dropdown_menu{
-      max-height: 500px;
-      opacity: 1;
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_item_container{
       display: flex;
@@ -918,47 +951,40 @@ function granite_navigation(jsonBlock, jsonTheme) {
       opacity: 0;
     }
     `
-    let granite_css = graniteDocument.getElementById("g__css_" + id);
+    let granite_css = document.getElementById("g__css_" + id);
     if (granite_css) {
         granite_css.remove();
     }
-    graniteDocument.head.appendChild(navStyles);
-    /*---------------------------------------------
-    Check for records
-    ---------------------------------------------*/
-    // if(!rCount){
-    //   granite_div.classList.add('g__no_records');
-    //   granite_div.innerHTML = "<h2>Navigation</h2>";
-    //   return;
-    // }
+    document.head.appendChild(navStyles);
+
     /*---------------------------------------------
     Navigation builder
     ---------------------------------------------*/
-    let topBarCont = graniteDocument.createElement('div');
+    let topBarCont = document.createElement('div');
     topBarCont.classList.add(`g__${style}`);
     topBarCont.classList.add('g__mobile_top');
     o.mobile_menu_style === "bottom" ? topBarCont.classList.add(`g__mobile_bottom`) : "";
     /* ------------ Top Section Container -----------*/
-    let topSection = graniteDocument.createElement('div')
+    let topSection = document.createElement('div')
     topSection.classList.add('g__top_container');
 
     /* ------------ Logo -----------*/
-    let logoCont = graniteDocument.createElement('div')
+    let logoCont = document.createElement('div')
     logoCont.classList.add('g__logo_cont');
 
     if(o.header_image){
-      let logoLink = graniteDocument.createElement('a');
+      let logoLink = document.createElement('a');
       logoLink.href = o.header_link || '/';
       logoCont.appendChild(logoLink);
 
-      let logo = graniteDocument.createElement('img');
+      let logo = document.createElement('img');
       logo.classList.add('g__logo')
       logo.src = o.header_image;
       logo.alt = o.header_label || "";
       logoLink.appendChild(logo);
     }
     if(o.header_label){
-      let logoLabel = graniteDocument.createElement('div');
+      let logoLabel = document.createElement('div');
       logoLabel.classList.add('g__logo_label')
       logoLabel.innerHTML = o.header_label || "";
       logoCont.appendChild(logoLabel);
@@ -967,7 +993,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
     topBarCont.appendChild(topSection);
 
     if(style === "sidebar"){
-      var utilityCont = graniteDocument.createElement('div')
+      var utilityCont = document.createElement('div')
       utilityCont.classList.add('g__utility_cont');
       utilityCont.innerHTML = '<i class="far fa-ellipsis-h"></i>'
 
@@ -979,7 +1005,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
     };
 
     /* ------------ Hamburger Div -----------*/
-    let hamburger = graniteDocument.createElement('div');
+    let hamburger = document.createElement('div');
     hamburger.classList.add('g__nav_hamburger');
     topBarCont.appendChild(hamburger);
 
@@ -989,13 +1015,13 @@ function granite_navigation(jsonBlock, jsonTheme) {
     })
 
     for(let i = 1; i < 4; i++){
-      let bar = graniteDocument.createElement('div');
+      let bar = document.createElement('div');
       bar.setAttribute('class', `g__bar_${i}`)
       hamburger.appendChild(bar);
     }
 
     /* ------------ Links -----------*/
-    let navCont = graniteDocument.createElement('div');
+    let navCont = document.createElement('div');
     navCont.classList.add('g__nav_cont')
 
     if(style === "topbar"){
@@ -1012,10 +1038,10 @@ function granite_navigation(jsonBlock, jsonTheme) {
     }
 
 
-    let navMain = graniteDocument.createElement('ul');
+    let navMain = document.createElement('ul');
     navMain.classList.add('g__nav_main');
 
-    let navUtility = graniteDocument.createElement('ul');
+    let navUtility = document.createElement('ul');
     navUtility.classList.add('g__nav_utility');
 
     /* ------------ Dropdown -----------*/
@@ -1026,22 +1052,17 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
     /* ------------ Main Loop -----------*/
     r.forEach( (r, num) => {
-      let current = location.pathname;
-      console.log(current);
       String(r.submenu_header) === 'true' ? r.link_type = "ddHeader" :  "" ;
       String(r.submenu) === 'true' ? r.link_type = "ddItem" :  "" ;
       let item, link, iconCont, iconLink;
       switch(r.link_type) {
         case "utility":
-          item = graniteDocument.createElement('li');
+          item = document.createElement('li');
           item.classList.add('g__item_utility')
-          if(style === "topbar"){
-            !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
-          }
-
+          !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
           String(r.cta_button) === 'true' ? item.classList.add('g__cta_btn'): "";
 
-          link = graniteDocument.createElement('a');
+          link = document.createElement('a');
           link.classList.add('g__link_utility');
           link.innerHTML = r.label || "Link";
           item.appendChild(link)
@@ -1055,16 +1076,16 @@ function granite_navigation(jsonBlock, jsonTheme) {
         break;
         case "ddItem":
           dd = true;
-          let subItem = graniteDocument.createElement('li');
+          let subItem = document.createElement('li');
           subItem.classList.add('g__sub_item')
 
           if (r.icon){
-            iconLink = graniteDocument.createElement('i');
+            iconLink = document.createElement('i');
             iconLink.setAttribute('class', r.icon);
             subItem.appendChild(iconLink);
           }
 
-          let subLink = graniteDocument.createElement('a');
+          let subLink = document.createElement('a');
           subLink.classList.add('g__sub_link');
           subLink.innerHTML = r.label || "Link";
           subItem.appendChild(subLink);
@@ -1072,7 +1093,6 @@ function granite_navigation(jsonBlock, jsonTheme) {
           arrDdItems.push(subItem);
         break;
         default:
-          // append dd top dom if true
           if(dd){
             let ddMenu = buildDd();
             navMain.appendChild(ddMenu);
@@ -1082,28 +1102,27 @@ function granite_navigation(jsonBlock, jsonTheme) {
             ddLabel = "";
             ddIcon = "";
           }
-          // build level 1 nav item
-          item = graniteDocument.createElement('li');
+
+          item = document.createElement('li');
           item.classList.add('g__item')
           !!r.icon ? "" : item.classList.add('g__no_icon');
-          if(style === "topbar"){
-            !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
-          }
+          !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
           if((String(o.icon_top) === "true") && (style === "topbar")) {
             item.classList.add('g__icon_center')
           };
+          let active = itemActive(r.href);
 
           if(!!r.icon){
-            iconCont = graniteDocument.createElement('div');
+            iconCont = document.createElement('div');
             iconCont.classList.add('g__icon_container');
 
-            iconLink = graniteDocument.createElement('i');
+            iconLink = document.createElement('i');
             iconLink.setAttribute('class', r.icon);
             iconCont.appendChild(iconLink);
             item.appendChild(iconCont);
           }
 
-          link = graniteDocument.createElement('a');
+          link = document.createElement('a');
           link.classList.add('g__link');
           link.innerHTML = r.label || "Link";
 
@@ -1118,19 +1137,19 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ---------------------------------------------*/
     navCont.appendChild(navMain);
     if(o.mobile_menu_style === "bottom"){
-      var bottomNavCont = graniteDocument.createElement('div');
+      var bottomNavCont = document.createElement('div');
       bottomNavCont.classList.add('g__nav__bottom_cont')
     }
 
     if(style === 'sidebar'){
-      let collapseCont = graniteDocument.createElement('div');
+      let collapseCont = document.createElement('div');
       collapseCont.classList.add('g__sidebar_collapse')
 
       collapseCont.addEventListener('click', () => {
       collapseCont.parentElement.parentElement.classList.toggle('g__collapse_active');
       iconCheck();
     })
-      let collpaseIcon = graniteDocument.createElement('i');
+      let collpaseIcon = document.createElement('i');
       collpaseIcon.setAttribute('class', 'far fa-chevron-left');
       collapseCont.appendChild(collpaseIcon);
       navCont.appendChild(collapseCont);
@@ -1156,45 +1175,49 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /*---------------------------------------------
     Functions
     ---------------------------------------------*/
-
+    // Active item
+    function itemActive(href){
+      let path = window.location.pathname.split('/').pop();
+      console.log("URL Path: ", path);
+    }
     // Build DD function
     function buildDd(){
-      let ddItem = graniteDocument.createElement('li');
+      let ddItem = document.createElement('li');
       ddItem.classList.add('g__item');
       ddItem.classList.add('g__item_dropdown');
       !!o.hover_style ? ddItem.classList.add(`g__${o.hover_style}`) : ddItem.classList.add(`g__bottom_border`);
 
-      let ddItemCont = graniteDocument.createElement('div');
+      let ddItemCont = document.createElement('div');
       ddItemCont.classList.add('g__dd_item_container');
       ddItem.appendChild(ddItemCont);
 
-      let ddlink = graniteDocument.createElement('a');
+      let ddlink = document.createElement('a');
       ddlink.classList.add('g__link');
       ddlink.innerHTML = ddLabel || "Link";
       ddItemCont.appendChild(ddlink);
 
       let ddArrow
       if (!!ddIcon){
-        let ddIconArrow = graniteDocument.createElement('div');
+        let ddIconArrow = document.createElement('div');
         ddIconArrow.classList.add('g__dd_icon_arrow');
 
         let icon = ddIcon;
-        ddIcon = graniteDocument.createElement('i');
+        ddIcon = document.createElement('i');
         ddIcon.setAttribute('class', icon);
         ddIconArrow.appendChild(ddIcon);
 
-        ddArrow = graniteDocument.createElement('i');
+        ddArrow = document.createElement('i');
         ddArrow.setAttribute('class', 'far fa-chevron-right g__dd_arrow');
         ddIconArrow.appendChild(ddArrow);
 
         ddItemCont.appendChild(ddIconArrow);
       } else {
-        ddArrow = graniteDocument.createElement('i');
+        ddArrow = document.createElement('i');
         ddArrow.setAttribute('class', 'far fa-chevron-right');
         ddItemCont.appendChild(ddArrow);
       }
 
-      let dropdownMenu = graniteDocument.createElement('ul');
+      let dropdownMenu = document.createElement('ul');
       dropdownMenu.classList.add('g__dropdown_menu');
 
       // Event Listener for dropdowns
@@ -1205,7 +1228,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
       ddItem.addEventListener('click', function() {
         // dropdownMenu.classList.toggle('g__dd_active');
-        let currentWidth = window.innerWidth || graniteDocument.documentElement.clientWidth;
+        let currentWidth = window.innerWidth || document.documentElement.clientWidth;
         dropdownMenu.parentElement.classList.toggle('g__dd_active');
         if(style === "topbar" && currentWidth > 991.98){
           dropdownMenu.style.minWidth = ddItem.clientWidth + "px";
@@ -1218,19 +1241,17 @@ function granite_navigation(jsonBlock, jsonTheme) {
 
       return ddItem;
     }
-
-
     // Bottom nav CTA circle button
     if(String(o.mobile_bottom_cta) === "true" && o.mobile_menu_style === "bottom"){
       let navCont = granite_div.querySelector('.g__nav__bottom_cont');
       let nav = granite_div.querySelector('.g__nav_main');
       let navLinks = nav.children;
 
-      let cta = graniteDocument.createElement('li');
+      let cta = document.createElement('li');
       cta.setAttribute('class', 'g__bottom_cta')
 
       let bottomIcon = o.mobile_bottom_icon || "fal fa-plus";
-      let iconCta = graniteDocument.createElement('i');
+      let iconCta = document.createElement('i');
       iconCta.setAttribute('class', bottomIcon);
       cta.appendChild(iconCta);
       if(String(o.mobile_bottom_menu) === "true"){
@@ -1279,7 +1300,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
               }
             });
             if (linkCount >= 5){
-              let bottomMenu = graniteDocument.createElement('ul');
+              let bottomMenu = document.createElement('ul');
               bottomMenu.classList.add('g__bottom_menu');
 
               Array.from(navChildren).forEach((link, count) => {
@@ -1288,7 +1309,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
                   bottomMenu.appendChild(link)
                 }
                 if(count === 3){
-                  let elipsisLink = graniteDocument.createElement('li');
+                  let elipsisLink = document.createElement('li');
                   elipsisLink.classList.add('g__item');
                   elipsisLink.classList.add('g__bottom_ellipsis');
                   elipsisLink.innerHTML = '<i class="far fa-ellipsis-h"></i>';
@@ -1305,7 +1326,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
       }
       // Check for
       function iconCheck(){
-        let arrLink = graniteDocument.querySelectorAll('.g__item');
+        let arrLink = document.querySelectorAll('.g__item');
         arrLink.forEach( link => {
           let icon = link.nextSibling;
           if (!!icon){

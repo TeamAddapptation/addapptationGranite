@@ -2,11 +2,12 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    type: "sidebar",
+    type: "topbar",
     background: "#5557b2",
-    background_opacity: "1",
+    background_opacity: "100",
     //Top Bar
     icon_top: false,
+    nav_height: "50",
     topbar_position: "center",
     utility_font_size: "10px",
     utility_cta_background: "#D44697",
