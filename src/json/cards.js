@@ -1,9 +1,8 @@
 let cardsBlock = {
   id: "granite-block",
   options: {
-    "g_style": "basic",
-    "g_display_list": false,
-    "g_description_preview": false,
+    "g_display_list": true,
+    "g_description_preview": true,
     "g_columns": "3",
     "g_fill_row": false,
     "g_container_top_padding": "",
@@ -59,7 +58,7 @@ let cardsBlock = {
     {
       "g_image": "https://addapptation.blob.core.windows.net/pictures/nature/adventure.png",
       "g_title": "Texas",
-      "g_description": "Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem, et porta tellus maximus eu. Sed sollicitudin mi eu purus ornare imperdiet."
+      "g_description": "Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem vAliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem Aliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc semAliquam tincidunt nunc sem, et porta tellus maximus eu. Aliquam tincidunt nunc sem, et porta tellus maximus eu. Sed sollicitudin mi eu purus ornare imperdiet."
     },
     {
       "g_title": "Ohio",

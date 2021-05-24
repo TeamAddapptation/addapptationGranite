@@ -2,12 +2,12 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    type: "topbar",
+    type: "sidebar",
     background: "#5557b2",
     background_opacity: "100",
     //Top Bar
     icon_top: false,
-    nav_height: "50",
+    nav_height: "150",
     topbar_position: "center",
     utility_font_size: "10px",
     utility_cta_background: "#D44697",
@@ -27,6 +27,7 @@ let navigationBlock = {
     mobile_bottom_cta: "true",
     mobile_bottom_icon: "", //home icon
     mobile_bottom_menu: "false",
+    center_button_size: "40",
     //Design
     divider_line_color: "#ffffff",
     hover_style: "top_border", // bottom_border, top_border, bkg_fill, font_fill

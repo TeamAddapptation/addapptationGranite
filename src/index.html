@@ -42,11 +42,6 @@
 
     <title>Granite</title>
   </head>
-  <style>
-    #granite-form {
-      margin: 0 auto;
-    }
-  </style>
   <body>
     <div id="granite-block"></div>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -92,11 +87,12 @@
     <script src="v4/granite_cards.js"></script>
     <script src="v4/granite_image.js"></script>
     <script src="v4/granite_form.js"></script>
+    <script src="v4/granite_form_step.js"></script>
 
     <script src="main.js"></script>
   </body>
   <script>
-    const render = ["navigation"];
+    const render = ["form_step"];
     render.forEach((micro) => {
       switch (micro) {
         case "header":
@@ -155,6 +151,9 @@
           break;
         case "form_vb":
           granite_form_vb(formsBlock, jsonTheme);
+          break;
+        case "form_step":
+          granite_form_step(formsBlock, jsonTheme);
           break;
         case "column":
           granite_column(columnBlock, jsonTheme);
