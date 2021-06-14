@@ -62,20 +62,6 @@
     <script src="json/column.js"></script>
     <script src="json/navigation.js"></script>
     <script src="json/tabs.js"></script>
-    <!--JS FILES GRANITE -->
-    <script src="template/granite_template.js"></script>
-    <script src="v4/granite_navigation.js"></script>
-    <script src="hero/granite_hero.js"></script>
-    <script src="column/granite_column.js"></script>
-    <script src="carousel/granite_carousel.js"></script>
-    <script src="data_visualization/granite_data_visualization.js"></script>
-    <script src="tiles/granite_tiles.js"></script>
-    <!-- <script src="tabs/granite_tabs.js"></script> -->
-    <script src="v4/granite_tabs.js"></script>
-    <script src="content/granite_content.js"></script>
-    <script src="text/granite_text.js"></script>
-    <script src="heatmap/granite_heatmap.js"></script>
-    <!-- <script src="form/granite_form.js"></script> -->
     <!-- <script src="form/granite_form_vb.js"></script> -->
     <script src="table/granite_table.js"></script>
     <script src="elements/granite_button.js"></script>
@@ -92,7 +78,7 @@
     <script src="main.js"></script>
   </body>
   <script>
-    const render = ["form_step"];
+    const render = ["form"];
     render.forEach((micro) => {
       switch (micro) {
         case "header":
@@ -119,7 +105,7 @@
         case "cards_v4":
           granite_cards(cardsBlock, jsonTheme);
           break;
-          case "carousel":
+        case "carousel":
           granite_carousel(carouselBlock, jsonTheme);
           break;
         case "data_visualization":
@@ -148,12 +134,6 @@
           break;
         case "form":
           granite_form(formsBlock, jsonTheme);
-          break;
-        case "form_vb":
-          granite_form_vb(formsBlock, jsonTheme);
-          break;
-        case "form_step":
-          granite_form_step(formsBlock, jsonTheme);
           break;
         case "column":
           granite_column(columnBlock, jsonTheme);

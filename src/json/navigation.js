@@ -2,7 +2,7 @@ let navigationBlock = {
   id: "granite-block",
   feature: "navigation",
   options: {
-    type: "sidebar",
+    type: "topbar",
     background: "#5557b2",
     background_opacity: "100",
     //Top Bar
@@ -16,13 +16,13 @@ let navigationBlock = {
     header_label: "<span id='addapptation'>addapptation</span>",
     header_label_color: "white",
     logo_font_size: "24px",
-    header_image: "https://addapptation.blob.core.windows.net/logo/logo.png",
+    header_image: "https://cdn.addapptation.com/addapptation-customer-assets/addapptation-micros/knox/Knox-4c-logo-tagline-e1599744342679.png",
     header_link: "#test",
     //Links
     font_color_hover: "darkOrange",
     background_hover: "orange",
     //Mobile
-    mobile_menu_style: "bottom",
+    mobile_menu_style: "top",
     mobile_font_size: "12px",
     mobile_bottom_cta: "true",
     mobile_bottom_icon: "", //home icon

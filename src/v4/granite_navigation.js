@@ -1,8 +1,4 @@
-"use strict";
 function granite_navigation(jsonBlock, jsonTheme) {
-  //REMOVE
-  let graniteDocument = document;
-
   /*---------------------------------------------
   Global Variables
   ---------------------------------------------*/
@@ -11,106 +7,126 @@ function granite_navigation(jsonBlock, jsonTheme) {
   const r = jsonBlock.records;
   const t = jsonTheme;
   const rCount = r.length;
-  const style = o.type || 'topbar';
+  const style = o.type || "topbar";
   const mode = !!t.mode ? t.mode : "midnight";
   const cssId = "#" + id;
-  const granite_div = graniteDocument.getElementById(id);
-  let viewportWidth = window.innerWidth || graniteDocument.documentElement.clientWidth
-  !!o.classes ? granite_div.setAttribute('class', o.classes) : '';
+  const granite_div = document.getElementById(id);
+  let viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  !!o.classes ? granite_div.setAttribute("class", o.classes) : "";
   /*---------------------------------------------
     Check for no navigation option
   ---------------------------------------------*/
-    if(style === "none"){
-      graniteDocument.body.setAttribute('style', '');
-      return;
-    }
+  if (style === "none") {
+    document.body.setAttribute("style", "");
+    return;
+  }
   /*---------------------------------------------
   Verify Div ID and Div Alignment - Set Mode
   ---------------------------------------------*/
-  if (granite_div === null){
-      console.error('Object ID and Granite Div ID Do Not Match')
+  if (granite_div === null) {
+    console.error("Object ID and Granite Div ID Do Not Match");
   } else {
-      granite_div.setAttribute('mode', mode);
+    granite_div.setAttribute("mode", mode);
   }
   /*---------------------------------------------
   Add Font Family To Header
   ---------------------------------------------*/
-  const font_include = graniteDocument.getElementById('g__font_stylesheet');
-  if (!font_include){
-      var head = graniteDocument.head;
-      var fontLink = graniteDocument.createElement("link");
-      fontLink.type = "text/css";
-      fontLink.rel = "stylesheet";
-      fontLink.id = "g__font_stylesheet";
-      fontLink.href = "https://use.typekit.net/ihq4dbs.css";
-      head.appendChild(fontLink);
+  const font_include = document.getElementById("g__font_stylesheet");
+  if (!font_include) {
+    var head = document.head;
+    var fontLink = document.createElement("link");
+    fontLink.type = "text/css";
+    fontLink.rel = "stylesheet";
+    fontLink.id = "g__font_stylesheet";
+    fontLink.href = "https://use.typekit.net/ihq4dbs.css";
+    head.appendChild(fontLink);
   }
   /*---------------------------------------------
   Convert Hex to RGB
   ---------------------------------------------*/
-    function hexToRgb(hex){
-      var c;
-      if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-          c= hex.substring(1).split('');
-          if(c.length== 3){
-              c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-          }
-          c= '0x'+c.join('');
-          return [(c>>16)&255, (c>>8)&255, c&255].join(',');
+  function hexToRgb(hex) {
+    var c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      c = hex.substring(1).split("");
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
       }
-      return `${hex} is not a valid Hex code.`;
+      c = "0x" + c.join("");
+      return [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",");
+    }
+    return `${hex} is not a valid Hex code.`;
   }
   /*---------------------------------------------
   Default Attributes
   ---------------------------------------------*/
-  switch (t.mode){
+  switch (t.mode) {
     case "standard":
-      !!o.background ? "" : o.background = " #eaeaea";
-      !!o.font_color ? "" : o.font_color = "#000000" ;
-      !!o.hover_text_color ? "" : o.hover_text_color = "#000000";
-      !!o.utility_cta_font_color ? "" : o.utility_cta_font_color = "#ffffff";
-      !!o.utility_cta_font_color_hover ? "" : o.utility_cta_font_color_hover = "#000000";
-      !!o.utility_cta_border_color_hover ? "" : o.utility_cta_border_color_hover = "#000000";
-      !!o.utility_cta_background_color ? "" : o.utility_cta_background_color = "#000000";
-      !!o.utility_cta_font_background_hover ? "" : o.utility_cta_font_background_hover = "#161616";
-      !!o.utility_cta_border_color ? "" : o.utility_cta_border_color = "#000000";
-    break;
+      !!o.background ? "" : (o.background = " #eaeaea");
+      !!o.font_color ? "" : (o.font_color = "#000000");
+      !!o.hover_text_color ? "" : (o.hover_text_color = "#000000");
+      !!o.utility_cta_font_color ? "" : (o.utility_cta_font_color = "#ffffff");
+      !!o.utility_cta_font_color_hover
+        ? ""
+        : (o.utility_cta_font_color_hover = "#000000");
+      !!o.utility_cta_border_color_hover
+        ? ""
+        : (o.utility_cta_border_color_hover = "#000000");
+      !!o.utility_cta_background_color
+        ? ""
+        : (o.utility_cta_background_color = "#000000");
+      !!o.utility_cta_font_background_hover
+        ? ""
+        : (o.utility_cta_font_background_hover = "#161616");
+      !!o.utility_cta_border_color
+        ? ""
+        : (o.utility_cta_border_color = "#000000");
+      break;
     default:
-      !!o.background ? "" : o.background = " #303030";
-      !!o.font_color ? "" : o.font_color = "#ffffff" ;
-      !!o.hover_text_color ? "" : o.hover_text_color = "#ffffff";
-      !!o.utility_cta_font_color ? "" : o.utility_cta_font_color = "#000000";
-      !!o.utility_cta_font_color_hover ? "" : o.utility_cta_font_color_hover = "#ffffff";
-      !!o.utility_cta_border_color_hover ? "" : o.utility_cta_border_color_hover = "#ffffff";
-      !!o.utility_cta_font_background ? "" : o.utility_cta_font_background = "#ffffff";
-      !!o.utility_cta_font_background_hover ? "" : o.utility_cta_font_background_hover = "#f5f5f5";
-      !!o.utility_cta_border_color ? "" : o.utility_cta_border_color = "#ffffff";
-    break;
+      !!o.background ? "" : (o.background = " #303030");
+      !!o.font_color ? "" : (o.font_color = "#ffffff");
+      !!o.hover_text_color ? "" : (o.hover_text_color = "#ffffff");
+      !!o.utility_cta_font_color ? "" : (o.utility_cta_font_color = "#000000");
+      !!o.utility_cta_font_color_hover
+        ? ""
+        : (o.utility_cta_font_color_hover = "#ffffff");
+      !!o.utility_cta_border_color_hover
+        ? ""
+        : (o.utility_cta_border_color_hover = "#ffffff");
+      !!o.utility_cta_font_background
+        ? ""
+        : (o.utility_cta_font_background = "#ffffff");
+      !!o.utility_cta_font_background_hover
+        ? ""
+        : (o.utility_cta_font_background_hover = "#f5f5f5");
+      !!o.utility_cta_border_color
+        ? ""
+        : (o.utility_cta_border_color = "#ffffff");
+      break;
   }
-  !!o.nav_height ? "" : o.nav_height = "75";
-  !!o.background_opacity ? "" : o.background_opacity = "100";
-  !!o.nav_layout ? "" : o.nav_layout = "row";
-  !!o.topbar_position ? "" : o.topbar_position = "right";
-  !!o.topbar_font_size ? "" : o.topbar_font_size = "20";
-  !!o.dropdown_font_size ? "" : o.dropdown_font_size = "14px";
+  !!o.nav_height ? "" : (o.nav_height = "75");
+  !!o.background_opacity ? "" : (o.background_opacity = "100");
+  !!o.nav_layout ? "" : (o.nav_layout = "row");
+  !!o.topbar_position ? "" : (o.topbar_position = "right");
+  !!o.topbar_font_size ? "" : (o.topbar_font_size = "20");
+  !!o.dropdown_font_size ? "" : (o.dropdown_font_size = "14px");
+
   // Hover
-  !!o.hover_style ? "" : o.hover_style = "bottom_border";
-  !!o.hover_bkg_color ? "" : o.hover_bkg_color = "transparent";
+  !!o.hover_style ? "" : (o.hover_style = "bottom_border");
+  !!o.hover_bkg_color ? "" : (o.hover_bkg_color = "transparent");
 
   //Utility
-  !!o.utility_font_size ? "" : o.utility_font_size = "12";
-  !!o.utility_cta_border_radius ? "" : o.utility_cta_border_radius = "2";
-  !!o.utility_cta_background ? "" : o.utility_cta_background = "#5d5d5d";
-  !!o.utility_cta_border_size ? "" : o.utility_cta_border_size = "0";
-
+  !!o.utility_font_size ? "" : (o.utility_font_size = "12");
+  !!o.utility_cta_border_radius ? "" : (o.utility_cta_border_radius = "2");
+  !!o.utility_cta_background ? "" : (o.utility_cta_background = "#5d5d5d");
+  !!o.utility_cta_border_size ? "" : (o.utility_cta_border_size = "0");
 
   // Mobile
-  !!o.mobile_font_size ? "" : o.mobile_font_size = "16";
-  !!o.center_button_size ? "" : o.center_button_size = "40";
-
+  !!o.mobile_font_size ? "" : (o.mobile_font_size = "16");
+  !!o.center_button_size ? "" : (o.center_button_size = "40");
+  !!o.mobile_slide_in ? "" : (o.mobile_slide_in = "translateX(200%)");
 
   // Logo
-  !!o.header_label_size ? "" : o.header_label_size = "24"
+  !!o.header_label_size ? "" : (o.header_label_size = "24");
 
   /*---------------------------------------------
   Attributes
@@ -146,12 +162,13 @@ function granite_navigation(jsonBlock, jsonTheme) {
   let mobileFontSize = o.mobile_bottom_font_size || "10px";
   let bottomCtaBkg = o.bottom_cta_bkg || navBkg;
   let centerButtonSize = o.center_button_size + "px";
+  let mobileSlideIn = o.mobile_slide_in;
 
   // Font
   let font = "hero-new, sans-serif;";
   let fontWeight = 300;
   let navFontSize = o.topbar_font_size + "px";
-  let ddFontSize = o.dropdown_font_size = "px";
+  let ddFontSize = (o.dropdown_font_size = "px");
   let mobileTopFontSize = o.mobile_font_size + "px";
   let fontColor = o.font_color;
   let fontColorHover = o.hover_text_color;
@@ -163,44 +180,43 @@ function granite_navigation(jsonBlock, jsonTheme) {
   let utilityCtaFontSize = o.utility_cta_font_size + "px";
   let utilityCtaBkgColor = o.utility_cta_background_color;
   let utilityCtaFontColor = o.utility_cta_font_color;
-  let utilityCtaBorderSize = o.utility_border_size + "px";
+  let utilityCtaBorderSize = o.utility_cta_border_size + "px";
   let utilityCtaBorderColor = o.utility_cta_border_color;
 
   let utilityCtaBkgColorHover = o.utility_cta_background_hover;
   let utilityCtaFontColorHover = o.utility_cta_font_color_hover;
-  let utilityCtaBorderColorHover = o.utility_cta_border_color_hover
-
-
-
-
+  let utilityCtaBorderColorHover = o.utility_cta_border_color_hover;
 
   /*---------------------------------------------
   Adjust body margins
   ---------------------------------------------*/
-  if (style === "topbar"){
-    graniteDocument.body.style.marginTop = navHeight;
-    graniteDocument.body.style.marginLeft = "0";
+  if (style === "topbar") {
+    document.body.style.marginTop = navHeight;
+    document.body.style.marginLeft = "0";
     granite_div.style.display = "block";
     granite_div.style.width = "auto";
   }
-  if (style === "sidebar"){
+  if (style === "sidebar") {
     granite_div.style.display = "inline-block";
     granite_div.style.width = "250px";
-    sidebarMargin()
-    function sidebarMargin(){
-      let currWidth = window.innerWidth || graniteDocument.documentElement.clientWidth;
-      if (currWidth > 991.98){
-        graniteDocument.body.style.marginLeft = sidebarWidth;
-        graniteDocument.body.style.marginTop = "0";
+    sidebarMargin();
+    function sidebarMargin() {
+      let currWidth = window.innerWidth || document.documentElement.clientWidth;
+      if (currWidth > 991.98) {
+        document.body.style.marginLeft = sidebarWidth;
+        document.body.style.marginTop = "0";
+      }
+      if (currWidth < 991.98) {
+        granite_div.style.display = "block";
+        granite_div.style.width = "auto";
       }
     }
-    window.addEventListener('resize', sidebarMargin());
-
+    window.addEventListener("resize", sidebarMargin());
   }
   /*---------------------------------------------
   CSS
   ---------------------------------------------*/
-  let navStyles = graniteDocument.createElement('style');
+  let navStyles = document.createElement("style");
   navStyles.id = "g__css_" + id;
   navStyles.innerHTML = `
     /* ------------------------------
@@ -742,7 +758,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
         background: ${navBkg};
         height: calc(100vh - ${navHeight});
         opacity: 0;
-        transform: translateX(-100%);
+        transform: ${mobileSlideIn};
         transition: all 1s ease;
       }
       ${cssId} .g__mobile_top .g__nav_cont .g__nav_main{
@@ -761,7 +777,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
         margin-right: 15px;
       }
       ${cssId} .g__mobile_top.g__mobile_bottom .g__nav_cont{
-        height: calc(100vh - (${navHeight} * 2));
+        height: calc(100vh - (${navHeight} + 90px));
       }
       ${cssId} .g__mobile_top .g__nav_cont.g__nav_active{
         opacity: 1;
@@ -799,6 +815,7 @@ function granite_navigation(jsonBlock, jsonTheme) {
         border-bottom: 1px solid ${dividerLineColor};
         padding: 20px 10px;
         justify-content: center;
+        margin-top: 0;
       }
       ${cssId} .g__mobile_top .g__nav_cont .g__nav_main .g__item{
         border-bottom: 1px solid ${dividerLineColor};
@@ -876,24 +893,22 @@ function granite_navigation(jsonBlock, jsonTheme) {
     ${cssId} .g__nav__bottom_cont{
       display: flex;
       flex-direction: row;
-      height: ${navHeight};
+      height: 90px;
       position: fixed;
       width: 100%;
       bottom: 0;
-      background: ${navBkg};
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
     }
     ${cssId} .g__nav__bottom_cont .g__nav_main {
       display: flex;
       justify-content: space-between;
-      flex: 1;
+      flex: 0 0 100%;
+      background: ${navBkg};
       height: auto;
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
-      z-index: 99;
+      padding: 15px;
+      z-index: 5;
     }
     ${cssId} .g__nav__bottom_cont .g__nav_main .g__item {
       display: flex;
@@ -971,14 +986,14 @@ function granite_navigation(jsonBlock, jsonTheme) {
     /* ------------------------- Bottom Slide Menu --------------------------*/
     ${cssId} .g__nav__bottom_cont .g__bottom_menu{
       position: absolute;
-      transform: translateY(120%);
+      transform: translateY(140%);
       display: flex;
       flex-direction: column;
       width: 100vw;
       left: 0;
-      height: calc(100vh - (${navHeight} * 2));
+      height: calc(100vh - (${navHeight} + 90px));
       bottom: 0;
-      margin-bottom: ${navHeight};
+      margin-bottom: 90px;
       background: ${navBkg};
       z-index: 0;
       padding-left: 0;
@@ -1005,13 +1020,19 @@ function granite_navigation(jsonBlock, jsonTheme) {
       padding-left: 0;
       margin-bottom: 0;
       list-style: none;
-      opacity: 1;
+      opacity: 0;
+      max-height: 0;
       background: ${navBkg};
       transition: all .5s ease;
+    }
+    ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__item.g__dd_active ul.g__dropdown_menu  {
+      opacity: 1;
+      max-height: 500px;
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_item_container{
       display: flex;
       align-items: center;
+      padding: 0;
       color: ${fontColor};
     }
     ${cssId} .g__nav__bottom_cont .g__bottom_menu .g__dd_item_container i{
@@ -1036,397 +1057,402 @@ function granite_navigation(jsonBlock, jsonTheme) {
       display: flex;
       order: 0;
     }
-    ${cssId} .g__nav__bottom_cont .g__bottom_menu ul.g__dropdown_menu.g__hidden{
-      opacity: 0;
-    }
-    `
-    let granite_css = graniteDocument.getElementById("g__css_" + id);
-    if (granite_css) {
-        granite_css.remove();
-    }
-    graniteDocument.head.appendChild(navStyles);
 
-    /*---------------------------------------------
+    `;
+  let granite_css = document.getElementById("g__css_" + id);
+  if (granite_css) {
+    granite_css.remove();
+  }
+  document.head.appendChild(navStyles);
+
+  /*---------------------------------------------
     Navigation builder
     ---------------------------------------------*/
-    let topBarCont = graniteDocument.createElement('div');
-    topBarCont.classList.add(`g__${style}`);
-    topBarCont.classList.add('g__mobile_top');
-    o.mobile_menu_style === "bottom" ? topBarCont.classList.add(`g__mobile_bottom`) : "";
-    /* ------------ Top Section Container -----------*/
-    let topSection = graniteDocument.createElement('div')
-    topSection.classList.add('g__top_container');
+  let topBarCont = document.createElement("div");
+  topBarCont.classList.add(`g__${style}`);
+  topBarCont.classList.add("g__mobile_top");
+  o.mobile_menu_style === "bottom"
+    ? topBarCont.classList.add(`g__mobile_bottom`)
+    : "";
+  /* ------------ Top Section Container -----------*/
+  let topSection = document.createElement("div");
+  topSection.classList.add("g__top_container");
 
-    /* ------------ Logo -----------*/
-    let logoCont = graniteDocument.createElement('div')
-    logoCont.classList.add('g__logo_cont');
+  /* ------------ Logo -----------*/
+  let logoCont = document.createElement("div");
+  logoCont.classList.add("g__logo_cont");
 
-    if(o.header_image){
-      let logoLink = graniteDocument.createElement('a');
-      logoLink.href = o.header_link || '/';
-      logoCont.appendChild(logoLink);
+  if (o.header_image) {
+    let logoLink = document.createElement("a");
+    logoLink.href = o.header_link || "/";
+    logoCont.appendChild(logoLink);
 
-      let logo = graniteDocument.createElement('img');
-      logo.classList.add('g__logo')
-      logo.src = o.header_image;
-      logo.alt = o.header_label || "";
-      logoLink.appendChild(logo);
-    }
-    if(o.header_label){
-      let logoLabel = graniteDocument.createElement('div');
-      logoLabel.classList.add('g__logo_label')
-      logoLabel.innerHTML = o.header_label || "";
-      logoCont.appendChild(logoLabel);
-    }
-    topSection.appendChild(logoCont)
-    topBarCont.appendChild(topSection);
+    let logo = document.createElement("img");
+    logo.classList.add("g__logo");
+    logo.src = o.header_image;
+    logo.alt = o.header_label || "";
+    logoLink.appendChild(logo);
+  }
+  if (o.header_label) {
+    let logoLabel = document.createElement("div");
+    logoLabel.classList.add("g__logo_label");
+    logoLabel.innerHTML = o.header_label || "";
+    logoCont.appendChild(logoLabel);
+  }
+  topSection.appendChild(logoCont);
+  topBarCont.appendChild(topSection);
 
-    if(style === "sidebar"){
-      var utilityCont = graniteDocument.createElement('div')
-      utilityCont.classList.add('g__utility_cont');
-      utilityCont.innerHTML = '<i class="far fa-ellipsis-h"></i>'
+  if (style === "sidebar") {
+    var utilityCont = document.createElement("div");
+    utilityCont.classList.add("g__utility_cont");
+    utilityCont.innerHTML = '<i class="far fa-ellipsis-h"></i>';
 
-      utilityCont.addEventListener('click', () => {
-        utilityCont.classList.toggle('g__utility_active');
-      })
-
-      topSection.appendChild(utilityCont);
-    };
-
-    /* ------------ Hamburger Div -----------*/
-    let hamburger = graniteDocument.createElement('div');
-    hamburger.classList.add('g__nav_hamburger');
-    topBarCont.appendChild(hamburger);
-
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('g__nav_active');
-      hamburger.nextSibling.classList.toggle('g__nav_active');
-    })
-
-    for(let i = 1; i < 4; i++){
-      let bar = graniteDocument.createElement('div');
-      bar.setAttribute('class', `g__bar_${i}`)
-      hamburger.appendChild(bar);
-    }
-
-    /* ------------ Links -----------*/
-    let navCont = graniteDocument.createElement('div');
-    navCont.classList.add('g__nav_cont')
-
-    if(style === "topbar" && o.nav_layout != "column"){
-      switch(topBarPosition){
-        case "left":
-          navCont.style.marginRight = "auto"
-        break;
-        case "center":
-          navCont.style.margin = "0 auto"
-        break;
-        default:
-          navCont.style.marginLeft = "auto"
-      }
-    }
-
-
-    let navMain = graniteDocument.createElement('ul');
-    navMain.classList.add('g__nav_main');
-
-    let navUtility = graniteDocument.createElement('ul');
-    navUtility.classList.add('g__nav_utility');
-
-    /* ------------ Dropdown -----------*/
-    let dd = false;
-    let ddLabel = "";
-    let ddIcon = "";
-    let arrDdItems = [];
-
-    /* ------------ Main Loop -----------*/
-    r.forEach( (r, num) => {
-      String(r.submenu_header) === 'true' ? r.link_type = "ddHeader" :  "" ;
-      String(r.submenu) === 'true' ? r.link_type = "ddItem" :  "" ;
-      let item, link, iconCont, iconLink;
-      switch(r.link_type) {
-        case "utility":
-          item = graniteDocument.createElement('li');
-          item.classList.add('g__item_utility')
-          !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
-          String(r.cta_button) === 'true' ? item.classList.add('g__cta_btn'): "";
-
-          link = graniteDocument.createElement('a');
-          link.classList.add('g__link_utility');
-          link.innerHTML = r.label || "Link";
-          item.appendChild(link)
-
-          navUtility.appendChild(item);
-          break;
-        case "ddHeader":
-          ddLabel = r.label || "Dropdown";
-          dd = true;
-          ddIcon = r.icon;
-        break;
-        case "ddItem":
-          dd = true;
-          let subItem = graniteDocument.createElement('li');
-          subItem.classList.add('g__sub_item')
-
-          if (r.icon){
-            iconLink = graniteDocument.createElement('i');
-            iconLink.setAttribute('class', r.icon);
-            subItem.appendChild(iconLink);
-          }
-
-          let subLink = graniteDocument.createElement('a');
-          subLink.classList.add('g__sub_link');
-          subLink.innerHTML = r.label || "Link";
-          subItem.appendChild(subLink);
-
-          arrDdItems.push(subItem);
-        break;
-        default:
-          if(dd){
-            let ddMenu = buildDd();
-            navMain.appendChild(ddMenu);
-            // Reset Values
-            dd = false;
-            arrDdItems = [];
-            ddLabel = "";
-            ddIcon = "";
-          }
-
-          item = graniteDocument.createElement('li');
-          item.classList.add('g__item')
-          !!r.icon ? "" : item.classList.add('g__no_icon');
-          !!o.hover_style ? item.classList.add(`g__${o.hover_style}`) : item.classList.add(`g__bottom_border`);
-          if((String(o.icon_top) === "true") && (style === "topbar")) {
-            item.classList.add('g__icon_center')
-          };
-          let active = itemActive(r.href);
-
-          if(!!r.icon){
-            iconCont = graniteDocument.createElement('div');
-            iconCont.classList.add('g__icon_container');
-
-            iconLink = graniteDocument.createElement('i');
-            iconLink.setAttribute('class', r.icon);
-            iconCont.appendChild(iconLink);
-            item.appendChild(iconCont);
-          }
-
-          link = graniteDocument.createElement('a');
-          link.classList.add('g__link');
-          link.innerHTML = r.label || "Link";
-
-          item.appendChild(link)
-
-          navMain.appendChild(item);
-          }
+    utilityCont.addEventListener("click", () => {
+      utilityCont.classList.toggle("g__utility_active");
     });
 
-    /*---------------------------------------------
+    topSection.appendChild(utilityCont);
+  }
+
+  /* ------------ Hamburger Div -----------*/
+  let hamburger = document.createElement("div");
+  hamburger.classList.add("g__nav_hamburger");
+  topBarCont.appendChild(hamburger);
+
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("g__nav_active");
+    hamburger.nextSibling.classList.toggle("g__nav_active");
+  });
+
+  for (let i = 1; i < 4; i++) {
+    let bar = document.createElement("div");
+    bar.setAttribute("class", `g__bar_${i}`);
+    hamburger.appendChild(bar);
+  }
+
+  /* ------------ Links -----------*/
+  let navCont = document.createElement("div");
+  navCont.classList.add("g__nav_cont");
+
+  if (style === "topbar" && o.nav_layout != "column") {
+    switch (topBarPosition) {
+      case "left":
+        navCont.style.marginRight = "auto";
+        break;
+      case "center":
+        navCont.style.margin = "0 auto";
+        break;
+      default:
+        navCont.style.marginLeft = "auto";
+    }
+  }
+
+  let navMain = document.createElement("ul");
+  navMain.classList.add("g__nav_main");
+
+  let navUtility = document.createElement("ul");
+  navUtility.classList.add("g__nav_utility");
+
+  /* ------------ Dropdown -----------*/
+  let dd = false;
+  let ddLabel = "";
+  let ddIcon = "";
+  let arrDdItems = [];
+
+  /* ------------ Main Loop -----------*/
+  r.forEach((r, num) => {
+    String(r.submenu_header) === "true" ? (r.link_type = "ddHeader") : "";
+    String(r.submenu) === "true" ? (r.link_type = "ddItem") : "";
+    let item, link, iconCont, iconLink;
+    switch (r.link_type) {
+      case "utility":
+        item = document.createElement("li");
+        item.classList.add("g__item_utility");
+        !!o.hover_style
+          ? item.classList.add(`g__${o.hover_style}`)
+          : item.classList.add(`g__bottom_border`);
+        String(r.cta_button) === "true" ? item.classList.add("g__cta_btn") : "";
+
+        link = document.createElement("a");
+        link.classList.add("g__link_utility");
+        link.innerHTML = r.label || "Link";
+        item.appendChild(link);
+
+        navUtility.appendChild(item);
+        break;
+      case "ddHeader":
+        ddLabel = r.label || "Dropdown";
+        dd = true;
+        ddIcon = r.icon;
+        break;
+      case "ddItem":
+        dd = true;
+        let subItem = document.createElement("li");
+        subItem.classList.add("g__sub_item");
+
+        if (r.icon) {
+          iconLink = document.createElement("i");
+          iconLink.setAttribute("class", r.icon);
+          subItem.appendChild(iconLink);
+        }
+
+        let subLink = document.createElement("a");
+        subLink.classList.add("g__sub_link");
+        subLink.innerHTML = r.label || "Link";
+        subItem.appendChild(subLink);
+
+        arrDdItems.push(subItem);
+        break;
+      default:
+        if (dd) {
+          let ddMenu = buildDd();
+          navMain.appendChild(ddMenu);
+          // Reset Values
+          dd = false;
+          arrDdItems = [];
+          ddLabel = "";
+          ddIcon = "";
+        }
+
+        item = document.createElement("li");
+        item.classList.add("g__item");
+        !!r.icon ? "" : item.classList.add("g__no_icon");
+        !!o.hover_style
+          ? item.classList.add(`g__${o.hover_style}`)
+          : item.classList.add(`g__bottom_border`);
+        if (String(o.icon_top) === "true" && style === "topbar") {
+          item.classList.add("g__icon_center");
+        }
+        let active = itemActive(r.href);
+
+        if (!!r.icon) {
+          iconCont = document.createElement("div");
+          iconCont.classList.add("g__icon_container");
+
+          iconLink = document.createElement("i");
+          iconLink.setAttribute("class", r.icon);
+          iconCont.appendChild(iconLink);
+          item.appendChild(iconCont);
+        }
+
+        link = document.createElement("a");
+        link.classList.add("g__link");
+        link.innerHTML = r.label || "Link";
+
+        item.appendChild(link);
+
+        navMain.appendChild(item);
+    }
+  });
+
+  /*---------------------------------------------
     Build DOM Structure
     ---------------------------------------------*/
-    navCont.appendChild(navMain);
-    if(o.mobile_menu_style === "bottom"){
-      var bottomNavCont = graniteDocument.createElement('div');
-      bottomNavCont.classList.add('g__nav__bottom_cont')
-    }
+  navCont.appendChild(navMain);
+  if (o.mobile_menu_style === "bottom") {
+    var bottomNavCont = document.createElement("div");
+    bottomNavCont.classList.add("g__nav__bottom_cont");
+  }
 
-    if(style === 'sidebar'){
-      let collapseCont = graniteDocument.createElement('div');
-      collapseCont.classList.add('g__sidebar_collapse')
+  if (style === "sidebar") {
+    let collapseCont = document.createElement("div");
+    collapseCont.classList.add("g__sidebar_collapse");
 
-      collapseCont.addEventListener('click', () => {
-      collapseCont.parentElement.parentElement.classList.toggle('g__collapse_active');
-      graniteDocument.body.style.marginLeft = "60px";
+    collapseCont.addEventListener("click", () => {
+      collapseCont.parentElement.parentElement.classList.toggle(
+        "g__collapse_active"
+      );
+      document.body.style.marginLeft = "60px";
       iconCheck();
-    })
-      let collpaseIcon = graniteDocument.createElement('i');
-      collpaseIcon.setAttribute('class', 'far fa-chevron-left');
-      collapseCont.appendChild(collpaseIcon);
-      navCont.appendChild(collapseCont);
-    }
+    });
+    let collpaseIcon = document.createElement("i");
+    collpaseIcon.setAttribute("class", "far fa-chevron-left");
+    collapseCont.appendChild(collpaseIcon);
+    navCont.appendChild(collapseCont);
+  }
 
-    // Append the utility nav based on style
-    switch(style) {
-      case "sidebar":
-        utilityCont.appendChild(navUtility);
-        break;
-      case "topbar":
-        navCont.appendChild(navUtility);
-        break;
-    }
+  // Append the utility nav based on style
+  switch (style) {
+    case "sidebar":
+      utilityCont.appendChild(navUtility);
+      break;
+    case "topbar":
+      navCont.appendChild(navUtility);
+      break;
+  }
 
+  topBarCont.appendChild(navCont);
 
-    topBarCont.appendChild(navCont);
-
-    granite_div.appendChild(topBarCont);
-    if(o.mobile_menu_style === "bottom"){
-      granite_div.appendChild(bottomNavCont);
-    }
-    /*---------------------------------------------
+  granite_div.appendChild(topBarCont);
+  if (o.mobile_menu_style === "bottom") {
+    granite_div.appendChild(bottomNavCont);
+  }
+  /*---------------------------------------------
     Functions
     ---------------------------------------------*/
-    // Active item
-    function itemActive(href){
-      let path = window.location.pathname.split('/').pop();
-      if(href === "path"){
-        console.log(true);
-      }
+  // Active item
+  function itemActive(href) {
+    let path = window.location.pathname.split("/").pop();
+    if (href === "path") {
+      return true;
+    } else {
+      return false;
     }
-    // Build DD function
-    function buildDd(){
-      let ddItem = graniteDocument.createElement('li');
-      ddItem.classList.add('g__item');
-      ddItem.classList.add('g__item_dropdown');
-      !!o.hover_style ? ddItem.classList.add(`g__${o.hover_style}`) : ddItem.classList.add(`g__bottom_border`);
+  }
+  // Build DD function
+  function buildDd() {
+    let ddItem = document.createElement("li");
+    ddItem.classList.add("g__item");
+    ddItem.classList.add("g__item_dropdown");
+    !!o.hover_style
+      ? ddItem.classList.add(`g__${o.hover_style}`)
+      : ddItem.classList.add(`g__bottom_border`);
 
-      let ddItemCont = graniteDocument.createElement('div');
-      ddItemCont.classList.add('g__dd_item_container');
-      ddItem.appendChild(ddItemCont);
+    let ddItemCont = document.createElement("div");
+    ddItemCont.classList.add("g__dd_item_container");
+    ddItem.appendChild(ddItemCont);
 
-      let ddlink = graniteDocument.createElement('a');
-      ddlink.classList.add('g__link');
-      ddlink.innerHTML = ddLabel || "Link";
-      ddItemCont.appendChild(ddlink);
+    let ddlink = document.createElement("a");
+    ddlink.classList.add("g__link");
+    ddlink.innerHTML = ddLabel || "Link";
+    ddItemCont.appendChild(ddlink);
 
-      let ddArrow
-      if (!!ddIcon){
-        let ddIconArrow = graniteDocument.createElement('div');
-        ddIconArrow.classList.add('g__dd_icon_arrow');
+    let ddArrow;
+    if (!!ddIcon) {
+      let ddIconArrow = document.createElement("div");
+      ddIconArrow.classList.add("g__dd_icon_arrow");
 
-        let icon = ddIcon;
-        ddIcon = graniteDocument.createElement('i');
-        ddIcon.setAttribute('class', icon);
-        ddIconArrow.appendChild(ddIcon);
+      let icon = ddIcon;
+      ddIcon = document.createElement("i");
+      ddIcon.setAttribute("class", icon);
+      ddIconArrow.appendChild(ddIcon);
 
-        ddArrow = graniteDocument.createElement('i');
-        ddArrow.setAttribute('class', 'far fa-chevron-right g__dd_arrow');
-        ddIconArrow.appendChild(ddArrow);
+      ddArrow = document.createElement("i");
+      ddArrow.setAttribute("class", "far fa-chevron-right g__dd_arrow");
+      ddIconArrow.appendChild(ddArrow);
 
-        ddItemCont.appendChild(ddIconArrow);
+      ddItemCont.appendChild(ddIconArrow);
+    } else {
+      ddArrow = document.createElement("i");
+      ddArrow.setAttribute("class", "far fa-chevron-right");
+      ddItemCont.appendChild(ddArrow);
+    }
+
+    let dropdownMenu = document.createElement("ul");
+    dropdownMenu.classList.add("g__dropdown_menu");
+
+    // Event Listener for dropdowns
+    arrDdItems.forEach((item) => {
+      dropdownMenu.appendChild(item);
+    });
+    ddItem.appendChild(dropdownMenu);
+
+    ddItem.addEventListener("click", function () {
+      // dropdownMenu.classList.toggle('g__dd_active');
+      let currentWidth =
+        window.innerWidth || document.documentElement.clientWidth;
+      dropdownMenu.parentElement.classList.toggle("g__dd_active");
+      if (style === "topbar" && currentWidth > 991.98) {
+        dropdownMenu.style.minWidth = ddItem.clientWidth + "px";
+        dropdownMenu.style.top = ddItem.clientHeight + "px";
       } else {
-        ddArrow = graniteDocument.createElement('i');
-        ddArrow.setAttribute('class', 'far fa-chevron-right');
-        ddItemCont.appendChild(ddArrow);
+        dropdownMenu.style.minWidth = "inherit";
+        dropdownMenu.style.top = "inherit";
       }
+    });
 
-      let dropdownMenu = graniteDocument.createElement('ul');
-      dropdownMenu.classList.add('g__dropdown_menu');
+    return ddItem;
+  }
+  // Bottom nav CTA circle button
+  if (
+    String(o.mobile_bottom_cta) === "true" &&
+    o.mobile_menu_style === "bottom"
+  ) {
+    let navCont = granite_div.querySelector(".g__nav__bottom_cont");
+    let nav = granite_div.querySelector(".g__nav_main");
+    let navLinks = nav.children;
 
-      // Event Listener for dropdowns
-      arrDdItems.forEach(item => {
-        dropdownMenu.appendChild(item);
-      });
-      ddItem.appendChild(dropdownMenu);
+    let cta = document.createElement("li");
+    cta.setAttribute("class", "g__bottom_cta");
 
-      ddItem.addEventListener('click', function() {
-        // dropdownMenu.classList.toggle('g__dd_active');
-        let currentWidth = window.innerWidth || graniteDocument.documentElement.clientWidth;
-        dropdownMenu.parentElement.classList.toggle('g__dd_active');
-        if(style === "topbar" && currentWidth > 991.98){
-          dropdownMenu.style.minWidth = ddItem.clientWidth + "px";
-          dropdownMenu.style.top = ddItem.clientHeight + "px";
-        } else {
-          dropdownMenu.style.minWidth = "inherit";
-          dropdownMenu.style.top = "inherit";
-        }
-      })
-
-      return ddItem;
+    let bottomIcon = o.mobile_bottom_icon || "fal fa-plus";
+    let iconCta = document.createElement("i");
+    iconCta.setAttribute("class", bottomIcon);
+    cta.appendChild(iconCta);
+    if (String(o.mobile_bottom_menu) === "true") {
+      navCont.appendChild(cta);
+      navCont.classList.add("g__bottom_menu");
+    } else {
+      if (navLinks.length > 2) {
+        nav.insertBefore(cta, navLinks[2]);
+      }
+      if (navLinks.length === 2) {
+        nav.style.justifyContent = "space-around";
+        nav.insertBefore(cta, navLinks[1]);
+      }
+      if (navLinks.length === 0) {
+        nav.style.justifyContent = "center";
+        nav.appendChild(cta);
+      }
     }
-    // Bottom nav CTA circle button
-    if(String(o.mobile_bottom_cta) === "true" && o.mobile_menu_style === "bottom"){
-      let navCont = granite_div.querySelector('.g__nav__bottom_cont');
-      let nav = granite_div.querySelector('.g__nav_main');
-      let navLinks = nav.children;
+  }
+  // Bottom Moble Nav
+  if (o.mobile_menu_style === "bottom") {
+    bottomNav();
+    window.onresize = bottomNav;
+    function bottomNav() {
+      if (viewportWidth < 991.98) {
+        let navCont = granite_div.querySelector(".g__nav_cont");
+        let mainNav = granite_div.querySelector(".g__nav_main");
+        let utilityNav = granite_div.querySelector(".g__nav_utility");
+        let navChildren = mainNav.children;
+        let bottomCont = granite_div.querySelector(".g__nav__bottom_cont");
 
-      let cta = graniteDocument.createElement('li');
-      cta.setAttribute('class', 'g__bottom_cta')
+        bottomCont.appendChild(mainNav);
+        // If sidebar - move the utility menu back into the nav container
+        if (style === "sidebar") {
+          navCont.appendChild(utilityNav);
+        }
+        // Count the number of items excluding CTA.
+        let linkCount = 0;
+        let arrLinks = Array.from(navChildren).forEach((link) => {
+          let isCta = link.classList.contains("g__bottom_cta");
+          if (!isCta) {
+            linkCount++;
+          }
+        });
+        if (linkCount >= 5) {
+          let bottomMenu = document.createElement("ul");
+          bottomMenu.classList.add("g__bottom_menu");
 
-      let bottomIcon = o.mobile_bottom_icon || "fal fa-plus";
-      let iconCta = graniteDocument.createElement('i');
-      iconCta.setAttribute('class', bottomIcon);
-      cta.appendChild(iconCta);
-      if(String(o.mobile_bottom_menu) === "true"){
-        navCont.appendChild(cta);
-        navCont.classList.add('g__bottom_menu');
-      } else {
-        if(navLinks.length > 2){
-          nav.insertBefore(cta, navLinks[2]);
-        }
-        if(navLinks.length === 2){
-          nav.style.justifyContent = "space-around";
-          nav.insertBefore(cta, navLinks[1]);
-        }
-        if(navLinks.length === 0){
-          nav.style.justifyContent = "center";
-          nav.appendChild(cta);
+          Array.from(navChildren).forEach((link, count) => {
+            let isCta = link.classList.contains("g__bottom_cta");
+            if (!isCta && count > 3) {
+              bottomMenu.appendChild(link);
+            }
+            if (count === 3) {
+              let elipsisLink = document.createElement("li");
+              elipsisLink.classList.add("g__item");
+              elipsisLink.classList.add("g__bottom_ellipsis");
+              elipsisLink.innerHTML = '<i class="far fa-ellipsis-h"></i>';
+              mainNav.insertBefore(elipsisLink, mainNav[2]);
+              elipsisLink.addEventListener("click", () => {
+                bottomCont.classList.toggle("g__bottom_active");
+              });
+            }
+          });
+          bottomCont.appendChild(bottomMenu);
         }
       }
-
-
     }
-    // Bottom Moble Nav
-    if(o.mobile_menu_style === "bottom"){
-      bottomNav();
-      window.onresize = bottomNav;
-      function bottomNav(){
-        if (viewportWidth < 991.98) {
-            let navCont = granite_div.querySelector('.g__nav_cont');
-            let mainNav = granite_div.querySelector('.g__nav_main');
-            let utilityNav = granite_div.querySelector('.g__nav_utility');
-            let navChildren = mainNav.children;
-            let bottomCont = granite_div.querySelector('.g__nav__bottom_cont');
-
-            bottomCont.appendChild(mainNav);
-            // If sidebar - move the utility menu back into the nav container
-            if(style === 'sidebar'){
-              navCont.appendChild(utilityNav);
-            }
-            // Count the number of items excluding CTA.
-            let linkCount = 0;
-            let arrLinks =
-            Array.from(navChildren).forEach(link => {
-              let isCta = link.classList.contains('g__bottom_cta');
-              if(!isCta){
-                linkCount++;
-              }
-            });
-            if (linkCount >= 5){
-              let bottomMenu = graniteDocument.createElement('ul');
-              bottomMenu.classList.add('g__bottom_menu');
-
-              Array.from(navChildren).forEach((link, count) => {
-                let isCta = link.classList.contains('g__bottom_cta');
-                if(!isCta && count > 3){
-                  bottomMenu.appendChild(link)
-                }
-                if(count === 3){
-                  let elipsisLink = graniteDocument.createElement('li');
-                  elipsisLink.classList.add('g__item');
-                  elipsisLink.classList.add('g__bottom_ellipsis');
-                  elipsisLink.innerHTML = '<i class="far fa-ellipsis-h"></i>';
-                  mainNav.insertBefore(elipsisLink, mainNav[2]);
-                  elipsisLink.addEventListener('click', () => {
-                    bottomCont.classList.toggle('g__bottom_active');
-                  })
-                }
-              })
-              bottomCont.appendChild(bottomMenu);
-            }
-          }
-        }
+  }
+  // Check for
+  function iconCheck() {
+    let arrLink = document.querySelectorAll(".g__item");
+    arrLink.forEach((link) => {
+      let icon = link.nextSibling;
+      if (!!icon) {
       }
-      // Check for
-      function iconCheck(){
-        let arrLink = graniteDocument.querySelectorAll('.g__item');
-        arrLink.forEach( link => {
-          let icon = link.nextSibling;
-          if (!!icon){
-
-          }
-        })
-      }
-
-
- // End main function
+    });
+  }
 }
